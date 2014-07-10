@@ -34,4 +34,10 @@
     <Compile Include="DeckTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Palace\Palace.csproj">
+      <Project>{79AB397F-203B-4521-81EC-1BA40C4F2776}</Project>
+      <Name>Palace</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

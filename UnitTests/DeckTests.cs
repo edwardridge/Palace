@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Palace;
 using System;
 
 namespace UnitTests
@@ -6,11 +7,21 @@ namespace UnitTests
 	[TestFixture]
 	public class DeckTests
 	{
-		[Test]
-		public void TestCase ()
+		[TestFixture]
+		public class GetCard
 		{
-			Assert.True (true);
+			[Test]
+			public void Gets_Card ()
+			{
+				var deck = new Deck();
+				var expectedCard = new Card();
+
+				var cardFromDeck = deck.GetNextCard();
+
+				Assert.AreEqual (cardFromDeck, expectedCard);
+			}
 		}
+
 	}
 }
 
