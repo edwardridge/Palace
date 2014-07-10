@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Palace", "Palace\Palace.csproj", "{79AB397F-203B-4521-81EC-1BA40C4F2776}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{ED98C182-4169-4ECD-B18E-28A5E36FC833}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -13,6 +15,10 @@ Global
 		{79AB397F-203B-4521-81EC-1BA40C4F2776}.Debug|x86.Build.0 = Debug|x86
 		{79AB397F-203B-4521-81EC-1BA40C4F2776}.Release|x86.ActiveCfg = Release|x86
 		{79AB397F-203B-4521-81EC-1BA40C4F2776}.Release|x86.Build.0 = Release|x86
+		{ED98C182-4169-4ECD-B18E-28A5E36FC833}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ED98C182-4169-4ECD-B18E-28A5E36FC833}.Debug|x86.Build.0 = Debug|Any CPU
+		{ED98C182-4169-4ECD-B18E-28A5E36FC833}.Release|x86.ActiveCfg = Release|Any CPU
+		{ED98C182-4169-4ECD-B18E-28A5E36FC833}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Palace\Palace.csproj

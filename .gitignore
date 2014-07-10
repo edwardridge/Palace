@@ -1,2 +1,8 @@
 
 *.userprefs
+
+*.exe
+
+*.mdb
+
+*.dll
