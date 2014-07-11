@@ -1,12 +1,12 @@
-using System;
-
-namespace Palace
+﻿namespace Palace
 {
-	public class Card
-	{
-		public Card(){
-		}
-	}
+    public class Card
+    {
+        public int Value { get; private set; }
 
+        public Card(int value)
+        {
+            Value = value;
+        }
+    }
 }
-
