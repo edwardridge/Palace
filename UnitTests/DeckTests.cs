@@ -10,10 +10,17 @@ namespace UnitTests
     {
 		[TestFixture]
 		public class GetCards{
+			Deck deck;
+			int preDeckCount;
+
+			[SetUp]
+			public void Setup(){
+				deck = new Deck ();
+				preDeckCount = deck.GetCount ();
+			}
 
 			[Test]
 			public void Gets_Single_Card(){
-				var deck = new Deck ();
 				var expectedCardValue = 0;
 
 				var cardFromDeckValue = deck.GetCards (1).Select (s => s.Value).First();
@@ -23,9 +30,6 @@ namespace UnitTests
 
 			[Test]
 			public void Gets_Single_Card_Card_Is_Removed_From_Deck(){
-				var deck = new Deck ();
-				var preDeckCount = deck.GetCount ();
-
 				deck.GetCards (1);
 				var postDeckCount = deck.GetCount ();
 
@@ -34,7 +38,6 @@ namespace UnitTests
 
 			[Test]
 			public void Gets_Two_Cards(){
-				var deck = new Deck ();
 				var expectedCardValues = new List<int> (new []{0,1});
 
 				var cardsFromDeckValues = deck.GetCards(2).Select(s=>s.Value).OrderBy(o=>o).ToList();
@@ -44,9 +47,6 @@ namespace UnitTests
 
 			[Test]
 			public void Gets_Two_Cards_Two_Cards_Removed_From_Deck(){
-				var deck = new Deck ();
-				var preDeckCount = deck.GetCount ();
-
 				deck.GetCards (2);
 				var postDeckCount = deck.GetCount ();
 
