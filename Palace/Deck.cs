@@ -14,18 +14,15 @@ namespace Palace
 			}
 	    }
 
-		public Card GetNextCard()
-		{
-			Card returnCard = cards[0];
-			cards.Remove (returnCard);
-			return returnCard;
-		}
-
 		public IEnumerable<Card> GetCards (int count)
 		{
 			var returnCards = new List<Card>() ;
 			for(int i = 0 ;i < count; i++){
 				returnCards.Add (cards [i]);
+			}
+
+			for(int i = 0 ;i < count; i++){
+				cards.Remove (cards [i]);
 			}
 		
 			return returnCards;

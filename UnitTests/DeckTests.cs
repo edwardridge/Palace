@@ -8,33 +8,6 @@ namespace UnitTests
     [TestFixture]
     public class DeckTests
     {
-        [TestFixture]
-        public class GetCard
-        {
-            [Test]
-            public void Gets_Card()
-            {
-                var deck = new Deck();
-                var expectedCard = new Card(0);
-
-                var cardFromDeck = deck.GetNextCard();
-
-                Assert.AreEqual(cardFromDeck.Value, expectedCard.Value);
-            }
-
-			[Test]
-			public void Card_Is_Removed_From_Deck()
-			{
-				var deck = new Deck ();
-				var preDeckCount = deck.GetCount();
-
-				deck.GetNextCard ();
-				var postDeckCount = deck.GetCount();
-
-				Assert.AreEqual (preDeckCount - 1, postDeckCount);
-			}
-        }
-
 		[TestFixture]
 		public class GetCards{
 
@@ -49,6 +22,17 @@ namespace UnitTests
 			}
 
 			[Test]
+			public void Gets_Single_Card_Card_Is_Removed_From_Deck(){
+				var deck = new Deck ();
+				var preDeckCount = deck.GetCount ();
+
+				deck.GetCards (1);
+				var postDeckCount = deck.GetCount ();
+
+				Assert.AreEqual (preDeckCount - 1, postDeckCount);
+			}
+
+			[Test]
 			public void Gets_Two_Cards(){
 				var deck = new Deck ();
 				var expectedCardValues = new List<int> (new []{0,1});
@@ -56,6 +40,17 @@ namespace UnitTests
 				var cardsFromDeckValues = deck.GetCards(2).Select(s=>s.Value).OrderBy(o=>o).ToList();
 
 				Assert.AreEqual (expectedCardValues, cardsFromDeckValues);
+			}
+
+			[Test]
+			public void Gets_Two_Cards_Two_Cards_Removed_From_Deck(){
+				var deck = new Deck ();
+				var preDeckCount = deck.GetCount ();
+
+				deck.GetCards (2);
+				var postDeckCount = deck.GetCount ();
+
+				Assert.AreEqual (preDeckCount - 2, postDeckCount);
 			}
 		}
 
