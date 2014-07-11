@@ -21,6 +21,16 @@ namespace Palace
 			return returnCard;
 		}
 
+		public IEnumerable<Card> GetCards (int count)
+		{
+			var returnCards = new List<Card>() ;
+			for(int i = 0 ;i < count; i++){
+				returnCards.Add (cards [i]);
+			}
+		
+			return returnCards;
+		}
+
 		public int GetCount ()
 		{
 			return cards.Count;

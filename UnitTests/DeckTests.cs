@@ -1,5 +1,7 @@
 ﻿using Palace;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace UnitTests
 {
@@ -32,6 +34,30 @@ namespace UnitTests
 				Assert.AreEqual (preDeckCount - 1, postDeckCount);
 			}
         }
+
+		[TestFixture]
+		public class GetCards{
+
+			[Test]
+			public void Gets_Single_Card(){
+				var deck = new Deck ();
+				var expectedCardValue = 0;
+
+				var cardFromDeckValue = deck.GetCards (1).Select (s => s.Value).First();
+
+				Assert.AreEqual (expectedCardValue, cardFromDeckValue);
+			}
+
+			[Test]
+			public void Gets_Two_Cards(){
+				var deck = new Deck ();
+				var expectedCardValues = new List<int> (new []{0,1});
+
+				var cardsFromDeckValues = deck.GetCards(2).Select(s=>s.Value).OrderBy(o=>o).ToList();
+
+				Assert.AreEqual (expectedCardValues, cardsFromDeckValues);
+			}
+		}
 
     }
 }
