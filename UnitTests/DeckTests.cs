@@ -15,7 +15,8 @@ namespace UnitTests
 
 			[SetUp]
 			public void Setup(){
-				deck = new Deck ();
+				StubRandomiser randomiser = new StubRandomiser ();
+				deck = new Deck (randomiser);
 				preDeckCount = deck.GetCount ();
 			}
 
