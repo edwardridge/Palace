@@ -11,7 +11,7 @@ namespace UnitTests
 
 		public int GetRandom (int max)
 		{
-			return 0;
+			return 0; //Always return the first card
 		}
 	}
 }

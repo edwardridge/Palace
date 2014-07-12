@@ -10,6 +10,7 @@ namespace Palace
 		public Deck(IRandomiser randomiser)
 	    {
 			this.randomiser = randomiser;
+
 			cards = new List<Card>();
 			for (int i = 0; i < 52; i++) {
 				cards.Add (new Card (i));
