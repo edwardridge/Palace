@@ -1,8 +1,8 @@
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace UnitTests
+namespace Palace
 {
 	public class Game
 	{
@@ -15,6 +15,10 @@ namespace UnitTests
 
 		public int NumberOfPlayers {
 			get{ return players.Count; }
+		}
+
+		public Player CurrentTurn(){
+			return players.ToArray()[0];
 		}
 	}
 
