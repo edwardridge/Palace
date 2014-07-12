@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Palace;
 using System.Collections;
+using System.Linq;
 
 namespace UnitTests
 {
@@ -20,27 +21,39 @@ namespace UnitTests
 			[SetUp]
 			public void Setup(){
 				game = new Game ();
+
+				IRandomiser randomiser = new StubRandomiser ();
+				Deck deck = new Deck (randomiser);
+
 				player1 = new Player ("Ed");
 				player2 = new Player ("Liam");
 				players = new List<Player> ();
 
 				players.Add (player1);
 				players.Add (player2);
+
+				game.Start (players, deck);
 			}
 
 			[Test]
 			public void Start_With_Two_Players_Two_Players_Are_In_Game(){
-				game.Start (players);
-
 				var playerCount = game.NumberOfPlayers;
 				Assert.AreEqual (2, playerCount);
 			}
 
 			[Test]
 			public void Player_1_Has_First_Go(){
-				game.Start (players);
-
 				Assert.AreEqual (player1.Name, game.CurrentTurn().Name);
+			}
+
+			[Test]
+			public void Player_1_Has_9_Cards(){
+				Assert.AreEqual (9, player1.NumCards);
+			}
+
+			[Test]
+			public void Player_2_Has_9_Cards(){
+				Assert.AreEqual (9, player2.NumCards);
 			}
 		}
 	}
