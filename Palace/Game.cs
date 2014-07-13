@@ -16,6 +16,7 @@ namespace Palace
 
 			foreach (Player player in players) {
 				player.AddCards (this.deck.GetCards (6, FaceOrientation.FaceUp));
+				player.AddCards (this.deck.GetCards (3, FaceOrientation.FaceDown));
 			}
 		}
 
