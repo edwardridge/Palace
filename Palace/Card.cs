@@ -4,12 +4,12 @@
     {
         public int Value { get; private set; }
 
-		public FaceOrientation FaceOrientation { get; set; }
+		public CardOrientation CardOrientation { get; set; }
 
-		public Card(int value, FaceOrientation faceUp)
+		public Card(int value, CardOrientation faceUp)
         {
             Value = value;
-			FaceOrientation = faceUp;
+			CardOrientation = faceUp;
         }
     }
 }

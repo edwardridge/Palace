@@ -16,12 +16,8 @@ namespace Palace
 			private set;
 		}
 
-		public int NumFaceUpCards {
-			get {return cards.Where(card=>card.FaceOrientation == FaceOrientation.FaceUp).Count(); }
-		}
-
-		public int NumFaceDownCards {
-			get { return cards.Where(card=>card.FaceOrientation == FaceOrientation.FaceDown).Count(); }
+		public int NumCards(CardOrientation cardLocation){
+			return cards.Where (card => card.CardOrientation == cardLocation).Count ();
 		}
 
 		public Player(string name){

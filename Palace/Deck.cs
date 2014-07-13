@@ -16,16 +16,16 @@ namespace Palace
 
 			cards = new List<Card>();
 			for (int i = 0; i < numCards; i++) {
-				cards.Add (new Card (i, FaceOrientation.FaceUp));
+				cards.Add (new Card (i, CardOrientation.FaceUp));
 			}
 		}
 
 		//Aside from setup we can assume we want face up cards
 		public IEnumerable<Card> GetCards (int count){
-			return this.GetCards (count, FaceOrientation.FaceUp);
+			return this.GetCards (count, CardOrientation.FaceUp);
 		}
 
-		public IEnumerable<Card> GetCards (int count, FaceOrientation faceOrientation)
+		public IEnumerable<Card> GetCards (int count, CardOrientation faceOrientation)
 		{
 			var returnCards = new List<Card>() ;
 
@@ -38,11 +38,11 @@ namespace Palace
 			return returnCards;
 		}
 
-		private Card GetCard(FaceOrientation faceUp){
+		private Card GetCard(CardOrientation faceUp){
 			var index = randomiser.GetRandom (cards.Count);
 
 			var cardToReturn = cards [index];
-			cardToReturn.FaceOrientation = faceUp;
+			cardToReturn.CardOrientation = faceUp;
 
 			return cardToReturn;
 		}
