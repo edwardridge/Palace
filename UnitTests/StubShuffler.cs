@@ -5,15 +5,15 @@ using System.Linq;
 
 namespace UnitTests
 {
-	public class StubRandomiser : IShuffler
+	public class StubShuffler : IShuffler
 	{
 		int[] cardOrder;
 
-		public StubRandomiser () {
+		public StubShuffler () {
 			this.cardOrder = GetSequentialOrder ();
 		}
 
-		public StubRandomiser (int[] cardOrder)
+		public StubShuffler (int[] cardOrder)
 		{
 			this.cardOrder = cardOrder;
 		}

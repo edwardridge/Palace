@@ -13,7 +13,7 @@ namespace UnitTests
 		public static Game CreateGameWithTwoPlayers(ref Player player1, ref Player player2){
 			Game game = new Game ();
 
-			IShuffler randomiser = new StubRandomiser ();
+			IShuffler randomiser = new StubShuffler ();
 			Deck deck = new Deck (randomiser);
 
 			player1 = new Player ("Ed");

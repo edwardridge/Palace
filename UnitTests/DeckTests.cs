@@ -15,7 +15,7 @@ namespace UnitTests
 
 			[SetUp]
 			public void Setup(){
-				StubRandomiser randomiser = new StubRandomiser ();
+				StubShuffler randomiser = new StubShuffler ();
 				deck = new Deck (randomiser, 52);
 				preDeckCount = deck.GetCount ();
 			}
@@ -61,7 +61,7 @@ namespace UnitTests
 			Deck deck;
 			[SetUp]
 			public void Setup(){
-				IShuffler randomiser = new StubRandomiser ();
+				IShuffler randomiser = new StubShuffler ();
 				deck = new Deck (randomiser, 2);
 			}
 
