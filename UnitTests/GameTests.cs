@@ -78,6 +78,23 @@ namespace UnitTests
 			public void Setup(){
 				game = GameTests.CreateGameWithTwoPlayers (ref player1, ref player2);
 			}
+
+			[Test]
+			public void Game_Cannot_Start_When_Both_Players_Not_Ready(){
+				Result result = game.Start ();
+
+				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
+			}
+
+			[Test]
+			public void Game_Can_Start_When_Both_Players_Are_Ready(){
+				game.PlayerReady (player1);
+				game.PlayerReady (player2);
+
+				var result = game.Start ();
+
+				Assert.AreEqual (ResultOutcome.Success, result.ResultOutcome);
+			}
 		}
 	}
 }

@@ -20,6 +20,25 @@ namespace Palace
 			}
 		}
 
+		public void PlayerReady (Player player)
+		{
+			player.SetState (State.Ready);
+		}
+
+		public Result Start ()
+		{
+			bool allPlayersReady = true;
+			foreach (Player player in players) {
+				if (player.State != State.Ready)
+					allPlayersReady = false;
+			}
+
+			if(allPlayersReady)
+				return new Result (ResultOutcome.Success);
+
+			return new Result (ResultOutcome.Fail);
+		}
+
 		public int NumberOfPlayers {
 			get{ return players.Count; }
 		}

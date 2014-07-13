@@ -11,17 +11,23 @@ namespace Palace
 			private set;
 		}
 
+		public State State {
+			get;
+			private set;
+		}
+
 		public int NumFaceUpCards {
 			get {return cards.Where(card=>card.FaceOrientation == FaceOrientation.FaceUp).Count(); }
 		}
 
-		public object NumFaceDownCards {
+		public int NumFaceDownCards {
 			get { return cards.Where(card=>card.FaceOrientation == FaceOrientation.FaceDown).Count(); }
 		}
 
 		public Player(string name){
 			Name = name;
 			cards = new List<Card> ();
+			State = State.Setup;
 		}
 
 		public void AddCards (IEnumerable<Card> cardsToBeAdded)
@@ -29,6 +35,11 @@ namespace Palace
 			foreach (Card addedCard in cardsToBeAdded) {
 				this.cards.Add (addedCard);
 			}
+		}
+
+		public void SetState (State state)
+		{
+			this.State = state;
 		}
 
 		private ICollection<Card> cards;
