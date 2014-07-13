@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Palace
 {
-	public enum State
+	public enum PlayerState
 	{
 		Setup = 1,
 		Ready = 2

@@ -22,14 +22,14 @@ namespace Palace
 
 		public void PlayerReady (Player player)
 		{
-			player.SetState (State.Ready);
+			player.SetState (PlayerState.Ready);
 		}
 
 		public Result Start ()
 		{
 			bool allPlayersReady = true;
 			foreach (Player player in players) {
-				if (player.State != State.Ready)
+				if (player.State != PlayerState.Ready)
 					allPlayersReady = false;
 			}
 

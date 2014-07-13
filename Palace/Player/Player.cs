@@ -11,7 +11,7 @@ namespace Palace
 			private set;
 		}
 
-		public State State {
+		public PlayerState State {
 			get;
 			private set;
 		}
@@ -23,7 +23,7 @@ namespace Palace
 		public Player(string name){
 			Name = name;
 			cards = new List<Card> ();
-			State = State.Setup;
+			State = PlayerState.Setup;
 		}
 
 		public void AddCards (IEnumerable<Card> cardsToBeAdded)
@@ -33,7 +33,7 @@ namespace Palace
 			}
 		}
 
-		public void SetState (State state)
+		public void SetState (PlayerState state)
 		{
 			this.State = state;
 		}
