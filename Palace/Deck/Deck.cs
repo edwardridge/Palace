@@ -1,23 +1,26 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Palace
 {
 	public class Deck
 	{
-		private IList<Card> cards;
-		private IRandomiser randomiser;
+		private ICollection<Card> cards;
+		private IShuffler shuffler;
 
-		public Deck(IRandomiser randomiser) : this(randomiser, 52){
+		public Deck(IShuffler randomiser) : this(randomiser, 52){
 		}
 
-		public Deck(IRandomiser randomiser, int numCards)
+		public Deck(IShuffler shuffler, int numCards)
 	    {
-			this.randomiser = randomiser;
+			this.shuffler = shuffler;
 
 			cards = new List<Card>();
 			for (int i = 0; i < numCards; i++) {
 				cards.Add (new Card (i, CardOrientation.FaceUp));
 			}
+
+			cards = shuffler.ShuffleCards (cards);
 		}
 
 		//Aside from setup we can assume we want face up cards
@@ -39,9 +42,7 @@ namespace Palace
 		}
 
 		private Card GetCard(CardOrientation faceUp){
-			var index = randomiser.GetRandom (cards.Count);
-
-			var cardToReturn = cards [index];
+			var cardToReturn = cards.First();
 			cardToReturn.CardOrientation = faceUp;
 
 			return cardToReturn;

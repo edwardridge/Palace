@@ -1,17 +1,22 @@
 ﻿using System;
 using Palace;
+using System.Collections.Generic;
 
 namespace UnitTests
 {
-	public class StubRandomiser : IRandomiser
+	public class StubRandomiser : IShuffler
 	{
 		public StubRandomiser ()
 		{
 		}
 
-		public int GetRandom (int max)
+		public ICollection<Card> ShuffleCards (ICollection<Card> preShuffledDeck)
 		{
-			return 0; //Always return the first card
+			List<Card> cards = new List<Card> ();
+			for (int i = 0; i < preShuffledDeck.Count; i++) {
+				cards.Add (new Card (i));
+			}
+			return cards;
 		}
 	}
 }

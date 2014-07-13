@@ -41,9 +41,9 @@
     <Compile Include="Player\Player.cs" />
     <Compile Include="Player\PlayerState.cs" />
     <Compile Include="Deck\Deck.cs" />
-    <Compile Include="Deck\IRandomiser.cs" />
     <Compile Include="Result\Result.cs" />
     <Compile Include="Result\ResultOutcome.cs" />
+    <Compile Include="Deck\IShuffler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

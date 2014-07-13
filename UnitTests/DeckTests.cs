@@ -61,7 +61,7 @@ namespace UnitTests
 			Deck deck;
 			[SetUp]
 			public void Setup(){
-				IRandomiser randomiser = new StubRandomiser ();
+				IShuffler randomiser = new StubRandomiser ();
 				deck = new Deck (randomiser, 2);
 			}
 

@@ -6,6 +6,10 @@
 
 		public CardOrientation CardOrientation { get; set; }
 
+		public Card(int value) : this(value, CardOrientation.FaceDown){
+
+		}
+
 		public Card(int value, CardOrientation faceUp)
         {
             Value = value;
