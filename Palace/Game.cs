@@ -9,7 +9,7 @@ namespace Palace
 		private ICollection<Player> players;
 		private Deck deck;
 
-		public void Start (ICollection<Player> players, Deck deck)
+		public void Setup (ICollection<Player> players, Deck deck)
 		{
 			this.deck = deck;
 			this.players = players;

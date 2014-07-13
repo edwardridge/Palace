@@ -8,31 +8,36 @@ using System.Linq;
 namespace UnitTests
 {
 	[TestFixture]
-	public class GameTests
+	public static class GameTests
 	{
+		public static Game CreateGameWithTwoPlayers(ref Player player1, ref Player player2){
+			Game game = new Game ();
+
+			IRandomiser randomiser = new StubRandomiser ();
+			Deck deck = new Deck (randomiser);
+
+			player1 = new Player ("Ed");
+			player2 = new Player ("Liam");
+			List<Player> players = new List<Player> ();
+
+			players.Add (player1);
+			players.Add (player2);
+
+			game.Setup (players, deck);
+
+			return game;
+		}
+
 		[TestFixture]
 		public class SetupGame
 		{
 			Game game;
 			Player player1;
 			Player player2;
-			ICollection<Player> players;
 
 			[SetUp]
 			public void Setup(){
-				game = new Game ();
-
-				IRandomiser randomiser = new StubRandomiser ();
-				Deck deck = new Deck (randomiser);
-
-				player1 = new Player ("Ed");
-				player2 = new Player ("Liam");
-				players = new List<Player> ();
-
-				players.Add (player1);
-				players.Add (player2);
-
-				game.Start (players, deck);
+				game = GameTests.CreateGameWithTwoPlayers (ref player1, ref player2);
 			}
 
 			[Test]
@@ -59,6 +64,19 @@ namespace UnitTests
 			[Test]
 			public void Player_1_Has_3_Face_Down_Cards(){
 				Assert.AreEqual (3, player1.NumFaceDownCards);
+			}
+		}
+
+		[TestFixture]
+		public class StartGame
+		{
+			Game game;
+			Player player1;
+			Player player2;
+
+			[SetUp]
+			public void Setup(){
+				game = GameTests.CreateGameWithTwoPlayers (ref player1, ref player2);
 			}
 		}
 	}

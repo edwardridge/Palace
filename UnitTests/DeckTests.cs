@@ -9,14 +9,14 @@ namespace UnitTests
     public class DeckTests
     {
 		[TestFixture]
-		public class GetCards{
+		public class GetCardsWithPackOf52{
 			Deck deck;
 			int preDeckCount;
 
 			[SetUp]
 			public void Setup(){
 				StubRandomiser randomiser = new StubRandomiser ();
-				deck = new Deck (randomiser);
+				deck = new Deck (randomiser, 52);
 				preDeckCount = deck.GetCount ();
 			}
 
@@ -55,6 +55,23 @@ namespace UnitTests
 			}
 		}
 
+		[TestFixture]
+		public class GetCardsWithPackOf2
+		{
+			Deck deck;
+			[SetUp]
+			public void Setup(){
+				IRandomiser randomiser = new StubRandomiser ();
+				deck = new Deck (randomiser, 2);
+			}
+
+			[Test]
+			public void Gets_Three_Cards_Returns_Two_Cards(){
+				var cards = deck.GetCards (3);
+
+				Assert.AreEqual (2, cards.Count());
+			}
+		}
     }
 }
 
