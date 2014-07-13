@@ -15,14 +15,15 @@ namespace UnitTests
 
 			[SetUp]
 			public void Setup(){
-				StubShuffler randomiser = new StubShuffler ();
+				int[] order = new int[]{ 7,1,10,4,5,6,7,8,9};
+				StubShuffler randomiser = new StubShuffler (order);
 				deck = new Deck (randomiser, 52);
 				preDeckCount = deck.GetCount ();
 			}
 
 			[Test]
 			public void Gets_Single_Card(){
-				var expectedCardValue = 0;
+				var expectedCardValue = 7;
 
 				var cardFromDeckValue = deck.GetCards (1).Select (s => s.Value).First();
 
@@ -39,9 +40,9 @@ namespace UnitTests
 
 			[Test]
 			public void Gets_Two_Cards(){
-				var expectedCardValues = new List<int> (new []{0,1});
+				var expectedCardValues = new List<int> (new []{7,1});
 
-				var cardsFromDeckValues = deck.GetCards(2).Select(s=>s.Value).OrderBy(o=>o).ToList();
+				var cardsFromDeckValues = deck.GetCards(2).Select(s=>s.Value).ToList();
 
 				Assert.AreEqual (expectedCardValues, cardsFromDeckValues);
 			}
