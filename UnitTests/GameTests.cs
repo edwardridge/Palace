@@ -47,13 +47,13 @@ namespace UnitTests
 			}
 
 			[Test]
-			public void Player_1_Has_9_Cards(){
-				Assert.AreEqual (9, player1.NumCards);
+			public void Player_1_Has_6_Face_Up_Cards(){
+				Assert.AreEqual (6, player1.NumFaceUpCards);
 			}
 
 			[Test]
-			public void Player_2_Has_9_Cards(){
-				Assert.AreEqual (9, player2.NumCards);
+			public void Player_2_Has_6_Face_Up_Cards(){
+				Assert.AreEqual (6, player2.NumFaceUpCards);
 			}
 		}
 	}

@@ -15,7 +15,7 @@ namespace Palace
 			this.players = players;
 
 			foreach (Player player in players) {
-				player.AddCards (this.deck.GetCards (9));
+				player.AddCards (this.deck.GetCards (6, true));
 			}
 		}
 

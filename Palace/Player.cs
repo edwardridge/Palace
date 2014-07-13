@@ -11,7 +11,7 @@ namespace Palace
 			private set;
 		}
 
-		public int NumCards {
+		public int NumFaceUpCards {
 			get {return cards.Count; }
 		}
 
