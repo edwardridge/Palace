@@ -86,12 +86,48 @@ namespace UnitTests
 				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
 			}
 
-			[Test]
+			[Test, Ignore]
 			public void Game_Can_Start_When_Both_Players_Are_Ready(){
 				game.PlayerReady (player1);
 				game.PlayerReady (player2);
 
 				var result = game.Start ();
+
+				Assert.AreEqual (ResultOutcome.Success, result.ResultOutcome);
+			}
+
+			[Test]
+			public void Player_Cannot_Be_Ready_With_No_Face_Up_Cards(){
+				var result = game.PlayerReady (player1);
+
+				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
+			}
+
+			[Test]
+			public void Player_Cannot_Be_Ready_With_Two_Face_Up_Cards(){
+				var cards = player1.GetCards();
+				var cardsToPutFaceUp = new List<Card> ();
+				cardsToPutFaceUp.Add (cards.ToArray()[0]);
+				cardsToPutFaceUp.Add (cards.ToArray()[1]);
+
+				player1.PutCardsFaceUp (cardsToPutFaceUp);
+
+				var result = game.PlayerReady (player1);
+
+				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
+			}
+
+			[Test]
+			public void Player_Can_Be_Ready_When_Three_Cards_Are_Face_Up(){
+				var cards = player1.GetCards ();
+				var cardsToPutFaceUp = new List<Card> ();
+				cardsToPutFaceUp.Add (cards.ToArray () [0]);
+				cardsToPutFaceUp.Add (cards.ToArray () [1]);
+				cardsToPutFaceUp.Add (cards.ToArray () [2]);
+
+				player1.PutCardsFaceUp (cardsToPutFaceUp);
+
+				var result = game.PlayerReady (player1);
 
 				Assert.AreEqual (ResultOutcome.Success, result.ResultOutcome);
 			}

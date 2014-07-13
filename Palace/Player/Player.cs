@@ -38,6 +38,16 @@ namespace Palace
 			this.State = state;
 		}
 
+		public ICollection<Card> GetCards ()
+		{
+			return cards;
+		}
+
+		public void PutCardsFaceUp (ICollection<Card> cardsToPutFaceUp)
+		{
+			cardsToPutFaceUp.ToList().ForEach (card=>card.CardOrientation = CardOrientation.FaceUp);
+		}
+
 		private ICollection<Card> cards;
 	}
 

@@ -20,9 +20,15 @@ namespace Palace
 			}
 		}
 
-		public void PlayerReady (Player player)
+		public Result PlayerReady (Player player)
 		{
+			if (player.NumCards (CardOrientation.FaceUp) != 3)
+				return new Result (ResultOutcome.Fail);
+
 			player.SetState (PlayerState.Ready);
+
+			return new Result (ResultOutcome.Success);
+
 		}
 
 		public Result Start ()
