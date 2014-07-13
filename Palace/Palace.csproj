@@ -40,6 +40,7 @@
     <Compile Include="IRandomiser.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="FaceOrientation.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,9 +4,9 @@
     {
         public int Value { get; private set; }
 
-		public bool FaceUp { get; set; }
+		public FaceOrientation FaceUp { get; set; }
 
-		public Card(int value, bool faceUp)
+		public Card(int value, FaceOrientation faceUp)
         {
             Value = value;
 			FaceUp = faceUp;
