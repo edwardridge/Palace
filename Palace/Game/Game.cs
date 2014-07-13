@@ -25,7 +25,6 @@ namespace Palace
 			player.State = PlayerState.Ready;
 
 			return new Result (ResultOutcome.Success);
-
 		}
 
 		public Result Start ()
