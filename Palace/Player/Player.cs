@@ -12,18 +12,18 @@ namespace Palace
 		}
 
 		public PlayerState State {
-			get;
-			private set;
+			get { return state; }
+			set { state = value; }
 		}
 
-		public int NumCards(CardOrientation cardLocation){
-			return cards.Where (card => card.CardOrientation == cardLocation).Count ();
+		public ICollection<Card> Cards {
+			get { return cards; }
 		}
 
 		public Player(string name){
 			Name = name;
 			cards = new List<Card> ();
-			State = PlayerState.Setup;
+			state = PlayerState.Setup;
 		}
 
 		public void AddCards (IEnumerable<Card> cardsToBeAdded)
@@ -31,16 +31,6 @@ namespace Palace
 			foreach (Card addedCard in cardsToBeAdded) {
 				this.cards.Add (addedCard);
 			}
-		}
-
-		public void SetState (PlayerState state)
-		{
-			this.State = state;
-		}
-
-		public ICollection<Card> GetCards ()
-		{
-			return cards;
 		}
 
 		public Result PutCardFaceUp (Card cardToPutFaceUp)
@@ -52,7 +42,13 @@ namespace Palace
 			return new Result (ResultOutcome.Success);
 		}
 
+		public int NumCards(CardOrientation cardLocation){
+			return cards.Where (card => card.CardOrientation == cardLocation).Count ();
+		}
+
 		private ICollection<Card> cards;
+
+		private PlayerState state;
 	}
 
 }

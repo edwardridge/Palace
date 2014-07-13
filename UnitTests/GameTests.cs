@@ -123,14 +123,14 @@ namespace UnitTests
 			public void Player_Cannot_Put_Fourth_Card_Face_Up(){
 				PutSomeCardsFaceUp (player1, 3);
 
-				var result = player1.PutCardFaceUp(player1.GetCards().ToArray()[3]);
+				var result = player1.PutCardFaceUp(player1.Cards.ToArray()[3]);
 
 				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
 			}
 
 			private void PutSomeCardsFaceUp (Player player, int count)
 			{
-				var cards = player.GetCards ();
+				var cards = player.Cards;
 
 				for (int i = 0; i < count; i++) {
 					player.PutCardFaceUp (cards.ToArray () [i]);

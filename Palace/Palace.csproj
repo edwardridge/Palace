@@ -38,12 +38,12 @@
     <Compile Include="Card\Card.cs" />
     <Compile Include="Card\CardOrientation.cs" />
     <Compile Include="Game\Game.cs" />
-    <Compile Include="Game\ResultOutcome.cs" />
-    <Compile Include="Game\Result.cs" />
     <Compile Include="Player\Player.cs" />
     <Compile Include="Player\PlayerState.cs" />
     <Compile Include="Deck\Deck.cs" />
     <Compile Include="Deck\IRandomiser.cs" />
+    <Compile Include="Result.cs" />
+    <Compile Include="ResultOutcome.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

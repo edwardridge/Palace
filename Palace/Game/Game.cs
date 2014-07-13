@@ -6,9 +6,6 @@ namespace Palace
 {
 	public class Game
 	{
-		private ICollection<Player> players;
-		private Deck deck;
-
 		public void Setup (ICollection<Player> players, Deck deck)
 		{
 			this.deck = deck;
@@ -25,7 +22,7 @@ namespace Palace
 			if (player.NumCards (CardOrientation.FaceUp) != 3)
 				return new Result (ResultOutcome.Fail);
 
-			player.SetState (PlayerState.Ready);
+			player.State = PlayerState.Ready;
 
 			return new Result (ResultOutcome.Success);
 
@@ -33,14 +30,9 @@ namespace Palace
 
 		public Result Start ()
 		{
-			bool allPlayersReady = true;
-			foreach (Player player in players) {
-				if (player.State != PlayerState.Ready)
-					allPlayersReady = false;
-			}
+			bool allPlayersReady = players.All(player => player.State == PlayerState.Ready);
 
-			if(allPlayersReady)
-				return new Result (ResultOutcome.Success);
+			if(allPlayersReady) return new Result (ResultOutcome.Success);
 
 			return new Result (ResultOutcome.Fail);
 		}
@@ -48,6 +40,9 @@ namespace Palace
 		public int NumberOfPlayers {
 			get{ return players.Count; }
 		}
+
+		private ICollection<Player> players;
+		private Deck deck;
 	}
 
 }
