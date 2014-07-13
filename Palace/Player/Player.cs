@@ -43,9 +43,13 @@ namespace Palace
 			return cards;
 		}
 
-		public void PutCardsFaceUp (ICollection<Card> cardsToPutFaceUp)
+		public Result PutCardFaceUp (Card cardToPutFaceUp)
 		{
-			cardsToPutFaceUp.ToList().ForEach (card=>card.CardOrientation = CardOrientation.FaceUp);
+			if(this.NumCards(CardOrientation.FaceUp) >= 3)
+				return new Result(ResultOutcome.Fail);
+
+			cardToPutFaceUp.CardOrientation = CardOrientation.FaceUp;
+			return new Result (ResultOutcome.Success);
 		}
 
 		private ICollection<Card> cards;

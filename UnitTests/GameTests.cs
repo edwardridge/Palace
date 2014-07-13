@@ -41,14 +41,10 @@ namespace UnitTests
 			}
 
 			[Test]
-			public void Start_With_Two_Players_Two_Players_Are_In_Game(){
+			public void Setup_With_Two_Players_Two_Players_Are_In_Game(){
 				var playerCount = game.NumberOfPlayers;
-				Assert.AreEqual (2, playerCount);
-			}
 
-			[Test]
-			public void Player_1_Has_First_Go(){
-				Assert.AreEqual (player1.Name, game.CurrentTurn().Name);
+				Assert.AreEqual (2, playerCount);
 			}
 
 			[Test]
@@ -123,16 +119,22 @@ namespace UnitTests
 				Assert.AreEqual (ResultOutcome.Success, result.ResultOutcome);
 			}
 
+			[Test]
+			public void Player_Cannot_Put_Fourth_Card_Face_Up(){
+				PutSomeCardsFaceUp (player1, 3);
+
+				var result = player1.PutCardFaceUp(player1.GetCards().ToArray()[3]);
+
+				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
+			}
+
 			private void PutSomeCardsFaceUp (Player player, int count)
 			{
 				var cards = player.GetCards ();
-				var cardsToPutFaceUp = new List<Card> ();
 
 				for (int i = 0; i < count; i++) {
-					cardsToPutFaceUp.Add (cards.ToArray () [i]);
+					player.PutCardFaceUp (cards.ToArray () [i]);
 				}
-
-				player1.PutCardsFaceUp (cardsToPutFaceUp);
 			}
 		}
 	}

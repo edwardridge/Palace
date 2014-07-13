@@ -48,10 +48,6 @@ namespace Palace
 		public int NumberOfPlayers {
 			get{ return players.Count; }
 		}
-
-		public Player CurrentTurn(){
-			return players.ToArray()[0];
-		}
 	}
 
 }
