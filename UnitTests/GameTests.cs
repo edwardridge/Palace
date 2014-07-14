@@ -7,23 +7,20 @@ using System.Linq;
 
 namespace UnitTests
 {
-	[TestFixture]
+    [TestFixture]
 	public static class GameTests
 	{
 		public static Game CreateGameWithTwoPlayers(ref Player player1, ref Player player2){
-			Game game = new Game ();
+			var game = new Game ();
 
-			IShuffler randomiser = new StubShuffler ();
-			Deck deck = new Deck (randomiser);
+			var randomiser = new StubShuffler ();
+			var deck = new Deck (randomiser);
 
 			player1 = new Player ("Ed");
 			player2 = new Player ("Liam");
-			List<Player> players = new List<Player> ();
+			var players = new List<Player> { player1, player2 };
 
-			players.Add (player1);
-			players.Add (player2);
-
-			game.Setup (players, deck);
+		    game.Setup (players, deck);
 
 			return game;
 		}
@@ -37,7 +34,7 @@ namespace UnitTests
 
 			[SetUp]
 			public void Setup(){
-				game = GameTests.CreateGameWithTwoPlayers (ref player1, ref player2);
+				game = CreateGameWithTwoPlayers (ref player1, ref player2);
 			}
 
 			[Test]
@@ -47,7 +44,6 @@ namespace UnitTests
 				Assert.AreEqual (2, playerCount);
 			}
 
-			[Test]
 			public void Player_1_Has_6_In_Hand_Cards(){
 				Assert.AreEqual (6, player1.NumCards(CardOrientation.InHand));
 			}
@@ -72,12 +68,12 @@ namespace UnitTests
 
 			[SetUp]
 			public void Setup(){
-				game = GameTests.CreateGameWithTwoPlayers (ref player1, ref player2);
+				game = CreateGameWithTwoPlayers (ref player1, ref player2);
 			}
 
 			[Test]
 			public void Game_Cannot_Start_When_Both_Players_Not_Ready(){
-				Result result = game.Start ();
+				var result = game.Start ();
 
 				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
 			}
@@ -128,11 +124,11 @@ namespace UnitTests
 				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
 			}
 
-			private void PutSomeCardsFaceUp (Player player, int count)
+		    private static void PutSomeCardsFaceUp (Player player, int count)
 			{
 				var cards = player.Cards;
 
-				for (int i = 0; i < count; i++) {
+				for (var i = 0; i < count; i++) {
 					player.PutCardFaceUp (cards.ToArray () [i]);
 				}
 			}

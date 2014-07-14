@@ -15,8 +15,8 @@ namespace UnitTests
 
 			[SetUp]
 			public void Setup(){
-				int[] order = new int[]{ 7,1,10,4,5,6,7,8,9};
-				StubShuffler randomiser = new StubShuffler (order);
+				var order = new []{ 7,1,10,4,5,6,7,8,9};
+				var randomiser = new StubShuffler (order);
 				deck = new Deck (randomiser, 52);
 				preDeckCount = deck.GetCount ();
 			}
