@@ -80,8 +80,8 @@ namespace UnitTests
 
 			[Test]
 			public void Game_Can_Start_When_Both_Players_Are_Ready(){
-				PutSomeCardsFaceUp (player1, 3);
-				PutSomeCardsFaceUp (player2, 3);
+				PlayerHelper.PutSomeCardsFaceUp (player1, 3);
+				PlayerHelper.PutSomeCardsFaceUp (player2, 3);
 
 				player1.Ready ();
 				player2.Ready ();
@@ -99,7 +99,7 @@ namespace UnitTests
 
 			[Test]
 			public void Player_Cannot_Be_Ready_With_Two_Face_Up_Cards(){
-				PutSomeCardsFaceUp (player1, 2);
+				PlayerHelper.PutSomeCardsFaceUp (player1, 2);
 
 				var result = player1.Ready ();
 
@@ -108,7 +108,7 @@ namespace UnitTests
 
 			[Test]
 			public void Player_Can_Be_Ready_When_Three_Cards_Are_Face_Up(){
-				PutSomeCardsFaceUp (player1, 3);
+				PlayerHelper.PutSomeCardsFaceUp (player1, 3);
 
 				var result = player1.Ready ();
 
@@ -117,20 +117,11 @@ namespace UnitTests
 
 			[Test]
 			public void Player_Cannot_Put_Fourth_Card_Face_Up(){
-				PutSomeCardsFaceUp (player1, 3);
+				PlayerHelper.PutSomeCardsFaceUp (player1, 3);
 
 				var result = player1.PutCardFaceUp(player1.Cards.ToArray()[3]);
 
 				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
-			}
-
-		    private static void PutSomeCardsFaceUp (Player player, int count)
-			{
-				var cards = player.Cards;
-
-				for (var i = 0; i < count; i++) {
-					player.PutCardFaceUp (cards.ToArray () [i]);
-				}
 			}
 		}
 	}
