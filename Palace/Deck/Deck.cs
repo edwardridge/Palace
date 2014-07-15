@@ -6,15 +6,12 @@ namespace Palace
 	public class Deck
 	{
 		private ICollection<Card> cards;
-		private IShuffler shuffler;
 
-		public Deck(IShuffler randomiser) : this(randomiser, 52){
+		public Deck(IShuffler shuffler) : this(shuffler, 52){
 		}
 
 		public Deck(IShuffler shuffler, int numCards)
 	    {
-			this.shuffler = shuffler;
-
 			cards = new List<Card>();
 			for (int i = 0; i < numCards; i++) {
 				cards.Add (new Card (i, CardOrientation.FaceUp));
@@ -23,17 +20,17 @@ namespace Palace
 			cards = shuffler.ShuffleCards (cards);
 		}
 
-		//Aside from setup we can assume we want face up cards
+		//Aside from setup we can assume we want in hand cards
 		public IEnumerable<Card> GetCards (int count){
-			return this.GetCards (count, CardOrientation.FaceUp);
+			return this.GetCards (count, CardOrientation.InHand);
 		}
 
-		public IEnumerable<Card> GetCards (int count, CardOrientation faceOrientation)
+		public IEnumerable<Card> GetCards (int count, CardOrientation cardOrientation)
 		{
 			var returnCards = new List<Card>() ;
 
 			for(int i = 0 ;(i < count) && (cards.Count > 0); i++){
-				var card = GetCard (faceOrientation);
+				var card = GetCard (cardOrientation);
 				returnCards.Add(card);
 				RemoveCard (card);
 			}
@@ -41,9 +38,9 @@ namespace Palace
 			return returnCards;
 		}
 
-		private Card GetCard(CardOrientation faceUp){
+		private Card GetCard(CardOrientation cardOrientation){
 			var cardToReturn = cards.First();
-			cardToReturn.CardOrientation = faceUp;
+			cardToReturn.CardOrientation = cardOrientation;
 
 			return cardToReturn;
 		}

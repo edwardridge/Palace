@@ -83,8 +83,8 @@ namespace UnitTests
 				PutSomeCardsFaceUp (player1, 3);
 				PutSomeCardsFaceUp (player2, 3);
 
-				game.PlayerReady (player1);
-				game.PlayerReady (player2);
+				player1.Ready ();
+				player2.Ready ();
 				var result = game.Start ();
 
 				Assert.AreEqual (ResultOutcome.Success, result.ResultOutcome);
@@ -92,7 +92,7 @@ namespace UnitTests
 
 			[Test]
 			public void Player_Cannot_Be_Ready_With_No_Face_Up_Cards(){
-				var result = game.PlayerReady (player1);
+				var result = player1.Ready();
 
 				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
 			}
@@ -101,7 +101,7 @@ namespace UnitTests
 			public void Player_Cannot_Be_Ready_With_Two_Face_Up_Cards(){
 				PutSomeCardsFaceUp (player1, 2);
 
-				var result = game.PlayerReady (player1);
+				var result = player1.Ready ();
 
 				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
 			}
@@ -110,7 +110,7 @@ namespace UnitTests
 			public void Player_Can_Be_Ready_When_Three_Cards_Are_Face_Up(){
 				PutSomeCardsFaceUp (player1, 3);
 
-				var result = game.PlayerReady (player1);
+				var result = player1.Ready ();
 
 				Assert.AreEqual (ResultOutcome.Success, result.ResultOutcome);
 			}

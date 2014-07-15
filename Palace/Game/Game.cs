@@ -17,16 +17,6 @@ namespace Palace
 			}
 		}
 
-		public Result PlayerReady (Player player)
-		{
-			if (player.NumCards (CardOrientation.FaceUp) != 3)
-				return new Result (ResultOutcome.Fail);
-
-			player.State = PlayerState.Ready;
-
-			return new Result (ResultOutcome.Success);
-		}
-
 		public Result Start ()
 		{
 			bool allPlayersReady = players.All(player => player.State == PlayerState.Ready);

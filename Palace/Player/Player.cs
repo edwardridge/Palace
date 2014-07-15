@@ -46,6 +46,16 @@ namespace Palace
 			return cards.Where (card => card.CardOrientation == cardLocation).Count ();
 		}
 
+		public Result Ready ()
+		{
+			if (this.NumCards (CardOrientation.FaceUp) != 3)
+				return new Result (ResultOutcome.Fail);
+
+			this.State = PlayerState.Ready;
+
+			return new Result (ResultOutcome.Success);
+		}
+
 		private ICollection<Card> cards;
 
 		private PlayerState state;

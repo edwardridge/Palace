@@ -5,7 +5,7 @@ namespace Palace
 {
 	public interface IShuffler
 	{
-		ICollection<Card> ShuffleCards(ICollection<Card> preShuffledDeck);
+		 ICollection<Card> ShuffleCards(ICollection<Card> preShuffledDeck);
 	}
 }
 
