@@ -54,6 +54,13 @@ namespace UnitTests
 
 				Assert.AreEqual (preDeckCount - 2, postDeckCount);
 			}
+
+			[Test]
+			public void Standard_Deck_Has_13_Hearts(){
+				var heartCount = deck.CardsOfSuite (Suite.Heart);
+
+				Assert.AreEqual (13, heartCount);
+			}
 		}
 
 		[TestFixture]

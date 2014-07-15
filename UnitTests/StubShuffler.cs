@@ -15,7 +15,13 @@ namespace UnitTests
 
 		public StubShuffler (int[] cardOrder)
 		{
-			this.cardOrder = cardOrder;
+			var NewThing = cardOrder.ToList ();
+
+			for (int i = 0; i < (52 - cardOrder.Count()); i++) {
+				NewThing.Add (i + cardOrder.Count());
+			}
+
+			this.cardOrder = NewThing.ToArray ();
 		}
 
 		public ICollection<Card> ShuffleCards (ICollection<Card> preShuffledDeck)
@@ -26,6 +32,7 @@ namespace UnitTests
 			foreach(int order in newOrder){
 				cards.Add(preShuffledDeck.ToArray()[order]);
 			}
+
 			return cards;
 		}
 
