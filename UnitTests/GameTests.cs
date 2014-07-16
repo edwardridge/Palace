@@ -13,7 +13,7 @@ namespace UnitTests
 		public static Game CreateGameWithTwoPlayers(ref Player player1, ref Player player2){
 			var game = new Game ();
 
-			var randomiser = new StubShuffler ();
+			var randomiser = new PredeterminedShuffler ();
 			var deck = new Deck (randomiser);
 
 			player1 = new Player ("Ed");

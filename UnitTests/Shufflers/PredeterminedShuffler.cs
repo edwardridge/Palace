@@ -5,15 +5,15 @@ using System.Linq;
 
 namespace UnitTests
 {
-	public class StubShuffler : IShuffler
+	public class PredeterminedShuffler : IShuffler
 	{
 		Card[] cardOrder;
 
-		public StubShuffler () {
+		public PredeterminedShuffler () {
 			this.cardOrder = GetSequentialOrder ();
 		}
 
-		public StubShuffler (Card[] cardOrder)
+		public PredeterminedShuffler (IEnumerable<Card> cardOrder)
 		{
 			var NewThing = cardOrder.ToList ();
 
@@ -27,10 +27,11 @@ namespace UnitTests
 		public ICollection<Card> ShuffleCards (ICollection<Card> preShuffledDeck)
 		{
 			List<Card> cards = new List<Card> ();
-			var newOrder = cardOrder.Where (i=>i.Value < preShuffledDeck.Count);
-
-			foreach(Card order in newOrder){
-				cards.Add(preShuffledDeck.ToArray()[order.Value]);
+			for (int i = 0; i < preShuffledDeck.Count; i++) {
+				if (i < this.cardOrder.Count())
+					cards.Add (this.cardOrder [i]);
+				else
+					cards.Add(new Card(i, Suite.Club));
 			}
 
 			return cards;

@@ -39,8 +39,9 @@
     <Compile Include="GameTests.cs">
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="StubShuffler.cs" />
     <Compile Include="PlayerHelper.cs" />
+    <Compile Include="Shufflers\NonShuffler.cs" />
+    <Compile Include="Shufflers\PredeterminedShuffler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -48,5 +49,8 @@
       <Project>{79AB397F-203B-4521-81EC-1BA40C4F2776}</Project>
       <Name>Palace</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Shufflers\" />
   </ItemGroup>
 </Project>

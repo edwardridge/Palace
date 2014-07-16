@@ -8,10 +8,8 @@ namespace UnitTests
     [TestFixture]
     public class DeckTests
     {
-		public static Deck SetupDeckWithStandardPack(){
-			var order = new []{ new Card(7, Suite.Club),new Card(1, Suite.Club),new Card(10, Suite.Club),new Card(4, Suite.Club),new Card(5, Suite.Club),new Card(6, Suite.Club),new Card(7, Suite.Club),new Card(8, Suite.Club),new Card(9, Suite.Club)};
-			var randomiser = new StubShuffler (order);
-			return new Deck (randomiser, 52);
+		private static IEnumerable<Card> GetCardsFromValues(IEnumerable<int> values){
+			return values.ToList().Select(s => new Card(s, Suite.Club));
 		}
 
 		[TestFixture]
@@ -20,7 +18,8 @@ namespace UnitTests
 
 			[SetUp]
 			public void Setup(){
-				deck = DeckTests.SetupDeckWithStandardPack();
+				var nonShuffler = new NonShuffler ();
+				deck = new Deck (nonShuffler, 52);
 			}
 
 			[Test]
@@ -59,7 +58,9 @@ namespace UnitTests
 
 			[SetUp]
 			public void Setup(){
-				deck = DeckTests.SetupDeckWithStandardPack();
+				var order = GetCardsFromValues(new List<int>(){ 7,1,10,3,5,2,5,6,4,8,12,51});
+				var predeterminedShuffler = new PredeterminedShuffler (order);
+				deck = new Deck (predeterminedShuffler, 52);
 				preDeckCount = deck.GetCount ();
 			}
 
@@ -104,7 +105,7 @@ namespace UnitTests
 			Deck deck;
 			[SetUp]
 			public void Setup(){
-				IShuffler randomiser = new StubShuffler ();
+				IShuffler randomiser = new PredeterminedShuffler ();
 				deck = new Deck (randomiser, 2);
 			}
 
