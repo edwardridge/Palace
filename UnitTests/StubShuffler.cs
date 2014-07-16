@@ -7,18 +7,18 @@ namespace UnitTests
 {
 	public class StubShuffler : IShuffler
 	{
-		int[] cardOrder;
+		Card[] cardOrder;
 
 		public StubShuffler () {
 			this.cardOrder = GetSequentialOrder ();
 		}
 
-		public StubShuffler (int[] cardOrder)
+		public StubShuffler (Card[] cardOrder)
 		{
 			var NewThing = cardOrder.ToList ();
 
 			for (int i = 0; i < (52 - cardOrder.Count()); i++) {
-				NewThing.Add (i + cardOrder.Count());
+				NewThing.Add (new Card(i + cardOrder.Count(), Suite.Club));
 			}
 
 			this.cardOrder = NewThing.ToArray ();
@@ -27,20 +27,20 @@ namespace UnitTests
 		public ICollection<Card> ShuffleCards (ICollection<Card> preShuffledDeck)
 		{
 			List<Card> cards = new List<Card> ();
-			var newOrder = cardOrder.Where (i=>i < preShuffledDeck.Count);
+			var newOrder = cardOrder.Where (i=>i.Value < preShuffledDeck.Count);
 
-			foreach(int order in newOrder){
-				cards.Add(preShuffledDeck.ToArray()[order]);
+			foreach(Card order in newOrder){
+				cards.Add(preShuffledDeck.ToArray()[order.Value]);
 			}
 
 			return cards;
 		}
 
-		public int[] GetSequentialOrder ()
+		public Card[] GetSequentialOrder ()
 		{
-			List<int> order = new List<int> ();
+			var order = new List<Card> ();
 			for (int i = 0; i < 52; i++) {
-				order.Add (i);
+				order.Add (new Card(i, Suite.Club));
 			}
 
 			return order.ToArray ();

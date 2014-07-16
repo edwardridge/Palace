@@ -13,6 +13,7 @@ namespace Palace
 		public Deck(IShuffler shuffler, int numCards)
 	    {
 			cards = new List<Card>();
+
 			for (int i = 0; i < numCards; i++) {
 				if(i<13)
 					cards.Add (new Card (i, Suite.Heart));

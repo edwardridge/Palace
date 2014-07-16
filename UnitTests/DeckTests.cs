@@ -8,6 +8,50 @@ namespace UnitTests
     [TestFixture]
     public class DeckTests
     {
+		public static Deck SetupDeckWithStandardPack(){
+			var order = new []{ new Card(7, Suite.Club),new Card(1, Suite.Club),new Card(10, Suite.Club),new Card(4, Suite.Club),new Card(5, Suite.Club),new Card(6, Suite.Club),new Card(7, Suite.Club),new Card(8, Suite.Club),new Card(9, Suite.Club)};
+			var randomiser = new StubShuffler (order);
+			return new Deck (randomiser, 52);
+		}
+
+		[TestFixture]
+		public class StandardPack{
+			Deck deck;
+
+			[SetUp]
+			public void Setup(){
+				deck = DeckTests.SetupDeckWithStandardPack();
+			}
+
+			[Test]
+			public void Has_13_Hearts(){
+				var heartCount = deck.CardsOfSuite (Suite.Heart);
+
+				Assert.AreEqual (13, heartCount);
+			}
+
+			[Test]
+			public void Has_13_Clubs(){
+				var clubCount = deck.CardsOfSuite (Suite.Club);
+
+				Assert.AreEqual (13, clubCount);
+			}
+
+			[Test]
+			public void Has_13_Spades(){
+				var clubCount = deck.CardsOfSuite (Suite.Spade);
+
+				Assert.AreEqual (13, clubCount);
+			}
+
+			[Test]
+			public void Has_13_Diamonds(){
+				var clubCount = deck.CardsOfSuite (Suite.Diamond);
+
+				Assert.AreEqual (13, clubCount);
+			}
+		}
+
 		[TestFixture]
 		public class GetCardsWithPackOf52{
 			Deck deck;
@@ -15,9 +59,7 @@ namespace UnitTests
 
 			[SetUp]
 			public void Setup(){
-				var order = new []{ 7,1,10,4,5,6,7,8,9};
-				var randomiser = new StubShuffler (order);
-				deck = new Deck (randomiser, 52);
+				deck = DeckTests.SetupDeckWithStandardPack();
 				preDeckCount = deck.GetCount ();
 			}
 
@@ -42,7 +84,7 @@ namespace UnitTests
 			public void Gets_Two_Cards(){
 				var expectedCardValues = new List<int> (new []{7,1});
 
-				var cardsFromDeckValues = deck.GetCards(2).Select(s=>s.Value).ToList();
+				var cardsFromDeckValues = deck.GetCards(2).Select(s=>s.Value);
 
 				Assert.AreEqual (expectedCardValues, cardsFromDeckValues);
 			}
@@ -53,34 +95,6 @@ namespace UnitTests
 				var postDeckCount = deck.GetCount ();
 
 				Assert.AreEqual (preDeckCount - 2, postDeckCount);
-			}
-
-			[Test]
-			public void Standard_Deck_Has_13_Hearts(){
-				var heartCount = deck.CardsOfSuite (Suite.Heart);
-
-				Assert.AreEqual (13, heartCount);
-			}
-
-			[Test]
-			public void Standard_Deck_Has_13_Clubs(){
-				var clubCount = deck.CardsOfSuite (Suite.Club);
-
-				Assert.AreEqual (13, clubCount);
-			}
-
-			[Test]
-			public void Standard_Deck_Has_13_Spades(){
-				var clubCount = deck.CardsOfSuite (Suite.Spade);
-
-				Assert.AreEqual (13, clubCount);
-			}
-
-			[Test]
-			public void Standard_Deck_Has_13_Diamonds(){
-				var clubCount = deck.CardsOfSuite (Suite.Diamond);
-
-				Assert.AreEqual (13, clubCount);
 			}
 		}
 
