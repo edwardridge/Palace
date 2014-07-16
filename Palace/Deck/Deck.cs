@@ -18,8 +18,10 @@ namespace Palace
 					cards.Add (new Card (i, Suite.Heart));
 				else if(i<26)
 					cards.Add (new Card (i, Suite.Club));
+				else if(i<39)
+					cards.Add (new Card (i, Suite.Spade));
 				else
-					cards.Add (new Card (i, Suite.Other));
+					cards.Add (new Card (i, Suite.Diamond));
 			}
 
 			cards = shuffler.ShuffleCards (cards);
