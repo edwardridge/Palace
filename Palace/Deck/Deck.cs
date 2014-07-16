@@ -15,9 +15,11 @@ namespace Palace
 			cards = new List<Card>();
 			for (int i = 0; i < numCards; i++) {
 				if(i<13)
-					cards.Add (new Card (i, Suite.Heart, CardOrientation.FaceUp));
+					cards.Add (new Card (i, Suite.Heart));
+				else if(i<26)
+					cards.Add (new Card (i, Suite.Club));
 				else
-					cards.Add (new Card (i, Suite.Other, CardOrientation.FaceUp));
+					cards.Add (new Card (i, Suite.Other));
 			}
 
 			cards = shuffler.ShuffleCards (cards);
@@ -41,9 +43,9 @@ namespace Palace
 			return returnCards;
 		}
 
-		public int CardsOfSuite (Suite heart)
+		public int CardsOfSuite (Suite suite)
 		{
-			return cards.Where (card => card.Suite == Suite.Heart).Count ();
+			return cards.Where (card => card.Suite == suite).Count ();
 		}
 			
 		public int GetCount ()

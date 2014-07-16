@@ -8,6 +8,10 @@
 
 		public CardOrientation CardOrientation { get; set; }
 
+		public Card(int value, Suite suite) : this(value, suite, CardOrientation.InHand)
+		{
+		}
+
 		public Card(int value, Suite suite, CardOrientation faceUp)
         {
             Value = value;

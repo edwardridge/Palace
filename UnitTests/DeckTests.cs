@@ -61,6 +61,13 @@ namespace UnitTests
 
 				Assert.AreEqual (13, heartCount);
 			}
+
+			[Test]
+			public void Standard_Deck_Has_13_Clubs(){
+				var clubCount = deck.CardsOfSuite (Suite.Club);
+
+				Assert.AreEqual (13, clubCount);
+			}
 		}
 
 		[TestFixture]
