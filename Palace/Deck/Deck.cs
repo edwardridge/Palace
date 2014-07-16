@@ -29,11 +29,11 @@ namespace Palace
 		}
 
 		//Aside from setup we can assume we want in hand cards
-		public IEnumerable<Card> GetCards (int count){
+		public ICollection<Card> GetCards (int count){
 			return this.GetCards (count, CardOrientation.InHand);
 		}
 
-		public IEnumerable<Card> GetCards (int count, CardOrientation cardOrientation)
+		public ICollection<Card> GetCards (int count, CardOrientation cardOrientation)
 		{
 			var returnCards = new List<Card>() ;
 

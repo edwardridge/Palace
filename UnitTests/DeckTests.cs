@@ -8,8 +8,8 @@ namespace UnitTests
     [TestFixture]
     public class DeckTests
     {
-		private static IEnumerable<Card> GetCardsFromValues(IEnumerable<int> values){
-			return values.ToList().Select(s => new Card(s, Suite.Club));
+		private static ICollection<Card> GetCardsFromValues(ICollection<int> values){
+			return values.Select(s => new Card(s, Suite.Club)).ToList();
 		}
 
 		[TestFixture]

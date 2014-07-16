@@ -26,7 +26,7 @@ namespace Palace
 			state = PlayerState.Setup;
 		}
 
-		public void AddCards (IEnumerable<Card> cardsToBeAdded)
+		public void AddCards (ICollection<Card> cardsToBeAdded)
 		{
 			foreach (Card addedCard in cardsToBeAdded) {
 				this.cards.Add (addedCard);

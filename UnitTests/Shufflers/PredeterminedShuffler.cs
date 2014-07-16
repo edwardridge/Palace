@@ -13,7 +13,7 @@ namespace UnitTests
 			this.cardOrder = GetSequentialOrder ();
 		}
 
-		public PredeterminedShuffler (IEnumerable<Card> cardOrder)
+		public PredeterminedShuffler (ICollection<Card> cardOrder)
 		{
 			var NewThing = cardOrder.ToList ();
 
@@ -27,7 +27,7 @@ namespace UnitTests
 		public ICollection<Card> ShuffleCards (ICollection<Card> preShuffledDeck)
 		{
 			List<Card> cards = new List<Card> ();
-			for (int i = 0; i < preShuffledDeck.Count; i++) {
+			for (int i = 0; i < preShuffledDeck.Count(); i++) {
 				if (i < this.cardOrder.Count())
 					cards.Add (this.cardOrder [i]);
 				else
