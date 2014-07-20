@@ -47,6 +47,7 @@
     <Compile Include="Deck\IShuffler.cs" />
     <Compile Include="Card\Suite.cs" />
     <Compile Include="Card\CardType.cs" />
+    <Compile Include="Deck\Pack.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

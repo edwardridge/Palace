@@ -7,22 +7,15 @@ namespace Palace
 	{
 		private ICollection<Card> cards;
 
-		public Deck(IShuffler shuffler) : this(shuffler, 52){
+		public Deck(IShuffler shuffler) : this(shuffler, new Pack()){
 		}
 
-		public Deck(IShuffler shuffler, int numCards)
+		public Deck(IShuffler shuffler, Pack pack)
 	    {
-			cards = new List<Card>();
+			//Pack pack = new Pack ();
+			cards = new List<Card> ();
 
-			var fullDeck = new List<Card> ();
-			fullDeck.AddRange(SetupSuiteOfCards(Suite.Club));
-			fullDeck.AddRange(SetupSuiteOfCards(Suite.Diamond));
-			fullDeck.AddRange(SetupSuiteOfCards(Suite.Heart));
-			fullDeck.AddRange(SetupSuiteOfCards(Suite.Spade));
-
-			for (int i = 0; i < numCards; i++) {
-				cards.Add (fullDeck [i]);
-			}
+			cards = pack.Cards;
 
 			cards = shuffler.ShuffleCards (cards);
 		}

@@ -19,7 +19,8 @@ namespace UnitTests
 			[SetUp]
 			public void Setup(){
 				var nonShuffler = new NonShuffler ();
-				deck = new Deck (nonShuffler, 52);
+				Pack pack = new Pack ();
+				deck = new Deck (nonShuffler, pack);
 			}
 
 			[Test]
@@ -74,7 +75,8 @@ namespace UnitTests
 			public void Setup(){
 				var order = GetCardsFromValues(new List<int>(){ 7,1,10,3,5,2,5,6,4,8,12,51});
 				var predeterminedShuffler = new PredeterminedShuffler (order);
-				deck = new Deck (predeterminedShuffler, 52);
+				Pack pack = new Pack ();
+				deck = new Deck (predeterminedShuffler, pack);
 				preDeckCount = deck.GetCount ();
 			}
 
@@ -120,7 +122,8 @@ namespace UnitTests
 			[SetUp]
 			public void Setup(){
 				IShuffler randomiser = new PredeterminedShuffler ();
-				deck = new Deck (randomiser, 2);
+				Pack pack = new Pack (2);
+				deck = new Deck (randomiser, pack);
 			}
 
 			[Test]
