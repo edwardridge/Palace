@@ -77,7 +77,7 @@ namespace UnitTests
 				var predeterminedShuffler = new PredeterminedShuffler (order);
 				Pack pack = new Pack ();
 				deck = new Deck (predeterminedShuffler, pack);
-				preDeckCount = deck.GetCount ();
+				preDeckCount = deck.CardCount ();
 			}
 
 			[Test]
@@ -92,7 +92,7 @@ namespace UnitTests
 			[Test]
 			public void Gets_Single_Card_Card_Is_Removed_From_Deck(){
 				deck.GetCards (1);
-				var postDeckCount = deck.GetCount ();
+				var postDeckCount = deck.CardCount ();
 
 				Assert.AreEqual (preDeckCount - 1, postDeckCount);
 			}
@@ -109,7 +109,7 @@ namespace UnitTests
 			[Test]
 			public void Gets_Two_Cards_Two_Cards_Removed_From_Deck(){
 				deck.GetCards (2);
-				var postDeckCount = deck.GetCount ();
+				var postDeckCount = deck.CardCount ();
 
 				Assert.AreEqual (preDeckCount - 2, postDeckCount);
 			}
