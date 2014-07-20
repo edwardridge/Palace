@@ -31,9 +31,10 @@ namespace Palace
 			for(int i = 2; i <= 10; i++){
 				suiteOfCards.Add(new Card(i, CardType.Number, suit));
 			}
-			suiteOfCards.Add(new Card(11, CardType.Other, suit));
-			suiteOfCards.Add(new Card(12, CardType.Other, suit));
-			suiteOfCards.Add(new Card(13, CardType.Other, suit));
+
+			suiteOfCards.Add(new Card(11, CardType.Jack, suit));
+			suiteOfCards.Add(new Card(12, CardType.Queen, suit));
+			suiteOfCards.Add(new Card(13, CardType.King, suit));
 			suiteOfCards.Add(new Card(14, CardType.Ace, suit));
 
 			return suiteOfCards;

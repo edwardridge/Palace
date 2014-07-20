@@ -39,16 +39,16 @@ namespace UnitTests
 
 			[Test]
 			public void Has_13_Spades(){
-				var clubCount = deck.CardsOfSuite (Suit.Spade);
+				var spadeCount = deck.CardsOfSuite (Suit.Spade);
 
-				Assert.AreEqual (13, clubCount);
+				Assert.AreEqual (13, spadeCount);
 			}
 
 			[Test]
 			public void Has_13_Diamonds(){
-				var clubCount = deck.CardsOfSuite (Suit.Diamond);
+				var diamondCount = deck.CardsOfSuite (Suit.Diamond);
 
-				Assert.AreEqual (13, clubCount);
+				Assert.AreEqual (13, diamondCount);
 			}
 
 			[Test]
@@ -56,6 +56,27 @@ namespace UnitTests
 				var aceCount = deck.CardsOfType (CardType.Ace);
 
 				Assert.AreEqual (4, aceCount);
+			}
+
+			[Test]
+			public void Has_4_Jacks(){
+				var jackCount = deck.CardsOfType (CardType.Jack);
+
+				Assert.AreEqual (4, jackCount);
+			}
+
+			[Test]
+			public void Has_4_Queens(){
+				var queenCount = deck.CardsOfType (CardType.Queen);
+
+				Assert.AreEqual (4, queenCount);
+			}
+
+			[Test]
+			public void Has_4_Kings(){
+				var kingCount = deck.CardsOfType (CardType.King);
+
+				Assert.AreEqual (4, kingCount);
 			}
 
 			[Test]
