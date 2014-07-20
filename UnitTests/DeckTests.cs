@@ -9,7 +9,7 @@ namespace UnitTests
     public class DeckTests
     {
 		private static ICollection<Card> GetCardsFromValues(ICollection<int> values){
-			return values.Select(s => new Card(s, Suite.Club)).ToList();
+			return values.Select(s => new Card(s, CardType.Number, Suite.Club)).ToList();
 		}
 
 		[TestFixture]
@@ -48,6 +48,20 @@ namespace UnitTests
 				var clubCount = deck.CardsOfSuite (Suite.Diamond);
 
 				Assert.AreEqual (13, clubCount);
+			}
+
+			[Test]
+			public void Has_4_Aces(){
+				var aceCount = deck.CardsOfType (CardType.Ace);
+
+				Assert.AreEqual (4, aceCount);
+			}
+
+			[Test]
+			public void Has_36_Number_Cards(){
+				int aceOfSpadesCount = deck.CardsOfType (CardType.Number);
+
+				Assert.AreEqual (36, aceOfSpadesCount);
 			}
 		}
 

@@ -14,18 +14,31 @@ namespace Palace
 	    {
 			cards = new List<Card>();
 
+			var fullDeck = new List<Card> ();
+			fullDeck.AddRange(SetupSuiteOfCards(Suite.Club));
+			fullDeck.AddRange(SetupSuiteOfCards(Suite.Diamond));
+			fullDeck.AddRange(SetupSuiteOfCards(Suite.Heart));
+			fullDeck.AddRange(SetupSuiteOfCards(Suite.Spade));
+
 			for (int i = 0; i < numCards; i++) {
-				if(i<13)
-					cards.Add (new Card (i, Suite.Heart));
-				else if(i<26)
-					cards.Add (new Card (i, Suite.Club));
-				else if(i<39)
-					cards.Add (new Card (i, Suite.Spade));
-				else
-					cards.Add (new Card (i, Suite.Diamond));
+				cards.Add (fullDeck [i]);
 			}
 
 			cards = shuffler.ShuffleCards (cards);
+		}
+
+		private ICollection<Card> SetupSuiteOfCards(Suite suite){
+			List<Card> suiteOfCards = new List<Card> ();
+
+			for(int i = 2; i <= 10; i++){
+				suiteOfCards.Add(new Card(i, CardType.Number, suite));
+			}
+			suiteOfCards.Add(new Card(11, CardType.Other, suite));
+			suiteOfCards.Add(new Card(12, CardType.Other, suite));
+			suiteOfCards.Add(new Card(13, CardType.Other, suite));
+			suiteOfCards.Add(new Card(14, CardType.Ace, suite));
+
+			return suiteOfCards;
 		}
 
 		//Aside from setup we can assume we want in hand cards
@@ -49,6 +62,11 @@ namespace Palace
 		public int CardsOfSuite (Suite suite)
 		{
 			return cards.Where (card => card.Suite == suite).Count ();
+		}
+
+		public int CardsOfType (CardType type)
+		{
+			return cards.Where (card => card.Type == type).Count ();
 		}
 			
 		public int GetCount ()

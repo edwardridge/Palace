@@ -8,7 +8,7 @@ using System.Linq;
 namespace UnitTests
 {
     [TestFixture]
-	public static class GameTests
+	public static class GameInitialiseTests
 	{
 		public static Game CreateGameWithTwoPlayers(ref Player player1, ref Player player2){
 			var game = new Game ();

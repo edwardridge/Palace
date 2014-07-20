@@ -18,7 +18,7 @@ namespace UnitTests
 			var NewThing = cardOrder.ToList ();
 
 			for (int i = 0; i < (52 - cardOrder.Count()); i++) {
-				NewThing.Add (new Card(i + cardOrder.Count(), Suite.Club));
+				NewThing.Add (new Card(i + cardOrder.Count(), CardType.Number, Suite.Club));
 			}
 
 			this.cardOrder = NewThing.ToArray ();
@@ -31,7 +31,7 @@ namespace UnitTests
 				if (i < this.cardOrder.Count())
 					cards.Add (this.cardOrder [i]);
 				else
-					cards.Add(new Card(i, Suite.Club));
+					cards.Add(new Card(i, CardType.Number,	Suite.Club));
 			}
 
 			return cards;
@@ -41,7 +41,7 @@ namespace UnitTests
 		{
 			var order = new List<Card> ();
 			for (int i = 0; i < 52; i++) {
-				order.Add (new Card(i, Suite.Club));
+				order.Add (new Card(i, CardType.Number, Suite.Club));
 			}
 
 			return order.ToArray ();
