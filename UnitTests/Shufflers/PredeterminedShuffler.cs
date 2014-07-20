@@ -16,10 +16,10 @@ namespace UnitTests
 
 		public ICollection<Card> ShuffleCards (ICollection<Card> preShuffledDeck)
 		{
-			var cards = new List<Card> ();
-			cards.AddRange (predeterminedCards);
+			var cards = new List<Card> (predeterminedCards);
+
 			for (int i = predeterminedCards.Count(); i < preShuffledDeck.Count(); i++) {
-				cards.Add(new Card(i, CardType.Number,	Suite.Club));
+				cards.Add(new Card(i, CardType.Number,	Suit.Club));
 			}
 
 			return cards;

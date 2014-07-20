@@ -2,10 +2,8 @@
 
 namespace Palace
 {
-	public enum Suite
+	public enum Suit
 	{
-
-
 		Heart = 1,
 		Club = 2,
 		Diamond = 3,

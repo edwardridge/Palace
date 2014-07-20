@@ -35,9 +35,9 @@ namespace Palace
 			return returnCards;
 		}
 
-		public int CardsOfSuite (Suite suite)
+		public int CardsOfSuite (Suit suit)
 		{
-			return cards.Where (card => card.Suite == suite).Count ();
+			return cards.Where (card => card.Suit == suit).Count ();
 		}
 
 		public int CardsOfType (CardType type)

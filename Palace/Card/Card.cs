@@ -4,22 +4,22 @@
     {
         public int Value { get; private set; }
 
-		public Suite Suite { get; private set; }
+		public Suit Suit { get; private set; }
 
 		public CardType Type { get; private set; }
 
 		public CardOrientation CardOrientation { get; set; }
 
-		public Card(int value, CardType type, Suite suite) : this(value, suite, type, CardOrientation.InHand)
+		public Card(int value, CardType type, Suit suit) : this(value, suit, type, CardOrientation.InHand)
 		{
 		}
 
-		public Card(int value, Suite suite, CardType type, CardOrientation faceUp)
+		public Card(int value, Suit suit, CardType type, CardOrientation faceUp)
         {
-            Value = value;
-			Suite = suite;
+            this.Value = value;
+			this.Suit = suit;
 			this.Type = type;
-			CardOrientation = faceUp;
+			this.CardOrientation = faceUp;
         }
     }
 }

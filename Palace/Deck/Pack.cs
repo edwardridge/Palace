@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace Palace
 {
@@ -13,10 +14,9 @@ namespace Palace
 
 		public Pack(int numCards){
 			var fullPack = new List<Card> ();
-			fullPack.AddRange(SetupSuiteOfCards(Suite.Club));
-			fullPack.AddRange(SetupSuiteOfCards(Suite.Diamond));
-			fullPack.AddRange(SetupSuiteOfCards(Suite.Heart));
-			fullPack.AddRange(SetupSuiteOfCards(Suite.Spade));
+			foreach (Suit suite in(Suit[]) Enum.GetValues(typeof(Suit))) {
+				fullPack.AddRange(SetupSuiteOfCards(suite));
+			}
 
 			Cards = new List<Card> ();
 
@@ -25,16 +25,16 @@ namespace Palace
 			}
 		}
 
-		private ICollection<Card> SetupSuiteOfCards(Suite suite){
+		private ICollection<Card> SetupSuiteOfCards(Suit suit){
 			List<Card> suiteOfCards = new List<Card> ();
 
 			for(int i = 2; i <= 10; i++){
-				suiteOfCards.Add(new Card(i, CardType.Number, suite));
+				suiteOfCards.Add(new Card(i, CardType.Number, suit));
 			}
-			suiteOfCards.Add(new Card(11, CardType.Other, suite));
-			suiteOfCards.Add(new Card(12, CardType.Other, suite));
-			suiteOfCards.Add(new Card(13, CardType.Other, suite));
-			suiteOfCards.Add(new Card(14, CardType.Ace, suite));
+			suiteOfCards.Add(new Card(11, CardType.Other, suit));
+			suiteOfCards.Add(new Card(12, CardType.Other, suit));
+			suiteOfCards.Add(new Card(13, CardType.Other, suit));
+			suiteOfCards.Add(new Card(14, CardType.Ace, suit));
 
 			return suiteOfCards;
 		}
