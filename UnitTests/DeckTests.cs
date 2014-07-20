@@ -84,14 +84,14 @@ namespace UnitTests
 			public void Gets_Single_Card(){
 				var expectedCardValue = 7;
 
-				var cardFromDeckValue = deck.GetCards (1).Select (s => s.Value).First();
+				var cardFromDeckValue = deck.TakeCards (1).Select (s => s.Value).First();
 
 				Assert.AreEqual (expectedCardValue, cardFromDeckValue);
 			}
 
 			[Test]
 			public void Gets_Single_Card_Card_Is_Removed_From_Deck(){
-				deck.GetCards (1);
+				deck.TakeCards (1);
 				var postDeckCount = deck.CardCount ();
 
 				Assert.AreEqual (preDeckCount - 1, postDeckCount);
@@ -101,14 +101,14 @@ namespace UnitTests
 			public void Gets_Two_Cards(){
 				var expectedCardValues = new List<int> (new []{7,1});
 
-				var cardsFromDeckValues = deck.GetCards(2).Select(s=>s.Value);
+				var cardsFromDeckValues = deck.TakeCards(2).Select(s=>s.Value);
 
 				Assert.AreEqual (expectedCardValues, cardsFromDeckValues);
 			}
 
 			[Test]
 			public void Gets_Two_Cards_Two_Cards_Removed_From_Deck(){
-				deck.GetCards (2);
+				deck.TakeCards (2);
 				var postDeckCount = deck.CardCount ();
 
 				Assert.AreEqual (preDeckCount - 2, postDeckCount);
@@ -128,7 +128,7 @@ namespace UnitTests
 
 			[Test]
 			public void Gets_Three_Cards_Returns_Two_Cards(){
-				var cards = deck.GetCards (3);
+				var cards = deck.TakeCards (3);
 
 				Assert.AreEqual (2, cards.Count());
 			}

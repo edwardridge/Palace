@@ -18,11 +18,11 @@ namespace Palace
 		}
 
 		//Aside from setup we can assume we want in hand cards
-		public ICollection<Card> GetCards (int count){
-			return this.GetCards (count, CardOrientation.InHand);
+		public ICollection<Card> TakeCards (int count){
+			return this.TakeCards (count, CardOrientation.InHand);
 		}
 
-		public ICollection<Card> GetCards (int count, CardOrientation cardOrientation)
+		public ICollection<Card> TakeCards (int count, CardOrientation cardOrientation)
 		{
 			var returnCards = new List<Card>() ;
 
@@ -37,12 +37,12 @@ namespace Palace
 
 		public int CardsOfSuite (Suit suit)
 		{
-			return cards.Where (card => card.Suit == suit).Count ();
+			return cards.Count (card => card.Suit == suit);
 		}
 
 		public int CardsOfType (CardType type)
 		{
-			return cards.Where (card => card.Type == type).Count ();
+			return cards.Count (card => card.Type == type);
 		}
 			
 		public int CardCount ()
