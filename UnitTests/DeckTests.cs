@@ -121,7 +121,7 @@ namespace UnitTests
 			Deck deck;
 			[SetUp]
 			public void Setup(){
-				IShuffler randomiser = new PredeterminedShuffler ();
+				IShuffler randomiser = new NonShuffler ();
 				Pack pack = new Pack (2);
 				deck = new Deck (randomiser, pack);
 			}

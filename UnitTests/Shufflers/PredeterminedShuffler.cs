@@ -7,44 +7,22 @@ namespace UnitTests
 {
 	public class PredeterminedShuffler : IShuffler
 	{
-		Card[] cardOrder;
-
-		public PredeterminedShuffler () {
-			this.cardOrder = GetSequentialOrder ();
-		}
+		Card[] predeterminedCards;
 
 		public PredeterminedShuffler (ICollection<Card> cardOrder)
 		{
-			var NewThing = cardOrder.ToList ();
-
-			for (int i = 0; i < (52 - cardOrder.Count()); i++) {
-				NewThing.Add (new Card(i + cardOrder.Count(), CardType.Number, Suite.Club));
-			}
-
-			this.cardOrder = NewThing.ToArray ();
+			this.predeterminedCards = cardOrder.ToArray();
 		}
 
 		public ICollection<Card> ShuffleCards (ICollection<Card> preShuffledDeck)
 		{
-			List<Card> cards = new List<Card> ();
-			for (int i = 0; i < preShuffledDeck.Count(); i++) {
-				if (i < this.cardOrder.Count())
-					cards.Add (this.cardOrder [i]);
-				else
-					cards.Add(new Card(i, CardType.Number,	Suite.Club));
+			var cards = new List<Card> ();
+			cards.AddRange (predeterminedCards);
+			for (int i = predeterminedCards.Count(); i < preShuffledDeck.Count(); i++) {
+				cards.Add(new Card(i, CardType.Number,	Suite.Club));
 			}
 
 			return cards;
-		}
-
-		public Card[] GetSequentialOrder ()
-		{
-			var order = new List<Card> ();
-			for (int i = 0; i < 52; i++) {
-				order.Add (new Card(i, CardType.Number, Suite.Club));
-			}
-
-			return order.ToArray ();
 		}
 	}
 }
