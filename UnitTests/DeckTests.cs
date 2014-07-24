@@ -8,9 +8,6 @@ namespace UnitTests
     [TestFixture]
     public class DeckTests
     {
-		private static ICollection<Card> GetCardsFromValues(ICollection<int> values){
-			return values.Select(s => new Card(s, CardType.Number, Suit.Club)).ToList();
-		}
 
 		[TestFixture]
 		public class StandardPack{
@@ -94,7 +91,7 @@ namespace UnitTests
 
 			[SetUp]
 			public void Setup(){
-				var order = GetCardsFromValues(new List<int>(){ 7,1,10,3,5,2,5,6,4,8,12,51});
+				var order = CardHelpers.GetCardsFromValues(new List<int>(){ 7,1,10,3,5,2,5,6,4,8,12,51});
 				var predeterminedShuffler = new PredeterminedShuffler (order);
 				Pack pack = new Pack ();
 				deck = new Deck (predeterminedShuffler, pack);

@@ -44,6 +44,7 @@ namespace UnitTests
 				Assert.AreEqual (2, playerCount);
 			}
 
+			[Test]
 			public void Player_1_Has_6_In_Hand_Cards(){
 				Assert.AreEqual (6, player1.NumCards(CardOrientation.InHand));
 			}
@@ -122,6 +123,40 @@ namespace UnitTests
 				var result = player1.PutCardFaceUp(player1.Cards.ToArray()[3]);
 
 				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
+			}
+
+			[TestFixture]
+			public class FirstMoveTests{
+
+				[Test]
+				public void P1_Has_2_As_Lowest_Card_P2_Has_3_As_Lowest_Card_P1_Goes_First(){
+					var p1 = new Player ("Ed");
+					var p2 = new Player ("Liam");
+					p1.SetupPlayerForTest (CardHelpers.GetCardsFromValues (new []{2,5,6}));
+					p2.SetupPlayerForTest (CardHelpers.GetCardsFromValues (new []{3, 7, 8}));
+					var game = new Game ();
+					game.SetupGameForTest (new []{p1,p2});
+
+					game.Start ();
+
+					Assert.AreEqual (p1.Name, game.CurrentPlayer.Name);
+				}
+
+				[Test]
+				public void P1_Has_3_As_Lowest_Card_P2_Has_2_As_Lowest_Card_P2_Goes_First(){
+					var p1 = new Player ("Ed");
+					var p2 = new Player ("Liam");
+					p1.SetupPlayerForTest (CardHelpers.GetCardsFromValues (new[]{ 3, 5, 6 }));
+					p2.SetupPlayerForTest (CardHelpers.GetCardsFromValues (new[]{ 2, 5, 6 }));
+					var game = new Game ();
+					game.SetupGameForTest (new[]{ p1, p2 });
+
+					game.Start ();
+				
+					Assert.AreEqual (p2.Name, game.CurrentPlayer.Name);
+				}
+
+
 			}
 		}
 	}

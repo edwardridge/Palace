@@ -26,6 +26,11 @@ namespace Palace
 			state = PlayerState.Setup;
 		}
 
+		public void SetupPlayerForTest(ICollection<Card> cards){
+			state = PlayerState.Ready;
+			this.cards = cards;
+		}
+
 		public void AddCards (ICollection<Card> cardsToBeAdded)
 		{
 			foreach (Card addedCard in cardsToBeAdded) {

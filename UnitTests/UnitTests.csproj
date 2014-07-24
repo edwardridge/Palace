@@ -35,11 +35,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeckTests.cs" />
+    <Compile Include="DeckTests.cs">
+      <DependentUpon>CardHelpers.cs</DependentUpon>
+    </Compile>
     <Compile Include="PlayerHelper.cs" />
     <Compile Include="Shufflers\NonShuffler.cs" />
     <Compile Include="Shufflers\PredeterminedShuffler.cs" />
     <Compile Include="GameInitialiseTests.cs" />
+    <Compile Include="CardHelpers.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
