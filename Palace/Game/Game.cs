@@ -29,15 +29,10 @@ namespace Palace
 			if(!allPlayersReady) return new Result (ResultOutcome.Fail);
 
 			var startingPlayer = players.First ();
-			int startingPlayerLowestValue = startingPlayer.Cards.OrderBy (o => o.Value).Select (s => s.Value).First ();
 
 			foreach (Player player in players) {
-				int currentPlayerLowestValue = player.Cards.OrderBy (o => o.Value).Select (s => s.Value).First ();
-
-				if (currentPlayerLowestValue < startingPlayerLowestValue) {
+				if (player.LowestCard.Value < startingPlayer.LowestCard.Value)
 					startingPlayer = player;
-					startingPlayerLowestValue = currentPlayerLowestValue;
-				}
 			}
 
 			currentPlayer = startingPlayer;
