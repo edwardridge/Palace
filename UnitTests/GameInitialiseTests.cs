@@ -130,7 +130,7 @@ namespace UnitTests
 				[SetUp]
 				public void Setup(){
 					game = new Game ();
-					players = new []{new Player ("Ed"), new Player("Liam")};
+					players = new []{new Player ("Ed"), new Player("Liam"), new Player("Jess")};
 				}
 
 				[Test]
@@ -151,9 +151,22 @@ namespace UnitTests
 					Assert.AreEqual (players[1].Name, game.CurrentPlayer.Name);
 				}
 
+				[Test] 
+				public void P3_Has_Lowest_Card_P3_Goes_First(){
+					var player1Cards = new []{ 3, 5, 6 };
+					var player2Cards = new []{ 3, 5, 6 };
+					var player3Cards = new []{ 2, 5, 6 };
+					SetupGameForTest(game, players, new []{player1Cards, player2Cards, player3Cards});
+
+					Assert.AreEqual (players [2].Name, game.CurrentPlayer.Name);
+				}
+
 				public void SetupGameForTest(Game game, IList<Player> players, IList<IList<int>> cards){
 					for (int i = 0; i < players.Count; i++) {
-						players [i].SetupPlayerForTest (CardHelpers.GetCardsFromValues (cards [i]));
+						if (i < cards.Count)
+							players [i].SetupPlayerForTest (CardHelpers.GetCardsFromValues (cards [i]));
+						else
+							players [i].SetupPlayerForTest (CardHelpers.GetCardsFromValues (new[]{ 15}));
 					}
 
 					game.SetupGameForTest (players);
