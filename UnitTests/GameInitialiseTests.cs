@@ -125,34 +125,36 @@ namespace UnitTests
 			public class FirstMoveTests{
 
 				Player[] players;
+				Game game;
 
 				[SetUp]
 				public void Setup(){
+					game = new Game ();
 					players = new []{new Player ("Ed"), new Player("Liam")};
 				}
 
 				[Test]
 				public void P1_Has_2_As_Lowest_Card_P2_Has_3_As_Lowest_Card_P1_Goes_First(){
-					players[0].SetupPlayerForTest (CardHelpers.GetCardsFromValues (new []{2,5,6}));
-					players[1].SetupPlayerForTest (CardHelpers.GetCardsFromValues (new []{3, 7, 8}));
-					var game = new Game ();
-					game.SetupGameForTest (new []{players[0],players[1]});
-
-					game.Start ();
+					SetupGameForTest (game, players, new [] { new []{ 2, 5, 6}, new[]{3, 5, 6 } });
 
 					Assert.AreEqual (players[0].Name, game.CurrentPlayer.Name);
 				}
 
 				[Test]
 				public void P1_Has_3_As_Lowest_Card_P2_Has_2_As_Lowest_Card_P2_Goes_First(){
-					players[0].SetupPlayerForTest (CardHelpers.GetCardsFromValues (new[]{ 3, 5, 6 }));
-					players[1].SetupPlayerForTest (CardHelpers.GetCardsFromValues (new[]{ 2, 5, 6 }));
-					var game = new Game ();
-					game.SetupGameForTest (new[]{ players[0], players[1] });
+					SetupGameForTest (game, players, new [] { new []{ 3, 5, 6}, new[]{2, 5, 6 } });
+
+					Assert.AreEqual (players[1].Name, game.CurrentPlayer.Name);
+				}
+
+				public void SetupGameForTest(Game game, IList<Player> players, IList<IList<int>> cards){
+					for (int i = 0; i < players.Count; i++) {
+						players [i].SetupPlayerForTest (CardHelpers.GetCardsFromValues (cards [i]));
+					}
+
+					game.SetupGameForTest (players);
 
 					game.Start ();
-				
-					Assert.AreEqual (players[1].Name, game.CurrentPlayer.Name);
 				}
 			}
 		}
