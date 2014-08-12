@@ -10,14 +10,12 @@ namespace UnitTests
     [TestFixture]
 	public static class GameInitialiseTests
 	{
-		public static Game CreateGameWithTwoPlayers(ref Player player1, ref Player player2){
+		public static Game CreateGameWithTwoPlayers(Player player1, Player player2){
 			var game = new Game ();
 
 			var randomiser = new NonShuffler ();
 			var deck = new Deck (randomiser);
 
-			player1 = new Player ("Ed");
-			player2 = new Player ("Liam");
 			var players = new List<Player> { player1, player2 };
 
 		    game.Setup (players, deck);
@@ -34,7 +32,9 @@ namespace UnitTests
 
 			[SetUp]
 			public void Setup(){
-				game = CreateGameWithTwoPlayers (ref player1, ref player2);
+				player1 = new Player ("Ed");
+				player2 = new Player ("Liam");
+				game = CreateGameWithTwoPlayers (player1, player2);
 			}
 
 			[Test]
@@ -69,7 +69,9 @@ namespace UnitTests
 
 			[SetUp]
 			public void Setup(){
-				game = CreateGameWithTwoPlayers (ref player1, ref player2);
+				player1 = new Player ("Ed");
+				player2 = new Player ("Liam");
+				game = CreateGameWithTwoPlayers (player1, player2);
 			}
 
 			[Test]
@@ -128,32 +130,37 @@ namespace UnitTests
 			[TestFixture]
 			public class FirstMoveTests{
 
+				Player player1;
+				Player player2;
+
+				[SetUp]
+				public void Setup(){
+					player1 = new Player ("Ed");
+					player2 = new Player ("Liam");
+				}
+
 				[Test]
 				public void P1_Has_2_As_Lowest_Card_P2_Has_3_As_Lowest_Card_P1_Goes_First(){
-					var p1 = new Player ("Ed");
-					var p2 = new Player ("Liam");
-					p1.SetupPlayerForTest (CardHelpers.GetCardsFromValues (new []{2,5,6}));
-					p2.SetupPlayerForTest (CardHelpers.GetCardsFromValues (new []{3, 7, 8}));
+					player1.SetupPlayerForTest (CardHelpers.GetCardsFromValues (new []{2,5,6}));
+					player2.SetupPlayerForTest (CardHelpers.GetCardsFromValues (new []{3, 7, 8}));
 					var game = new Game ();
-					game.SetupGameForTest (new []{p1,p2});
+					game.SetupGameForTest (new []{player1,player2});
 
 					game.Start ();
 
-					Assert.AreEqual (p1.Name, game.CurrentPlayer.Name);
+					Assert.AreEqual (player1.Name, game.CurrentPlayer.Name);
 				}
 
 				[Test]
 				public void P1_Has_3_As_Lowest_Card_P2_Has_2_As_Lowest_Card_P2_Goes_First(){
-					var p1 = new Player ("Ed");
-					var p2 = new Player ("Liam");
-					p1.SetupPlayerForTest (CardHelpers.GetCardsFromValues (new[]{ 3, 5, 6 }));
-					p2.SetupPlayerForTest (CardHelpers.GetCardsFromValues (new[]{ 2, 5, 6 }));
+					player1.SetupPlayerForTest (CardHelpers.GetCardsFromValues (new[]{ 3, 5, 6 }));
+					player2.SetupPlayerForTest (CardHelpers.GetCardsFromValues (new[]{ 2, 5, 6 }));
 					var game = new Game ();
-					game.SetupGameForTest (new[]{ p1, p2 });
+					game.SetupGameForTest (new[]{ player1, player2 });
 
 					game.Start ();
 				
-					Assert.AreEqual (p2.Name, game.CurrentPlayer.Name);
+					Assert.AreEqual (player2.Name, game.CurrentPlayer.Name);
 				}
 
 

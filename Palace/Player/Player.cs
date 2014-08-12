@@ -51,10 +51,6 @@ namespace Palace
 			return cards.Where (card => card.CardOrientation == cardLocation).Count ();
 		}
 
-		internal Card LowestCard{
-			get{ return cards.OrderBy (o => o.Value).First (); }
-		}
-
 		public Result Ready ()
 		{
 			if (this.NumCards (CardOrientation.FaceUp) != 3)
@@ -63,6 +59,10 @@ namespace Palace
 			this.State = PlayerState.Ready;
 
 			return new Result (ResultOutcome.Success);
+		}
+
+		internal Card LowestCard{
+			get{ return cards.OrderBy (o => o.Value).First (); }
 		}
 
 		private ICollection<Card> cards;
