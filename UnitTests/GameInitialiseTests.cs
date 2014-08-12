@@ -135,14 +135,18 @@ namespace UnitTests
 
 				[Test]
 				public void P1_Has_2_As_Lowest_Card_P2_Has_3_As_Lowest_Card_P1_Goes_First(){
-					SetupGameForTest (game, players, new [] { new []{ 2, 5, 6}, new[]{3, 5, 6 } });
+					var player1Cards = new []{2,5,6};
+					var player2Cards = new []{3,5,6};
+					SetupGameForTest (game, players, new [] { player1Cards, player2Cards });
 
 					Assert.AreEqual (players[0].Name, game.CurrentPlayer.Name);
 				}
 
 				[Test]
 				public void P1_Has_3_As_Lowest_Card_P2_Has_2_As_Lowest_Card_P2_Goes_First(){
-					SetupGameForTest (game, players, new [] { new []{ 3, 5, 6}, new[]{2, 5, 6 } });
+					var player1Cards = new []{3,5,6};
+					var player2Cards = new []{2,5,6};
+					SetupGameForTest (game, players, new [] { player1Cards, player2Cards });
 
 					Assert.AreEqual (players[1].Name, game.CurrentPlayer.Name);
 				}
