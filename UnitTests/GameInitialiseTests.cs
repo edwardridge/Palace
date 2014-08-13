@@ -10,17 +10,6 @@ namespace UnitTests
     [TestFixture]
 	public static class GameInitialiseTests
 	{
-		public static Game CreateGameWithTwoPlayers(IList<Player> players){
-			var game = new Game ();
-
-			var randomiser = new NonShuffler ();
-			var deck = new Deck (randomiser);
-
-			game.Setup (players, deck);
-
-			return game;
-		}
-
 		[TestFixture]
 		public class SetupGame
 		{
@@ -30,7 +19,7 @@ namespace UnitTests
 			[SetUp]
 			public void Setup(){
 				players = new []{new Player ("Ed"), new Player("Liam")};
-				game = CreateGameWithTwoPlayers (players);
+				game = GameHelper.CreateGameWithPlayers (players);
 			}
 
 			[Test]
@@ -65,7 +54,7 @@ namespace UnitTests
 			[SetUp]
 			public void Setup(){
 				players = new []{new Player ("Ed"), new Player("Liam")};
-				game = CreateGameWithTwoPlayers (players);
+				game = GameHelper.CreateGameWithPlayers (players);
 			}
 
 			[Test]
@@ -137,7 +126,7 @@ namespace UnitTests
 				public void P1_Has_2_As_Lowest_Card_P2_Has_3_As_Lowest_Card_P1_Goes_First(){
 					var player1Cards = new []{2,5,6};
 					var player2Cards = new []{3,5,6};
-					SetupGameForTest (game, players, new [] { player1Cards, player2Cards });
+					GameHelper.SetupGameForTest (game, players, new [] { player1Cards, player2Cards });
 
 					Assert.AreEqual (players[0].Name, game.CurrentPlayer.Name);
 				}
@@ -146,7 +135,7 @@ namespace UnitTests
 				public void P1_Has_3_As_Lowest_Card_P2_Has_2_As_Lowest_Card_P2_Goes_First(){
 					var player1Cards = new []{3,5,6};
 					var player2Cards = new []{2,5,6};
-					SetupGameForTest (game, players, new [] { player1Cards, player2Cards });
+					GameHelper.SetupGameForTest (game, players, new [] { player1Cards, player2Cards });
 
 					Assert.AreEqual (players[1].Name, game.CurrentPlayer.Name);
 				}
@@ -156,23 +145,11 @@ namespace UnitTests
 					var player1Cards = new []{ 3, 5, 6 };
 					var player2Cards = new []{ 3, 5, 6 };
 					var player3Cards = new []{ 2, 5, 6 };
-					SetupGameForTest(game, players, new []{player1Cards, player2Cards, player3Cards});
+					GameHelper.SetupGameForTest(game, players, new []{player1Cards, player2Cards, player3Cards});
 
 					Assert.AreEqual (players [2].Name, game.CurrentPlayer.Name);
 				}
 
-				public void SetupGameForTest(Game game, IList<Player> players, IList<IList<int>> cards){
-					for (int i = 0; i < players.Count; i++) {
-						if (i < cards.Count)
-							players [i].SetupPlayerForTest (CardHelpers.GetCardsFromValues (cards [i]));
-						else
-							players [i].SetupPlayerForTest (CardHelpers.GetCardsFromValues (new[]{ 15}));
-					}
-
-					game.SetupGameForTest (players);
-
-					game.Start ();
-				}
 			}
 		}
 	}

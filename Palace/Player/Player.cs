@@ -7,13 +7,11 @@ namespace Palace
 	public class Player
 	{
 		public string Name {
-			get;
-			private set;
+			get{ return name; }
 		}
 
 		public PlayerState State {
-			get { return state; }
-			set { state = value; }
+			get {return state;}
 		}
 
 		public ICollection<Card> Cards {
@@ -21,12 +19,12 @@ namespace Palace
 		}
 
 		public Player(string name){
-			Name = name;
+			this.name = name;
 			cards = new List<Card> ();
 			state = PlayerState.Setup;
 		}
 
-		public void SetupPlayerForTest(ICollection<Card> cards){
+		public void ReplaceCardsAndSetReady(ICollection<Card> cards){
 			state = PlayerState.Ready;
 			this.cards = cards;
 		}
@@ -56,7 +54,7 @@ namespace Palace
 			if (this.NumCards (CardOrientation.FaceUp) != 3)
 				return new Result (ResultOutcome.Fail);
 
-			this.State = PlayerState.Ready;
+			state = PlayerState.Ready;
 
 			return new Result (ResultOutcome.Success);
 		}
@@ -64,6 +62,8 @@ namespace Palace
 		internal Card LowestCard{
 			get{ return cards.OrderBy (o => o.Value).First (); }
 		}
+
+		private string name;
 
 		private ICollection<Card> cards;
 

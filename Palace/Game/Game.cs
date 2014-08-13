@@ -17,7 +17,7 @@ namespace Palace
 			}
 		}
 
-		public void SetupGameForTest(ICollection<Player> players)
+		public void ReplacePlayers(ICollection<Player> players)
 		{
 			this.players = players;
 		}

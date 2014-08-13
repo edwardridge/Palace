@@ -43,6 +43,8 @@
     <Compile Include="Shufflers\PredeterminedShuffler.cs" />
     <Compile Include="GameInitialiseTests.cs" />
     <Compile Include="CardHelpers.cs" />
+    <Compile Include="GameplayTests.cs" />
+    <Compile Include="GameHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
