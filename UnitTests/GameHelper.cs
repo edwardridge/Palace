@@ -17,7 +17,7 @@ namespace UnitTests
 			return game;
 		}
 
-		public static void StartGameForTest(Game game, IList<Player> players, IList<IList<int>> cards){
+		public static void StartGameForTest(this Game game, IList<Player> players, IList<IList<int>> cards){
 			for (int i = 0; i < players.Count; i++) {
 				if (i < cards.Count)
 					players [i].ReplaceCardsAndSetReady (CardHelpers.GetCardsFromValues (cards [i]));

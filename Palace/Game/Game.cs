@@ -41,6 +41,7 @@ namespace Palace
 
 		public ResultOutcome PlayCards (Player player, Card card)
 		{
+			player.Cards.Remove (card);
 			return ResultOutcome.Fail;
 		}
 

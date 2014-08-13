@@ -59,7 +59,7 @@ namespace Palace
 			return new Result (ResultOutcome.Success);
 		}
 
-		internal Card LowestCard{
+		public Card LowestCard{
 			get{ return cards.OrderBy (o => o.Value).First (); }
 		}
 
