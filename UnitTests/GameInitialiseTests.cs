@@ -126,7 +126,7 @@ namespace UnitTests
 				public void P1_Has_2_As_Lowest_Card_P2_Has_3_As_Lowest_Card_P1_Goes_First(){
 					var player1Cards = new []{2,5,6};
 					var player2Cards = new []{3,5,6};
-					GameHelper.SetupGameForTest (game, players, new [] { player1Cards, player2Cards });
+					GameHelper.StartGameForTest (game, players, new [] { player1Cards, player2Cards });
 
 					Assert.AreEqual (players[0].Name, game.CurrentPlayer.Name);
 				}
@@ -135,7 +135,7 @@ namespace UnitTests
 				public void P1_Has_3_As_Lowest_Card_P2_Has_2_As_Lowest_Card_P2_Goes_First(){
 					var player1Cards = new []{3,5,6};
 					var player2Cards = new []{2,5,6};
-					GameHelper.SetupGameForTest (game, players, new [] { player1Cards, player2Cards });
+					GameHelper.StartGameForTest (game, players, new [] { player1Cards, player2Cards });
 
 					Assert.AreEqual (players[1].Name, game.CurrentPlayer.Name);
 				}
@@ -145,7 +145,7 @@ namespace UnitTests
 					var player1Cards = new []{ 3, 5, 6 };
 					var player2Cards = new []{ 3, 5, 6 };
 					var player3Cards = new []{ 2, 5, 6 };
-					GameHelper.SetupGameForTest(game, players, new []{player1Cards, player2Cards, player3Cards});
+					GameHelper.StartGameForTest(game, players, new []{player1Cards, player2Cards, player3Cards});
 
 					Assert.AreEqual (players [2].Name, game.CurrentPlayer.Name);
 				}

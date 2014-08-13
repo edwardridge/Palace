@@ -39,6 +39,11 @@ namespace Palace
 			return new Result (ResultOutcome.Success);
 		}
 
+		public ResultOutcome PlayCards (Player player, Card card)
+		{
+			return ResultOutcome.Fail;
+		}
+
 		public int NumberOfPlayers {
 			get{ return players.Count; }
 		}
