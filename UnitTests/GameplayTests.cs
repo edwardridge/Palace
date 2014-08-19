@@ -24,10 +24,12 @@ namespace UnitTests
 			var player1Cards = new [] { 2, 4, 5 };
 			var player2Cards = new [] { 3, 5, 6 };
 
-			var game = new Game ();
+			players [0].AddCards (CardHelpers.GetCardsFromValues (player1Cards));
+			players [1].AddCards (CardHelpers.GetCardsFromValues (player2Cards));
+			var game = new GameInProgress ();
 			game.Setup (players, new Deck(new PredeterminedShuffler(CardHelpers.GetCardsFromValues(new []{10}))));
 
-			game.StartGameForTest (players, new [] { player1Cards, player2Cards });
+			game.Start ();
 			var lowestCard = players [0].LowestCard;
 
 			game.PlayCards (players [0], lowestCard);

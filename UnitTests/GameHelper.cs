@@ -7,7 +7,7 @@ namespace UnitTests
 	public static class GameHelper
 	{
 		public static Game CreateGameWithPlayers(IList<Player> players){
-			var game = new Game ();
+			var game = new GameFromStart ();
 
 			var randomiser = new NonShuffler ();
 			var deck = new Deck (randomiser);

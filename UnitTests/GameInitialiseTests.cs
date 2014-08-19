@@ -118,7 +118,7 @@ namespace UnitTests
 
 				[SetUp]
 				public void Setup(){
-					game = new Game ();
+					game = new GameFromStart ();
 					players = new []{new Player ("Ed"), new Player("Liam"), new Player("Jess")};
 				}
 
