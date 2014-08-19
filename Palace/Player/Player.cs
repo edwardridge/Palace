@@ -12,6 +12,7 @@ namespace Palace
 
 		public PlayerState State {
 			get {return state;}
+			internal set{ state = value; }
 		}
 
 		public ICollection<Card> Cards {

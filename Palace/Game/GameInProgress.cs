@@ -9,6 +9,9 @@ namespace Palace
 		{
 			this.players = players;
 			this.deck = deck;
+
+			foreach (Player player in players)
+				player.State = PlayerState.Ready;
 		}
 
 		public override Result Start ()
