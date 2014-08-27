@@ -4,20 +4,43 @@ using System.Linq;
 
 namespace Palace
 {
-	public abstract class Game
+	public class Game
 	{
-		public abstract void Setup (ICollection<Player> players, Deck deck);
-
-		public void ReplacePlayers(ICollection<Player> players)
-		{
+		public Game(ICollection<IPlayer> players, Deck deck){
+			this.deck = deck;
 			this.players = players;
+
+			currentPlayer = players.First ();
 		}
 
-		public abstract Result Start ();
-
-		public ResultOutcome PlayCards (Player player, Card card)
+		public Result Start ()
 		{
-			player.Cards.Remove (card);
+			bool allPlayersReady = players.All(player => player.State == PlayerState.Ready);
+
+			if(!allPlayersReady) return new Result (ResultOutcome.Fail);
+
+			var startingPlayer = players.First ();
+
+			foreach (var player in players) {
+				if (LowestCard(player.Cards).Value < LowestCard(startingPlayer.Cards).Value)
+					startingPlayer = player;
+			}
+
+			currentPlayer = startingPlayer;
+			return new Result (ResultOutcome.Success);
+		}
+
+		public void Setup ()
+		{
+			foreach (Player player in players) {
+				player.AddCards (this.deck.TakeCards (3, CardOrientation.FaceDown));
+				player.AddCards (this.deck.TakeCards (6, CardOrientation.InHand));
+			}
+		}
+
+		public ResultOutcome PlayCards (IPlayer player, Card card)
+		{
+			player.RemoveCards (new []{card});
 			return ResultOutcome.Fail;
 		}
 
@@ -25,13 +48,17 @@ namespace Palace
 			get{ return players.Count; }
 		}
 
-		public Player CurrentPlayer {
+		public IPlayer CurrentPlayer {
 			get{ return currentPlayer; }
 		}
 
-		protected Player currentPlayer;
-		protected ICollection<Player> players;
-		protected Deck deck;
+		private Card LowestCard(ICollection<Card> cards){
+			return cards.OrderBy (o => o.Value).First (); 
+		}
+
+		private IPlayer currentPlayer;
+		private ICollection<IPlayer> players;
+		private Deck deck;
 	}
 
 }

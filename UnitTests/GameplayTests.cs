@@ -17,24 +17,6 @@ namespace UnitTests
 
 			Assert.AreEqual (ResultOutcome.Fail, result);
 		}
-
-		[Test]
-		public void Plays_Card_Card_Is_Removed_From_Players_Hand(){
-			var players = new [] { new Player ("Ed"), new Player ("Liam") };
-			var player1Cards = new [] { 2, 4, 5 };
-			var player2Cards = new [] { 3, 5, 6 };
-
-			players [0].AddCards (CardHelpers.GetCardsFromValues (player1Cards));
-			players [1].AddCards (CardHelpers.GetCardsFromValues (player2Cards));
-			var game = new GameInProgress ();
-			game.Setup (players, new Deck(new PredeterminedShuffler(CardHelpers.GetCardsFromValues(new []{10}))));
-
-			game.Start ();
-			var lowestCard = players [0].LowestCard;
-
-			game.PlayCards (players [0], lowestCard);
-			Assert.IsTrue(!players[0].Cards.Any(card=>card.Value == lowestCard.Value));
-		}
 	}
 }
 

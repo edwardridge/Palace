@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Palace
 {
-	public class Player
+	public class Player : IPlayer
 	{
 		public string Name {
 			get{ return name; }
@@ -37,6 +37,12 @@ namespace Palace
 			}
 		}
 
+		public void RemoveCards(ICollection<Card> cardsToBeRemoved){
+			foreach (Card removedCard in cardsToBeRemoved) {
+				this.cards.Remove (removedCard);
+			}
+		}
+
 		public Result PutCardFaceUp (Card cardToPutFaceUp)
 		{
 			if(this.NumCards(CardOrientation.FaceUp) >= 3)
@@ -58,10 +64,6 @@ namespace Palace
 			state = PlayerState.Ready;
 
 			return new Result (ResultOutcome.Success);
-		}
-
-		public Card LowestCard{
-			get{ return cards.OrderBy (o => o.Value).First (); }
 		}
 
 		private string name;

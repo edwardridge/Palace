@@ -5,7 +5,7 @@ namespace Palace
 {
 	public class GameInProgress : Game
 	{
-		public override void Setup (ICollection<Player> players, Deck deck)
+		public override void Setup (ICollection<IPlayer> players, Deck deck)
 		{
 			this.players = players;
 			this.deck = deck;

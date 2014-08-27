@@ -50,8 +50,7 @@
     <Compile Include="Card\CardType.cs" />
     <Compile Include="Deck\Pack.cs" />
     <Compile Include="Card\Suit.cs" />
-    <Compile Include="Game\GameFromStart.cs" />
-    <Compile Include="Game\GameInProgress.cs" />
+    <Compile Include="Player\IPlayer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

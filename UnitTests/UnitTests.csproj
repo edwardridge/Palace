@@ -41,6 +41,9 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.2.1408.0717\lib\net40\Moq.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Shufflers\NonShuffler.cs" />
@@ -53,7 +56,6 @@
     <Compile Include="Helpers\DeckTests.cs">
       <DependentUpon>CardHelpers.cs</DependentUpon>
     </Compile>
-    <Compile Include="GameInProgressTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

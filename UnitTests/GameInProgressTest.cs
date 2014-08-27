@@ -13,7 +13,7 @@ namespace UnitTests
 		{
 			var player1 = new Player ("Ed");
 			var deck = new Deck (new NonShuffler());
-			var game = new GameInProgress ();
+			var game = new Game ();
 			game.Setup (new []{ player1 }, deck);
 
 			player1.State.Should ().Be (PlayerState.Ready);
