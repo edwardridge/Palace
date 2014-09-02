@@ -112,72 +112,61 @@ namespace UnitTests
 			}
 
 			[TestFixture]
-			public class FirstMoveTests{
+			public class FirstMoveWhenAllPlayersAreReady{
 
-				Player[] players;
+				MockPlayerBuilder player1Builder;
+				MockPlayerBuilder player2Builder;
+				MockPlayerBuilder player3Builder;
 				Game game;
-				Deck deck;
-				IShuffler shuffler;
 
 				[SetUp]
 				public void Setup(){
-					players = new []{new Player ("Ed"), new Player("Liam"), new Player("Jess")};
-					game = new Game (players, new Deck(new NonShuffler()));
+					player1Builder = new MockPlayerBuilder ().WithState (PlayerState.Ready).WithName ("Ed");
+					player2Builder = new MockPlayerBuilder ().WithState (PlayerState.Ready).WithName ("Liam");
+					player3Builder = new MockPlayerBuilder ().WithState (PlayerState.Ready).WithName ("Jess");
 				}
 
 				[Test]
-				public void P1_Has_2_As_Lowest_Card_P2_Has_3_As_Lowest_Card_P1_Goes_First(){
-					var player1 = new Mock<IPlayer> ();
-					player1.SetupGet (prop => prop.Cards).Returns(CardHelpers.GetCardsFromValues (new []{ 2 }));
-					player1.SetupGet (prop => prop.Name).Returns ("Ed");
+				public void P1_Has_Lowest_Card_P1_Goes_First(){
+					var player1 = player1Builder.WithCards (new []{ 2 }).Build();
+					var player2 = player2Builder.WithCards (new []{ 3 }).Build();
 
-					var player2 = new Mock<IPlayer> ();
-					player2.SetupGet (prop => prop.Cards).Returns( CardHelpers.GetCardsFromValues (new []{ 3 }));
-					player2.SetupGet (prop => prop.Name).Returns ("Liam");
-
-					game = new Game (new[]{ player1.Object, player2.Object }, new Deck (new NonShuffler ()));
+					game = new Game (new[]{ player1, player2 }, new Deck (new NonShuffler ()));
 					game.Start ();
-					Assert.AreEqual (player1.Object.Name, game.CurrentPlayer.Name);
+					Assert.AreEqual (player1.Name, game.CurrentPlayer.Name);
 				}
 
 				[Test]
-				public void P1_Has_3_As_Lowest_Card_P2_Has_2_As_Lowest_Card_P2_Goes_First(){
-					var player1 = new Mock<IPlayer> ();
-					player1.SetupGet (prop => prop.Name).Returns ("Ed");
-					player1.SetupGet (prop => prop.Cards).Returns(CardHelpers.GetCardsFromValues (new []{ 3 }));
-					player1.SetupGet (prop => prop.State).Returns (PlayerState.Ready);
+				public void P2_Has_Lowest_Card_P2_Goes_First(){
+					var player1 = player1Builder.WithCards (new []{ 3 }).Build();
+					var player2 = player2Builder.WithCards (new []{ 2 }).Build();
 
-					var player2 = new Mock<IPlayer> ();
-					player2.SetupGet (prop => prop.State).Returns (PlayerState.Ready);
-					player2.SetupGet (prop => prop.Cards).Returns( CardHelpers.GetCardsFromValues (new []{ 2 }));
-					player2.SetupGet (prop => prop.Name).Returns ("Liam");
-
-					game = new Game (new[]{ player1.Object, player2.Object }, new Deck (new NonShuffler ()));
+					game = new Game (new[]{ player1, player2 }, new Deck (new NonShuffler ()));
 					game.Start ();
-					Assert.AreEqual (player2.Object.Name, game.CurrentPlayer.Name);
+					Assert.AreEqual (player2.Name, game.CurrentPlayer.Name);
 				}
 
 				[Test] 
 				public void P3_Has_Lowest_Card_P3_Goes_First(){
-					var player1 = new Mock<IPlayer> ();
-					player1.SetupGet (prop => prop.Name).Returns ("Ed");
-					player1.SetupGet (prop => prop.Cards).Returns(CardHelpers.GetCardsFromValues (new []{ 3 }));
-					player1.SetupGet (prop => prop.State).Returns (PlayerState.Ready);
+					var player1 = player1Builder.WithCards (new []{ 3 }).Build();
+					var player2 = player2Builder.WithCards (new []{ 3 }).Build();
+					var player3 = player3Builder.WithCards (new []{ 2 }).Build();
 
-					var player2 = new Mock<IPlayer> ();
-					player2.SetupGet (prop => prop.State).Returns (PlayerState.Ready);
-					player2.SetupGet (prop => prop.Cards).Returns( CardHelpers.GetCardsFromValues (new []{ 3 }));
-					player2.SetupGet (prop => prop.Name).Returns ("Liam");
-
-					var player3 = new Mock<IPlayer> ();
-					player3.SetupGet (prop => prop.State).Returns (PlayerState.Ready);
-					player3.SetupGet (prop => prop.Cards).Returns( CardHelpers.GetCardsFromValues (new []{ 2 }));
-					player3.SetupGet (prop => prop.Name).Returns ("Jess");
-
-					game = new Game (new[]{ player1.Object, player2.Object, player3.Object }, new Deck (new NonShuffler ()));
+					game = new Game (new[]{ player1, player2, player3 }, new Deck (new NonShuffler ()));
 					game.Start ();
-					Assert.AreEqual (player3.Object.Name, game.CurrentPlayer.Name);
+					Assert.AreEqual (player3.Name, game.CurrentPlayer.Name);
 				}
+
+//				static Mock<IPlayer> MockReadyPlayer (string name)
+//				{
+//					var player1 = new Mock<IPlayer> ();
+//					player1.SetupGet (prop => prop.Name).Returns (name);
+//					player1.SetupGet (prop => prop.Cards).Returns (CardHelpers.GetCardsFromValues (new[] {
+//						3
+//					}));
+//					player1.SetupGet (prop => prop.State).Returns (PlayerState.Ready);
+//					return player1;
+//				}
 			}
 		}
 	}
