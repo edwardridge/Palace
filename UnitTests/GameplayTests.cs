@@ -10,13 +10,17 @@ namespace UnitTests
 	{
 		[Test]
 		public void Cannot_Play_A_Card_When_Game_Not_Started(){
-			var players = new [] { new Player ("Ed"), new Player ("Liam") };
-			var game = GameHelper.CreateGameWithPlayers (players);
+			var player1 = new MockPlayerBuilder ().WithName ("Ed").WithState (PlayerState.Ready).WithCards (new []{ 2, 3, 4 }).Build ();
+			var player2 = new MockPlayerBuilder ().WithName ("Ed").WithState (PlayerState.Ready).WithCards (new []{ 2, 3, 4 }).Build ();
 
-			var result = game.PlayCards (players [0], players [0].Cards.First());
+			var game = new Game (new []{player1, player2},new Deck(new NonShuffler()));
+
+			var result = game.PlayCards (player1, player1.Cards.First());
 
 			Assert.AreEqual (ResultOutcome.Fail, result);
 		}
+
+
 	}
 }
 
