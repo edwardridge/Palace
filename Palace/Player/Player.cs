@@ -6,30 +6,23 @@ namespace Palace
 {
 	public class Player : IPlayer
 	{
-		public virtual string Name {
+		public string Name {
 			get{ return name; }
 		}
 
-		public virtual PlayerState State {
+		public PlayerState State {
 			get {return state;}
 			internal set{ state = value; }
 		}
 
-		public virtual ICollection<Card> Cards {
+		public ICollection<Card> Cards {
 			get { return cards; }
 		}
-
-		public Player (){}
 
 		public Player(string name){
 			this.name = name;
 			cards = new List<Card> ();
 			state = PlayerState.Setup;
-		}
-
-		public void ReplaceCardsAndSetReady(ICollection<Card> cards){
-			state = PlayerState.Ready;
-			this.cards = cards;
 		}
 
 		public void AddCards (ICollection<Card> cardsToBeAdded)

@@ -21,5 +21,9 @@
 			this.Type = type;
 			this.CardOrientation = faceUp;
         }
+
+		public virtual bool Equals(Card comparison){
+			return this.Suit == comparison.Suit && this.Value == comparison.Value;
+		}
     }
 }

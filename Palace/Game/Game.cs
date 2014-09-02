@@ -9,6 +9,7 @@ namespace Palace
 		public Game(ICollection<IPlayer> players, Deck deck){
 			this.deck = deck;
 			this.players = players;
+			this.gameStarted = false;
 
 			currentPlayer = players.First ();
 		}
@@ -27,6 +28,7 @@ namespace Palace
 			}
 
 			currentPlayer = startingPlayer;
+			gameStarted = true;
 			return new Result (ResultOutcome.Success);
 		}
 
@@ -40,7 +42,14 @@ namespace Palace
 
 		public ResultOutcome PlayCards (IPlayer player, Card card)
 		{
-			player.RemoveCards (new []{card});
+			if (!gameStarted)
+				return ResultOutcome.Fail;
+
+			if(player.Cards.Any(p=>p.Value == card.Value && p.Suit == card.Suit)){
+				player.RemoveCards (new []{card});
+				return ResultOutcome.Success;
+			}
+			
 			return ResultOutcome.Fail;
 		}
 
@@ -59,6 +68,7 @@ namespace Palace
 		private IPlayer currentPlayer;
 		private ICollection<IPlayer> players;
 		private Deck deck;
+		private bool gameStarted;
 	}
 
 }
