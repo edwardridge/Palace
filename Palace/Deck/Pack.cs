@@ -26,16 +26,10 @@ namespace Palace
 		}
 
 		private ICollection<Card> SetupSuiteOfCards(Suit suit){
-			List<Card> suiteOfCards = new List<Card> ();
+			var suiteOfCards = new List<Card> ();
 
-			for(int i = 2; i <= 10; i++){
-				suiteOfCards.Add(new Card((CardType) i, suit));
-			}
-
-			suiteOfCards.Add(new Card(CardType.Jack, suit));
-			suiteOfCards.Add(new Card(CardType.Queen, suit));
-			suiteOfCards.Add(new Card(CardType.King, suit));
-			suiteOfCards.Add(new Card(CardType.Ace, suit));
+			foreach (CardValue value in (CardValue[]) Enum.GetValues(typeof(CardValue)))
+				suiteOfCards.Add(new Card(value, suit));
 
 			return suiteOfCards;
 		}

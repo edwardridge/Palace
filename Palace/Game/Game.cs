@@ -22,8 +22,10 @@ namespace Palace
 
 			var startingPlayer = players.First ();
 
-			foreach (var player in players) {
-				if (LowestCard(player.Cards).Type < LowestCard(startingPlayer.Cards).Type)
+			var playersWithCards = players.Where (p => p.Cards != null && p.Cards.Count > 0);
+
+			foreach (var player in playersWithCards) {
+				if (LowestCard(player.Cards).Value < LowestCard(startingPlayer.Cards).Value)
 					startingPlayer = player;
 			}
 
@@ -45,7 +47,7 @@ namespace Palace
 			if (!gameStarted)
 				return ResultOutcome.Fail;
 
-			if(player.Cards.Any(p=>p.Type == card.Type && p.Suit == card.Suit)){
+			if(player.Cards.Any(p=>p.Value == card.Value && p.Suit == card.Suit)){
 				player.RemoveCards (new []{card});
 				return ResultOutcome.Success;
 			}
@@ -62,7 +64,7 @@ namespace Palace
 		}
 
 		private Card LowestCard(ICollection<Card> cards){
-			return cards.OrderBy (o => o.Type).First (); 
+			return cards.OrderBy (o => o.Value).FirstOrDefault (); 
 		}
 
 		private IPlayer currentPlayer;

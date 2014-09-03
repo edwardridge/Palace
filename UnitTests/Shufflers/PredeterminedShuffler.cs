@@ -19,7 +19,7 @@ namespace UnitTests
 			var cards = new List<Card> (predeterminedCards);
 
 			for (int i = predeterminedCards.Count(); i < preShuffledDeck.Count(); i++) {
-				cards.Add(new Card((CardType) i, Suit.Club));
+				cards.Add(new Card((CardValue) i, Suit.Club));
 			}
 
 			return cards;

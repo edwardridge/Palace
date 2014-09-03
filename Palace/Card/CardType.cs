@@ -2,7 +2,7 @@
 
 namespace Palace
 {
-	public enum CardType
+	public enum CardValue
 	{
 		Two = 2,
 		Three = 3,

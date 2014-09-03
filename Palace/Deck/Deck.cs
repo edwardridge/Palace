@@ -40,9 +40,9 @@ namespace Palace
 			return cards.Count (card => card.Suit == suit);
 		}
 
-		public int CardsOfType (CardType type)
+		public int CardsOfType (CardValue type)
 		{
-			return cards.Count (card => card.Type == type);
+			return cards.Count (card => card.Value == type);
 		}
 			
 		public int CardCount ()

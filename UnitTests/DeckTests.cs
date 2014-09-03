@@ -50,35 +50,35 @@ namespace UnitTests
 
 			[Test]
 			public void Has_4_Aces(){
-				var aceCount = deck.CardsOfType (CardType.Ace);
+				var aceCount = deck.CardsOfType (CardValue.Ace);
 
 				Assert.AreEqual (4, aceCount);
 			}
 
 			[Test]
 			public void Has_4_Jacks(){
-				var jackCount = deck.CardsOfType (CardType.Jack);
+				var jackCount = deck.CardsOfType (CardValue.Jack);
 
 				Assert.AreEqual (4, jackCount);
 			}
 
 			[Test]
 			public void Has_4_Queens(){
-				var queenCount = deck.CardsOfType (CardType.Queen);
+				var queenCount = deck.CardsOfType (CardValue.Queen);
 
 				Assert.AreEqual (4, queenCount);
 			}
 
 			[Test]
 			public void Has_4_Kings(){
-				var kingCount = deck.CardsOfType (CardType.King);
+				var kingCount = deck.CardsOfType (CardValue.King);
 
 				Assert.AreEqual (4, kingCount);
 			}
 
 			[Test]
 			public void Has_4_NumberTwo_Cards(){
-				int numberTwoCards = deck.CardsOfType (CardType.Two);
+				int numberTwoCards = deck.CardsOfType (CardValue.Two);
 
 				Assert.AreEqual (4, numberTwoCards);
 			}
@@ -100,9 +100,9 @@ namespace UnitTests
 
 			[Test]
 			public void Gets_Single_Card(){
-				var expectedCardValue = CardType.Seven;
+				var expectedCardValue = CardValue.Seven;
 
-				var cardFromDeckValue = deck.TakeCards (1).Select (s => s.Type).First();
+				var cardFromDeckValue = deck.TakeCards (1).Select (s => s.Value).First();
 
 				Assert.AreEqual (expectedCardValue, cardFromDeckValue);
 			}
@@ -117,9 +117,9 @@ namespace UnitTests
 
 			[Test]
 			public void Gets_Two_Cards(){
-				var expectedCardValues = new List<CardType> (new []{CardType.Seven,CardType.Two});
+				var expectedCardValues = new List<CardValue> (new []{CardValue.Seven,CardValue.Two});
 
-				var cardsFromDeckValues = deck.TakeCards(2).Select(s=>s.Type);
+				var cardsFromDeckValues = deck.TakeCards(2).Select(s=>s.Value);
 
 				Assert.AreEqual (expectedCardValues, cardsFromDeckValues);
 			}

@@ -50,13 +50,10 @@
     <Compile Include="Shufflers\PredeterminedShuffler.cs" />
     <Compile Include="GameInitialiseTests.cs" />
     <Compile Include="GameplayTests.cs" />
-    <Compile Include="Helpers\PlayerHelper.cs" />
     <Compile Include="Helpers\GameHelper.cs" />
     <Compile Include="Helpers\CardHelpers.cs" />
-    <Compile Include="Helpers\DeckTests.cs">
-      <DependentUpon>CardHelpers.cs</DependentUpon>
-    </Compile>
     <Compile Include="Builders\MockPlayerBuilder.cs" />
+    <Compile Include="DeckTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

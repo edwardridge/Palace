@@ -47,69 +47,82 @@ namespace UnitTests
 		}
 
 		[TestFixture]
-		public class StartGame
+		public class GameStart
 		{
-			Game game;
-			Player[] players;
-
-			[SetUp]
-			public void Setup(){
-				players = new []{new Player ("Ed"), new Player("Liam")};
-				game = GameHelper.CreateGameWithPlayers (players);
-			}
-
 			[Test]
-			public void Game_Cannot_Start_When_Both_Players_Not_Ready(){
+			public void Cannot_Start_When_Both_Players_Not_Ready(){
+				var player1 = new MockPlayerBuilder ().WithState (PlayerState.Setup).Build();
+				var player2 = new MockPlayerBuilder ().WithState (PlayerState.Ready).Build();
+				var game = new Game (new []{ player1, player2 }, new Deck (new NonShuffler ()));
 				var result = game.Start ();
 
 				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
 			}
 
 			[Test]
-			public void Game_Can_Start_When_Both_Players_Are_Ready(){
-				PlayerHelper.PutSomeCardsFaceUp (players[0], 3);
-				PlayerHelper.PutSomeCardsFaceUp (players[1], 3);
-
-				players[0].Ready ();
-				players[1].Ready ();
+			public void Can_Start_When_Both_Players_Are_Ready(){
+				var player1 = new MockPlayerBuilder ().WithState (PlayerState.Ready).Build();
+				var player2 = new MockPlayerBuilder ().WithState (PlayerState.Ready).Build();
+				var game = new Game (new []{ player1, player2 }, new Deck (new NonShuffler ()));
 				var result = game.Start ();
 
 				Assert.AreEqual (ResultOutcome.Success, result.ResultOutcome);
 			}
 
+		}
+
+		[TestFixture]
+		public class PlayerReady{
+			Player player;
+
+			[SetUp]
+			public void Setup(){
+				player = new Player ("Ed");
+			}
+
 			[Test]
 			public void Player_Cannot_Be_Ready_With_No_Face_Up_Cards(){
-				var result = players[0].Ready();
+				//Don't put any cards face up
+				var result = player.Ready ();
 
 				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
 			}
 
 			[Test]
 			public void Player_Cannot_Be_Ready_With_Two_Face_Up_Cards(){
-				PlayerHelper.PutSomeCardsFaceUp (players[0], 2);
+				player.AddCards(new []{new Card(CardValue.Ace, Suit.Club,CardOrientation.FaceUp), 
+					new Card(CardValue.Ace, Suit.Club,CardOrientation.FaceUp)});
 
-				var result = players[0].Ready ();
+				var result = player.Ready ();
 
 				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
 			}
 
 			[Test]
 			public void Player_Can_Be_Ready_When_Three_Cards_Are_Face_Up(){
-				PlayerHelper.PutSomeCardsFaceUp (players[0], 3);
+				player.AddCards(new []{new Card(CardValue.Ace, Suit.Club,CardOrientation.FaceUp), 
+					new Card(CardValue.Ace, Suit.Club,CardOrientation.FaceUp),
+					new Card(CardValue.Ace, Suit.Club,CardOrientation.FaceUp)});
 
-				var result = players[0].Ready ();
+				var result = player.Ready ();
 
 				Assert.AreEqual (ResultOutcome.Success, result.ResultOutcome);
 			}
 
 			[Test]
-			public void Player_Cannot_Put_Fourth_Card_Face_Up(){
-				PlayerHelper.PutSomeCardsFaceUp (players[0], 3);
+			public void Player_Cannot_Put_Fourth_Card_Face_Up ()
+			{
+				player.AddCards (new [] {new Card (CardValue.Ace, Suit.Club, CardOrientation.FaceUp), 
+					new Card (CardValue.Ace, Suit.Club, CardOrientation.FaceUp),
+					new Card (CardValue.Ace, Suit.Club, CardOrientation.FaceUp)
+				});
 
-				var result = players[0].PutCardFaceUp(players[0].Cards.ToArray()[3]);
+				var result = player.PutCardFaceUp (new Card (CardValue.Ace, Suit.Club, CardOrientation.FaceUp));
 
 				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
 			}
+
+		}
 
 			[TestFixture]
 			public class FirstMoveWhenAllPlayersAreReady{
@@ -156,19 +169,8 @@ namespace UnitTests
 					game.Start ();
 					Assert.AreEqual (player3.Name, game.CurrentPlayer.Name);
 				}
-
-//				static Mock<IPlayer> MockReadyPlayer (string name)
-//				{
-//					var player1 = new Mock<IPlayer> ();
-//					player1.SetupGet (prop => prop.Name).Returns (name);
-//					player1.SetupGet (prop => prop.Cards).Returns (CardHelpers.GetCardsFromValues (new[] {
-//						3
-//					}));
-//					player1.SetupGet (prop => prop.State).Returns (PlayerState.Ready);
-//					return player1;
-//				}
 			}
 		}
 	}
-}
+
 
