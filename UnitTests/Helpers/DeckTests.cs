@@ -77,10 +77,10 @@ namespace UnitTests
 			}
 
 			[Test]
-			public void Has_36_Number_Cards(){
-				int aceOfSpadesCount = deck.CardsOfType (CardType.Number);
+			public void Has_4_NumberTwo_Cards(){
+				int numberTwoCards = deck.CardsOfType (CardType.Two);
 
-				Assert.AreEqual (36, aceOfSpadesCount);
+				Assert.AreEqual (4, numberTwoCards);
 			}
 		}
 
@@ -91,7 +91,7 @@ namespace UnitTests
 
 			[SetUp]
 			public void Setup(){
-				var order = CardHelpers.GetCardsFromValues(new List<int>(){ 7,1,10,3,5,2,5,6,4,8,12,51});
+				var order = CardHelpers.GetCardsFromValues(new List<int>(){ 7,2,10,3,5,2,5,6,4,8,12,51});
 				var predeterminedShuffler = new PredeterminedShuffler (order);
 				Pack pack = new Pack ();
 				deck = new Deck (predeterminedShuffler, pack);
@@ -100,9 +100,9 @@ namespace UnitTests
 
 			[Test]
 			public void Gets_Single_Card(){
-				var expectedCardValue = 7;
+				var expectedCardValue = CardType.Seven;
 
-				var cardFromDeckValue = deck.TakeCards (1).Select (s => s.Value).First();
+				var cardFromDeckValue = deck.TakeCards (1).Select (s => s.Type).First();
 
 				Assert.AreEqual (expectedCardValue, cardFromDeckValue);
 			}
@@ -117,9 +117,9 @@ namespace UnitTests
 
 			[Test]
 			public void Gets_Two_Cards(){
-				var expectedCardValues = new List<int> (new []{7,1});
+				var expectedCardValues = new List<CardType> (new []{CardType.Seven,CardType.Two});
 
-				var cardsFromDeckValues = deck.TakeCards(2).Select(s=>s.Value);
+				var cardsFromDeckValues = deck.TakeCards(2).Select(s=>s.Type);
 
 				Assert.AreEqual (expectedCardValues, cardsFromDeckValues);
 			}

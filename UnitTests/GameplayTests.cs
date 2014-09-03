@@ -36,7 +36,7 @@ namespace UnitTests
 
 			var game = new Game (new []{player1, player2},new Deck(new NonShuffler()));
 			game.Start ();
-			var result = game.PlayCards (player1, new Card(5,CardType.Number,Suit.Club));
+			var result = game.PlayCards (player1, new Card(CardType.Five,Suit.Club));
 
 			Assert.AreEqual (ResultOutcome.Fail, result);
 		}
@@ -48,7 +48,8 @@ namespace UnitTests
 
 			var game = new Game (new []{player1, player2},new Deck(new NonShuffler()));
 			game.Start ();
-			var result = game.PlayCards (player1, new Card(2,CardType.Number,Suit.Club));
+
+			var result = game.PlayCards (player1, new Card(CardType.Two,Suit.Club));
 
 			Assert.AreEqual (ResultOutcome.Success, result);
 		}

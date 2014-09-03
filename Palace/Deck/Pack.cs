@@ -29,13 +29,13 @@ namespace Palace
 			List<Card> suiteOfCards = new List<Card> ();
 
 			for(int i = 2; i <= 10; i++){
-				suiteOfCards.Add(new Card(i, CardType.Number, suit));
+				suiteOfCards.Add(new Card((CardType) i, suit));
 			}
 
-			suiteOfCards.Add(new Card(11, CardType.Jack, suit));
-			suiteOfCards.Add(new Card(12, CardType.Queen, suit));
-			suiteOfCards.Add(new Card(13, CardType.King, suit));
-			suiteOfCards.Add(new Card(14, CardType.Ace, suit));
+			suiteOfCards.Add(new Card(CardType.Jack, suit));
+			suiteOfCards.Add(new Card(CardType.Queen, suit));
+			suiteOfCards.Add(new Card(CardType.King, suit));
+			suiteOfCards.Add(new Card(CardType.Ace, suit));
 
 			return suiteOfCards;
 		}
