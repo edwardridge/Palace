@@ -6,20 +6,12 @@ namespace Palace
 {
 	public class Game
 	{
-		public void Setup (ICollection<Player> players, Deck deck)
-		{
+		public Game(ICollection<IPlayer> players, Deck deck){
 			this.deck = deck;
 			this.players = players;
+			this.gameStarted = false;
 
-			foreach (Player player in players) {
-				player.AddCards (this.deck.TakeCards (3, CardOrientation.FaceDown));
-				player.AddCards (this.deck.TakeCards (6, CardOrientation.InHand));
-			}
-		}
-
-		public void ReplacePlayers(ICollection<Player> players)
-		{
-			this.players = players;
+			currentPlayer = players.First ();
 		}
 
 		public Result Start ()
@@ -30,18 +22,36 @@ namespace Palace
 
 			var startingPlayer = players.First ();
 
-			foreach (Player player in players) {
-				if (player.LowestCard.Value < startingPlayer.LowestCard.Value)
+			var playersWithCards = players.Where (p => p.Cards != null && p.Cards.Count > 0);
+
+			foreach (var player in playersWithCards) {
+				if (LowestCard(player.Cards).Value < LowestCard(startingPlayer.Cards).Value)
 					startingPlayer = player;
 			}
 
 			currentPlayer = startingPlayer;
+			gameStarted = true;
 			return new Result (ResultOutcome.Success);
 		}
 
-		public ResultOutcome PlayCards (Player player, Card card)
+		public void Setup ()
 		{
-			player.Cards.Remove (card);
+			foreach (IPlayer player in players) {
+				player.AddCards (this.deck.TakeCards (3, CardOrientation.FaceDown));
+				player.AddCards (this.deck.TakeCards (6, CardOrientation.InHand));
+			}
+		}
+
+		public ResultOutcome PlayCards (IPlayer player, Card card)
+		{
+			if (!gameStarted)
+				return ResultOutcome.Fail;
+
+			if(player.Cards.Any(p=>p.Value == card.Value && p.Suit == card.Suit)){
+				player.RemoveCards (new []{card});
+				return ResultOutcome.Success;
+			}
+			
 			return ResultOutcome.Fail;
 		}
 
@@ -49,13 +59,18 @@ namespace Palace
 			get{ return players.Count; }
 		}
 
-		public Player CurrentPlayer {
+		public IPlayer CurrentPlayer {
 			get{ return currentPlayer; }
 		}
 
-		private Player currentPlayer;
-		private ICollection<Player> players;
+		private Card LowestCard(ICollection<Card> cards){
+			return cards.OrderBy (o => o.Value).FirstOrDefault (); 
+		}
+
+		private IPlayer currentPlayer;
+		private ICollection<IPlayer> players;
 		private Deck deck;
+		private bool gameStarted;
 	}
 
 }

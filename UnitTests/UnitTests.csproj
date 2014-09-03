@@ -33,18 +33,27 @@
     <Reference Include="nunit.framework, Version=2.6.0.12051, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <Private>True</Private>
     </Reference>
+    <Reference Include="FluentAssertions.Core">
+      <HintPath>..\packages\FluentAssertions.3.1.229\lib\net40\FluentAssertions.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\packages\FluentAssertions.3.1.229\lib\net40\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.2.1408.0717\lib\net40\Moq.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeckTests.cs">
-      <DependentUpon>CardHelpers.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PlayerHelper.cs" />
     <Compile Include="Shufflers\NonShuffler.cs" />
     <Compile Include="Shufflers\PredeterminedShuffler.cs" />
     <Compile Include="GameInitialiseTests.cs" />
-    <Compile Include="CardHelpers.cs" />
     <Compile Include="GameplayTests.cs" />
-    <Compile Include="GameHelper.cs" />
+    <Compile Include="Helpers\CardHelpers.cs" />
+    <Compile Include="Builders\MockPlayerBuilder.cs" />
+    <Compile Include="DeckTests.cs" />
+    <Compile Include="StubPlayer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -55,5 +64,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Shufflers\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Builders\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Palace
 {
-	public class Player
+	public class Player : IPlayer
 	{
 		public string Name {
 			get{ return name; }
@@ -24,15 +24,16 @@ namespace Palace
 			state = PlayerState.Setup;
 		}
 
-		public void ReplaceCardsAndSetReady(ICollection<Card> cards){
-			state = PlayerState.Ready;
-			this.cards = cards;
-		}
-
 		public void AddCards (ICollection<Card> cardsToBeAdded)
 		{
 			foreach (Card addedCard in cardsToBeAdded) {
 				this.cards.Add (addedCard);
+			}
+		}
+
+		public void RemoveCards(ICollection<Card> cardsToBeRemoved){
+			foreach (Card removedCard in cardsToBeRemoved) {
+				this.cards.Remove (removedCard);
 			}
 		}
 
@@ -57,10 +58,6 @@ namespace Palace
 			state = PlayerState.Ready;
 
 			return new Result (ResultOutcome.Success);
-		}
-
-		public Card LowestCard{
-			get{ return cards.OrderBy (o => o.Value).First (); }
 		}
 
 		private string name;

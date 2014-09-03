@@ -2,36 +2,57 @@
 using NUnit.Framework;
 using Palace;
 using System.Linq;
+using FluentAssertions;
 
 namespace UnitTests
 {
 	[TestFixture]
 	public class GameplayTests
 	{
-		[Test]
-		public void Cannot_Play_A_Card_When_Game_Not_Started(){
-			var players = new [] { new Player ("Ed"), new Player ("Liam") };
-			var game = GameHelper.CreateGameWithPlayers (players);
+		MockPlayerBuilder player1Builder;
+		MockPlayerBuilder player2Builder;
 
-			var result = game.PlayCards (players [0], players [0].Cards.First());
-
-			Assert.AreEqual (ResultOutcome.Fail, result);
+		[SetUp]
+		public void Setup(){
+			player1Builder = new MockPlayerBuilder ().WithName ("Ed").WithState (PlayerState.Ready);
+			player2Builder = new MockPlayerBuilder ().WithName ("Liam").WithState (PlayerState.Ready);
 		}
 
 		[Test]
-		public void Plays_Card_Card_Is_Removed_From_Players_Hand(){
-			var players = new [] { new Player ("Ed"), new Player ("Liam") };
-			var player1Cards = new [] { 2, 4, 5 };
-			var player2Cards = new [] { 3, 5, 6 };
+		public void Cannot_Play_A_Card_When_Game_Not_Started(){
+			var player1 = player1Builder.WithCards (new []{ 2, 3, 4 }).Build ();
+			var player2 = player2Builder.WithCards (new []{ 2, 3, 4 }).Build ();
 
-			var game = new Game ();
-			game.Setup (players, new Deck(new PredeterminedShuffler(CardHelpers.GetCardsFromValues(new []{10}))));
+			var game = new Game (new []{player1, player2},new Deck(new NonShuffler()));
+			//Dont' start game 
+			var result = game.PlayCards (player1, player1.Cards.First());
 
-			game.StartGameForTest (players, new [] { player1Cards, player2Cards });
-			var lowestCard = players [0].LowestCard;
+			result.Should ().Be (ResultOutcome.Fail);
+		}
 
-			game.PlayCards (players [0], lowestCard);
-			Assert.IsTrue(!players[0].Cards.Any(card=>card.Value == lowestCard.Value));
+		[Test]
+		public void Player_Cannot_Play_Card_Player_Doesnt_Have(){
+			var player1 = player1Builder.WithCards (new []{ 2, 3, 4 }).Build ();
+			var player2 = player2Builder.WithCards (new []{ 2, 3, 4 }).Build ();
+
+			var game = new Game (new []{player1, player2},new Deck(new NonShuffler()));
+			game.Start ();
+			var result = game.PlayCards (player1, new Card(CardValue.Five,Suit.Club));
+
+			result.Should ().Be (ResultOutcome.Fail);
+		}
+
+		[Test]
+		public void Player_Can_Play_Card_Player_Has(){
+			var player1 = player1Builder.WithCards (new []{ 2, 3, 4 }).Build ();
+			var player2 = player2Builder.WithCards (new []{ 2, 3, 4 }).Build ();
+
+			var game = new Game (new []{player1, player2},new Deck(new NonShuffler()));
+			game.Start ();
+
+			var result = game.PlayCards (player1, new Card(CardValue.Two,Suit.Club));
+
+			result.Should ().Be (ResultOutcome.Success);
 		}
 	}
 }

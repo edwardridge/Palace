@@ -31,6 +31,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -48,7 +50,11 @@
     <Compile Include="Card\CardType.cs" />
     <Compile Include="Deck\Pack.cs" />
     <Compile Include="Card\Suit.cs" />
+    <Compile Include="Player\IPlayer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
 </Project>
