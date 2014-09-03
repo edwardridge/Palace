@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Palace;
 using System.Linq;
+using FluentAssertions;
 
 namespace UnitTests
 {
@@ -26,7 +27,7 @@ namespace UnitTests
 			//Dont' start game 
 			var result = game.PlayCards (player1, player1.Cards.First());
 
-			Assert.AreEqual (ResultOutcome.Fail, result);
+			result.Should ().Be (ResultOutcome.Fail);
 		}
 
 		[Test]
@@ -38,7 +39,7 @@ namespace UnitTests
 			game.Start ();
 			var result = game.PlayCards (player1, new Card(CardValue.Five,Suit.Club));
 
-			Assert.AreEqual (ResultOutcome.Fail, result);
+			result.Should ().Be (ResultOutcome.Fail);
 		}
 
 		[Test]
@@ -51,7 +52,7 @@ namespace UnitTests
 
 			var result = game.PlayCards (player1, new Card(CardValue.Two,Suit.Club));
 
-			Assert.AreEqual (ResultOutcome.Success, result);
+			result.Should ().Be (ResultOutcome.Success);
 		}
 	}
 }

@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 
 namespace UnitTests
 {
@@ -24,63 +25,63 @@ namespace UnitTests
 			public void Has_13_Hearts(){
 				var heartCount = deck.CardsOfSuite (Suit.Heart);
 
-				Assert.AreEqual (13, heartCount);
+				heartCount.Should ().Be (13);
 			}
 
 			[Test]
 			public void Has_13_Clubs(){
 				var clubCount = deck.CardsOfSuite (Suit.Club);
 
-				Assert.AreEqual (13, clubCount);
+				clubCount.Should ().Be (13);
 			}
 
 			[Test]
 			public void Has_13_Spades(){
 				var spadeCount = deck.CardsOfSuite (Suit.Spade);
 
-				Assert.AreEqual (13, spadeCount);
+				spadeCount.Should ().Be (13);
 			}
 
 			[Test]
 			public void Has_13_Diamonds(){
 				var diamondCount = deck.CardsOfSuite (Suit.Diamond);
 
-				Assert.AreEqual (13, diamondCount);
+				diamondCount.Should ().Be (13);
 			}
 
 			[Test]
 			public void Has_4_Aces(){
 				var aceCount = deck.CardsOfType (CardValue.Ace);
 
-				Assert.AreEqual (4, aceCount);
+				aceCount.Should ().Be (4);
 			}
 
 			[Test]
 			public void Has_4_Jacks(){
 				var jackCount = deck.CardsOfType (CardValue.Jack);
 
-				Assert.AreEqual (4, jackCount);
+				jackCount.Should ().Be (4);
 			}
 
 			[Test]
 			public void Has_4_Queens(){
 				var queenCount = deck.CardsOfType (CardValue.Queen);
 
-				Assert.AreEqual (4, queenCount);
+				queenCount.Should ().Be (4);
 			}
 
 			[Test]
 			public void Has_4_Kings(){
 				var kingCount = deck.CardsOfType (CardValue.King);
 
-				Assert.AreEqual (4, kingCount);
+				kingCount.Should ().Be (4);
 			}
 
 			[Test]
 			public void Has_4_NumberTwo_Cards(){
 				int numberTwoCards = deck.CardsOfType (CardValue.Two);
 
-				Assert.AreEqual (4, numberTwoCards);
+				numberTwoCards.Should().Be(4);
 			}
 		}
 
@@ -100,11 +101,9 @@ namespace UnitTests
 
 			[Test]
 			public void Gets_Single_Card(){
-				var expectedCardValue = CardValue.Seven;
-
 				var cardFromDeckValue = deck.TakeCards (1).Select (s => s.Value).First();
 
-				Assert.AreEqual (expectedCardValue, cardFromDeckValue);
+				cardFromDeckValue.Should ().Be (CardValue.Seven);
 			}
 
 			[Test]
@@ -112,7 +111,7 @@ namespace UnitTests
 				deck.TakeCards (1);
 				var postDeckCount = deck.CardCount ();
 
-				Assert.AreEqual (preDeckCount - 1, postDeckCount);
+				postDeckCount.Should ().Be (preDeckCount - 1);
 			}
 
 			[Test]
@@ -121,7 +120,7 @@ namespace UnitTests
 
 				var cardsFromDeckValues = deck.TakeCards(2).Select(s=>s.Value);
 
-				Assert.AreEqual (expectedCardValues, cardsFromDeckValues);
+				cardsFromDeckValues.ShouldAllBeEquivalentTo (expectedCardValues);
 			}
 
 			[Test]
@@ -129,7 +128,7 @@ namespace UnitTests
 				deck.TakeCards (2);
 				var postDeckCount = deck.CardCount ();
 
-				Assert.AreEqual (preDeckCount - 2, postDeckCount);
+				postDeckCount.Should ().Be (preDeckCount - 2);
 			}
 		}
 
@@ -148,7 +147,7 @@ namespace UnitTests
 			public void Gets_Three_Cards_Returns_Two_Cards(){
 				var cards = deck.TakeCards (3);
 
-				Assert.AreEqual (2, cards.Count());
+				cards.Count ().Should ().Be (2);
 			}
 		}
     }

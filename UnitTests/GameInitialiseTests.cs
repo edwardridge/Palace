@@ -5,6 +5,7 @@ using Palace;
 using System.Collections;
 using System.Linq;
 using Moq;
+using FluentAssertions;
 
 namespace UnitTests
 {
@@ -31,22 +32,22 @@ namespace UnitTests
 			public void Setup_With_Two_Players_Two_Players_Are_In_Game(){
 				var playerCount = game.NumberOfPlayers;
 
-				Assert.AreEqual (2, playerCount);
+				playerCount.Should ().Be (2);
 			}
 
 			[Test]
 			public void Player_1_Has_6_In_Hand_Cards(){
-				Assert.AreEqual (6, player1.Cards.Count(card => card.CardOrientation == CardOrientation.InHand));
+				player1.Cards.Count (card => card.CardOrientation == CardOrientation.InHand).Should ().Be (6);
 			}
 
 			[Test]
 			public void Player_2_Has_6_In_Hand_Cards(){
-				Assert.AreEqual (6, player2.Cards.Count(card => card.CardOrientation == CardOrientation.InHand));
+				player2.Cards.Count (card => card.CardOrientation == CardOrientation.InHand).Should ().Be (6);
 			}
 
 			[Test]
 			public void Player_1_Has_3_Face_Down_Cards(){
-				Assert.AreEqual (3, player1.Cards.Count(card => card.CardOrientation == CardOrientation.FaceDown));
+				player1.Cards.Count (card => card.CardOrientation == CardOrientation.FaceDown).Should ().Be (3);
 			}
 		}
 
@@ -60,7 +61,7 @@ namespace UnitTests
 				var game = new Game (new []{ player1, player2 }, new Deck (new NonShuffler ()));
 				var result = game.Start ();
 
-				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
+				result.Outcome.Should ().Be (ResultOutcome.Fail);
 			}
 
 			[Test]
@@ -70,7 +71,7 @@ namespace UnitTests
 				var game = new Game (new []{ player1, player2 }, new Deck (new NonShuffler ()));
 				var result = game.Start ();
 
-				Assert.AreEqual (ResultOutcome.Success, result.ResultOutcome);
+				result.Outcome.Should ().Be (ResultOutcome.Success);
 			}
 
 		}
@@ -89,7 +90,7 @@ namespace UnitTests
 				//Don't put any cards face up
 				var result = player.Ready ();
 
-				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
+				result.Outcome.Should ().Be (ResultOutcome.Fail);
 			}
 
 			[Test]
@@ -99,7 +100,7 @@ namespace UnitTests
 
 				var result = player.Ready ();
 
-				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
+				result.Outcome.Should ().Be (ResultOutcome.Fail);
 			}
 
 			[Test]
@@ -110,7 +111,7 @@ namespace UnitTests
 
 				var result = player.Ready ();
 
-				Assert.AreEqual (ResultOutcome.Success, result.ResultOutcome);
+				result.Outcome.Should ().Be (ResultOutcome.Success);
 			}
 
 			[Test]
@@ -123,7 +124,7 @@ namespace UnitTests
 
 				var result = player.PutCardFaceUp (new Card (CardValue.Ace, Suit.Club, CardOrientation.FaceUp));
 
-				Assert.AreEqual (ResultOutcome.Fail, result.ResultOutcome);
+				result.Outcome.Should ().Be (ResultOutcome.Fail);
 			}
 
 		}
@@ -150,7 +151,8 @@ namespace UnitTests
 
 					game = new Game (new[]{ player1, player2 }, new Deck (new NonShuffler ()));
 					game.Start ();
-					Assert.AreEqual (player1.Name, game.CurrentPlayer.Name);
+
+					game.CurrentPlayer.Should().Be(player1);
 				}
 
 				[Test]
@@ -160,7 +162,8 @@ namespace UnitTests
 
 					game = new Game (new[]{ player1, player2 }, new Deck (new NonShuffler ()));
 					game.Start ();
-					Assert.AreEqual (player2.Name, game.CurrentPlayer.Name);
+					
+					game.CurrentPlayer.Should().Be(player2);
 				}
 
 				[Test] 
@@ -171,7 +174,8 @@ namespace UnitTests
 
 					game = new Game (new[]{ player1, player2, player3 }, new Deck (new NonShuffler ()));
 					game.Start ();
-					Assert.AreEqual (player3.Name, game.CurrentPlayer.Name);
+
+					game.CurrentPlayer.Should().Be(player3);
 				}
 			}
 		}
