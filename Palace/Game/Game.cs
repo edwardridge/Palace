@@ -36,7 +36,7 @@ namespace Palace
 
 		public void Setup ()
 		{
-			foreach (Player player in players) {
+			foreach (IPlayer player in players) {
 				player.AddCards (this.deck.TakeCards (3, CardOrientation.FaceDown));
 				player.AddCards (this.deck.TakeCards (6, CardOrientation.InHand));
 			}

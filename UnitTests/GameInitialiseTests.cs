@@ -15,12 +15,16 @@ namespace UnitTests
 		public class SetupGame
 		{
 			Game game;
-			Player[] players;
+			IPlayer player1;
+			IPlayer player2;
 
 			[SetUp]
 			public void Setup(){
-				players = new []{new Player ("Ed"), new Player("Liam")};
-				game = GameHelper.CreateGameWithPlayers (players);
+				player1 = new StubPlayer ();
+				player2 = new StubPlayer ();
+				var deck = new Deck (new NonShuffler ());
+				game = new Game (new []{player1, player2}, deck);
+				game.Setup ();
 			}
 
 			[Test]
@@ -32,17 +36,17 @@ namespace UnitTests
 
 			[Test]
 			public void Player_1_Has_6_In_Hand_Cards(){
-				Assert.AreEqual (6, players[0].NumCards(CardOrientation.InHand));
+				Assert.AreEqual (6, player1.Cards.Count(card => card.CardOrientation == CardOrientation.InHand));
 			}
 
 			[Test]
 			public void Player_2_Has_6_In_Hand_Cards(){
-				Assert.AreEqual (6, players[1].NumCards(CardOrientation.InHand));
+				Assert.AreEqual (6, player2.Cards.Count(card => card.CardOrientation == CardOrientation.InHand));
 			}
 
 			[Test]
 			public void Player_1_Has_3_Face_Down_Cards(){
-				Assert.AreEqual (3, players[0].NumCards(CardOrientation.FaceDown));
+				Assert.AreEqual (3, player1.Cards.Count(card => card.CardOrientation == CardOrientation.FaceDown));
 			}
 		}
 

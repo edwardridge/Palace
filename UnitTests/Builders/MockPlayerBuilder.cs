@@ -2,6 +2,7 @@
 using Palace;
 using Moq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace UnitTests
 {
@@ -25,6 +26,13 @@ namespace UnitTests
 
 		public MockPlayerBuilder WithCards(ICollection<int> cards){
 			mockPlayer.SetupGet (prop => prop.Cards).Returns(CardHelpers.GetCardsFromValues (cards));
+			return this;
+		}
+
+		public MockPlayerBuilder WithAddCards(){
+			mockPlayer.Setup (s => s.AddCards (It.IsAny<ICollection<Card>> ()))
+				.Callback ((ICollection<Card> cards) => mockPlayer.Object.Cards.ToList ().AddRange (cards));
+
 			return this;
 		}
 

@@ -54,6 +54,7 @@
     <Compile Include="Helpers\CardHelpers.cs" />
     <Compile Include="Builders\MockPlayerBuilder.cs" />
     <Compile Include="DeckTests.cs" />
+    <Compile Include="StubPlayer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
