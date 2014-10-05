@@ -21,9 +21,8 @@ namespace UnitTests
 		[Test]
 		public void Cannot_Play_A_Card_When_Game_Not_Started(){
 			var player1 = player1Builder.WithCards (new []{ 2, 3, 4 }).Build ();
-			var player2 = player2Builder.WithCards (new []{ 2, 3, 4 }).Build ();
 
-			var game = new Game (new []{player1, player2},new Deck(new NonShuffler()));
+			var game = new Game (new []{player1},new Deck(new NonShuffler()));
 			//Dont' start game 
 			var result = game.PlayCards (player1, player1.Cards.First());
 
@@ -33,9 +32,8 @@ namespace UnitTests
 		[Test]
 		public void Player_Cannot_Play_Card_Player_Doesnt_Have(){
 			var player1 = player1Builder.WithCards (new []{ 2, 3, 4 }).Build ();
-			var player2 = player2Builder.WithCards (new []{ 2, 3, 4 }).Build ();
 
-			var game = new Game (new []{player1, player2},new Deck(new NonShuffler()));
+			var game = new Game (new []{player1},new Deck(new NonShuffler()));
 			game.Start ();
 			var playingCardsPlayerDoesntHaveOutcome = game.PlayCards (player1, new Card(CardValue.Five,Suit.Club));
 
@@ -45,15 +43,16 @@ namespace UnitTests
 		[Test]
 		public void Player_Can_Play_Card_Player_Has(){
 			var player1 = player1Builder.WithCards (new []{ 2, 3, 4 }).Build ();
-			var player2 = player2Builder.WithCards (new []{ 2, 3, 4 }).Build ();
 
-			var game = new Game (new []{player1, player2},new Deck(new NonShuffler()));
+			var game = new Game (new []{player1},new Deck(new NonShuffler()));
 			game.Start ();
 
 			var playingCardsPlayerHasOutcome = game.PlayCards (player1, new Card(CardValue.Two,Suit.Club));
 
 			playingCardsPlayerHasOutcome.Should ().Be (ResultOutcome.Success);
 		}
+
+
 
 		[Test]
 		public void When_Player_Plays_Card_Card_Is_Removed_From_Hand(){
@@ -82,7 +81,7 @@ namespace UnitTests
 		}
 
 		[Test]
-		public void Cannot_PLay_Multiple_Cards_Of_Different_Value(){
+		public void Cannot_Play_Multiple_Cards_Of_Different_Value(){
 			var cardsToPlay = new []{ new Card (CardValue.Four, Suit.Club), new Card (CardValue.Ace, Suit.Club) };
 			var player1 = new StubReadyPlayer ();
 			player1.AddCards (cardsToPlay);
