@@ -43,18 +43,27 @@ namespace Palace
 			}
 		}
 
-		public ResultOutcome PlayCards (IPlayer player, Card card)
+		public ResultOutcome PlayCards (IPlayer player, ICollection<Card> cards)
 		{
 			if (!gameStarted)
 				return ResultOutcome.Fail;
 
-			if(player.Cards.Any(p=>p.Value == card.Value && p.Suit == card.Suit)){
-				player.RemoveCards (new []{card});
-				playPile.Add (card);
-				return ResultOutcome.Success;
+			if (cards.Select (card => card.Value).Distinct ().Count() != 1)
+				return ResultOutcome.Fail;
+
+			foreach (Card card in cards) {
+				if(player.Cards.Any(p=>p.Value == card.Value && p.Suit == card.Suit)){
+					player.RemoveCards (new []{card});
+					playPile.Add (card);
+				}else
+					return ResultOutcome.Fail;
 			}
-			
-			return ResultOutcome.Fail;
+
+			return ResultOutcome.Success;
+		}
+
+		public ResultOutcome PlayCards(IPlayer player, Card card){
+			return PlayCards (player, new[]{ card });
 		}
 
 		public int PlayPileCardCount(){

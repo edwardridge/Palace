@@ -69,6 +69,33 @@ namespace UnitTests
 		}
 
 		[Test]
+		public void Can_Play_Multiple_Cards_Of_Same_Value(){
+			var cardsToPlay = new []{ new Card (CardValue.Four, Suit.Club), new Card (CardValue.Four, Suit.Club) };
+			var player1 = new StubReadyPlayer ();
+			player1.AddCards (cardsToPlay);
+
+			var game = new Game (new[]{player1}, new Deck (new NonShuffler ()));
+			game.Start ();
+			var playerPlaysMultipleCardsOfSameValueOutcome = game.PlayCards (player1, cardsToPlay);
+
+			playerPlaysMultipleCardsOfSameValueOutcome.Should ().Be (ResultOutcome.Success);
+		}
+
+		[Test]
+		public void Cannot_PLay_Multiple_Cards_Of_Different_Value(){
+			var cardsToPlay = new []{ new Card (CardValue.Four, Suit.Club), new Card (CardValue.Ace, Suit.Club) };
+			var player1 = new StubReadyPlayer ();
+			player1.AddCards (cardsToPlay);
+
+			var game = new Game (new[]{ player1 }, new Deck (new NonShuffler ()));
+			game.Start ();
+			var playerPlaysMultipleCardsOfDifferentValueOutcome = game.PlayCards (player1, cardsToPlay);
+
+			playerPlaysMultipleCardsOfDifferentValueOutcome.Should ().Be (ResultOutcome.Fail);
+		}
+
+
+		[Test]
 		public void When_Player_Plays_Card_Card_Is_Added_To_PlayPile(){
 			var cardToPlay = new Card (CardValue.Four, Suit.Club);
 			var player1 = new StubReadyPlayer ();
