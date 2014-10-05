@@ -10,6 +10,7 @@ namespace Palace
 			this.deck = deck;
 			this.players = players;
 			this.gameStarted = false;
+			this.playPile = new List<Card> ();
 
 			currentPlayer = players.First ();
 		}
@@ -49,10 +50,15 @@ namespace Palace
 
 			if(player.Cards.Any(p=>p.Value == card.Value && p.Suit == card.Suit)){
 				player.RemoveCards (new []{card});
+				playPile.Add (card);
 				return ResultOutcome.Success;
 			}
 			
 			return ResultOutcome.Fail;
+		}
+
+		public int PlayPileCardCount(){
+			return playPile.Count;
 		}
 
 		public int NumberOfPlayers {
@@ -69,6 +75,7 @@ namespace Palace
 
 		private IPlayer currentPlayer;
 		private ICollection<IPlayer> players;
+		private ICollection<Card> playPile;
 		private Deck deck;
 		private bool gameStarted;
 	}

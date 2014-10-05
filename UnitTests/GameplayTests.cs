@@ -37,9 +37,9 @@ namespace UnitTests
 
 			var game = new Game (new []{player1, player2},new Deck(new NonShuffler()));
 			game.Start ();
-			var result = game.PlayCards (player1, new Card(CardValue.Five,Suit.Club));
+			var playingCardsPlayerDoesntHaveOutcome = game.PlayCards (player1, new Card(CardValue.Five,Suit.Club));
 
-			result.Should ().Be (ResultOutcome.Fail);
+			playingCardsPlayerDoesntHaveOutcome.Should ().Be (ResultOutcome.Fail);
 		}
 
 		[Test]
@@ -50,9 +50,52 @@ namespace UnitTests
 			var game = new Game (new []{player1, player2},new Deck(new NonShuffler()));
 			game.Start ();
 
-			var result = game.PlayCards (player1, new Card(CardValue.Two,Suit.Club));
+			var playingCardsPlayerHasOutcome = game.PlayCards (player1, new Card(CardValue.Two,Suit.Club));
 
-			result.Should ().Be (ResultOutcome.Success);
+			playingCardsPlayerHasOutcome.Should ().Be (ResultOutcome.Success);
+		}
+
+		[Test]
+		public void When_Player_Plays_Card_Card_Is_Removed_From_Hand(){
+			var cardToPlay = new Card (CardValue.Four, Suit.Club);
+			var player1 = new StubReadyPlayer ();
+			player1.AddCards (new []{ cardToPlay });
+
+			var game = new Game(new []{player1}, new Deck(new NonShuffler()));
+			game.Start ();
+			game.PlayCards (player1, cardToPlay);
+
+			player1.Cards.Count.Should ().Be (0);
+		}
+
+		[Test]
+		public void When_Player_Plays_Card_Card_Is_Added_To_PlayPile(){
+			var cardToPlay = new Card (CardValue.Four, Suit.Club);
+			var player1 = new StubReadyPlayer ();
+			player1.AddCards (new []{cardToPlay});
+
+			var game = new Game (new[]{ player1 }, new Deck (new NonShuffler ()));
+			game.Start ();
+			game.PlayCards (player1, cardToPlay);
+
+			game.PlayPileCardCount().Should ().Be (1);
+		}
+
+		[TestFixture]
+		public class RulesTests{
+			[Test]
+
+			public void Playing_Card_High_In_Value_Is_Valid(){
+				var cardToPlay = new Card (CardValue.Three, Suit.Club);
+				var player1 = new StubReadyPlayer ();
+				player1.AddCards (new []{ cardToPlay });
+
+				var game = new Game (new []{ player1 }, new Deck (new NonShuffler ()));
+				game.Start ();
+				var playingCardWithHigherValueOutcome = game.PlayCards (player1, cardToPlay);
+
+				playingCardWithHigherValueOutcome.Should ().Be (ResultOutcome.Success);
+			}
 		}
 	}
 }

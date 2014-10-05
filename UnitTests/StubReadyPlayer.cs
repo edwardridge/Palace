@@ -5,11 +5,12 @@ using System.Linq;
 
 namespace UnitTests
 {
-	public class StubPlayer : IPlayer
+	public class StubReadyPlayer : IPlayer
 	{
-		public StubPlayer ()
+		public StubReadyPlayer ()
 		{
 			_cards = new List<Card> ();
+			this._state = PlayerState.Ready;
 		}
 
 		#region IPlayer implementation
@@ -19,12 +20,13 @@ namespace UnitTests
 			foreach (Card card in cards) {
 				_cards.Add (card);
 			}
-			//this._cards.ToList ().AddRange (cards);
 		}
 
 		public void RemoveCards (ICollection<Card> cards)
 		{
-			throw new NotImplementedException ();
+			foreach (Card card in cards) {
+				_cards.Remove (card);
+			}
 		}
 
 		public ICollection<Card> Cards {
@@ -34,9 +36,8 @@ namespace UnitTests
 		}
 
 		public PlayerState State {
-			get {
-				throw new NotImplementedException ();
-			}
+			get { return _state;}
+			set { _state = value;}
 		}
 
 		public string Name {
@@ -48,6 +49,7 @@ namespace UnitTests
 		#endregion
 
 		private ICollection<Card> _cards;
+		private PlayerState _state;
 	}
 }
 

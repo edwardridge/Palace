@@ -21,8 +21,8 @@ namespace UnitTests
 
 			[SetUp]
 			public void Setup(){
-				player1 = new StubPlayer ();
-				player2 = new StubPlayer ();
+				player1 = new StubReadyPlayer ();
+				player2 = new StubReadyPlayer ();
 				var deck = new Deck (new NonShuffler ());
 				game = new Game (new []{player1, player2}, deck);
 				game.Setup ();

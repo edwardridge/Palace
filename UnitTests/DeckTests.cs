@@ -92,7 +92,7 @@ namespace UnitTests
 
 			[SetUp]
 			public void Setup(){
-				var order = CardHelpers.GetCardsFromValues(new List<int>(){ 7,2,10,3,5,2,5,6,4,8,12,51});
+				var order = CardHelpers.ConvertIntegersToCardsWithSuitClub(new List<int>(){ 7,2,10,3,5,2,5,6,4,8,12,51});
 				var predeterminedShuffler = new PredeterminedShuffler (order);
 				Pack pack = new Pack ();
 				deck = new Deck (predeterminedShuffler, pack);

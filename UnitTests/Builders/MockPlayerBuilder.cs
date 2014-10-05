@@ -25,7 +25,12 @@ namespace UnitTests
 		}
 
 		public MockPlayerBuilder WithCards(ICollection<int> cards){
-			mockPlayer.SetupGet (prop => prop.Cards).Returns(CardHelpers.GetCardsFromValues (cards));
+			mockPlayer.SetupGet (prop => prop.Cards).Returns(CardHelpers.ConvertIntegersToCardsWithSuitClub (cards));
+			return this;
+		}
+
+		public MockPlayerBuilder WithCards(ICollection<Card> cards){
+			mockPlayer.SetupGet (prop => prop.Cards).Returns(cards);
 			return this;
 		}
 
