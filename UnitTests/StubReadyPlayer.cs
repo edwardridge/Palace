@@ -7,10 +7,18 @@ namespace UnitTests
 {
 	public class StubReadyPlayer : IPlayer
 	{
-		public StubReadyPlayer ()
+		public StubReadyPlayer () : this(new List<Card>())
 		{
-			_cards = new List<Card> ();
+		}
+
+		public StubReadyPlayer (ICollection<Card> cards)
+		{
+			_cards = cards;
 			this._state = PlayerState.Ready;
+		}
+
+		public StubReadyPlayer (Card card) : this(new List<Card>(){card})
+		{
 		}
 
 		#region IPlayer implementation
@@ -29,7 +37,7 @@ namespace UnitTests
 
 		public void RemoveCards (ICollection<Card> cards)
 		{
-			foreach (Card card in cards) {
+			foreach (Card card in cards.ToList()) {
 				_cards.Remove (card);
 			}
 		}
