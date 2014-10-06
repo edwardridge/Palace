@@ -15,6 +15,11 @@ namespace UnitTests
 
 		#region IPlayer implementation
 
+		public void AddCards (Card card)
+		{
+			_cards.Add (card);
+		}
+
 		public void AddCards (ICollection<Card> cards)
 		{
 			foreach (Card card in cards) {

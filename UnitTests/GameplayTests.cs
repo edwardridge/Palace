@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Palace;
 using System.Linq;
 using FluentAssertions;
+using System.Collections.Generic;
 
 namespace UnitTests
 {
@@ -141,8 +142,7 @@ namespace UnitTests
 		[TestFixture]
 		public class RulesTests{
 			[Test]
-
-			public void Playing_Card_High_In_Value_Is_Valid(){
+			public void Playing_Card_Higher_In_Value_Is_Valid(){
 				var cardToPlay = new Card (CardValue.Three, Suit.Club);
 				var player1 = new StubReadyPlayer ();
 				player1.AddCards (new []{ cardToPlay });
@@ -151,6 +151,19 @@ namespace UnitTests
 				var playingCardWithHigherValueOutcome = game.PlayCards (player1, cardToPlay);
 
 				playingCardWithHigherValueOutcome.Should ().Be (ResultOutcome.Success);
+			}
+
+			[Test]
+			public void Playing_Card_Lower_In_Value_Isnt_Valid(){
+				var cardToPlay = new Card (CardValue.Three, Suit.Club);
+				var player1 = new StubReadyPlayer ();
+				player1.AddCards (cardToPlay);
+
+				var cardInPile = new Card (CardValue.Five, Suit.Club);
+				var game = new Game (new []{ player1 }, new Deck (new NonShuffler ()), GameState.GameStarted, new List<Card>(){cardInPile});
+				var result = game.PlayCards (player1, cardToPlay);
+
+				result.Should ().Be (ResultOutcome.Fail);
 			}
 		}
 	}

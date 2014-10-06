@@ -58,10 +58,17 @@ namespace Palace
 			if (gameState != GameState.GameStarted)
 				return ResultOutcome.Fail;
 
-			if (cards.Select (card => card.Value).Distinct ().Count() != 1)
+			var distinctValues = cards.Select (card => card.Value).Distinct ();
+
+			if (distinctValues.Count() != 1)
 				return ResultOutcome.Fail;
 
 			if (cards.Except (player.Cards).Any ())
+				return ResultOutcome.Fail;
+
+			var lastCardPlayed = playPile.LastOrDefault ();
+
+			if (lastCardPlayed != null && distinctValues.First () < lastCardPlayed.Value)
 				return ResultOutcome.Fail;
 
 			player.RemoveCards (cards);
