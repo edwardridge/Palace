@@ -51,12 +51,12 @@ namespace Palace
 			if (cards.Select (card => card.Value).Distinct ().Count() != 1)
 				return ResultOutcome.Fail;
 
+			if (cards.Except (player.Cards).Any ())
+				return ResultOutcome.Fail;
+
+			player.RemoveCards (cards);
 			foreach (Card card in cards) {
-				if(player.Cards.Any(p=>p.Value == card.Value && p.Suit == card.Suit)){
-					player.RemoveCards (new []{card});
-					playPile.Add (card);
-				}else
-					return ResultOutcome.Fail;
+				playPile.Add (card);
 			}
 
 			return ResultOutcome.Success;

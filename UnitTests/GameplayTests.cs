@@ -42,17 +42,32 @@ namespace UnitTests
 
 		[Test]
 		public void Player_Can_Play_Card_Player_Has(){
-			var player1 = player1Builder.WithCards (new []{ 2, 3, 4 }).Build ();
+			var cardsPlayerHas = new []{ new Card (CardValue.Four, Suit.Club), new Card (CardValue.Four, Suit.Club) };
+			var player1 = new StubReadyPlayer ();
+			player1.AddCards (cardsPlayerHas);
 
 			var game = new Game (new []{player1},new Deck(new NonShuffler()));
 			game.Start ();
 
-			var playingCardsPlayerHasOutcome = game.PlayCards (player1, new Card(CardValue.Two,Suit.Club));
+			var playingCardsPlayerHasOutcome = game.PlayCards (player1, cardsPlayerHas[0]);
 
 			playingCardsPlayerHasOutcome.Should ().Be (ResultOutcome.Success);
 		}
 
+		[Test]
+		public void When_Playing_Multiple_Cards_Player_Cannot_PLay_Card_They_Dont_Have(){
+			var cardsPlayerHas = new []{ new Card (CardValue.Four, Suit.Club), new Card (CardValue.Four, Suit.Club) };
+			var player1 = new StubReadyPlayer ();
+			player1.AddCards (cardsPlayerHas);
 
+			var cardsPlayerPlays = new []{ new Card (CardValue.Four, Suit.Club), new Card (CardValue.Four, Suit.Spade) };
+			var game = new Game (new[]{ player1 }, new Deck (new NonShuffler ()));
+			game.Start ();
+			var result = game.PlayCards (player1, cardsPlayerPlays);
+
+			result.Should ().Be (ResultOutcome.Fail);
+			
+		}
 
 		[Test]
 		public void When_Player_Plays_Card_Card_Is_Removed_From_Hand(){
