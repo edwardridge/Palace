@@ -82,6 +82,8 @@ namespace UnitTests
 			player1.Cards.Count.Should ().Be (0);
 		}
 
+
+
 		[Test]
 		public void Can_Play_Multiple_Cards_Of_Same_Value(){
 			var cardsToPlay = new []{ new Card (CardValue.Four, Suit.Club), new Card (CardValue.Four, Suit.Club) };
@@ -96,6 +98,19 @@ namespace UnitTests
 		}
 
 		[Test]
+		public void When_PLayer_Plays_Multiple_Cards_Cards_Are_Removed_From_Hand(){
+			var cardsToPlay = new []{ new Card (CardValue.Four, Suit.Club), new Card (CardValue.Four, Suit.Club) };
+			var player1 = new StubReadyPlayer ();
+			player1.AddCards (cardsToPlay);
+
+			var game = new Game (new[]{player1}, new Deck (new NonShuffler ()));
+			game.Start ();
+			game.PlayCards (player1, cardsToPlay);
+
+			player1.Cards.Count ().Should ().Be (0);
+		}
+
+		[Test]
 		public void Cannot_Play_Multiple_Cards_Of_Different_Value(){
 			var cardsToPlay = new []{ new Card (CardValue.Four, Suit.Club), new Card (CardValue.Ace, Suit.Club) };
 			var player1 = new StubReadyPlayer ();
@@ -106,6 +121,19 @@ namespace UnitTests
 			var playerPlaysMultipleCardsOfDifferentValueOutcome = game.PlayCards (player1, cardsToPlay);
 
 			playerPlaysMultipleCardsOfDifferentValueOutcome.Should ().Be (ResultOutcome.Fail);
+		}
+
+		[Test]
+		public void When_PLayer_Plays_Multiple_Of_Different_Value_No_Cards_Are_Removed_From_Hand(){
+			var cardsToPlay = new []{ new Card (CardValue.Four, Suit.Club), new Card (CardValue.Ace, Suit.Club) };
+			var player1 = new StubReadyPlayer ();
+			player1.AddCards (cardsToPlay);
+
+			var game = new Game (new[]{ player1 }, new Deck (new NonShuffler ()));
+			game.Start ();
+			game.PlayCards (player1, cardsToPlay);
+
+			player1.Cards.Count().Should ().Be (cardsToPlay.Count());
 		}
 
 
