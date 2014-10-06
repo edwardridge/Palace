@@ -6,11 +6,21 @@ namespace Palace
 {
 	public class Game
 	{
-		public Game(ICollection<IPlayer> players, Deck deck){
+		public Game(ICollection<IPlayer> players, Deck deck)
+			: this(players, deck, GameState.GameInSetup, new List<Card>()){
+
+		}
+
+		public Game(ICollection<IPlayer> players, Deck deck,GameState gameState)
+			: this(players, deck, gameState, new List<Card>()){
+
+		}
+
+		public Game(ICollection<IPlayer> players, Deck deck, GameState gameState, ICollection<Card> playPile){
 			this.deck = deck;
 			this.players = players;
-			this.gameStarted = false;
-			this.playPile = new List<Card> ();
+			this.gameState = gameState;
+			this.playPile = playPile;
 
 			currentPlayer = players.First ();
 		}
@@ -31,7 +41,7 @@ namespace Palace
 			}
 
 			currentPlayer = startingPlayer;
-			gameStarted = true;
+			gameState = GameState.GameStarted;
 			return new Result (ResultOutcome.Success);
 		}
 
@@ -45,7 +55,7 @@ namespace Palace
 
 		public ResultOutcome PlayCards (IPlayer player, ICollection<Card> cards)
 		{
-			if (!gameStarted)
+			if (gameState != GameState.GameStarted)
 				return ResultOutcome.Fail;
 
 			if (cards.Select (card => card.Value).Distinct ().Count() != 1)
@@ -86,7 +96,7 @@ namespace Palace
 		private ICollection<IPlayer> players;
 		private ICollection<Card> playPile;
 		private Deck deck;
-		private bool gameStarted;
+		private GameState gameState;
 	}
 
 }
