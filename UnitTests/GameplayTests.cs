@@ -10,12 +10,10 @@ namespace UnitTests
 	public class GameplayTests
 	{
 		MockPlayerBuilder player1Builder;
-		MockPlayerBuilder player2Builder;
 
 		[SetUp]
 		public void Setup(){
 			player1Builder = new MockPlayerBuilder ().WithName ("Ed").WithState (PlayerState.Ready);
-			player2Builder = new MockPlayerBuilder ().WithName ("Liam").WithState (PlayerState.Ready);
 		}
 
 		[Test]
@@ -33,8 +31,7 @@ namespace UnitTests
 		public void Player_Cannot_Play_Card_Player_Doesnt_Have(){
 			var player1 = player1Builder.WithCards (new []{ 2, 3, 4 }).Build ();
 
-			var game = new Game (new []{player1},new Deck(new NonShuffler()));
-			game.Start ();
+			var game = new Game (new []{player1},new Deck(new NonShuffler()), GameState.GameStarted);
 			var playingCardsPlayerDoesntHaveOutcome = game.PlayCards (player1, new Card(CardValue.Five,Suit.Club));
 
 			playingCardsPlayerDoesntHaveOutcome.Should ().Be (ResultOutcome.Fail);
@@ -46,9 +43,7 @@ namespace UnitTests
 			var player1 = new StubReadyPlayer ();
 			player1.AddCards (cardsPlayerHas);
 
-			var game = new Game (new []{player1},new Deck(new NonShuffler()));
-			game.Start ();
-
+			var game = new Game (new []{player1},new Deck(new NonShuffler()), GameState.GameStarted);
 			var playingCardsPlayerHasOutcome = game.PlayCards (player1, cardsPlayerHas[0]);
 
 			playingCardsPlayerHasOutcome.Should ().Be (ResultOutcome.Success);
@@ -61,8 +56,7 @@ namespace UnitTests
 			player1.AddCards (cardsPlayerHas);
 
 			var cardsPlayerPlays = new []{ new Card (CardValue.Four, Suit.Club), new Card (CardValue.Four, Suit.Spade) };
-			var game = new Game (new[]{ player1 }, new Deck (new NonShuffler ()));
-			game.Start ();
+			var game = new Game (new[]{ player1 }, new Deck (new NonShuffler ()), GameState.GameStarted);
 			var result = game.PlayCards (player1, cardsPlayerPlays);
 
 			result.Should ().Be (ResultOutcome.Fail);
@@ -75,8 +69,7 @@ namespace UnitTests
 			var player1 = new StubReadyPlayer ();
 			player1.AddCards (new []{ cardToPlay });
 
-			var game = new Game(new []{player1}, new Deck(new NonShuffler()));
-			game.Start ();
+			var game = new Game(new []{player1}, new Deck(new NonShuffler()), GameState.GameStarted);
 			game.PlayCards (player1, cardToPlay);
 
 			player1.Cards.Count.Should ().Be (0);
@@ -90,8 +83,7 @@ namespace UnitTests
 			var player1 = new StubReadyPlayer ();
 			player1.AddCards (cardsToPlay);
 
-			var game = new Game (new[]{player1}, new Deck (new NonShuffler ()));
-			game.Start ();
+			var game = new Game (new[]{player1}, new Deck (new NonShuffler ()), GameState.GameStarted);
 			var playerPlaysMultipleCardsOfSameValueOutcome = game.PlayCards (player1, cardsToPlay);
 
 			playerPlaysMultipleCardsOfSameValueOutcome.Should ().Be (ResultOutcome.Success);
@@ -103,8 +95,7 @@ namespace UnitTests
 			var player1 = new StubReadyPlayer ();
 			player1.AddCards (cardsToPlay);
 
-			var game = new Game (new[]{player1}, new Deck (new NonShuffler ()));
-			game.Start ();
+			var game = new Game (new[]{player1}, new Deck (new NonShuffler ()), GameState.GameStarted);
 			game.PlayCards (player1, cardsToPlay);
 
 			player1.Cards.Count ().Should ().Be (0);
@@ -116,8 +107,7 @@ namespace UnitTests
 			var player1 = new StubReadyPlayer ();
 			player1.AddCards (cardsToPlay);
 
-			var game = new Game (new[]{ player1 }, new Deck (new NonShuffler ()));
-			game.Start ();
+			var game = new Game (new[]{ player1 }, new Deck (new NonShuffler ()), GameState.GameStarted);
 			var playerPlaysMultipleCardsOfDifferentValueOutcome = game.PlayCards (player1, cardsToPlay);
 
 			playerPlaysMultipleCardsOfDifferentValueOutcome.Should ().Be (ResultOutcome.Fail);
@@ -129,8 +119,7 @@ namespace UnitTests
 			var player1 = new StubReadyPlayer ();
 			player1.AddCards (cardsToPlay);
 
-			var game = new Game (new[]{ player1 }, new Deck (new NonShuffler ()));
-			game.Start ();
+			var game = new Game (new[]{ player1 }, new Deck (new NonShuffler ()), GameState.GameStarted);
 			game.PlayCards (player1, cardsToPlay);
 
 			player1.Cards.Count().Should ().Be (cardsToPlay.Count());
@@ -143,8 +132,7 @@ namespace UnitTests
 			var player1 = new StubReadyPlayer ();
 			player1.AddCards (new []{cardToPlay});
 
-			var game = new Game (new[]{ player1 }, new Deck (new NonShuffler ()));
-			game.Start ();
+			var game = new Game (new[]{ player1 }, new Deck (new NonShuffler ()), GameState.GameStarted);
 			game.PlayCards (player1, cardToPlay);
 
 			game.PlayPileCardCount().Should ().Be (1);
@@ -159,8 +147,7 @@ namespace UnitTests
 				var player1 = new StubReadyPlayer ();
 				player1.AddCards (new []{ cardToPlay });
 
-				var game = new Game (new []{ player1 }, new Deck (new NonShuffler ()));
-				game.Start ();
+				var game = new Game (new []{ player1 }, new Deck (new NonShuffler ()), GameState.GameStarted);
 				var playingCardWithHigherValueOutcome = game.PlayCards (player1, cardToPlay);
 
 				playingCardWithHigherValueOutcome.Should ().Be (ResultOutcome.Success);

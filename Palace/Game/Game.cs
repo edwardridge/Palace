@@ -11,7 +11,7 @@ namespace Palace
 
 		}
 
-		public Game(ICollection<IPlayer> players, Deck deck,GameState gameState)
+		public Game(ICollection<IPlayer> players, Deck deck, GameState gameState)
 			: this(players, deck, gameState, new List<Card>()){
 
 		}
