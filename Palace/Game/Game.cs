@@ -68,7 +68,10 @@ namespace Palace
 
 			var lastCardPlayed = playPile.LastOrDefault ();
 
-			if (lastCardPlayed != null && distinctValues.First () < lastCardPlayed.Value)
+			if (lastCardPlayed != null && distinctValues.First () < lastCardPlayed.Value && lastCardPlayed.CardType == CardType.Standard)
+				return ResultOutcome.Fail;
+
+			if (lastCardPlayed != null && distinctValues.First () > lastCardPlayed.Value && lastCardPlayed.CardType == CardType.LowerThan)
 				return ResultOutcome.Fail;
 
 			player.RemoveCards (cards);

@@ -136,31 +136,52 @@ namespace UnitTests
 
 		[TestFixture]
 		public class RulesTests{
-			[Test]
-			public void Playing_Card_Higher_In_Value_Is_Valid(){
-				var cardToPlay = new Card (CardValue.Three, Suit.Club);
-				var player1 = new StubReadyPlayer (cardToPlay);
+			[TestFixture]
+			public class StandardCard{
+				[Test]
+				public void Playing_Card_Higher_In_Value_Is_Valid(){
+					var cardToPlay = new Card (CardValue.Three, Suit.Club);
+					var player1 = new StubReadyPlayer (cardToPlay);
 
-				var cardInPile = new List<Card>(){ new Card (CardValue.Two, Suit.Club)};
-				var game = new Game (new []{ player1 }, new Deck (new NonShuffler ()), GameState.GameStarted, cardInPile);
-				var outcome = game.PlayCards (player1, cardToPlay);
+					var cardInPile = new List<Card>(){ new Card (CardValue.Two, Suit.Club)};
+					var game = new Game (new []{ player1 }, new Deck (new NonShuffler ()), GameState.GameStarted, cardInPile);
+					var outcome = game.PlayCards (player1, cardToPlay);
 
-				outcome.Should ().Be (ResultOutcome.Success);
-				player1.Cards.Count ().Should ().Be (0);
+					outcome.Should ().Be (ResultOutcome.Success);
+					player1.Cards.Count ().Should ().Be (0);
+				}
+
+				[Test]
+				public void Playing_Card_Lower_In_Value_Isnt_Valid(){
+					var cardToPlay = new Card (CardValue.Three, Suit.Club);
+					var player1 = new StubReadyPlayer (cardToPlay);
+
+					var cardInPile = new Card (CardValue.Five, Suit.Club);
+					var game = new Game (new []{ player1 }, new Deck (new NonShuffler ()), GameState.GameStarted, new List<Card>(){cardInPile});
+					var outcome = game.PlayCards (player1, cardToPlay);
+
+					outcome.Should ().Be (ResultOutcome.Fail);
+					player1.Cards.Count ().Should ().Be (1);
+				}
 			}
 
-			[Test]
-			public void Playing_Card_Lower_In_Value_Isnt_Valid(){
-				var cardToPlay = new Card (CardValue.Three, Suit.Club);
-				var player1 = new StubReadyPlayer (cardToPlay);
+			[TestFixture]
+			public class LowerThanCard{
+				[Test]
+				public void Playing_Card_Higher_In_Value_Isnt_Valid(){
+					var cardToPlay = new Card (CardValue.Eight, Suit.Club);
+					var player1 = new StubReadyPlayer (cardToPlay);
 
-				var cardInPile = new Card (CardValue.Five, Suit.Club);
-				var game = new Game (new []{ player1 }, new Deck (new NonShuffler ()), GameState.GameStarted, new List<Card>(){cardInPile});
-				var outcome = game.PlayCards (player1, cardToPlay);
+					var cardInPile = new List<Card>(){new Card (CardValue.Seven, Suit.Club, CardType.LowerThan)};
+					var game = new Game (new[]{ player1 }, new Deck (new NonShuffler ()), GameState.GameStarted, cardInPile);
+					var outcome = game.PlayCards (player1, cardToPlay);
 
-				outcome.Should ().Be (ResultOutcome.Fail);
-				player1.Cards.Count ().Should ().Be (1);
+					outcome.Should ().Be (ResultOutcome.Fail);
+					player1.Cards.Count ().Should ().Be (1);
+				}
 			}
+
+
 		}
 	}
 }
