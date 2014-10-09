@@ -163,6 +163,8 @@ namespace UnitTests
 					outcome.Should ().Be (ResultOutcome.Fail);
 					player1.Cards.Count ().Should ().Be (1);
 				}
+
+				//TODO: Card of same value should also pass
 			}
 
 			[TestFixture]
@@ -179,9 +181,26 @@ namespace UnitTests
 					outcome.Should ().Be (ResultOutcome.Fail);
 					player1.Cards.Count ().Should ().Be (1);
 				}
+
+				[Test]
+				public void Playing_Card_Lower_In_Value_Is_Valid(){
+					var cardToPlay = new Card (CardValue.Six, Suit.Club);
+					var player1 = new StubReadyPlayer (cardToPlay);
+
+					var cardInPile = new List<Card> (){ new Card (CardValue.Seven, Suit.Club, CardType.LowerThan) };
+					var game = new Game (new[]{ player1 }, NonShufflingDeck(), GameState.GameStarted, cardInPile);
+					var outcome = game.PlayCards (player1, cardToPlay);
+
+					outcome.Should ().Be (ResultOutcome.Success);
+					player1.Cards.Count ().Should ().Be (0);
+				}
 			}
 
 
+		}
+
+		public static Deck NonShufflingDeck(){
+			return new Deck (new NonShuffler ());
 		}
 	}
 }

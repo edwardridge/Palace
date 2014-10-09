@@ -67,12 +67,13 @@ namespace Palace
 				return ResultOutcome.Fail;
 
 			var lastCardPlayed = playPile.LastOrDefault ();
+			if (lastCardPlayed != null) {
+				if (lastCardPlayed.CardType == CardType.Standard && distinctValues.First () <= lastCardPlayed.Value)
+					return ResultOutcome.Fail;
 
-			if (lastCardPlayed != null && distinctValues.First () < lastCardPlayed.Value && lastCardPlayed.CardType == CardType.Standard)
-				return ResultOutcome.Fail;
-
-			if (lastCardPlayed != null && distinctValues.First () > lastCardPlayed.Value && lastCardPlayed.CardType == CardType.LowerThan)
-				return ResultOutcome.Fail;
+				if (lastCardPlayed.CardType == CardType.LowerThan && distinctValues.First () > lastCardPlayed.Value)
+					return ResultOutcome.Fail;
+			}
 
 			player.RemoveCards (cards);
 			foreach (Card card in cards) {
