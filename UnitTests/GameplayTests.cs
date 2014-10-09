@@ -164,7 +164,18 @@ namespace UnitTests
 					player1.Cards.Count ().Should ().Be (1);
 				}
 
-				//TODO: Card of same value should also pass
+				[Test]
+				public void PLay_Card_Of_Same_Value_Is_Valid(){
+					var cardToPlay = new Card (CardValue.Four, Suit.Club);
+					var player1 = new StubReadyPlayer (cardToPlay);
+
+					var cardInPile = new List<Card>(){new Card (CardValue.Four, Suit.Club)};
+					var game = new Game (new[]{ player1 }, NonShufflingDeck (), GameState.GameStarted, cardInPile);
+					var outcome = game.PlayCards (player1, cardToPlay);
+
+					outcome.Should ().Be (ResultOutcome.Success);
+					player1.Cards.Count ().Should ().Be (0);
+				}
 			}
 
 			[TestFixture]
