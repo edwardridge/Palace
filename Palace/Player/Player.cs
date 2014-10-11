@@ -7,33 +7,33 @@ namespace Palace
 	public class Player : IPlayer
 	{
 		public string Name {
-			get{ return name; }
+			get{ return _name; }
 		}
 
 		public PlayerState State {
-			get {return state;}
+			get {return _state;}
 		}
 
 		public ICollection<Card> Cards {
-			get { return cards; }
+			get { return _cards; }
 		}
 
 		public Player(string name){
-			this.name = name;
-			cards = new List<Card> ();
-			state = PlayerState.Setup;
+			this._name = name;
+			_cards = new List<Card> ();
+			_state = PlayerState.Setup;
 		}
 
 		public void AddCards (ICollection<Card> cardsToBeAdded)
 		{
 			foreach (Card addedCard in cardsToBeAdded) {
-				this.cards.Add (addedCard);
+				this._cards.Add (addedCard);
 			}
 		}
 
 		public void RemoveCards(ICollection<Card> cardsToBeRemoved){
 			foreach (Card removedCard in cardsToBeRemoved) {
-				this.cards.Remove (removedCard);
+				this._cards.Remove (removedCard);
 			}
 		}
 
@@ -47,7 +47,7 @@ namespace Palace
 		}
 
 		public int NumCards(CardOrientation cardLocation){
-			return cards.Where (card => card.CardOrientation == cardLocation).Count ();
+			return _cards.Where (card => card.CardOrientation == cardLocation).Count ();
 		}
 
 		public Result Ready ()
@@ -55,16 +55,16 @@ namespace Palace
 			if (this.NumCards (CardOrientation.FaceUp) != 3)
 				return new Result (ResultOutcome.Fail);
 
-			state = PlayerState.Ready;
+			_state = PlayerState.Ready;
 
 			return new Result (ResultOutcome.Success);
 		}
 
-		private string name;
+		private string _name;
 
-		private ICollection<Card> cards;
+		private ICollection<Card> _cards;
 
-		private PlayerState state;
+		private PlayerState _state;
 	}
 
 }

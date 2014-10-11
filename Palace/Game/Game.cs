@@ -17,54 +17,53 @@ namespace Palace
 		}
 
 		public Game(ICollection<IPlayer> players, Deck deck, GameState gameState, ICollection<Card> playPile){
-			this.deck = deck;
-			this.players = players;
-			this.gameState = gameState;
-			this.playPile = playPile;
+			this._deck = deck;
+			this._players = players;
+			this._gameState = gameState;
+			this._playPile = playPile;
 
-			currentPlayer = players.First ();
+			_currentPlayer = players.First ();
 		}
 
 		public Result Start ()
 		{
-			bool allPlayersReady = players.All(player => player.State == PlayerState.Ready);
+			bool allPlayersReady = _players.All(player => player.State == PlayerState.Ready);
 
 			if(!allPlayersReady) return new Result (ResultOutcome.Fail);
 
-			var startingPlayer = players.First ();
+			var startingPlayer = _players.First ();
 
-			var playersWithCards = players.Where (p => p.Cards != null && p.Cards.Count > 0);
+			var playersWithCards = _players.Where (p => p.Cards != null && p.Cards.Count > 0);
 
 			foreach (var player in playersWithCards) {
 				if (LowestCard(player.Cards).Value < LowestCard(startingPlayer.Cards).Value)
 					startingPlayer = player;
 			}
 
-			currentPlayer = startingPlayer;
-			gameState = GameState.GameStarted;
+			_currentPlayer = startingPlayer;
+			_gameState = GameState.GameStarted;
 			return new Result (ResultOutcome.Success);
 		}
 
 		public void Setup ()
 		{
-			foreach (IPlayer player in players) {
-				player.AddCards (this.deck.TakeCards (3, CardOrientation.FaceDown));
-				player.AddCards (this.deck.TakeCards (6, CardOrientation.InHand));
+			foreach (IPlayer player in _players) {
+				player.AddCards (this._deck.TakeCards (3, CardOrientation.FaceDown));
+				player.AddCards (this._deck.TakeCards (6, CardOrientation.InHand));
 			}
 		}
 
 		public ResultOutcome PlayCards (IPlayer player, ICollection<Card> cards)
 		{
-			if (gameState != GameState.GameStarted)
+			if (_gameState != GameState.GameStarted)
 				return ResultOutcome.Fail;
-
 
 			if (!CardsPassRules (player, cards)) 
 				return ResultOutcome.Fail;
 				
 			player.RemoveCards (cards);
 			foreach (Card card in cards) {
-				playPile.Add (card);
+				_playPile.Add (card);
 			}
 
 			return ResultOutcome.Success;
@@ -80,7 +79,7 @@ namespace Palace
 			if (cards.Except (player.Cards).Any ())
 				return false;
 
-			var lastCardPlayed = playPile.LastOrDefault ();
+			var lastCardPlayed = _playPile.LastOrDefault ();
 			var playersCard = cards.First ();
 
 			if (lastCardPlayed != null) {
@@ -98,26 +97,26 @@ namespace Palace
 		}
 
 		public int PlayPileCardCount(){
-			return playPile.Count;
+			return _playPile.Count;
 		}
 
 		public int NumberOfPlayers {
-			get{ return players.Count; }
+			get{ return _players.Count; }
 		}
 
 		public IPlayer CurrentPlayer {
-			get{ return currentPlayer; }
+			get{ return _currentPlayer; }
 		}
 
 		private Card LowestCard(ICollection<Card> cards){
 			return cards.OrderBy (o => o.Value).FirstOrDefault (); 
 		}
 
-		private IPlayer currentPlayer;
-		private ICollection<IPlayer> players;
-		private ICollection<Card> playPile;
-		private Deck deck;
-		private GameState gameState;
+		private IPlayer _currentPlayer;
+		private ICollection<IPlayer> _players;
+		private ICollection<Card> _playPile;
+		private Deck _deck;
+		private GameState _gameState;
 	}
 
 }
