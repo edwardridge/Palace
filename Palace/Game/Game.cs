@@ -58,7 +58,7 @@ namespace Palace
 			if (_gameState != GameState.GameStarted)
 				return ResultOutcome.Fail;
 
-			if (!CardsPassRules (player, cards)) 
+			if (!cardsPassRules (player, cards)) 
 				return ResultOutcome.Fail;
 				
 			player.RemoveCards (cards);
@@ -69,7 +69,7 @@ namespace Palace
 			return ResultOutcome.Success;
 		}
 
-		private bool CardsPassRules (IPlayer player, ICollection<Card> cards)
+		private bool cardsPassRules (IPlayer player, ICollection<Card> cards)
 		{
 			var distinctValues = cards.Select (card => card.Value).Distinct ();
 
