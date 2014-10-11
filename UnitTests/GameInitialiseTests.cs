@@ -59,9 +59,9 @@ namespace UnitTests
 				var player1 = new MockPlayerBuilder ().WithState (PlayerState.Setup).Build();
 				var player2 = new MockPlayerBuilder ().WithState (PlayerState.Ready).Build();
 				var game = new Game (new []{ player1, player2 }, new Deck (new NonShuffler ()));
-				var result = game.Start ();
+				var outcome = game.Start ();
 
-				result.Outcome.Should ().Be (ResultOutcome.Fail);
+				outcome.Should ().Be (ResultOutcome.Fail);
 			}
 
 			[Test]
@@ -69,9 +69,9 @@ namespace UnitTests
 				var player1 = new MockPlayerBuilder ().WithState (PlayerState.Ready).Build();
 				var player2 = new MockPlayerBuilder ().WithState (PlayerState.Ready).Build();
 				var game = new Game (new []{ player1, player2 }, new Deck (new NonShuffler ()));
-				var result = game.Start ();
+				var outcome = game.Start ();
 
-				result.Outcome.Should ().Be (ResultOutcome.Success);
+				outcome.Should ().Be (ResultOutcome.Success);
 			}
 
 		}
@@ -88,9 +88,9 @@ namespace UnitTests
 			[Test]
 			public void Player_Cannot_Be_Ready_With_No_Face_Up_Cards(){
 				//Don't put any cards face up
-				var result = player.Ready ();
+				var outcome = player.Ready ();
 
-				result.Outcome.Should ().Be (ResultOutcome.Fail);
+				outcome.Should ().Be (ResultOutcome.Fail);
 			}
 
 			[Test]
@@ -98,9 +98,9 @@ namespace UnitTests
 				player.AddCards(new []{new Card(CardValue.Ace, Suit.Club,CardOrientation.FaceUp), 
 					new Card(CardValue.Ace, Suit.Club,CardOrientation.FaceUp)});
 
-				var result = player.Ready ();
+				var outcome = player.Ready ();
 
-				result.Outcome.Should ().Be (ResultOutcome.Fail);
+				outcome.Should ().Be (ResultOutcome.Fail);
 			}
 
 			[Test]
@@ -109,9 +109,9 @@ namespace UnitTests
 					new Card(CardValue.Ace, Suit.Club,CardOrientation.FaceUp),
 					new Card(CardValue.Ace, Suit.Club,CardOrientation.FaceUp)});
 
-				var result = player.Ready ();
+				var outcome = player.Ready ();
 
-				result.Outcome.Should ().Be (ResultOutcome.Success);
+				outcome.Should ().Be (ResultOutcome.Success);
 			}
 
 			[Test]
@@ -122,9 +122,9 @@ namespace UnitTests
 					new Card (CardValue.Ace, Suit.Club, CardOrientation.FaceUp)
 				});
 
-				var result = player.PutCardFaceUp (new Card (CardValue.Ace, Suit.Club, CardOrientation.FaceUp));
+				var outcome = player.PutCardFaceUp (new Card (CardValue.Ace, Suit.Club, CardOrientation.FaceUp));
 
-				result.Outcome.Should ().Be (ResultOutcome.Fail);
+				outcome.Should ().Be (ResultOutcome.Fail);
 			}
 
 		}

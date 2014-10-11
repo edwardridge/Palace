@@ -25,11 +25,11 @@ namespace Palace
 			_currentPlayer = players.First ();
 		}
 
-		public Result Start ()
+		public ResultOutcome Start ()
 		{
 			bool allPlayersReady = _players.All(player => player.State == PlayerState.Ready);
 
-			if(!allPlayersReady) return new Result (ResultOutcome.Fail);
+			if(!allPlayersReady) return ResultOutcome.Fail;
 
 			var startingPlayer = _players.First ();
 
@@ -42,7 +42,7 @@ namespace Palace
 
 			_currentPlayer = startingPlayer;
 			_gameState = GameState.GameStarted;
-			return new Result (ResultOutcome.Success);
+			return ResultOutcome.Success;
 		}
 
 		public void Setup ()

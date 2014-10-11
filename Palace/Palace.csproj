@@ -44,7 +44,6 @@
     <Compile Include="Player\Player.cs" />
     <Compile Include="Player\PlayerState.cs" />
     <Compile Include="Deck\Deck.cs" />
-    <Compile Include="Result\Result.cs" />
     <Compile Include="Result\ResultOutcome.cs" />
     <Compile Include="Deck\IShuffler.cs" />
     <Compile Include="Deck\Pack.cs" />

@@ -37,27 +37,27 @@ namespace Palace
 			}
 		}
 
-		public Result PutCardFaceUp (Card cardToPutFaceUp)
+		public ResultOutcome PutCardFaceUp (Card cardToPutFaceUp)
 		{
 			if(this.NumCards(CardOrientation.FaceUp) >= 3)
-				return new Result(ResultOutcome.Fail);
+				return ResultOutcome.Fail;
 
 			cardToPutFaceUp.CardOrientation = CardOrientation.FaceUp;
-			return new Result (ResultOutcome.Success);
+			return ResultOutcome.Success;
 		}
 
 		public int NumCards(CardOrientation cardLocation){
 			return _cards.Where (card => card.CardOrientation == cardLocation).Count ();
 		}
 
-		public Result Ready ()
+		public ResultOutcome Ready ()
 		{
 			if (this.NumCards (CardOrientation.FaceUp) != 3)
-				return new Result (ResultOutcome.Fail);
+				return ResultOutcome.Fail;
 
 			_state = PlayerState.Ready;
 
-			return new Result (ResultOutcome.Success);
+			return ResultOutcome.Success;
 		}
 
 		private string _name;
