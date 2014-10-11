@@ -7,20 +7,25 @@ namespace Palace
 	public class Game
 	{
 		public Game(ICollection<IPlayer> players, Deck deck)
-			: this(players, deck, GameState.GameInSetup, new List<Card>()){
+			: this(players, deck, GameState.GameInSetup, new List<Card>(), new Dictionary<CardValue, CardType> ()){
 
 		}
 
 		public Game(ICollection<IPlayer> players, Deck deck, GameState gameState)
-			: this(players, deck, gameState, new List<Card>()){
+			: this(players, deck, gameState, new List<Card>(), new Dictionary<CardValue, CardType> ()){
 
 		}
 
-		public Game(ICollection<IPlayer> players, Deck deck, GameState gameState, ICollection<Card> playPile){
+		public Game (ICollection<IPlayer> players, Deck deck, GameState gameState, ICollection<Card> playPile)
+			: this (players, deck, gameState, playPile, new Dictionary<CardValue, CardType> ()){
+		}
+
+		public Game(ICollection<IPlayer> players, Deck deck, GameState gameState, ICollection<Card> playPile, Dictionary<CardValue, CardType> cardTypes){
 			this._deck = deck;
 			this._players = players;
 			this._gameState = gameState;
 			this._playPile = playPile;
+			this._cardTypes = cardTypes;
 
 			_currentPlayer = players.First ();
 		}
@@ -83,13 +88,19 @@ namespace Palace
 			var playersCard = cards.First ();
 
 			if (lastCardPlayed != null) {
-				if (lastCardPlayed.CardType == CardType.Standard && playersCard.Value < lastCardPlayed.Value)
+				if (getCardTypeFromCardValue(lastCardPlayed.Value) == CardType.Standard && playersCard.Value < lastCardPlayed.Value)
 					return false;
-				if (lastCardPlayed.CardType == CardType.LowerThan && playersCard.Value > lastCardPlayed.Value)
+				if (getCardTypeFromCardValue(lastCardPlayed.Value) == CardType.LowerThan && playersCard.Value > lastCardPlayed.Value)
 					return false;
 			}
 
 			return true;
+		}
+
+		private CardType getCardTypeFromCardValue(CardValue cardValue){
+			CardType cardType;
+			_cardTypes.TryGetValue(cardValue, out cardType);
+			return cardType == 0 ? CardType.Standard : cardType;
 		}
 
 		public ResultOutcome PlayCards(IPlayer player, Card card){
@@ -117,6 +128,7 @@ namespace Palace
 		private ICollection<Card> _playPile;
 		private Deck _deck;
 		private GameState _gameState;
+		private Dictionary<CardValue, CardType> _cardTypes;
 	}
 
 }

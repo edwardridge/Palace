@@ -165,7 +165,7 @@ namespace UnitTests
 				}
 
 				[Test]
-				public void PLay_Card_Of_Same_Value_Is_Valid(){
+				public void Play_Card_Of_Same_Value_Is_Valid(){
 					var cardToPlay = new Card (CardValue.Four, Suit.Club);
 					var player1 = new StubReadyPlayer (cardToPlay);
 
@@ -179,14 +179,21 @@ namespace UnitTests
 			}
 
 			[TestFixture]
-			public class LowerThanCard{
+			public class WithSevenAsLowerThanCard{
+				Dictionary<CardValue, CardType> cardTypes;
+				[SetUp]
+				public void Setup(){
+					cardTypes = new Dictionary<CardValue, CardType> ();
+					cardTypes.Add (CardValue.Seven, CardType.LowerThan);
+				}
+
 				[Test]
 				public void Playing_Card_Higher_In_Value_Isnt_Valid(){
 					var cardToPlay = new Card (CardValue.Eight, Suit.Club);
 					var player1 = new StubReadyPlayer (cardToPlay);
 
-					var cardInPile = new List<Card>(){new Card (CardValue.Seven, Suit.Club, CardType.LowerThan)};
-					var game = new Game (new[]{ player1 }, NonShufflingDeck(), GameState.GameStarted, cardInPile);
+					var cardInPile = new List<Card>(){new Card (CardValue.Seven, Suit.Club)};
+					var game = new Game (new[]{ player1 }, NonShufflingDeck(), GameState.GameStarted, cardInPile, cardTypes);
 					var outcome = game.PlayCards (player1, cardToPlay);
 
 					outcome.Should ().Be (ResultOutcome.Fail);
@@ -198,16 +205,14 @@ namespace UnitTests
 					var cardToPlay = new Card (CardValue.Six, Suit.Club);
 					var player1 = new StubReadyPlayer (cardToPlay);
 
-					var cardInPile = new List<Card> (){ new Card (CardValue.Seven, Suit.Club, CardType.LowerThan) };
-					var game = new Game (new[]{ player1 }, NonShufflingDeck(), GameState.GameStarted, cardInPile);
+					var cardInPile = new List<Card> (){ new Card (CardValue.Seven, Suit.Club) };
+					var game = new Game (new[]{ player1 }, NonShufflingDeck(), GameState.GameStarted, cardInPile, cardTypes);
 					var outcome = game.PlayCards (player1, cardToPlay);
 
 					outcome.Should ().Be (ResultOutcome.Success);
 					player1.Cards.Count ().Should ().Be (0);
 				}
 			}
-
-
 		}
 
 		public static Deck NonShufflingDeck(){
