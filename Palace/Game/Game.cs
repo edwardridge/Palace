@@ -58,29 +58,39 @@ namespace Palace
 			if (gameState != GameState.GameStarted)
 				return ResultOutcome.Fail;
 
-			var distinctValues = cards.Select (card => card.Value).Distinct ();
 
-			if (distinctValues.Count() != 1)
+			if (!CardsPassRules (player, cards)) 
 				return ResultOutcome.Fail;
-
-			if (cards.Except (player.Cards).Any ())
-				return ResultOutcome.Fail;
-
-			var lastCardPlayed = playPile.LastOrDefault ();
-			if (lastCardPlayed != null) {
-				if (lastCardPlayed.CardType == CardType.Standard && distinctValues.First () < lastCardPlayed.Value)
-					return ResultOutcome.Fail;
-
-				if (lastCardPlayed.CardType == CardType.LowerThan && distinctValues.First () > lastCardPlayed.Value)
-					return ResultOutcome.Fail;
-			}
-
+				
 			player.RemoveCards (cards);
 			foreach (Card card in cards) {
 				playPile.Add (card);
 			}
 
 			return ResultOutcome.Success;
+		}
+
+		private bool CardsPassRules (IPlayer player, ICollection<Card> cards)
+		{
+			var distinctValues = cards.Select (card => card.Value).Distinct ();
+
+			if (distinctValues.Count() != 1)
+				return false;
+
+			if (cards.Except (player.Cards).Any ())
+				return false;
+
+			var lastCardPlayed = playPile.LastOrDefault ();
+			var playersCard = cards.First ();
+
+			if (lastCardPlayed != null) {
+				if (lastCardPlayed.CardType == CardType.Standard && playersCard.Value < lastCardPlayed.Value)
+					return false;
+				if (lastCardPlayed.CardType == CardType.LowerThan && playersCard.Value > lastCardPlayed.Value)
+					return false;
+			}
+
+			return true;
 		}
 
 		public ResultOutcome PlayCards(IPlayer player, Card card){
