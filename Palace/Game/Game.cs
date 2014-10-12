@@ -60,6 +60,8 @@ namespace Palace
 
 		public ResultOutcome PlayCards (IPlayer player, ICollection<Card> cards)
 		{
+			IList<Card> csdasds = new List<Card> ();
+
 			if (_gameState != GameState.GameStarted)
 				return ResultOutcome.Fail;
 
@@ -69,6 +71,17 @@ namespace Palace
 			player.RemoveCards (cards);
 			foreach (Card card in cards) {
 				_playPile.Add (card);
+			}
+
+			var playersArray = _players.ToArray ();
+			for (int i = 0; i < playersArray.Length; i++) {
+				if (playersArray [i].Name == player.Name) {
+					if (playersArray.Length - 1 == i)
+						_currentPlayer = playersArray [0];
+					else
+						_currentPlayer = playersArray [i + 1];
+				}
+				   
 			}
 
 			return ResultOutcome.Success;

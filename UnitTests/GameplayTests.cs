@@ -10,13 +10,6 @@ namespace UnitTests
 	[TestFixture]
 	public class GameplayTests
 	{
-		MockPlayerBuilder player1Builder;
-
-		[SetUp]
-		public void Setup(){
-			player1Builder = new MockPlayerBuilder ().WithName ("Ed").WithState (PlayerState.Ready);
-		}
-
 		[Test]
 		public void Cannot_Play_A_Card_When_Game_Not_Started(){
 			var cardsPlayerHas = new List<Card>(){ new Card (CardValue.Four, Suit.Club) };
@@ -76,8 +69,6 @@ namespace UnitTests
 			player1.Cards.Count.Should ().Be (0);
 		}
 
-
-
 		[Test]
 		public void Can_Play_Multiple_Cards_Of_Same_Value(){
 			var cardsToPlay = new List<Card>(){ new Card (CardValue.Four, Suit.Club), new Card (CardValue.Four, Suit.Club) };
@@ -112,7 +103,7 @@ namespace UnitTests
 		}
 
 		[Test]
-		public void When_PLayer_Plays_Multiple_Of_Different_Value_No_Cards_Are_Removed_From_Hand(){
+		public void When_Player_Plays_Multiple_Cards_Of_Different_Value_No_Cards_Are_Removed_From_Hand(){
 			var cardsToPlay = new List<Card>(){ new Card (CardValue.Four, Suit.Club), new Card (CardValue.Ace, Suit.Club) };
 			var player1 = new StubReadyPlayer (cardsToPlay);
 
@@ -132,6 +123,18 @@ namespace UnitTests
 			game.PlayCards (player1, cardToPlay);
 
 			game.PlayPileCardCount().Should ().Be (1);
+		}
+
+		[Test]
+		public void When_Player_Plays_Card_Its_Next_Players_Turn(){
+			var cardToPlay = new Card (CardValue.Ace, Suit.Club);
+			var player1 = new StubReadyPlayer (cardToPlay, "Ed");
+			var player2 = new StubReadyPlayer ("Liam");
+
+			var game = new Game (new[]{ player1, player2 }, NonShufflingDeck (), GameState.GameStarted);
+			game.PlayCards (player1, cardToPlay);
+
+			game.CurrentPlayer.Should ().Be (player2);
 		}
 
 		[TestFixture]
