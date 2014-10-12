@@ -212,6 +212,19 @@ namespace UnitTests
 					outcome.Should ().Be (ResultOutcome.Success);
 					player1.Cards.Count ().Should ().Be (0);
 				}
+
+				[Test]
+				public void Playing_Card_Of_Same_Value_Is_Valid(){
+					var cardToPlay = new Card (CardValue.Seven, Suit.Club);
+					var player1 = new StubReadyPlayer (cardToPlay);
+
+					var cardInPile = new List<Card> (){ new Card(CardValue.Seven, Suit.Club)};
+					var game = new Game (new []{ player1 }, NonShufflingDeck (), GameState.GameStarted, cardInPile, cardTypes);
+					var outcome = game.PlayCards (player1, cardToPlay);
+
+					outcome.Should ().Be (ResultOutcome.Success);
+					player1.Cards.Count ().Should ().Be (0);
+				}
 			}
 		}
 
