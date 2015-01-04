@@ -7,20 +7,20 @@ namespace Palace
 	public class Game
 	{
 		public Game(ICollection<IPlayer> players, Deck deck)
-			: this(players, deck, GameState.GameInSetup, new List<Card>(), new Dictionary<CardValue, CardType> ()){
+			: this(players, deck, GameState.GameInSetup, new Stack<Card>(), new Dictionary<CardValue, CardType> ()){
 
 		}
 
 		public Game(ICollection<IPlayer> players, Deck deck, GameState gameState)
-			: this(players, deck, gameState, new List<Card>(), new Dictionary<CardValue, CardType> ()){
+			: this(players, deck, gameState, new Stack<Card>(), new Dictionary<CardValue, CardType> ()){
 
 		}
 
-		public Game (ICollection<IPlayer> players, Deck deck, GameState gameState, ICollection<Card> playPile)
+		public Game (ICollection<IPlayer> players, Deck deck, GameState gameState, Stack<Card> playPile)
 			: this (players, deck, gameState, playPile, new Dictionary<CardValue, CardType> ()){
 		}
 
-		public Game(ICollection<IPlayer> players, Deck deck, GameState gameState, ICollection<Card> playPile, Dictionary<CardValue, CardType> cardTypes){
+		public Game(ICollection<IPlayer> players, Deck deck, GameState gameState, Stack<Card> playPile, Dictionary<CardValue, CardType> cardTypes){
 			this._deck = deck;
 			this._players = players;
 			this._gameState = gameState;
@@ -70,7 +70,7 @@ namespace Palace
 				
 			player.RemoveCards (cards);
 			foreach (Card card in cards) {
-				_playPile.Add (card);
+				_playPile.Push (card);
 			}
 
 			var playersArray = _players.ToArray ();
@@ -138,7 +138,7 @@ namespace Palace
 
 		private IPlayer _currentPlayer;
 		private ICollection<IPlayer> _players;
-		private ICollection<Card> _playPile;
+		private Stack<Card> _playPile;
 		private Deck _deck;
 		private GameState _gameState;
 		private Dictionary<CardValue, CardType> _cardTypes;

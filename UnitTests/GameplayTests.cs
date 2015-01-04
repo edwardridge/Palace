@@ -146,7 +146,8 @@ namespace UnitTests
 					var cardToPlay = new Card (CardValue.Three, Suit.Club);
 					var player1 = new StubReadyPlayer (cardToPlay);
 
-					var cardInPile = new List<Card>(){ new Card (CardValue.Two, Suit.Club)};
+					var cardInPile = new Stack<Card>();
+					cardInPile.Push (new Card (CardValue.Two, Suit.Club));
 					var game = new Game (new []{ player1 }, NonShufflingDeck(), GameState.GameStarted, cardInPile);
 					var outcome = game.PlayCards (player1, cardToPlay);
 
@@ -160,7 +161,7 @@ namespace UnitTests
 					var player1 = new StubReadyPlayer (cardToPlay);
 
 					var cardInPile = new Card (CardValue.Five, Suit.Club);
-					var game = new Game (new []{ player1 }, NonShufflingDeck(), GameState.GameStarted, new List<Card>(){cardInPile});
+					var game = new Game (new []{ player1 }, NonShufflingDeck(), GameState.GameStarted, new Stack<Card>(new []{cardInPile}));
 					var outcome = game.PlayCards (player1, cardToPlay);
 
 					outcome.Should ().Be (ResultOutcome.Fail);
@@ -172,7 +173,7 @@ namespace UnitTests
 					var cardToPlay = new Card (CardValue.Four, Suit.Club);
 					var player1 = new StubReadyPlayer (cardToPlay);
 
-					var cardInPile = new List<Card>(){new Card (CardValue.Four, Suit.Club)};
+					var cardInPile = new Stack<Card>(new []{new Card (CardValue.Four, Suit.Club)});
 					var game = new Game (new[]{ player1 }, NonShufflingDeck (), GameState.GameStarted, cardInPile);
 					var outcome = game.PlayCards (player1, cardToPlay);
 
@@ -195,7 +196,7 @@ namespace UnitTests
 					var cardToPlay = new Card (CardValue.Eight, Suit.Club);
 					var player1 = new StubReadyPlayer (cardToPlay);
 
-					var cardInPile = new List<Card>(){new Card (CardValue.Seven, Suit.Club)};
+					var cardInPile = new Stack<Card>(new []{new Card (CardValue.Seven, Suit.Club)});
 					var game = new Game (new[]{ player1 }, NonShufflingDeck(), GameState.GameStarted, cardInPile, cardTypes);
 					var outcome = game.PlayCards (player1, cardToPlay);
 
@@ -208,7 +209,7 @@ namespace UnitTests
 					var cardToPlay = new Card (CardValue.Six, Suit.Club);
 					var player1 = new StubReadyPlayer (cardToPlay);
 
-					var cardInPile = new List<Card> (){ new Card (CardValue.Seven, Suit.Club) };
+					var cardInPile = new Stack<Card> (new []{new Card (CardValue.Seven, Suit.Club) });
 					var game = new Game (new[]{ player1 }, NonShufflingDeck(), GameState.GameStarted, cardInPile, cardTypes);
 					var outcome = game.PlayCards (player1, cardToPlay);
 
@@ -221,7 +222,7 @@ namespace UnitTests
 					var cardToPlay = new Card (CardValue.Seven, Suit.Club);
 					var player1 = new StubReadyPlayer (cardToPlay);
 
-					var cardInPile = new List<Card> (){ new Card(CardValue.Seven, Suit.Club)};
+					var cardInPile = new Stack<Card> ( new[]{ new Card(CardValue.Seven, Suit.Club)});
 					var game = new Game (new []{ player1 }, NonShufflingDeck (), GameState.GameStarted, cardInPile, cardTypes);
 					var outcome = game.PlayCards (player1, cardToPlay);
 
