@@ -21,12 +21,12 @@ namespace Palace
 			this._playPile = playPile;
 		}
 
-		public override void Setup ()
+		public override sealed void Setup ()
 		{
 
 		}
 
-		public override ResultOutcome Start ()
+		public override sealed ResultOutcome Start ()
 		{
 			return ResultOutcome.Success;
 		}
