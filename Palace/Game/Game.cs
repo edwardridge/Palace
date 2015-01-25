@@ -41,12 +41,12 @@ namespace Palace
 
 		public Game(ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, CardType> cardTypes){
 			this._deck = deck;
-			this._players = players;
+			this._players = new LinkedList<IPlayer>(players);
 			this._gameState = GameState.GameInSetup;
 			this._playPile = new Stack<Card>();
 			this._cardTypes = cardTypes;
 
-			_currentPlayer = players.First ();
+			_currentPlayer = _players.First;
 		}
 
 		public virtual ResultOutcome Start ()
@@ -64,7 +64,7 @@ namespace Palace
 					startingPlayer = player;
 			}
 
-			_currentPlayer = startingPlayer;
+			_currentPlayer = _players.Find(startingPlayer);
 			_gameState = GameState.GameStarted;
 			return ResultOutcome.Success;
 		}
@@ -90,16 +90,8 @@ namespace Palace
 				_playPile.Push (card);
 			}
 
-			var playersArray = _players.ToArray ();
-			for (int i = 0; i < playersArray.Length; i++) {
-				if (playersArray [i].Name == player.Name) {
-					if (playersArray.Length - 1 == i)
-						_currentPlayer = playersArray [0];
-					else
-						_currentPlayer = playersArray [i + 1];
-				}
-				   
-			}
+
+			_currentPlayer = _currentPlayer.Next != null ? _currentPlayer.Next : _players.First ;
 
 			return ResultOutcome.Success;
 		}
@@ -146,15 +138,15 @@ namespace Palace
 		}
 
 		public IPlayer CurrentPlayer {
-			get{ return _currentPlayer; }
+			get{ return _currentPlayer.Value; }
 		}
 
 		private Card LowestCard(ICollection<Card> cards){
 			return cards.OrderBy (o => o.Value).FirstOrDefault (); 
 		}
 
-		private IPlayer _currentPlayer;
-		private ICollection<IPlayer> _players;
+		private LinkedListNode<IPlayer> _currentPlayer;
+		private LinkedList<IPlayer> _players;
 		protected Stack<Card> _playPile;
 		private Deck _deck;
 		protected GameState _gameState;
