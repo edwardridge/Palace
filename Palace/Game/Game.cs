@@ -21,7 +21,15 @@ namespace Palace
 			this._playPile = playPile;
 		}
 
+		public override void Setup ()
+		{
 
+		}
+
+		public override ResultOutcome Start ()
+		{
+			return ResultOutcome.Success;
+		}
 
 	}
 	public class Game
