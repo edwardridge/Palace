@@ -4,33 +4,44 @@ using System.Linq;
 
 namespace Palace
 {
+	public class GameInProgress : Game{
+		public GameInProgress(ICollection<IPlayer> players, Deck deck)
+			: this(players, deck, new Dictionary<CardValue, CardType> (),new Stack<Card>()){
+
+		}
+
+		public GameInProgress(ICollection<IPlayer> players, Deck deck,  Stack<Card> playPile)
+			: this(players, deck, new Dictionary<CardValue, CardType> (), playPile){
+
+		}
+		 
+		public GameInProgress (ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, CardType> cardTypes, Stack<Card> playPile)
+			: base (players, deck, cardTypes){
+			this._gameState = GameState.GameStarted;
+			this._playPile = playPile;
+		}
+
+
+
+	}
 	public class Game
 	{
 		public Game(ICollection<IPlayer> players, Deck deck)
-			: this(players, deck, GameState.GameInSetup, new Stack<Card>(), new Dictionary<CardValue, CardType> ()){
+			: this(players, deck, new Dictionary<CardValue, CardType> ()){
 
 		}
 
-		public Game(ICollection<IPlayer> players, Deck deck, GameState gameState)
-			: this(players, deck, gameState, new Stack<Card>(), new Dictionary<CardValue, CardType> ()){
-
-		}
-
-		public Game (ICollection<IPlayer> players, Deck deck, GameState gameState, Stack<Card> playPile)
-			: this (players, deck, gameState, playPile, new Dictionary<CardValue, CardType> ()){
-		}
-
-		public Game(ICollection<IPlayer> players, Deck deck, GameState gameState, Stack<Card> playPile, Dictionary<CardValue, CardType> cardTypes){
+		public Game(ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, CardType> cardTypes){
 			this._deck = deck;
 			this._players = players;
-			this._gameState = gameState;
-			this._playPile = playPile;
+			this._gameState = GameState.GameInSetup;
+			this._playPile = new Stack<Card>();
 			this._cardTypes = cardTypes;
 
 			_currentPlayer = players.First ();
 		}
 
-		public ResultOutcome Start ()
+		public virtual ResultOutcome Start ()
 		{
 			bool allPlayersReady = _players.All(player => player.State == PlayerState.Ready);
 
@@ -50,7 +61,7 @@ namespace Palace
 			return ResultOutcome.Success;
 		}
 
-		public void Setup ()
+		public virtual void Setup ()
 		{
 			foreach (IPlayer player in _players) {
 				player.AddCards (this._deck.TakeCards (3, CardOrientation.FaceDown));
@@ -138,9 +149,9 @@ namespace Palace
 
 		private IPlayer _currentPlayer;
 		private ICollection<IPlayer> _players;
-		private Stack<Card> _playPile;
+		protected Stack<Card> _playPile;
 		private Deck _deck;
-		private GameState _gameState;
+		protected GameState _gameState;
 		private Dictionary<CardValue, CardType> _cardTypes;
 	}
 
