@@ -6,17 +6,17 @@ namespace Palace
 {
 	public class GameInProgress : Game{
 		public GameInProgress(ICollection<IPlayer> players, Deck deck)
-			: this(players, deck, new Dictionary<CardValue, CardType> (),new Stack<Card>()){
+			: this(players, deck, new Dictionary<CardValue, RuleForCard> (),new Stack<Card>()){
 
 		}
 
 		public GameInProgress(ICollection<IPlayer> players, Deck deck, IEnumerable<Card> playPile)
-			: this(players, deck, new Dictionary<CardValue, CardType> (), playPile){
+			: this(players, deck, new Dictionary<CardValue, RuleForCard> (), playPile){
 
 		}
 		 
-		public GameInProgress (ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, CardType> cardTypes, IEnumerable<Card> playPile)
-			: base (players, deck, cardTypes){
+		public GameInProgress (ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, RuleForCard> rulesForCardsByValue, IEnumerable<Card> playPile)
+			: base (players, deck, rulesForCardsByValue){
 			this._gameState = GameState.GameStarted;
 			this._playPile = new Stack<Card>(playPile);
 		}
@@ -35,16 +35,16 @@ namespace Palace
 	public class Game
 	{
 		public Game(ICollection<IPlayer> players, Deck deck)
-			: this(players, deck, new Dictionary<CardValue, CardType> ()){
+			: this(players, deck, new Dictionary<CardValue, RuleForCard> ()){
 
 		}
 
-		public Game(ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, CardType> cardTypes){
+		public Game(ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, RuleForCard> rulesForCardsByValue){
 			this._deck = deck;
 			this._players = new LinkedList<IPlayer>(players);
 			this._gameState = GameState.GameInSetup;
 			this._playPile = new Stack<Card>();
-			this._cardTypes = cardTypes;
+			this.rulesForCardsByValue = rulesForCardsByValue;
 
 			_currentPlayer = _players.First;
 		}
@@ -91,38 +91,38 @@ namespace Palace
 			}
 
 
-			_currentPlayer = _currentPlayer.Next != null ? _currentPlayer.Next : _players.First ;
+			_currentPlayer = _currentPlayer.Next ?? _players.First ;
 
 			return ResultOutcome.Success;
 		}
 
 		private bool cardsPassRules (IPlayer player, ICollection<Card> cards)
 		{
-			var distinctValues = cards.Select (card => card.Value).Distinct ();
-
-			if (distinctValues.Count() != 1)
+			if (cards.Select (card => card.Value).Distinct ().Count() != 1)
 				return false;
 
 			if (cards.Except (player.Cards).Any ())
 				return false;
 
-			var lastCardPlayed = _playPile.Count > 0 ? _playPile.Peek () : null;
-			var playersCard = cards.First ();
+			if (_playPile.Count == 0)
+				return true;
 
-			if (lastCardPlayed != null) {
-				if (getCardTypeFromCardValue(lastCardPlayed.Value) == CardType.Standard && playersCard.Value < lastCardPlayed.Value)
-					return false;
-				if (getCardTypeFromCardValue(lastCardPlayed.Value) == CardType.LowerThan && playersCard.Value > lastCardPlayed.Value)
-					return false;
-			}
+			var lastCardPlayed = _playPile.Peek();
+			var playersCard = cards.First ();
+			var ruleForCard = getRuleForCardFromCardValue (lastCardPlayed.Value);
+
+			if (ruleForCard == RuleForCard.Standard && playersCard.Value < lastCardPlayed.Value)
+				return false;
+			if (ruleForCard == RuleForCard.LowerThan && playersCard.Value > lastCardPlayed.Value)
+				return false;
 
 			return true;
 		}
 
-		private CardType getCardTypeFromCardValue(CardValue cardValue){
-			CardType cardType;
-			_cardTypes.TryGetValue(cardValue, out cardType);
-			return cardType == 0 ? CardType.Standard : cardType;
+		private RuleForCard getRuleForCardFromCardValue(CardValue cardValue){
+			RuleForCard ruleForCard;
+			rulesForCardsByValue.TryGetValue(cardValue, out ruleForCard);
+			return ruleForCard == 0 ? RuleForCard.Standard : ruleForCard;
 		}
 
 		public ResultOutcome PlayCards(IPlayer player, Card card){
@@ -150,7 +150,7 @@ namespace Palace
 		protected Stack<Card> _playPile;
 		private Deck _deck;
 		protected GameState _gameState;
-		private Dictionary<CardValue, CardType> _cardTypes;
+		private Dictionary<CardValue, RuleForCard> rulesForCardsByValue;
 	}
 
 }

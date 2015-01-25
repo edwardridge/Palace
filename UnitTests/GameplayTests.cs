@@ -184,11 +184,11 @@ namespace UnitTests
 
 			[TestFixture]
 			public class WithSevenAsLowerThanCard{
-				Dictionary<CardValue, CardType> cardTypes;
+				Dictionary<CardValue, RuleForCard> cardTypes;
 				[SetUp]
 				public void Setup(){
-					cardTypes = new Dictionary<CardValue, CardType> ();
-					cardTypes.Add (CardValue.Seven, CardType.LowerThan);
+					cardTypes = new Dictionary<CardValue, RuleForCard> ();
+					cardTypes.Add (CardValue.Seven, RuleForCard.LowerThan);
 				}
 
 				[Test]

@@ -51,7 +51,7 @@
     <Compile Include="Player\IPlayer.cs" />
     <Compile Include="Game\GameState.cs" />
     <Compile Include="Card\CardValue.cs" />
-    <Compile Include="Card\CardType.cs" />
+    <Compile Include="Card\RuleForCard.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

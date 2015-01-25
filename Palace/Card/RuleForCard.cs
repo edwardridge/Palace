@@ -1,6 +1,6 @@
 namespace Palace
 {
-	public enum CardType
+	public enum RuleForCard
 	{
 		Standard = 1,
 		LowerThan = 2
