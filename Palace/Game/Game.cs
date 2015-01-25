@@ -10,15 +10,15 @@ namespace Palace
 
 		}
 
-		public GameInProgress(ICollection<IPlayer> players, Deck deck,  Stack<Card> playPile)
+		public GameInProgress(ICollection<IPlayer> players, Deck deck, IEnumerable<Card> playPile)
 			: this(players, deck, new Dictionary<CardValue, CardType> (), playPile){
 
 		}
 		 
-		public GameInProgress (ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, CardType> cardTypes, Stack<Card> playPile)
+		public GameInProgress (ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, CardType> cardTypes, IEnumerable<Card> playPile)
 			: base (players, deck, cardTypes){
 			this._gameState = GameState.GameStarted;
-			this._playPile = playPile;
+			this._playPile = new Stack<Card>(playPile);
 		}
 
 		public override sealed void Setup ()
@@ -79,8 +79,6 @@ namespace Palace
 
 		public ResultOutcome PlayCards (IPlayer player, ICollection<Card> cards)
 		{
-			IList<Card> csdasds = new List<Card> ();
-
 			if (_gameState != GameState.GameStarted)
 				return ResultOutcome.Fail;
 
@@ -116,7 +114,7 @@ namespace Palace
 			if (cards.Except (player.Cards).Any ())
 				return false;
 
-			var lastCardPlayed = _playPile.LastOrDefault ();
+			var lastCardPlayed = _playPile.Count > 0 ? _playPile.Peek () : null;
 			var playersCard = cards.First ();
 
 			if (lastCardPlayed != null) {
