@@ -4,6 +4,34 @@ using System.Linq;
 
 namespace Palace
 {
+	public class Dealer{
+		public static void DealIntialCards(ICollection<IPlayer> players, Deck deck){
+			foreach (IPlayer player in players) {
+				player.AddCards (deck.TakeCards (3, CardOrientation.FaceDown));
+				player.AddCards (deck.TakeCards (6, CardOrientation.InHand));
+			}
+		}
+
+//		public static Game StartGame(ICollection<IPlayer> players, Deck deck){
+//			bool allPlayersReady = players.All(player => player.State == PlayerState.Ready);
+//
+//			if(!allPlayersReady) return ResultOutcome.Fail;
+//
+//			var startingPlayer = players.First ();
+//
+//			foreach (var player in _players) {
+//				if (player.Cards == null || player.Cards.Count == 0)
+//					continue;
+//				if (LowestCard(player.Cards).Value < LowestCard(startingPlayer.Cards).Value)
+//					startingPlayer = player;
+//			}
+//
+//			_currentPlayerNode = _players.Find(startingPlayer);
+//			_gameState = GameState.GameStarted;
+//			return ResultOutcome.Success;
+//		}
+	}
+
 	public class GameInProgress : Game{
 		public GameInProgress(ICollection<IPlayer> players, Deck deck)
 			: this(players, deck, new Dictionary<CardValue, RuleForCard> (),new Stack<Card>()){
@@ -22,10 +50,10 @@ namespace Palace
 
 		}
 
-		public override sealed void Setup ()
-		{
-
-		}
+//		public override sealed void Setup ()
+//		{
+//
+//		}
 
 		public override sealed ResultOutcome Start ()
 		{
@@ -62,7 +90,7 @@ namespace Palace
 			foreach (var player in _players) {
 				if (player.Cards == null || player.Cards.Count == 0)
 					continue;
-				if (LowestCard(player.Cards).Value < LowestCard(startingPlayer.Cards).Value)
+				if (player.LowestCardInValue.Value < startingPlayer.LowestCardInValue.Value)
 					startingPlayer = player;
 			}
 
@@ -71,13 +99,13 @@ namespace Palace
 			return ResultOutcome.Success;
 		}
 
-		public virtual void Setup ()
-		{
-			foreach (IPlayer player in _players) {
-				player.AddCards (this._deck.TakeCards (3, CardOrientation.FaceDown));
-				player.AddCards (this._deck.TakeCards (6, CardOrientation.InHand));
-			}
-		}
+//		public virtual void Setup ()
+//		{
+//			foreach (IPlayer player in _players) {
+//				player.AddCards (this._deck.TakeCards (3, CardOrientation.FaceDown));
+//				player.AddCards (this._deck.TakeCards (6, CardOrientation.InHand));
+//			}
+//		}
 
 		public ResultOutcome PlayCards (IPlayer player, ICollection<Card> cards)
 		{

@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace Palace
 {
+
+
 	public class Player : IPlayer
 	{
 		public string Name {
@@ -58,6 +60,10 @@ namespace Palace
 			_state = PlayerState.Ready;
 
 			return ResultOutcome.Success;
+		}
+
+		public Card LowestCardInValue{
+			get{ return _cards.ToList ().OrderBy (o => o.Value).FirstOrDefault (); }
 		}
 
 		private string _name;

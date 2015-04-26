@@ -72,6 +72,10 @@ namespace UnitTests
 			private set{_name = value;}
 		}
 
+		public Card LowestCardInValue{
+			get { return this._cards.ToList ().OrderBy (o => o.Value).FirstOrDefault (); }
+		}
+
 		#endregion
 
 		private ICollection<Card> _cards;

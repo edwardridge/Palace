@@ -26,7 +26,7 @@ namespace UnitTests
 				var deck = new Deck (new NonShuffler ());
 
 				game = new Game (new List<IPlayer>(){player1, player2}, deck);
-				game.Setup ();
+				Dealer.DealIntialCards (new List<IPlayer>(){player1, player2}, deck);
 			}
 
 			[Test]
@@ -133,22 +133,23 @@ namespace UnitTests
 			[TestFixture]
 			public class FirstMoveWhenAllPlayersAreReady{
 
-				MockPlayerBuilder player1Builder;
-				MockPlayerBuilder player2Builder;
-				MockPlayerBuilder player3Builder;
+				IPlayer player1;
+				IPlayer player2;
+				IPlayer player3;
 				Game game;
 
 				[SetUp]
 				public void Setup(){
-					player1Builder = new MockPlayerBuilder ().WithState (PlayerState.Ready).WithName ("Ed");
-					player2Builder = new MockPlayerBuilder ().WithState (PlayerState.Ready).WithName ("Liam");
-					player3Builder = new MockPlayerBuilder ().WithState (PlayerState.Ready).WithName ("Jess");
+					//player1Builder = new MockPlayerBuilder ().WithState (PlayerState.Ready).WithName ("Ed");
+					player1 = new StubReadyPlayer ();
+					player2 = new StubReadyPlayer();
+					player3 = new StubReadyPlayer();
 				}
 
 				[Test]
 				public void P1_Has_Lowest_Card_P1_Goes_First(){
-					var player1 = player1Builder.WithCards (new []{ 2 }).Build();
-					var player2 = player2Builder.WithCards (new []{ 3 }).Build();
+					player1.AddCards(new []{ new Card(CardValue.Two,Suit.Club) });
+					player2.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
 
 					game = new Game (new[]{ player1, player2 }, new Deck (new NonShuffler ()));
 					game.Start ();
@@ -158,8 +159,8 @@ namespace UnitTests
 
 				[Test]
 				public void P2_Has_Lowest_Card_P2_Goes_First(){
-					var player1 = player1Builder.WithCards (new []{ 3 }).Build();
-					var player2 = player2Builder.WithCards (new []{ 2 }).Build();
+					player1.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
+					player2.AddCards(new []{ new Card(CardValue.Two,Suit.Club) });
 
 					game = new Game (new[]{ player1, player2 }, new Deck (new NonShuffler ()));
 					game.Start ();
@@ -169,9 +170,9 @@ namespace UnitTests
 
 				[Test] 
 				public void P3_Has_Lowest_Card_P3_Goes_First(){
-					var player1 = player1Builder.WithCards (new []{ 3 }).Build();
-					var player2 = player2Builder.WithCards (new []{ 3 }).Build();
-					var player3 = player3Builder.WithCards (new []{ 2 }).Build();
+					player1.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
+					player2.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
+					player3.AddCards(new []{ new Card(CardValue.Two,Suit.Club) });
 
 					game = new Game (new[]{ player1, player2, player3 }, new Deck (new NonShuffler ()));
 					game.Start ();

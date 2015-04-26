@@ -14,6 +14,8 @@ namespace Palace
 		void AddCards(ICollection<Card> cards);
 
 		void RemoveCards(ICollection<Card> cards);
+
+		Card LowestCardInValue { get; }
 	}
 }
 
