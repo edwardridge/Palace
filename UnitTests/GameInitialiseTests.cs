@@ -24,7 +24,7 @@ namespace UnitTests
 				player1 = new StubReadyPlayer ();
 				player2 = new StubReadyPlayer ();
 				var deck = new Deck (new NonShuffler ());
-				var players = new SortedList ();
+
 				game = new Game (new List<IPlayer>(){player1, player2}, deck);
 				game.Setup ();
 			}

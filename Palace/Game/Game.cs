@@ -19,6 +19,7 @@ namespace Palace
 			: base (players, deck, rulesForCardsByValue){
 			this._gameState = GameState.GameStarted;
 			this._playPile = new Stack<Card>(playPile);
+
 		}
 
 		public override sealed void Setup ()
@@ -32,6 +33,7 @@ namespace Palace
 		}
 
 	}
+
 	public class Game
 	{
 		public Game(ICollection<IPlayer> players, Deck deck)
@@ -46,7 +48,7 @@ namespace Palace
 			this._playPile = new Stack<Card>();
 			this.rulesForCardsByValue = rulesForCardsByValue;
 
-			_currentPlayer = _players.First;
+			_currentPlayerNode = _players.First;
 		}
 
 		public virtual ResultOutcome Start ()
@@ -57,14 +59,14 @@ namespace Palace
 
 			var startingPlayer = _players.First ();
 
-			var playersWithCards = _players.Where (p => p.Cards != null && p.Cards.Count > 0);
-
-			foreach (var player in playersWithCards) {
+			foreach (var player in _players) {
+				if (player.Cards == null || player.Cards.Count == 0)
+					continue;
 				if (LowestCard(player.Cards).Value < LowestCard(startingPlayer.Cards).Value)
 					startingPlayer = player;
 			}
 
-			_currentPlayer = _players.Find(startingPlayer);
+			_currentPlayerNode = _players.Find(startingPlayer);
 			_gameState = GameState.GameStarted;
 			return ResultOutcome.Success;
 		}
@@ -90,8 +92,7 @@ namespace Palace
 				_playPile.Push (card);
 			}
 
-
-			_currentPlayer = _currentPlayer.Next ?? _players.First ;
+			_currentPlayerNode = _currentPlayerNode.Next ?? _players.First ;
 
 			return ResultOutcome.Success;
 		}
@@ -102,7 +103,7 @@ namespace Palace
 				return false;
 
 			if (cards.Except (player.Cards).Any ())
-				return false;
+				throw new ArgumentException ("You cannot play cards you don't have!");
 
 			if (_playPile.Count == 0)
 				return true;
@@ -138,14 +139,14 @@ namespace Palace
 		}
 
 		public IPlayer CurrentPlayer {
-			get{ return _currentPlayer.Value; }
+			get{ return _currentPlayerNode.Value; }
 		}
 
 		private Card LowestCard(ICollection<Card> cards){
 			return cards.OrderBy (o => o.Value).FirstOrDefault (); 
 		}
 
-		private LinkedListNode<IPlayer> _currentPlayer;
+		private LinkedListNode<IPlayer> _currentPlayerNode;
 		private LinkedList<IPlayer> _players;
 		protected Stack<Card> _playPile;
 		private Deck _deck;
