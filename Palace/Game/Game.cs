@@ -12,23 +12,23 @@ namespace Palace
 			}
 		}
 
-//		public static Game StartGame(ICollection<IPlayer> players, Deck deck){
+//		public static Game StartGame(ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, RuleForCard> rulesForCardsByValue){
 //			bool allPlayersReady = players.All(player => player.State == PlayerState.Ready);
 //
-//			if(!allPlayersReady) return ResultOutcome.Fail;
+//			if(!allPlayersReady) throw new Exception();
 //
 //			var startingPlayer = players.First ();
 //
-//			foreach (var player in _players) {
+//			foreach (var player in players) {
 //				if (player.Cards == null || player.Cards.Count == 0)
 //					continue;
-//				if (LowestCard(player.Cards).Value < LowestCard(startingPlayer.Cards).Value)
+//				if (player.LowestCardInValue.Value < startingPlayer.LowestCardInValue.Value)
 //					startingPlayer = player;
 //			}
 //
-//			_currentPlayerNode = _players.Find(startingPlayer);
-//			_gameState = GameState.GameStarted;
-//			return ResultOutcome.Success;
+////			_currentPlayerNode = _players.Find(startingPlayer);
+////			_gameState = GameState.GameStarted;
+//			return new Game(players, startingPlayer, deck, rulesForCardsByValue, GameState.GameStarted);
 //		}
 	}
 
@@ -78,6 +78,15 @@ namespace Palace
 
 			_currentPlayerNode = _players.First;
 		}
+
+//		public Game(ICollection<IPlayer> players, IPlayer startingPlayer, Deck deck,  Dictionary<CardValue, RuleForCard> rulesForCardsByValue, GameState gameState){
+//			this._deck = deck;
+//			this._players = new LinkedList<IPlayer>(players);
+//			this.rulesForCardsByValue = rulesForCardsByValue;
+//			this._playPile = new Stack<Card>();
+//			this._gameState = gameState;
+//			_currentPlayerNode = _players.Find (startingPlayer);
+//		}
 
 		public virtual ResultOutcome Start ()
 		{

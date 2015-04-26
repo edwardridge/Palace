@@ -67,8 +67,8 @@ namespace UnitTests
 
 			[Test]
 			public void Can_Start_When_Both_Players_Are_Ready(){
-				var player1 = new MockPlayerBuilder ().WithState (PlayerState.Ready).Build();
-				var player2 = new MockPlayerBuilder ().WithState (PlayerState.Ready).Build();
+				var player1 = new StubReadyPlayer ();
+				var player2 = new StubReadyPlayer ();
 				var game = new Game (new []{ player1, player2 }, new Deck (new NonShuffler ()));
 				var outcome = game.Start ();
 
