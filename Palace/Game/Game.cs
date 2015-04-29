@@ -5,14 +5,23 @@ using System.Linq;
 namespace Palace
 {
 	public class Dealer{
-		public void DealIntialCards(ICollection<IPlayer> players, Deck deck){
+		public Dealer(Deck deck) : this(deck, new Dictionary<CardValue, RuleForCard>()){
+
+		}
+
+		public Dealer(Deck deck, Dictionary<CardValue, RuleForCard> rulesForCardsByValue){
+			this._deck = deck;
+			this._rulesForCardsByValue = rulesForCardsByValue;
+		}
+
+		public void DealIntialCards(ICollection<IPlayer> players){
 			foreach (IPlayer player in players) {
-				player.AddCards (deck.TakeCards (3, CardOrientation.FaceDown));
-				player.AddCards (deck.TakeCards (6, CardOrientation.InHand));
+				player.AddCards (_deck.TakeCards (3, CardOrientation.FaceDown));
+				player.AddCards (_deck.TakeCards (6, CardOrientation.InHand));
 			}
 		}
 
-		public Game StartGame(ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, RuleForCard> rulesForCardsByValue){
+		public Game StartGame(ICollection<IPlayer> players){
 			var startingPlayer = players.First ();
 
 			foreach (var player in players) {
@@ -21,10 +30,13 @@ namespace Palace
 				if (player.LowestCardInValue.Value < startingPlayer.LowestCardInValue.Value)
 					startingPlayer = player;
 			}
-			Game game = new Game(players, deck, rulesForCardsByValue);
+			Game game = new Game(players, _deck, _rulesForCardsByValue);
 			game.Start (startingPlayer);
 			return game;
 		}
+
+		private Deck _deck;
+		private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
 	}
 
 	public class GameInProgress : Game{
