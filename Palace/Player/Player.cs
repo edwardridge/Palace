@@ -52,8 +52,8 @@ namespace Palace
 
 		public ResultOutcome Ready ()
 		{
-			if (this.NumCards (CardOrientation.FaceUp) != 3)
-				return ResultOutcome.Fail;
+//			if (this.NumCards (CardOrientation.FaceUp) != 3)
+//				return ResultOutcome.Fail;
 
 			_state = PlayerState.Ready;
 

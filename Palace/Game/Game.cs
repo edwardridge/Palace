@@ -4,14 +4,24 @@ using System.Linq;
 
 namespace Palace
 {
+	public class GameStartValidator : IGameStartValidator{
+
+		public bool GameIsValid (ICollection<IPlayer> players)
+		{
+			var returnVal = !(players.Any (p => p.Cards.Count (c => c.CardOrientation == CardOrientation.FaceUp) != 3));
+			return returnVal;
+		}
+	}
+
 	public class Dealer{
-		public Dealer(Deck deck) : this(deck, new Dictionary<CardValue, RuleForCard>()){
+		public Dealer(Deck deck, IGameStartValidator gameStartValidator) : this(deck, gameStartValidator, new Dictionary<CardValue, RuleForCard>()){
 
 		}
 
-		public Dealer(Deck deck, Dictionary<CardValue, RuleForCard> rulesForCardsByValue){
+		public Dealer(Deck deck,  IGameStartValidator gameStartValidator, Dictionary<CardValue, RuleForCard> rulesForCardsByValue){
 			this._deck = deck;
 			this._rulesForCardsByValue = rulesForCardsByValue;
+			this._gameStartValidator = gameStartValidator;
 		}
 
 		public void DealIntialCards(ICollection<IPlayer> players){
@@ -22,6 +32,13 @@ namespace Palace
 		}
 
 		public Game StartGame(ICollection<IPlayer> players){
+			if(_gameStartValidator.GameIsValid(players))
+				return ResumeGame (players);
+
+			throw new InvalidOperationException ();
+		}
+
+		public Game ResumeGame(ICollection<IPlayer> players){
 			var startingPlayer = players.First ();
 
 			foreach (var player in players) {
@@ -37,6 +54,7 @@ namespace Palace
 
 		private Deck _deck;
 		private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
+		private IGameStartValidator _gameStartValidator;
 	}
 
 	public class GameInProgress : Game{

@@ -52,6 +52,7 @@
     <Compile Include="Game\GameState.cs" />
     <Compile Include="Card\CardValue.cs" />
     <Compile Include="Card\RuleForCard.cs" />
+    <Compile Include="Game\IGameStartValidator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
