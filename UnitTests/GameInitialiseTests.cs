@@ -9,8 +9,8 @@ using FluentAssertions;
 
 namespace UnitTests
 {
-	public class DummyGameValidator : IGameStartValidator{
-		public bool GameIsValid (ICollection<IPlayer> players)
+	public class DummyGameStartValidator : IGameStartValidator{
+		public bool GameIsReadyToStart (ICollection<IPlayer> players)
 		{
 			return true;
 		}
@@ -32,8 +32,8 @@ namespace UnitTests
 				player2 = new StubReadyPlayer ();
 				var deck = new Deck (new NonShuffler ());
 
-				game = new Dealer(deck, new DummyGameValidator()).StartGame(new List<IPlayer>(){player1, player2});
-				new Dealer(deck, new DummyGameValidator()).DealIntialCards (new List<IPlayer>(){player1, player2});
+				game = new Dealer(deck, new DummyGameStartValidator()).StartGame(new List<IPlayer>(){player1, player2});
+				new Dealer(deck, new DummyGameStartValidator()).DealIntialCards (new List<IPlayer>(){player1, player2});
 			}
 
 			[Test]
@@ -67,7 +67,7 @@ namespace UnitTests
 				var player1 = new MockPlayerBuilder ().WithState (PlayerState.Setup).Build();
 				var player2 = new MockPlayerBuilder ().WithState (PlayerState.Ready).Build();
 
-				Action outcome = () => new Dealer(new Deck (new NonShuffler ()), new DummyGameValidator()).StartGame (new []{ player1, player2 });
+				Action outcome = () => new Dealer(new Deck (new NonShuffler ()), new DummyGameStartValidator()).StartGame (new []{ player1, player2 });
 
 				outcome.ShouldThrow<ArgumentException> ();
 			}
@@ -77,7 +77,7 @@ namespace UnitTests
 				var player1 = new StubReadyPlayer ();
 				var player2 = new StubReadyPlayer ();
 
-				Action outcome = () => new Dealer(new Deck (new NonShuffler ()), new DummyGameValidator()).StartGame (new []{ player1, player2 });
+				Action outcome = () => new Dealer(new Deck (new NonShuffler ()), new DummyGameStartValidator()).StartGame (new []{ player1, player2 });
 
 				outcome.ShouldNotThrow ();
 			}
@@ -160,7 +160,7 @@ namespace UnitTests
 					player1.AddCards(new []{ new Card(CardValue.Two,Suit.Club) });
 					player2.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
 
-					game = new Dealer(new Deck (new NonShuffler ()), new DummyGameValidator()).StartGame (new []{ player1, player2 });
+					game = new Dealer(new Deck (new NonShuffler ()), new DummyGameStartValidator()).StartGame (new []{ player1, player2 });
 
 					game.CurrentPlayer.Should().Be(player1);
 				}
@@ -170,7 +170,7 @@ namespace UnitTests
 					player1.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
 					player2.AddCards(new []{ new Card(CardValue.Two,Suit.Club) });
 
-					game = new Dealer(new Deck (new NonShuffler ()), new DummyGameValidator()).StartGame (new []{ player1, player2 });
+					game = new Dealer(new Deck (new NonShuffler ()), new DummyGameStartValidator()).StartGame (new []{ player1, player2 });
 					
 					game.CurrentPlayer.Should().Be(player2);
 				}
@@ -181,7 +181,7 @@ namespace UnitTests
 					player2.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
 					player3.AddCards(new []{ new Card(CardValue.Two,Suit.Club) });
 
-					game = new Dealer(new Deck (new NonShuffler ()), new DummyGameValidator()).StartGame (new []{ player1, player2, player3 });
+					game = new Dealer(new Deck (new NonShuffler ()), new DummyGameStartValidator()).StartGame (new []{ player1, player2, player3 });
 					//game.Start ();
 
 					game.CurrentPlayer.Should().Be(player3);

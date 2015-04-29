@@ -6,7 +6,7 @@ namespace Palace
 {
 	public interface IGameStartValidator
 	{
-		bool GameIsValid(ICollection<IPlayer> players);
+		bool GameIsReadyToStart(ICollection<IPlayer> players);
 	}
 
 

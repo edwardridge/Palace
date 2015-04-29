@@ -6,7 +6,7 @@ namespace Palace
 {
 	public class GameStartValidator : IGameStartValidator{
 
-		public bool GameIsValid (ICollection<IPlayer> players)
+		public bool GameIsReadyToStart (ICollection<IPlayer> players)
 		{
 			var returnVal = !(players.Any (p => p.Cards.Count (c => c.CardOrientation == CardOrientation.FaceUp) != 3));
 			return returnVal;
@@ -32,7 +32,7 @@ namespace Palace
 		}
 
 		public Game StartGame(ICollection<IPlayer> players){
-			if(_gameStartValidator.GameIsValid(players))
+			if(_gameStartValidator.GameIsReadyToStart(players))
 				return ResumeGame (players);
 
 			throw new InvalidOperationException ();
