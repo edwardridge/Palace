@@ -32,7 +32,7 @@ namespace UnitTests
 				player2 = new StubReadyPlayer ();
 				var deck = new Deck (new NonShuffler ());
 
-				game = new Game (new List<IPlayer>(){player1, player2}, deck);
+				game = new Dealer(deck, new DummyGameValidator()).StartGame(new List<IPlayer>(){player1, player2});
 				new Dealer(deck, new DummyGameValidator()).DealIntialCards (new List<IPlayer>(){player1, player2});
 			}
 
@@ -77,9 +77,9 @@ namespace UnitTests
 				var player1 = new StubReadyPlayer ();
 				var player2 = new StubReadyPlayer ();
 
-				Game game = new Dealer(new Deck (new NonShuffler ()), new DummyGameValidator()).StartGame (new []{ player1, player2 });
+				Action outcome = () => new Dealer(new Deck (new NonShuffler ()), new DummyGameValidator()).StartGame (new []{ player1, player2 });
 
-				game.GameState.Should ().Be (GameState.GameStarted);
+				outcome.ShouldNotThrow ();
 			}
 
 		}

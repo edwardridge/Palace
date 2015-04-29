@@ -70,7 +70,6 @@ namespace Palace
 		 
 		public GameInProgress (ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, RuleForCard> rulesForCardsByValue, IEnumerable<Card> playPile)
 			: base (players, deck, rulesForCardsByValue){
-			this._gameState = GameState.GameStarted;
 			this._playPile = new Stack<Card>(playPile);
 
 		}
@@ -78,15 +77,14 @@ namespace Palace
 
 	public class Game
 	{
-		public Game(ICollection<IPlayer> players, Deck deck)
+		internal Game(ICollection<IPlayer> players, Deck deck)
 			: this(players, deck, new Dictionary<CardValue, RuleForCard> ()){
 
 		}
 
-		public Game(ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, RuleForCard> rulesForCardsByValue){
+		internal Game(ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, RuleForCard> rulesForCardsByValue){
 			this._deck = deck;
 			this._players = new LinkedList<IPlayer>(players);
-			this._gameState = GameState.GameInSetup;
 			this._playPile = new Stack<Card>();
 			this.rulesForCardsByValue = rulesForCardsByValue;
 
@@ -99,14 +97,10 @@ namespace Palace
 			if(!allPlayersReady) throw new ArgumentException("Not all players are ready");
 
 			_currentPlayerNode = _players.Find (startingPlayer);
-			_gameState = GameState.GameStarted;
 		}
 
 		public ResultOutcome PlayCards (IPlayer player, ICollection<Card> cards)
 		{
-			if (_gameState != GameState.GameStarted)
-				return ResultOutcome.Fail;
-
 			if (!cardsPassRules (player, cards)) 
 				return ResultOutcome.Fail;
 				
@@ -164,16 +158,11 @@ namespace Palace
 		public IPlayer CurrentPlayer {
 			get{ return _currentPlayerNode.Value; }
 		}
-
-		public GameState GameState{
-			get { return _gameState; }
-		}
-
+			
 		private LinkedListNode<IPlayer> _currentPlayerNode;
 		private LinkedList<IPlayer> _players;
 		protected Stack<Card> _playPile;
 		private Deck _deck;
-		protected GameState _gameState;
 		private Dictionary<CardValue, RuleForCard> rulesForCardsByValue;
 	}
 

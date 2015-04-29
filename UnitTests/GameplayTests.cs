@@ -11,18 +11,6 @@ namespace UnitTests
 	public class GameplayTests
 	{
 		[Test]
-		public void Cannot_Play_A_Card_When_Game_Not_Started(){
-			var cardsPlayerHas = new List<Card>(){ new Card (CardValue.Four, Suit.Club) };
-			var player1 = new StubReadyPlayer (cardsPlayerHas);
-
-			var game = new Game (new []{player1}, NonShufflingDeck());
-			//Dont' start game 
-			var result = game.PlayCards (player1, player1.Cards.First());
-
-			result.Should ().Be (ResultOutcome.Fail);
-		}
-
-		[Test]
 		public void Player_Cannot_Play_Card_Player_Doesnt_Have(){
 			var cardsPlayerHas = new List<Card>(){ new Card (CardValue.Four, Suit.Club) };
 			var player1 = new StubReadyPlayer (cardsPlayerHas);
