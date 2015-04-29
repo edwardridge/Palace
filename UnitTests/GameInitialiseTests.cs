@@ -161,7 +161,6 @@ namespace UnitTests
 					player1.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
 					player2.AddCards(new []{ new Card(CardValue.Two,Suit.Club) });
 
-					//game = new Game (new[]{ player1, player2 }, new Deck (new NonShuffler ()));
 					game = Dealer.StartGame (new []{ player1, player2 }, new Deck (new NonShuffler ()), new Dictionary<CardValue, RuleForCard> ());
 					
 					game.CurrentPlayer.Should().Be(player2);

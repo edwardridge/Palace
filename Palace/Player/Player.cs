@@ -4,8 +4,6 @@ using System.Linq;
 
 namespace Palace
 {
-
-
 	public class Player : IPlayer
 	{
 		public string Name {

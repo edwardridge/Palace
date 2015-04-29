@@ -13,10 +13,6 @@ namespace Palace
 		}
 
 		public static Game StartGame(ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, RuleForCard> rulesForCardsByValue){
-			bool allPlayersReady = players.All(player => player.State == PlayerState.Ready);
-
-			if(!allPlayersReady) throw new ArgumentException("Not all players are ready");
-
 			var startingPlayer = players.First ();
 
 			foreach (var player in players) {
@@ -25,8 +21,9 @@ namespace Palace
 				if (player.LowestCardInValue.Value < startingPlayer.LowestCardInValue.Value)
 					startingPlayer = player;
 			}
-
-			return new Game(players, startingPlayer, deck, rulesForCardsByValue, GameState.GameStarted);
+			Game game = new Game(players, deck, rulesForCardsByValue);
+			game.Start (startingPlayer);
+			return game;
 		}
 	}
 
@@ -66,13 +63,13 @@ namespace Palace
 			_currentPlayerNode = _players.First;
 		}
 
-		public Game(ICollection<IPlayer> players, IPlayer startingPlayer, Deck deck,  Dictionary<CardValue, RuleForCard> rulesForCardsByValue, GameState gameState){
-			this._deck = deck;
-			this._players = new LinkedList<IPlayer>(players);
-			this.rulesForCardsByValue = rulesForCardsByValue;
-			this._playPile = new Stack<Card>();
-			this._gameState = gameState;
+		public void Start(IPlayer startingPlayer){
+			bool allPlayersReady = _players.All(player => player.State == PlayerState.Ready);
+
+			if(!allPlayersReady) throw new ArgumentException("Not all players are ready");
+
 			_currentPlayerNode = _players.Find (startingPlayer);
+			_gameState = GameState.GameStarted;
 		}
 
 		public ResultOutcome PlayCards (IPlayer player, ICollection<Card> cards)
@@ -140,10 +137,6 @@ namespace Palace
 
 		public GameState GameState{
 			get { return _gameState; }
-		}
-
-		private Card LowestCard(ICollection<Card> cards){
-			return cards.OrderBy (o => o.Value).FirstOrDefault (); 
 		}
 
 		private LinkedListNode<IPlayer> _currentPlayerNode;
