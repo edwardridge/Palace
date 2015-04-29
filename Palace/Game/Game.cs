@@ -5,14 +5,14 @@ using System.Linq;
 namespace Palace
 {
 	public class Dealer{
-		public static void DealIntialCards(ICollection<IPlayer> players, Deck deck){
+		public void DealIntialCards(ICollection<IPlayer> players, Deck deck){
 			foreach (IPlayer player in players) {
 				player.AddCards (deck.TakeCards (3, CardOrientation.FaceDown));
 				player.AddCards (deck.TakeCards (6, CardOrientation.InHand));
 			}
 		}
 
-		public static Game StartGame(ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, RuleForCard> rulesForCardsByValue){
+		public Game StartGame(ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, RuleForCard> rulesForCardsByValue){
 			var startingPlayer = players.First ();
 
 			foreach (var player in players) {

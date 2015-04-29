@@ -26,7 +26,7 @@ namespace UnitTests
 				var deck = new Deck (new NonShuffler ());
 
 				game = new Game (new List<IPlayer>(){player1, player2}, deck);
-				Dealer.DealIntialCards (new List<IPlayer>(){player1, player2}, deck);
+				new Dealer().DealIntialCards (new List<IPlayer>(){player1, player2}, deck);
 			}
 
 			[Test]
@@ -60,7 +60,7 @@ namespace UnitTests
 				var player1 = new MockPlayerBuilder ().WithState (PlayerState.Setup).Build();
 				var player2 = new MockPlayerBuilder ().WithState (PlayerState.Ready).Build();
 
-				Action outcome = () => Dealer.StartGame (new []{ player1, player2 }, new Deck (new NonShuffler ()), new Dictionary<CardValue, RuleForCard> ());
+				Action outcome = () => new Dealer().StartGame (new []{ player1, player2 }, new Deck (new NonShuffler ()), new Dictionary<CardValue, RuleForCard> ());
 
 				outcome.ShouldThrow<ArgumentException> ();
 			}
@@ -70,7 +70,7 @@ namespace UnitTests
 				var player1 = new StubReadyPlayer ();
 				var player2 = new StubReadyPlayer ();
 
-				Game game = Dealer.StartGame (new []{ player1, player2 }, new Deck (new NonShuffler ()), new Dictionary<CardValue, RuleForCard> ());
+				Game game = new Dealer().StartGame (new []{ player1, player2 }, new Deck (new NonShuffler ()), new Dictionary<CardValue, RuleForCard> ());
 
 				game.GameState.Should ().Be (GameState.GameStarted);
 			}
@@ -151,7 +151,7 @@ namespace UnitTests
 					player1.AddCards(new []{ new Card(CardValue.Two,Suit.Club) });
 					player2.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
 
-					game = Dealer.StartGame (new []{ player1, player2 }, new Deck (new NonShuffler ()), new Dictionary<CardValue, RuleForCard> ());
+					game = new Dealer().StartGame (new []{ player1, player2 }, new Deck (new NonShuffler ()), new Dictionary<CardValue, RuleForCard> ());
 
 					game.CurrentPlayer.Should().Be(player1);
 				}
@@ -161,7 +161,7 @@ namespace UnitTests
 					player1.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
 					player2.AddCards(new []{ new Card(CardValue.Two,Suit.Club) });
 
-					game = Dealer.StartGame (new []{ player1, player2 }, new Deck (new NonShuffler ()), new Dictionary<CardValue, RuleForCard> ());
+					game = new Dealer().StartGame (new []{ player1, player2 }, new Deck (new NonShuffler ()), new Dictionary<CardValue, RuleForCard> ());
 					
 					game.CurrentPlayer.Should().Be(player2);
 				}
@@ -172,7 +172,7 @@ namespace UnitTests
 					player2.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
 					player3.AddCards(new []{ new Card(CardValue.Two,Suit.Club) });
 
-					game = Dealer.StartGame (new []{ player1, player2, player3 }, new Deck (new NonShuffler ()), new Dictionary<CardValue, RuleForCard> ());
+					game = new Dealer().StartGame (new []{ player1, player2, player3 }, new Deck (new NonShuffler ()), new Dictionary<CardValue, RuleForCard> ());
 					//game.Start ();
 
 					game.CurrentPlayer.Should().Be(player3);
