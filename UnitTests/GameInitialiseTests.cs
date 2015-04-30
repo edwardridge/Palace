@@ -112,7 +112,7 @@ namespace UnitTests
 
 			[Test]
 			public void Player_Cannot_Be_Ready_With_Two_Face_Up_Cards(){
-				player1.AddCards(new []{new Card(CardValue.Ace, Suit.Club,CardOrientation.FaceUp), 
+				player1.AddCards(new []{new Card(CardValue.Ace, Suit.Club, CardOrientation.FaceUp), 
 					new Card(CardValue.Ace, Suit.Club,CardOrientation.FaceUp)});
 
 				Action outcome = () => dealer.StartGame(new []{player1});
@@ -167,8 +167,8 @@ namespace UnitTests
 
 				[Test]
 				public void P1_Has_Lowest_Card_P1_Goes_First(){
-					player1.AddCards(new []{ new Card(CardValue.Two,Suit.Club) });
-					player2.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
+					player1.AddCards(new []{ Card.TwoOfClubs });
+					player2.AddCards(new []{ Card.ThreeOfClubs });
 
                     game = dealer.StartGame(new[] { player1, player2 });
 
@@ -177,8 +177,8 @@ namespace UnitTests
 
 				[Test]
 				public void P2_Has_Lowest_Card_P2_Goes_First(){
-					player1.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
-					player2.AddCards(new []{ new Card(CardValue.Two,Suit.Club) });
+                    player1.AddCards(new[] { Card.ThreeOfClubs });
+                    player2.AddCards(new[] { Card.TwoOfClubs });
 
                     game = dealer.StartGame(new[] { player1, player2 });
 					
@@ -187,9 +187,9 @@ namespace UnitTests
 
 				[Test] 
 				public void P3_Has_Lowest_Card_P3_Goes_First(){
-					player1.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
-					player2.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
-					player3.AddCards(new []{ new Card(CardValue.Two,Suit.Club) });
+                    player1.AddCards(new[] { Card.ThreeOfClubs });
+                    player2.AddCards(new[] { Card.ThreeOfClubs });
+                    player3.AddCards(new[] { Card.TwoOfClubs });
 
                     game = dealer.StartGame(new[] { player1, player2, player3 });
 

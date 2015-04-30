@@ -23,10 +23,10 @@ namespace UnitTests
         [Test]
         public void Player_Cannot_Play_Card_Player_Doesnt_Have()
         {
-            var cardsPlayerHas = new List<Card>() { new Card(CardValue.Four, Suit.Club) };
+            var cardsPlayerHas = new List<Card>() { Card.FourOfClubs };
             var player1 = new StubReadyPlayer(cardsPlayerHas);
 
-            var cardsPlayerPlays = new Card(CardValue.Ace, Suit.Club);
+            var cardsPlayerPlays = Card.AceOfClubs;
             var game = dealer.ResumeGame(new[] { player1 }, player1);
 
             Action playingCardsPlayerHasOutcome = () => game.PlayCards(player1, cardsPlayerPlays);
@@ -38,7 +38,7 @@ namespace UnitTests
         [Test]
         public void Player_Can_Play_Card_Player_Has()
         {
-            var cardsPlayerHas = new List<Card>() { new Card(CardValue.Four, Suit.Club), new Card(CardValue.Four, Suit.Club) };
+            var cardsPlayerHas = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
             var player1 = new StubReadyPlayer(cardsPlayerHas);
 
             var game = dealer.ResumeGame(new[] { player1 }, player1);
@@ -50,10 +50,10 @@ namespace UnitTests
         [Test]
         public void When_Playing_Multiple_Cards_Player_Cannot_PLay_Card_They_Dont_Have()
         {
-            var cardsPlayerHas = new List<Card>() { new Card(CardValue.Four, Suit.Club), new Card(CardValue.Four, Suit.Club) };
+            var cardsPlayerHas = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
             var player1 = new StubReadyPlayer(cardsPlayerHas);
 
-            var cardsPlayerPlays = new[] { new Card(CardValue.Four, Suit.Club), new Card(CardValue.Four, Suit.Spade) };
+            var cardsPlayerPlays = new[] { Card.FourOfClubs, Card.FourOfSpades };
             var game = dealer.ResumeGame(new[] { player1 }, player1);
             Action result = () => game.PlayCards(player1, cardsPlayerPlays);
 
@@ -64,7 +64,7 @@ namespace UnitTests
         [Test]
         public void When_Player_Plays_Card_Card_Is_Removed_From_Hand()
         {
-            var cardToPlay = new Card(CardValue.Four, Suit.Club);
+            var cardToPlay = Card.FourOfClubs;
             var player1 = new StubReadyPlayer(cardToPlay);
 
             var game = dealer.ResumeGame(new[] { player1 }, player1);
@@ -76,7 +76,7 @@ namespace UnitTests
         [Test]
         public void Can_Play_Multiple_Cards_Of_Same_Value()
         {
-            var cardsToPlay = new List<Card>() { new Card(CardValue.Four, Suit.Club), new Card(CardValue.Four, Suit.Club) };
+            var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
             var player1 = new StubReadyPlayer(cardsToPlay);
 
             var game = dealer.ResumeGame(new[] { player1 }, player1);
@@ -88,7 +88,7 @@ namespace UnitTests
         [Test]
         public void When_PLayer_Plays_Multiple_Cards_Cards_Are_Removed_From_Hand()
         {
-            var cardsToPlay = new List<Card>() { new Card(CardValue.Four, Suit.Club), new Card(CardValue.Four, Suit.Club) };
+            var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
             var player1 = new StubReadyPlayer(cardsToPlay);
 
             var game = dealer.ResumeGame(new[] { player1 }, player1);
@@ -99,43 +99,31 @@ namespace UnitTests
 
         [Test]
         public void Cannot_Play_Multiple_Cards_Of_Different_Value(){
-            var cardsToPlay = new List<Card>(){ new Card (CardValue.Four, Suit.Club), new Card (CardValue.Ace, Suit.Club) };
+            var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.AceOfClubs };
             var player1 = new StubReadyPlayer (cardsToPlay);
 
             var game = dealer.ResumeGame(new[] { player1 }, player1);
-            var playerPlaysMultipleCardsOfDifferentValueOutcome = game.PlayCards (player1, cardsToPlay);
+            Action playerPlaysMultipleCardsOfDifferentValueOutcome = () => game.PlayCards (player1, cardsToPlay);
 
-            playerPlaysMultipleCardsOfDifferentValueOutcome.Should ().Be (ResultOutcome.Fail);
+            playerPlaysMultipleCardsOfDifferentValueOutcome.ShouldThrow<ArgumentException>();
         }
-
-        [Test]
-        public void When_Player_Plays_Multiple_Cards_Of_Different_Value_No_Cards_Are_Removed_From_Hand(){
-            var cardsToPlay = new List<Card>(){ new Card (CardValue.Four, Suit.Club), new Card (CardValue.Ace, Suit.Club) };
-            var player1 = new StubReadyPlayer (cardsToPlay);
-
-            var game = dealer.ResumeGame(new[] { player1 }, player1);
-            game.PlayCards (player1, cardsToPlay);
-
-            player1.Cards.Count().Should ().Be (cardsToPlay.Count());
-        }
-
 
         [Test]
         public void When_Player_Plays_Card_Card_Is_Added_To_PlayPile()
         {
-            var cardToPlay = new Card(CardValue.Four, Suit.Club);
+            var cardToPlay = Card.FourOfClubs;
             var player1 = new StubReadyPlayer(cardToPlay);
 
             var game = dealer.ResumeGame(new[] { player1 }, player1);
             game.PlayCards(player1, cardToPlay);
 
-            game.PlayPileCardCount().Should().Be(1);
+            game.PlayPileCardCount.Should().Be(1);
         }
 
         [Test]
         public void When_Player_Plays_Card_Its_Next_Players_Turn()
         {
-            var cardToPlay = new Card(CardValue.Ace, Suit.Club);
+            var cardToPlay = Card.AceOfClubs;
             var player1 = new StubReadyPlayer(cardToPlay, "Ed");
             var player2 = new StubReadyPlayer("Liam");
 
@@ -158,12 +146,13 @@ namespace UnitTests
                 }
 
                 [Test]
-                public void Playing_Card_Higher_In_Value_Is_Valid(){
-                    var cardToPlay = new Card (CardValue.Three, Suit.Club);
+                public void Playing_Card_Higher_In_Value_Is_Valid()
+                {
+                    var cardToPlay = Card.ThreeOfClubs;
                     var player1 = new StubReadyPlayer (cardToPlay);
 
                     var cardInPile = new Stack<Card>();
-                    cardInPile.Push (new Card (CardValue.Two, Suit.Club));
+                    cardInPile.Push (Card.TwoOfClubs);
                     var game = dealer.ResumeGame(new[] { player1 }, player1, cardInPile);
                     var outcome = game.PlayCards (player1, cardToPlay);
 
@@ -174,10 +163,10 @@ namespace UnitTests
                 [Test]
                 public void Playing_Card_Lower_In_Value_Isnt_Valid()
                 {
-                    var cardToPlay = new Card(CardValue.Three, Suit.Club);
+                    var cardToPlay = Card.ThreeOfClubs;
                     var player1 = new StubReadyPlayer(cardToPlay);
 
-                    var cardInPile = new Card(CardValue.Five, Suit.Club);
+                    var cardInPile = Card.FiveOfClubs;
                     var game = dealer.ResumeGame(new[] { player1 }, player1, new[]{cardInPile});
                     var outcome = game.PlayCards(player1, cardToPlay);
 
@@ -188,10 +177,10 @@ namespace UnitTests
                 [Test]
                 public void Play_Card_Of_Same_Value_Is_Valid()
                 {
-                    var cardToPlay = new Card(CardValue.Four, Suit.Club);
+                    var cardToPlay = Card.FourOfClubs;
                     var player1 = new StubReadyPlayer(cardToPlay);
 
-                    var cardInPile = new Stack<Card>(new[] { new Card(CardValue.Four, Suit.Club) });
+                    var cardInPile = new List<Card>(new[] { Card.FourOfClubs });
                     var game = dealer.ResumeGame(new[] { player1 }, player1, cardInPile);
                     var outcome = game.PlayCards(player1, cardToPlay);
 
@@ -217,10 +206,10 @@ namespace UnitTests
                 [Test]
                 public void Playing_Card_Higher_In_Value_Isnt_Valid()
                 {
-                    var cardToPlay = new Card(CardValue.Eight, Suit.Club);
+                    var cardToPlay = Card.EightOfClubs;
                     var player1 = new StubReadyPlayer(cardToPlay);
 
-                    var cardInPile = new List<Card>(new[] { new Card(CardValue.Seven, Suit.Club) });
+                    var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
                     var game = dealer.ResumeGame(new[] { player1 }, player1, cardInPile);
                     var outcome = game.PlayCards(player1, cardToPlay);
 
@@ -231,10 +220,10 @@ namespace UnitTests
                 [Test]
                 public void Playing_Card_Lower_In_Value_Is_Valid()
                 {
-                    var cardToPlay = new Card(CardValue.Six, Suit.Club);
+                    var cardToPlay = Card.SixOfClubs;
                     var player1 = new StubReadyPlayer(cardToPlay);
 
-                    var cardInPile = new List<Card>(new[] { new Card(CardValue.Seven, Suit.Club) });
+                    var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
                     var game = dealer.ResumeGame(new[] { player1 }, player1, cardInPile);
                     var outcome = game.PlayCards(player1, cardToPlay);
 
@@ -245,10 +234,10 @@ namespace UnitTests
                 [Test]
                 public void Playing_Card_Of_Same_Value_Is_Valid()
                 {
-                    var cardToPlay = new Card(CardValue.Seven, Suit.Club);
+                    var cardToPlay = Card.SevenOfClubs;
                     var player1 = new StubReadyPlayer(cardToPlay);
 
-                    var cardInPile = new List<Card>(new[] { new Card(CardValue.Seven, Suit.Club) });
+                    var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
                     var game = dealer.ResumeGame(new[] { player1 }, player1, cardInPile);
                     var outcome = game.PlayCards(player1, cardToPlay);
 
@@ -275,10 +264,10 @@ namespace UnitTests
                 [Test]
                 public void AnyCardIsValid()
                 {
-                    var cardToPlay = new Card(CardValue.Six, Suit.Club);
+                    var cardToPlay = Card.SixOfClubs;
                     var player1 = new StubReadyPlayer(cardToPlay);
 
-                    var cardInPile = new List<Card>(new[] { new Card(CardValue.Two, Suit.Club) });
+                    var cardInPile = new List<Card>(new[] { Card.TwoOfClubs });
                     var game = dealer.ResumeGame(new[] { player1 }, player1, cardInPile);
                     var outcome = game.PlayCards(player1, cardToPlay);
 
