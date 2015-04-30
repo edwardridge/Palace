@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\DealerHelper.cs" />
     <Compile Include="Shufflers\NonShuffler.cs" />
     <Compile Include="Shufflers\PredeterminedShuffler.cs" />
     <Compile Include="GameInitialiseTests.cs" />
@@ -62,11 +63,7 @@
       <Name>Palace</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Shufflers\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="Builders\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 namespace Palace
 {
-	public interface IPlayer
+    using System.Security.Cryptography.X509Certificates;
+
+    public interface IPlayer
 	{
 		ICollection<Card> Cards { get; }
 

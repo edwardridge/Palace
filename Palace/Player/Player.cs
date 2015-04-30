@@ -52,9 +52,6 @@ namespace Palace
 
 		public ResultOutcome Ready ()
 		{
-//			if (this.NumCards (CardOrientation.FaceUp) != 3)
-//				return ResultOutcome.Fail;
-
 			_state = PlayerState.Ready;
 
 			return ResultOutcome.Success;
@@ -64,7 +61,7 @@ namespace Palace
 			get{ return _cards.ToList ().OrderBy (o => o.Value).FirstOrDefault (); }
 		}
 
-		private string _name;
+	    private string _name;
 
 		private ICollection<Card> _cards;
 

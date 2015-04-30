@@ -9,19 +9,26 @@ using FluentAssertions;
 
 namespace UnitTests
 {
-	public class DummyGameStartValidator : IGameStartValidator{
+    using UnitTests.Helpers;
+
+    public class DummyGameStartValidator : IGameStartValidator{
 		public bool GameIsReadyToStart (ICollection<IPlayer> players)
 		{
 			return true;
 		}
 	}
 
+    
+
     [TestFixture]
 	public static class GameInitialiseTests
 	{
+        
+
 		[TestFixture]
 		public class SetupGame
 		{
+		    Dealer dealer;
 			Game game;
 			IPlayer player1;
 			IPlayer player2;
@@ -31,9 +38,9 @@ namespace UnitTests
 				player1 = new StubReadyPlayer ();
 				player2 = new StubReadyPlayer ();
 				var deck = new Deck (new NonShuffler ());
-
-				game = new Dealer(deck, new DummyGameStartValidator()).StartGame(new List<IPlayer>(){player1, player2});
-				new Dealer(deck, new DummyGameStartValidator()).DealIntialCards (new List<IPlayer>(){player1, player2});
+			    dealer = new Dealer(deck, new DummyGameStartValidator());
+                dealer.DealIntialCards(new List<IPlayer>() { player1, player2 });
+                game = dealer.StartGame(new List<IPlayer>() { player1, player2 });
 			}
 
 			[Test]
@@ -67,7 +74,7 @@ namespace UnitTests
 				var player1 = new MockPlayerBuilder ().WithState (PlayerState.Setup).Build();
 				var player2 = new MockPlayerBuilder ().WithState (PlayerState.Ready).Build();
 
-				Action outcome = () => new Dealer(new Deck (new NonShuffler ()), new DummyGameStartValidator()).StartGame (new []{ player1, player2 });
+                Action outcome = () => DealerHelper.TestDealer().StartGame(new[] { player1, player2 });
 
 				outcome.ShouldThrow<ArgumentException> ();
 			}
@@ -77,7 +84,7 @@ namespace UnitTests
 				var player1 = new StubReadyPlayer ();
 				var player2 = new StubReadyPlayer ();
 
-				Action outcome = () => new Dealer(new Deck (new NonShuffler ()), new DummyGameStartValidator()).StartGame (new []{ player1, player2 });
+                Action outcome = () => DealerHelper.TestDealer().StartGame(new[] { player1, player2 });
 
 				outcome.ShouldNotThrow ();
 			}
@@ -147,12 +154,15 @@ namespace UnitTests
 				IPlayer player3;
 				Game game;
 
+			    private Dealer dealer;
+
 				[SetUp]
 				public void Setup(){
 					//player1Builder = new MockPlayerBuilder ().WithState (PlayerState.Ready).WithName ("Ed");
 					player1 = new StubReadyPlayer ();
 					player2 = new StubReadyPlayer();
 					player3 = new StubReadyPlayer();
+				    dealer = DealerHelper.TestDealer();
 				}
 
 				[Test]
@@ -160,7 +170,7 @@ namespace UnitTests
 					player1.AddCards(new []{ new Card(CardValue.Two,Suit.Club) });
 					player2.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
 
-					game = new Dealer(new Deck (new NonShuffler ()), new DummyGameStartValidator()).StartGame (new []{ player1, player2 });
+                    game = dealer.StartGame(new[] { player1, player2 });
 
 					game.CurrentPlayer.Should().Be(player1);
 				}
@@ -170,7 +180,7 @@ namespace UnitTests
 					player1.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
 					player2.AddCards(new []{ new Card(CardValue.Two,Suit.Club) });
 
-					game = new Dealer(new Deck (new NonShuffler ()), new DummyGameStartValidator()).StartGame (new []{ player1, player2 });
+                    game = dealer.StartGame(new[] { player1, player2 });
 					
 					game.CurrentPlayer.Should().Be(player2);
 				}
@@ -181,8 +191,7 @@ namespace UnitTests
 					player2.AddCards(new []{ new Card(CardValue.Three,Suit.Club) });
 					player3.AddCards(new []{ new Card(CardValue.Two,Suit.Club) });
 
-					game = new Dealer(new Deck (new NonShuffler ()), new DummyGameStartValidator()).StartGame (new []{ player1, player2, player3 });
-					//game.Start ();
+                    game = dealer.StartGame(new[] { player1, player2, player3 });
 
 					game.CurrentPlayer.Should().Be(player3);
 				}

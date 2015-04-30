@@ -32,64 +32,63 @@ namespace Palace
 		}
 
 		public Game StartGame(ICollection<IPlayer> players){
-			if(_gameStartValidator.GameIsReadyToStart(players))
-				return ResumeGame (players);
+			if(!_gameStartValidator.GameIsReadyToStart(players))
+                throw new InvalidOperationException();
 
-			throw new InvalidOperationException ();
+            var game = new Game(players, this);
+
+            var startingPlayer = players.First();
+
+            foreach (var player in players)
+            {
+                if (player.Cards == null || player.Cards.Count == 0)
+                    continue;
+                if (player.LowestCardInValue.Value < startingPlayer.LowestCardInValue.Value)
+                    startingPlayer = player;
+            }
+		    
+            game.Start(startingPlayer);
+		    return game;
 		}
 
-		public Game ResumeGame(ICollection<IPlayer> players){
-			var startingPlayer = players.First ();
+        public Game ResumeGame(ICollection<IPlayer> players, IPlayer startingPlayer)
+        {
+            return ResumeGame(players, startingPlayer, new List<Card>());
+        }
 
-			foreach (var player in players) {
-				if (player.Cards == null || player.Cards.Count == 0)
-					continue;
-				if (player.LowestCardInValue.Value < startingPlayer.LowestCardInValue.Value)
-					startingPlayer = player;
-			}
-			Game game = new Game(players, _deck, _rulesForCardsByValue);
-			game.Start (startingPlayer);
-			return game;
+		public Game ResumeGame(ICollection<IPlayer> players, IPlayer startingPlayer, IEnumerable<Card> cardsInPile){
+            var game = new Game(players, this);
+		    game.Start(startingPlayer);
+            return game;
 		}
+
+        public RuleForCard GetRuleForCardFromCardValue(CardValue cardValue)
+        {
+            RuleForCard ruleForCard;
+            _rulesForCardsByValue.TryGetValue(cardValue, out ruleForCard);
+            return ruleForCard == 0 ? RuleForCard.Standard : ruleForCard;
+        }
 
 		private Deck _deck;
 		private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
 		private IGameStartValidator _gameStartValidator;
 	}
 
-	public class GameInProgress : Game{
-		public GameInProgress(ICollection<IPlayer> players, Deck deck)
-			: this(players, deck, new Dictionary<CardValue, RuleForCard> (),new Stack<Card>()){
-
-		}
-
-		public GameInProgress(ICollection<IPlayer> players, Deck deck, IEnumerable<Card> playPile)
-			: this(players, deck, new Dictionary<CardValue, RuleForCard> (), playPile){
-
-		}
-		 
-		public GameInProgress (ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, RuleForCard> rulesForCardsByValue, IEnumerable<Card> playPile)
-			: base (players, deck, rulesForCardsByValue){
-			this._playPile = new Stack<Card>(playPile);
-
-		}
-	}
-
 	public class Game
 	{
-		internal Game(ICollection<IPlayer> players, Deck deck)
-			: this(players, deck, new Dictionary<CardValue, RuleForCard> ()){
+        internal Game(ICollection<IPlayer> players, Dealer dealer)
+			: this(players, dealer, new List<Card>()){
 
 		}
 
-		internal Game(ICollection<IPlayer> players, Deck deck, Dictionary<CardValue, RuleForCard> rulesForCardsByValue){
-			this._deck = deck;
-			this._players = new LinkedList<IPlayer>(players);
-			this._playPile = new Stack<Card>();
-			this.rulesForCardsByValue = rulesForCardsByValue;
+        internal Game(ICollection<IPlayer> players, Dealer dealer, IEnumerable<Card> cardsInPile)
+        {
+            this._dealer = dealer;
+            this._players = new LinkedList<IPlayer>(players);
+            this._playPile = new Stack<Card>(cardsInPile);
 
-			_currentPlayerNode = _players.First;
-		}
+            _currentPlayerNode = _players.First;
+        }
 
 		public void Start(IPlayer startingPlayer){
 			bool allPlayersReady = _players.All(player => player.State == PlayerState.Ready);
@@ -127,7 +126,7 @@ namespace Palace
 
 			var lastCardPlayed = _playPile.Peek();
 			var playersCard = cards.First ();
-			var ruleForCard = getRuleForCardFromCardValue (lastCardPlayed.Value);
+		    var ruleForCard = _dealer.GetRuleForCardFromCardValue(playersCard.Value);
 
 			if (ruleForCard == RuleForCard.Standard && playersCard.Value < lastCardPlayed.Value)
 				return false;
@@ -135,12 +134,6 @@ namespace Palace
 				return false;
 
 			return true;
-		}
-
-		private RuleForCard getRuleForCardFromCardValue(CardValue cardValue){
-			RuleForCard ruleForCard;
-			rulesForCardsByValue.TryGetValue(cardValue, out ruleForCard);
-			return ruleForCard == 0 ? RuleForCard.Standard : ruleForCard;
 		}
 
 		public ResultOutcome PlayCards(IPlayer player, Card card){
@@ -162,8 +155,8 @@ namespace Palace
 		private LinkedListNode<IPlayer> _currentPlayerNode;
 		private LinkedList<IPlayer> _players;
 		protected Stack<Card> _playPile;
-		private Deck _deck;
-		private Dictionary<CardValue, RuleForCard> rulesForCardsByValue;
+
+	    private Dealer _dealer;
 	}
 
 }
