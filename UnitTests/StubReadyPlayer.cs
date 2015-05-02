@@ -17,8 +17,8 @@ namespace UnitTests
 		public StubReadyPlayer (ICollection<Card> cards, string name)
 		{
 		    _cards = new List<Card>(cards);
-			this._state = PlayerState.Ready;
-			this._name = name;
+			this.State = PlayerState.Ready;
+			this.Name = name;
 		}
 
 		public StubReadyPlayer(string name) : this(new List<Card>(), name){
@@ -42,16 +42,14 @@ namespace UnitTests
 
 		public void AddCards (IEnumerable<Card> cards)
 		{
-			foreach (Card card in cards) {
+			foreach (var card in cards) {
 				_cards.Add (card);
 			}
 		}
 
 		public void RemoveCards (ICollection<Card> cards)
 		{
-		    var cardsInList = _cards.Where(c => c.Equals(cards.First())).ToList();
-            
-            foreach (Card card in cardsInList)
+            foreach (var card in cards)
             {
 				_cards.Remove (card);
 			}
@@ -63,27 +61,17 @@ namespace UnitTests
 			}
 		}
 
-		public PlayerState State {
-			get { return _state;}
-			set { _state = value;}
-		}
+	    public PlayerState State { get; set; }
 
-		public string Name {
-			get {
-				return _name;
-			}
-			private set{_name = value;}
-		}
+	    public string Name { get; private set; }
 
-		public Card LowestCardInValue{
+	    public Card LowestCardInValue{
 			get { return this._cards.ToList ().OrderBy (o => o.Value).FirstOrDefault (); }
 		}
 
 		#endregion
 
 		private ICollection<Card> _cards;
-		private PlayerState _state;
-		private string _name;
 	}
 }
 
