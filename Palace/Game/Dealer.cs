@@ -51,7 +51,7 @@ namespace Palace
             return game;
         }
 
-        public Game ResumeGameWithPlayPile(ICollection<IPlayer> players, IPlayer startingPlayer, IEnumerable<Card> cardsInPile)
+        public Game StartGameWithPlayPile(ICollection<IPlayer> players, IPlayer startingPlayer, IEnumerable<Card> cardsInPile)
         {
             var game = new Game(players, this, cardsInPile);
             game.Start(startingPlayer);

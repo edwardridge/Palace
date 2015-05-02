@@ -152,7 +152,7 @@ namespace UnitTests
 
                     var cardInPile = new Stack<Card>();
                     cardInPile.Push (Card.TwoOfClubs);
-                    var game = dealer.ResumeGameWithPlayPile(new[] { player1 }, player1, cardInPile);
+                    var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
                     var outcome = game.PlayCards (player1, cardToPlay);
 
                     outcome.Should ().Be (ResultOutcome.Success);
@@ -166,7 +166,7 @@ namespace UnitTests
                     var player1 = new StubReadyPlayer(cardToPlay);
 
                     var cardInPile = Card.FiveOfClubs;
-                    var game = dealer.ResumeGameWithPlayPile(new[] { player1 }, player1, new[]{cardInPile});
+                    var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, new[]{cardInPile});
                     var outcome = game.PlayCards(player1, cardToPlay);
 
                     outcome.Should().Be(ResultOutcome.Fail);
@@ -180,7 +180,7 @@ namespace UnitTests
                     var player1 = new StubReadyPlayer(cardToPlay);
 
                     var cardInPile = new List<Card>(new[] { Card.FourOfClubs });
-                    var game = dealer.ResumeGameWithPlayPile(new[] { player1 }, player1, cardInPile);
+                    var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
                     var outcome = game.PlayCards(player1, cardToPlay);
 
                     outcome.Should().Be(ResultOutcome.Success);
@@ -209,7 +209,7 @@ namespace UnitTests
                     var player1 = new StubReadyPlayer(cardToPlay);
 
                     var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
-                    var game = dealer.ResumeGameWithPlayPile(new[] { player1 }, player1, cardInPile);
+                    var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
                     var outcome = game.PlayCards(player1, cardToPlay);
 
                     outcome.Should().Be(ResultOutcome.Fail);
@@ -223,7 +223,7 @@ namespace UnitTests
                     var player1 = new StubReadyPlayer(cardToPlay);
 
                     var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
-                    var game = dealer.ResumeGameWithPlayPile(new[] { player1 }, player1, cardInPile);
+                    var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
                     var outcome = game.PlayCards(player1, cardToPlay);
 
                     outcome.Should().Be(ResultOutcome.Success);
@@ -237,7 +237,7 @@ namespace UnitTests
                     var player1 = new StubReadyPlayer(cardToPlay);
 
                     var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
-                    var game = dealer.ResumeGameWithPlayPile(new[] { player1 }, player1, cardInPile);
+                    var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
                     var outcome = game.PlayCards(player1, cardToPlay);
 
                     outcome.Should().Be(ResultOutcome.Success);
@@ -267,7 +267,7 @@ namespace UnitTests
                     var player1 = new StubReadyPlayer(cardToPlay);
 
                     var cardInPile = new List<Card>(new[] { Card.TwoOfClubs });
-                    var game = dealer.ResumeGameWithPlayPile(new[] { player1 }, player1, cardInPile);
+                    var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
                     var outcome = game.PlayCards(player1, cardToPlay);
 
                     outcome.Should().Be(ResultOutcome.Success);
