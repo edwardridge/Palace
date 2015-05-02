@@ -17,6 +17,7 @@ namespace Palace
             this._players = new LinkedList<IPlayer>(players);
             this._playPile = new Stack<Card>(cardsInPile);
             this._cardDealer = cardDealer;
+            this._orderIsGoingForward = true;
 
             _currentPlayerNode = _players.First;
         }
@@ -41,11 +42,19 @@ namespace Palace
             player.AddCards(_cardDealer.DealCards(cards.Count));
 
             if (cards.First().Value == CardValue.Jack)
-                _currentPlayerNode = _currentPlayerNode.Previous ?? _players.Last;
-            else
-                _currentPlayerNode = _currentPlayerNode.Next ?? _players.First;
+                _orderIsGoingForward = !_orderIsGoingForward;
+
+            this.chooseCurrentPlayer();
 
             return ResultOutcome.Success;
+        }
+
+        private void chooseCurrentPlayer()
+        {
+            if (this._orderIsGoingForward)
+                this._currentPlayerNode = this._currentPlayerNode.Next ?? this._players.First;
+            else
+                this._currentPlayerNode = this._currentPlayerNode.Previous ?? this._players.Last;
         }
 
         public ResultOutcome PlayCards(IPlayer player, Card card)
@@ -91,5 +100,7 @@ namespace Palace
         private IRulesValidator rulesValidator;
 
         private ICardDealer _cardDealer;
+
+        private bool _orderIsGoingForward;
     }
 }

@@ -324,7 +324,7 @@
         }
 
         [Test]
-        public void After_Playing_Reverse_Order_Card_Order_Is_Reversed()
+        public void After_Playing_Reverse_Order_Card_Order_Is_Reversed_For_One_Turn()
         {
             var player1 = new StubReadyPlayer("Ed");
             var player2 = new StubReadyPlayer(Card.JackOfClubs);
@@ -334,6 +334,20 @@
             game.PlayCards(player2, Card.JackOfClubs);
 
             game.CurrentPlayer.Should().Be(player1);
+        }
+
+        [Test]
+        public void After_Playing_Reverse_Order_Card_Order_Is_Reversed_For_Two_Turns()
+        {
+            var player1 = new StubReadyPlayer(Card.AceOfClubs, "Ed");
+            var player2 = new StubReadyPlayer(Card.JackOfClubs);
+            var player3 = new StubReadyPlayer("Liam");
+
+            var game = dealer.StartGame(new[] { player1, player2, player3 }, player2);
+            game.PlayCards(player2, Card.JackOfClubs);
+            game.PlayCards(player1, Card.AceOfClubs);
+
+            game.CurrentPlayer.Should().Be(player3);
         }
 
     }
