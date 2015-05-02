@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Palace
 {
-    public class Dealer : ICanLayCards
+    public class Dealer : ICanLayCards, ICardDealer
     {
         public Dealer(Deck deck, ICanStartGame canStartGame)
             : this(deck, canStartGame, new Dictionary<CardValue, RuleForCard>())
@@ -23,8 +23,8 @@ namespace Palace
         {
             foreach (var player in players)
             {
-                player.AddCards(_deck.TakeCards(3, CardOrientation.FaceDown));
-                player.AddCards(_deck.TakeCards(6, CardOrientation.InHand));
+                player.AddCards(_deck.DealCards(3, CardOrientation.FaceDown));
+                player.AddCards(_deck.DealCards(6, CardOrientation.InHand));
             }
         }
 
@@ -33,7 +33,7 @@ namespace Palace
             if (!this.canStartGame.GameIsReadyToStart(players))
                 throw new InvalidOperationException();
 
-            var game = new Game(players, this);
+            var game = new Game(players, this, _deck);
             if (startingPlayer == null)
             {
                 startingPlayer = players.First();
@@ -53,7 +53,7 @@ namespace Palace
 
         public Game StartGameWithPlayPile(ICollection<IPlayer> players, IPlayer startingPlayer, IEnumerable<Card> cardsInPile)
         {
-            var game = new Game(players, this, cardsInPile);
+            var game = new Game(players, this, _deck, cardsInPile);
             game.Start(startingPlayer);
             return game;
         }
@@ -90,5 +90,10 @@ namespace Palace
         private Deck _deck;
         private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
         private ICanStartGame canStartGame;
+
+        public IEnumerable<Card> DealCards(int count)
+        {
+            return _deck.DealCards(count);
+        }
     }
 }

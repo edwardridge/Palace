@@ -101,14 +101,14 @@ namespace UnitTests
 
 			[Test]
 			public void Gets_Single_Card(){
-				var cardFromDeckValue = deck.TakeCards (1).Select (s => s.Value).First();
+				var cardFromDeckValue = deck.DealCards (1).Select (s => s.Value).First();
 
 				cardFromDeckValue.Should ().Be (CardValue.Seven);
 			}
 
 			[Test]
 			public void Gets_Single_Card_Card_Is_Removed_From_Deck(){
-				deck.TakeCards (1);
+				deck.DealCards (1);
 				var postDeckCount = deck.CardCount ();
 
 				postDeckCount.Should ().Be (preDeckCount - 1);
@@ -118,14 +118,14 @@ namespace UnitTests
 			public void Gets_Two_Cards(){
 				var expectedCardValues = new List<CardValue> (new []{CardValue.Seven,CardValue.Two});
 
-				var cardsFromDeckValues = deck.TakeCards(2).Select(s=>s.Value);
+				var cardsFromDeckValues = deck.DealCards(2).Select(s=>s.Value);
 
 				cardsFromDeckValues.ShouldAllBeEquivalentTo (expectedCardValues);
 			}
 
 			[Test]
 			public void Gets_Two_Cards_Two_Cards_Removed_From_Deck(){
-				deck.TakeCards (2);
+				deck.DealCards (2);
 				var postDeckCount = deck.CardCount ();
 
 				postDeckCount.Should ().Be (preDeckCount - 2);
@@ -145,7 +145,7 @@ namespace UnitTests
 
 			[Test]
 			public void Gets_Three_Cards_Returns_Two_Cards(){
-				var cards = deck.TakeCards (3);
+				var cards = deck.DealCards (3);
 
 				cards.Count ().Should ().Be (2);
 			}

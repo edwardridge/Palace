@@ -40,7 +40,7 @@ namespace UnitTests
 			_cards.Add (card);
 		}
 
-		public void AddCards (ICollection<Card> cards)
+		public void AddCards (IEnumerable<Card> cards)
 		{
 			foreach (Card card in cards) {
 				_cards.Add (card);

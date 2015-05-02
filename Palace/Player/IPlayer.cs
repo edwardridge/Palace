@@ -11,7 +11,7 @@ namespace Palace
 
 		string Name { get; }
 
-		void AddCards(ICollection<Card> cards);
+		void AddCards(IEnumerable<Card> cards);
 
 		void RemoveCards(ICollection<Card> cards);
 

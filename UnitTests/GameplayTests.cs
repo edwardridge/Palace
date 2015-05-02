@@ -64,13 +64,14 @@ namespace UnitTests
         [Test]
         public void When_Player_Plays_Card_Card_Is_Removed_From_Hand()
         {
+            var dealerForThisTest = new Dealer(new Deck(new PredeterminedShuffler(new[] { Card.ThreeOfClubs })), new DummyCanStartGame());
             var cardToPlay = Card.FourOfClubs;
             var player1 = new StubReadyPlayer(cardToPlay);
 
             var game = dealer.StartGame(new[] { player1 }, player1);
             game.PlayCards(player1, cardToPlay);
 
-            player1.Cards.Count.Should().Be(0);
+            player1.Cards.Should().NotContain(Card.FourOfClubs);
         }
 
         [Test]
@@ -131,6 +132,17 @@ namespace UnitTests
             game.PlayCards(player1, cardToPlay);
 
             game.CurrentPlayer.Should().Be(player2);
+        }
+
+        [Test]
+        public void When_Player_Plays_One_Card_They_Receive_One_Card()
+        {
+//            var cardToPlay = Card.AceOfClubs;
+            var player1 = new StubReadyPlayer(Card.AceOfClubs);
+            var game = dealer.StartGame(new[] { player1 });
+            game.PlayCards(player1, Card.AceOfClubs);
+
+            player1.Cards.Count.Should().Be(1);
         }
 
         [TestFixture]
@@ -227,7 +239,6 @@ namespace UnitTests
                     var outcome = game.PlayCards(player1, cardToPlay);
 
                     outcome.Should().Be(ResultOutcome.Success);
-                    player1.Cards.Count().Should().Be(0);
                 }
 
                 [Test]
@@ -241,7 +252,6 @@ namespace UnitTests
                     var outcome = game.PlayCards(player1, cardToPlay);
 
                     outcome.Should().Be(ResultOutcome.Success);
-                    player1.Cards.Count().Should().Be(0);
                 }
             }
 

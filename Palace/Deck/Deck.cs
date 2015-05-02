@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Palace
 {
-	public class Deck
+	public class Deck : ICardDealer
 	{
 		private ICollection<Card> cards;
 
@@ -18,11 +18,11 @@ namespace Palace
 		}
 
 		//Aside from setup we can assume we want in hand cards
-		public ICollection<Card> TakeCards (int count){
-			return this.TakeCards (count, CardOrientation.InHand);
+		public IEnumerable<Card> DealCards (int count){
+			return this.DealCards (count, CardOrientation.InHand);
 		}
 
-		public ICollection<Card> TakeCards (int count, CardOrientation cardOrientation)
+        public IEnumerable<Card> DealCards(int count, CardOrientation cardOrientation)
 		{
 			var returnCards = new List<Card>() ;
 

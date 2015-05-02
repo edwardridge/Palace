@@ -6,17 +6,18 @@ namespace Palace
 {
 	public class Game
 	{
-        internal Game(IEnumerable<IPlayer> players, ICanLayCards canLayCards)
-            : this(players, canLayCards, new List<Card>())
+        internal Game(IEnumerable<IPlayer> players, ICanLayCards canLayCards, ICardDealer cardDealer)
+            : this(players, canLayCards, cardDealer, new List<Card>())
         {
 
 		}
 
-        internal Game(IEnumerable<IPlayer> players, ICanLayCards canLayCards, IEnumerable<Card> cardsInPile)
+        internal Game(IEnumerable<IPlayer> players, ICanLayCards canLayCards, ICardDealer cardDealer, IEnumerable<Card> cardsInPile)
         {
             this.canLayCards = canLayCards;
             this._players = new LinkedList<IPlayer>(players);
             this._playPile = new Stack<Card>(cardsInPile);
+            this._cardDealer = cardDealer;
 
             _currentPlayerNode = _players.First;
         }
@@ -36,6 +37,8 @@ namespace Palace
 			foreach (Card card in cards) {
 				_playPile.Push (card);
 			}
+
+            player.AddCards(_cardDealer.DealCards(cards.Count));
 
 			_currentPlayerNode = _currentPlayerNode.Next ?? _players.First ;
 
@@ -72,6 +75,7 @@ namespace Palace
 		protected Stack<Card> _playPile;
 
 	    private ICanLayCards canLayCards;
+        private ICardDealer _cardDealer;
 	}
 
 }
