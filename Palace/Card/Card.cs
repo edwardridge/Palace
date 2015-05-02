@@ -51,5 +51,10 @@
         public static Card EightOfClubs { get { return new Card(CardValue.Eight, Suit.Club); } }
 
         public static Card FourOfSpades { get { return new Card(CardValue.Four, Suit.Spade); } }
+
+        public static Card JackOfClubs { get
+        {
+            return new Card(CardValue.Jack, Suit.Spade);
+        } }
     }
 }

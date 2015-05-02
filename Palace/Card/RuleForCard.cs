@@ -1,12 +1,13 @@
 namespace Palace
 {
-	public enum RuleForCard
-	{
+    public enum RuleForCard
+    {
 
-		Standard = 1,
-		LowerThan = 2,
-		Reset = 3
-	}
+        Standard = 1,
+        LowerThan = 2,
+        Reset = 3,
+        ReverseOrderOfPlay = 4
+    }
 
 
 }

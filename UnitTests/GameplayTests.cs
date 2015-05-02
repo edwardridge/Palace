@@ -90,13 +90,14 @@
         [Test]
         public void When_PLayer_Plays_Multiple_Cards_Cards_Are_Removed_From_Hand()
         {
+            var dealerForThisTest = new Dealer(new Deck(new PredeterminedShuffler(new[] { Card.AceOfClubs, Card.AceOfClubs })), new DummyCanStartGame());
             var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
             var player1 = new StubReadyPlayer(cardsToPlay);
 
-            var game = dealer.StartGame(new[] { player1 }, player1);
+            var game = dealerForThisTest.StartGame(new[] { player1 }, player1);
             game.PlayCards(player1, cardsToPlay);
 
-            player1.Cards.Count().Should().Be(0);
+            player1.Cards.Should().NotContain(cardsToPlay);
         }
 
         [Test]
@@ -139,7 +140,6 @@
         [Test]
         public void When_Player_Plays_One_Card_They_Receive_One_Card()
         {
-            // var cardToPlay = Card.AceOfClubs;
             var player1 = new StubReadyPlayer(Card.AceOfClubs);
             var game = dealer.StartGame(new[] { player1 });
             game.PlayCards(player1, Card.AceOfClubs);
@@ -309,5 +309,32 @@
 
             outcome.Should().Be(ResultOutcome.Success);
         }
+    }
+
+    [TestFixture]
+    public class WithJackAsReverseOrderOfPlayCard
+    {
+        private Dealer dealer;
+        [SetUp]
+        public void Setup()
+        {
+            var rulesForCardByValue = new Dictionary<CardValue, RuleForCard>();
+            rulesForCardByValue.Add(CardValue.Jack, RuleForCard.ReverseOrderOfPlay);
+            dealer = new Dealer(new Deck(new NonShuffler()), new DummyCanStartGame(), rulesForCardByValue);
+        }
+
+        [Test]
+        public void After_Playing_Reverse_Order_Card_Order_Is_Reversed()
+        {
+            var player1 = new StubReadyPlayer("Ed");
+            var player2 = new StubReadyPlayer(Card.JackOfClubs);
+            var player3 = new StubReadyPlayer("Liam");
+
+            var game = dealer.StartGame(new[] { player1, player2, player3 }, player2);
+            game.PlayCards(player2, Card.JackOfClubs);
+
+            game.CurrentPlayer.Should().Be(player1);
+        }
+
     }
 }

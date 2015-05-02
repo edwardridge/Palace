@@ -16,7 +16,7 @@ namespace UnitTests
 
 		public StubReadyPlayer (ICollection<Card> cards, string name)
 		{
-			_cards = cards;
+		    _cards = new List<Card>(cards);
 			this._state = PlayerState.Ready;
 			this._name = name;
 		}
@@ -49,7 +49,10 @@ namespace UnitTests
 
 		public void RemoveCards (ICollection<Card> cards)
 		{
-			foreach (Card card in cards.ToList()) {
+		    var cardsInList = _cards.Where(c => c.Equals(cards.First())).ToList();
+            
+            foreach (Card card in cardsInList)
+            {
 				_cards.Remove (card);
 			}
 		}

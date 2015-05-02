@@ -40,7 +40,10 @@ namespace Palace
 
             player.AddCards(_cardDealer.DealCards(cards.Count));
 
-            _currentPlayerNode = _currentPlayerNode.Next ?? _players.First;
+            if (cards.First().Value == CardValue.Jack)
+                _currentPlayerNode = _currentPlayerNode.Previous ?? _players.Last;
+            else
+                _currentPlayerNode = _currentPlayerNode.Next ?? _players.First;
 
             return ResultOutcome.Success;
         }
