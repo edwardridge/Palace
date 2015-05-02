@@ -6,15 +6,15 @@ namespace Palace
 {
 	public class Game
 	{
-        internal Game(IEnumerable<IPlayer> players, ICanLayCards canLayCards, ICardDealer cardDealer)
-            : this(players, canLayCards, cardDealer, new List<Card>())
+        internal Game(IEnumerable<IPlayer> players, IRulesValidator rulesValidator, ICardDealer cardDealer)
+            : this(players, rulesValidator, cardDealer, new List<Card>())
         {
 
 		}
 
-        internal Game(IEnumerable<IPlayer> players, ICanLayCards canLayCards, ICardDealer cardDealer, IEnumerable<Card> cardsInPile)
+        internal Game(IEnumerable<IPlayer> players, IRulesValidator rulesValidator, ICardDealer cardDealer, IEnumerable<Card> cardsInPile)
         {
-            this.canLayCards = canLayCards;
+            this.rulesValidator = rulesValidator;
             this._players = new LinkedList<IPlayer>(players);
             this._playPile = new Stack<Card>(cardsInPile);
             this._cardDealer = cardDealer;
@@ -30,7 +30,7 @@ namespace Palace
             if (cards.Select(card => card.Value).Distinct().Count() != 1)
                 throw new ArgumentException("You cannot play more than one type of card");
 
-            if (!this.canLayCards.CardsPassRules(cards, _playPile.Any() ? _playPile.Peek() : null)) 
+            if (!this.rulesValidator.CardsPassRules(cards, _playPile.Any() ? _playPile.Peek() : null)) 
 				return ResultOutcome.Fail;
 				
 			player.RemoveCards (cards);
@@ -63,18 +63,14 @@ namespace Palace
 
         internal void Start(IPlayer startingPlayer)
         {
-            bool allPlayersReady = _players.All(player => player.State == PlayerState.Ready);
-
-            if (!allPlayersReady) throw new ArgumentException("Not all players are ready");
-
             _currentPlayerNode = _players.Find(startingPlayer);
         }
 			
 		private LinkedListNode<IPlayer> _currentPlayerNode;
 		private LinkedList<IPlayer> _players;
-		protected Stack<Card> _playPile;
+		private Stack<Card> _playPile;
 
-	    private ICanLayCards canLayCards;
+	    private IRulesValidator rulesValidator;
         private ICardDealer _cardDealer;
 	}
 

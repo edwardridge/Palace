@@ -20,9 +20,9 @@ namespace UnitTests
 
     
 
-    [TestFixture]
-	public static class GameInitialiseTests
-	{
+    //[TestFixture]
+    //public static class GameInitialiseTests
+    //{
         
 
 		[TestFixture]
@@ -74,7 +74,9 @@ namespace UnitTests
 				var player1 = new MockPlayerBuilder ().WithState (PlayerState.Setup).Build();
 				var player2 = new MockPlayerBuilder ().WithState (PlayerState.Ready).Build();
 
-                Action outcome = () => DealerHelper.TestDealer().StartGame(new[] { player1, player2 });
+			    var dealer = new Dealer(new Deck(new NonShuffler()), new CanStartGame());
+
+                Action outcome = () => dealer.StartGame(new[] { player1, player2 });
 
 				outcome.ShouldThrow<ArgumentException> ();
 			}
@@ -197,6 +199,6 @@ namespace UnitTests
 				}
 			}
 		}
-	}
+	//}
 
 

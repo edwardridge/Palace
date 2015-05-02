@@ -99,12 +99,13 @@ namespace UnitTests
         }
 
         [Test]
-        public void Cannot_Play_Multiple_Cards_Of_Different_Value(){
+        public void Cannot_Play_Multiple_Cards_Of_Different_Value()
+        {
             var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.AceOfClubs };
-            var player1 = new StubReadyPlayer (cardsToPlay);
+            var player1 = new StubReadyPlayer(cardsToPlay);
 
             var game = dealer.StartGame(new[] { player1 }, player1);
-            Action playerPlaysMultipleCardsOfDifferentValueOutcome = () => game.PlayCards (player1, cardsToPlay);
+            Action playerPlaysMultipleCardsOfDifferentValueOutcome = () => game.PlayCards(player1, cardsToPlay);
 
             playerPlaysMultipleCardsOfDifferentValueOutcome.ShouldThrow<ArgumentException>();
         }
@@ -137,15 +138,16 @@ namespace UnitTests
         [Test]
         public void When_Player_Plays_One_Card_They_Receive_One_Card()
         {
-//            var cardToPlay = Card.AceOfClubs;
+            //            var cardToPlay = Card.AceOfClubs;
             var player1 = new StubReadyPlayer(Card.AceOfClubs);
             var game = dealer.StartGame(new[] { player1 });
             game.PlayCards(player1, Card.AceOfClubs);
 
             player1.Cards.Count.Should().Be(1);
         }
+    }
 
-        [TestFixture]
+    [TestFixture]
         public class StandardClassRules{
 
                 private Dealer dealer;
@@ -168,7 +170,6 @@ namespace UnitTests
                     var outcome = game.PlayCards (player1, cardToPlay);
 
                     outcome.Should ().Be (ResultOutcome.Success);
-                    player1.Cards.Count ().Should ().Be (0);
                 }
 
                 [Test]
@@ -196,7 +197,6 @@ namespace UnitTests
                     var outcome = game.PlayCards(player1, cardToPlay);
 
                     outcome.Should().Be(ResultOutcome.Success);
-                    player1.Cards.Count().Should().Be(0);
                 }
             }
 
@@ -300,10 +300,10 @@ namespace UnitTests
             }
         
 
-        public static Deck NonShufflingDeck()
-        {
-            return new Deck(new NonShuffler());
-        }
-    }
+        //public static Deck NonShufflingDeck()
+        //{
+        //    return new Deck(new NonShuffler());
+        //}
+    
 }
 

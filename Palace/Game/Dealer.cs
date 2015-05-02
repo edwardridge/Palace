@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Palace
 {
-    public class Dealer : ICanLayCards, ICardDealer
+    public class Dealer : IRulesValidator
     {
         public Dealer(Deck deck, ICanStartGame canStartGame)
             : this(deck, canStartGame, new Dictionary<CardValue, RuleForCard>())
@@ -31,7 +31,7 @@ namespace Palace
         public Game StartGame(ICollection<IPlayer> players, IPlayer startingPlayer = null)
         {
             if (!this.canStartGame.GameIsReadyToStart(players))
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("The game is not ready to start");
 
             var game = new Game(players, this, _deck);
             if (startingPlayer == null)
@@ -90,10 +90,5 @@ namespace Palace
         private Deck _deck;
         private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
         private ICanStartGame canStartGame;
-
-        public IEnumerable<Card> DealCards(int count)
-        {
-            return _deck.DealCards(count);
-        }
     }
 }

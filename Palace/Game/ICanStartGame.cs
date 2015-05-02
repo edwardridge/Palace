@@ -13,8 +13,9 @@ namespace Palace
     {
         public bool GameIsReadyToStart(ICollection<IPlayer> players)
         {
-            var returnVal = !(players.Any(p => p.Cards.Count(c => c.CardOrientation == CardOrientation.FaceUp) != 3));
-            return returnVal;
+            var playersHaveThreeCardsFaceUp = !(players.Any(p => p.Cards.Count(c => c.CardOrientation == CardOrientation.FaceUp) != 3));
+
+            return playersHaveThreeCardsFaceUp;
         }
     }
 }
