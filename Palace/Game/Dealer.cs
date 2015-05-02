@@ -28,32 +28,27 @@ namespace Palace
             }
         }
 
-        public Game StartGameAndChooseStartingPlayer(ICollection<IPlayer> players)
+        public Game StartGame(ICollection<IPlayer> players, IPlayer startingPlayer = null)
         {
             if (!this.canStartGame.GameIsReadyToStart(players))
                 throw new InvalidOperationException();
 
             var game = new Game(players, this);
-
-            var startingPlayer = players.First();
-
-            foreach (var player in players)
+            if (startingPlayer == null)
             {
-                if (player.Cards == null || player.Cards.Count == 0)
-                    continue;
-                if (player.LowestCardInValue.Value < startingPlayer.LowestCardInValue.Value)
-                    startingPlayer = player;
+                startingPlayer = players.First();
+
+                foreach (var player in players)
+                {
+                    if (player.Cards == null || player.Cards.Count == 0)
+                        continue;
+                    if (player.LowestCardInValue.Value < startingPlayer.LowestCardInValue.Value)
+                        startingPlayer = player;
+                }
             }
 
             game.Start(startingPlayer);
             return game;
-        }
-
-        public Game StartGame(ICollection<IPlayer> players, IPlayer startingPlayer)
-        {
-            if (!this.canStartGame.GameIsReadyToStart(players))
-                throw new InvalidOperationException();
-            return this.ResumeGameWithPlayPile(players, startingPlayer, new List<Card>());
         }
 
         public Game ResumeGameWithPlayPile(ICollection<IPlayer> players, IPlayer startingPlayer, IEnumerable<Card> cardsInPile)

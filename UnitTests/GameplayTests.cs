@@ -261,7 +261,7 @@ namespace UnitTests
                 }
 
                 [Test]
-                public void AnyCardIsValid()
+                public void After_Playing_Reset_Card_Any_Card_IsValid()
                 {
                     var cardToPlay = Card.SixOfClubs;
                     var player1 = new StubReadyPlayer(cardToPlay);
@@ -274,12 +274,12 @@ namespace UnitTests
                 }
 
                 [Test]
-                public void TwoCardResetsThePlayPile()
+                public void Two_Card_Resets_The_Play_Pile()
                 {
                     var player1 = new StubReadyPlayer(new List<Card>(){Card.SixOfClubs, Card.SevenOfClubs});
                     var player2 = new StubReadyPlayer(Card.TwoOfClubs);
 
-                    var game = dealer.ResumeGameWithPlayPile(new[] { player1, player2 }, player1, new List<Card>());
+                    var game = dealer.StartGame(new[] { player1, player2 }, player1);
                     game.PlayCards(player1, Card.SevenOfClubs);
                     game.PlayCards(player2, Card.TwoOfClubs);
                     //Playing this card without the reset card would not be valid
