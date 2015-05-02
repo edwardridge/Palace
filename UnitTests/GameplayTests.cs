@@ -146,6 +146,17 @@
 
             player1.Cards.Count.Should().Be(1);
         }
+
+        [Test]
+        public void When_Player_Plays_Two_Cards_They_Receive_Two_Cards()
+        {
+            var cards = new List<Card>() { Card.AceOfClubs, Card.AceOfClubs };
+            var player1 = new StubReadyPlayer(cards);
+            var game = dealer.StartGame(new[] { player1 });
+            game.PlayCards(player1, cards);
+
+            player1.Cards.Count.Should().Be(cards.Count);
+        }
     }
 
     [TestFixture]
@@ -184,7 +195,6 @@
             var outcome = game.PlayCards(player1, cardToPlay);
 
             outcome.Should().Be(ResultOutcome.Fail);
-            player1.Cards.Count().Should().Be(1);
         }
 
         [Test]
@@ -227,7 +237,6 @@
             var outcome = game.PlayCards(player1, cardToPlay);
 
             outcome.Should().Be(ResultOutcome.Fail);
-            player1.Cards.Count().Should().Be(1);
         }
 
         [Test]
