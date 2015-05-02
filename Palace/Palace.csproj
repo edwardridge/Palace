@@ -36,7 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Game\Dealer.cs" />
-    <Compile Include="Game\IRulesValidator.cs" />
+    <Compile Include="Game\ICanLayCards.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Card\Card.cs" />
@@ -54,7 +54,7 @@
     <Compile Include="Game\GameState.cs" />
     <Compile Include="Card\CardValue.cs" />
     <Compile Include="Card\RuleForCard.cs" />
-    <Compile Include="Game\IGameStartValidator.cs" />
+    <Compile Include="Game\ICanStartGame.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

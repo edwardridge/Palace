@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Palace
 {
-    public class Dealer : IRulesValidator
+    public class Dealer : ICanLayCards
     {
-        public Dealer(Deck deck, IGameStartValidator gameStartValidator)
-            : this(deck, gameStartValidator, new Dictionary<CardValue, RuleForCard>())
+        public Dealer(Deck deck, ICanStartGame canStartGame)
+            : this(deck, canStartGame, new Dictionary<CardValue, RuleForCard>())
         {
 
         }
 
-        public Dealer(Deck deck, IGameStartValidator gameStartValidator, Dictionary<CardValue, RuleForCard> rulesForCardsByValue)
+        public Dealer(Deck deck, ICanStartGame canStartGame, Dictionary<CardValue, RuleForCard> rulesForCardsByValue)
         {
             this._deck = deck;
             this._rulesForCardsByValue = rulesForCardsByValue;
-            this._gameStartValidator = gameStartValidator;
+            this.canStartGame = canStartGame;
         }
 
         public void DealIntialCards(ICollection<IPlayer> players)
@@ -29,9 +28,9 @@ namespace Palace
             }
         }
 
-        public Game StartGame(ICollection<IPlayer> players)
+        public Game StartGameAndChooseStartingPlayer(ICollection<IPlayer> players)
         {
-            if (!_gameStartValidator.GameIsReadyToStart(players))
+            if (!this.canStartGame.GameIsReadyToStart(players))
                 throw new InvalidOperationException();
 
             var game = new Game(players, this);
@@ -50,14 +49,16 @@ namespace Palace
             return game;
         }
 
-        public Game ResumeGame(ICollection<IPlayer> players, IPlayer startingPlayer)
+        public Game StartGame(ICollection<IPlayer> players, IPlayer startingPlayer)
         {
-            return ResumeGame(players, startingPlayer, new List<Card>());
+            if (!this.canStartGame.GameIsReadyToStart(players))
+                throw new InvalidOperationException();
+            return this.ResumeGameWithPlayPile(players, startingPlayer, new List<Card>());
         }
 
-        public Game ResumeGame(ICollection<IPlayer> players, IPlayer startingPlayer, IEnumerable<Card> cardsInPile)
+        public Game ResumeGameWithPlayPile(ICollection<IPlayer> players, IPlayer startingPlayer, IEnumerable<Card> cardsInPile)
         {
-            var game = new Game(players, this);
+            var game = new Game(players, this, cardsInPile);
             game.Start(startingPlayer);
             return game;
         }
@@ -70,12 +71,16 @@ namespace Palace
                 return true;
 
             var playersCard = cardsList.First();
-            var ruleForCard = this.getRuleForCardFromCardValue(playersCard.Value);
+            var ruleForLastCardPlayed = this.getRuleForCardFromCardValue(lastCardPlayed.Value);
+            var rulesForPlayersCard = this.getRuleForCardFromCardValue(playersCard.Value);
 
-            if (ruleForCard == RuleForCard.Standard && playersCard.Value < lastCardPlayed.Value)
+            if (ruleForLastCardPlayed == RuleForCard.Reset || rulesForPlayersCard == RuleForCard.Reset)
+                return true;
+            if (ruleForLastCardPlayed == RuleForCard.Standard && playersCard.Value < lastCardPlayed.Value)
                 return false;
-            if (ruleForCard == RuleForCard.LowerThan && playersCard.Value > lastCardPlayed.Value)
+            if (ruleForLastCardPlayed == RuleForCard.LowerThan && playersCard.Value > lastCardPlayed.Value)
                 return false;
+            
 
             return true;
         }
@@ -89,6 +94,6 @@ namespace Palace
 
         private Deck _deck;
         private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
-        private IGameStartValidator _gameStartValidator;
+        private ICanStartGame canStartGame;
     }
 }

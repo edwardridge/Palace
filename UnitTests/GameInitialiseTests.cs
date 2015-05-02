@@ -11,7 +11,7 @@ namespace UnitTests
 {
     using UnitTests.Helpers;
 
-    public class DummyGameStartValidator : IGameStartValidator{
+    public class DummyCanStartGame : ICanStartGame{
 		public bool GameIsReadyToStart (ICollection<IPlayer> players)
 		{
 			return true;
@@ -38,9 +38,9 @@ namespace UnitTests
 				player1 = new StubReadyPlayer ();
 				player2 = new StubReadyPlayer ();
 				var deck = new Deck (new NonShuffler ());
-			    dealer = new Dealer(deck, new DummyGameStartValidator());
+			    dealer = new Dealer(deck, new DummyCanStartGame());
                 dealer.DealIntialCards(new List<IPlayer>() { player1, player2 });
-                game = dealer.StartGame(new List<IPlayer>() { player1, player2 });
+                game = dealer.StartGameAndChooseStartingPlayer(new List<IPlayer>() { player1, player2 });
 			}
 
 			[Test]
@@ -74,7 +74,7 @@ namespace UnitTests
 				var player1 = new MockPlayerBuilder ().WithState (PlayerState.Setup).Build();
 				var player2 = new MockPlayerBuilder ().WithState (PlayerState.Ready).Build();
 
-                Action outcome = () => DealerHelper.TestDealer().StartGame(new[] { player1, player2 });
+                Action outcome = () => DealerHelper.TestDealer().StartGameAndChooseStartingPlayer(new[] { player1, player2 });
 
 				outcome.ShouldThrow<ArgumentException> ();
 			}
@@ -84,7 +84,7 @@ namespace UnitTests
 				var player1 = new StubReadyPlayer ();
 				var player2 = new StubReadyPlayer ();
 
-                Action outcome = () => DealerHelper.TestDealer().StartGame(new[] { player1, player2 });
+                Action outcome = () => DealerHelper.TestDealer().StartGameAndChooseStartingPlayer(new[] { player1, player2 });
 
 				outcome.ShouldNotThrow ();
 			}
@@ -99,13 +99,13 @@ namespace UnitTests
 			[SetUp]
 			public void Setup(){
 				player1 = new Player ("Ed");
-				dealer = new Dealer (new Deck (new NonShuffler ()), new GameStartValidator ());
+				dealer = new Dealer (new Deck (new NonShuffler ()), new CanStartGame ());
 			}
 
 			[Test]
 			public void Player_Cannot_Be_Ready_With_No_Face_Up_Cards(){
 				//Don't put any cards face up
-				Action outcome = () => dealer.StartGame(new []{player1});
+				Action outcome = () => dealer.StartGameAndChooseStartingPlayer(new []{player1});
 
 				outcome.ShouldThrow<InvalidOperationException> ();
 			}
@@ -115,7 +115,7 @@ namespace UnitTests
 				player1.AddCards(new []{new Card(CardValue.Ace, Suit.Club, CardOrientation.FaceUp), 
 					new Card(CardValue.Ace, Suit.Club,CardOrientation.FaceUp)});
 
-				Action outcome = () => dealer.StartGame(new []{player1});
+				Action outcome = () => dealer.StartGameAndChooseStartingPlayer(new []{player1});
 
 				outcome.ShouldThrow<InvalidOperationException> ();
 			}
@@ -170,7 +170,7 @@ namespace UnitTests
 					player1.AddCards(new []{ Card.TwoOfClubs });
 					player2.AddCards(new []{ Card.ThreeOfClubs });
 
-                    game = dealer.StartGame(new[] { player1, player2 });
+                    game = dealer.StartGameAndChooseStartingPlayer(new[] { player1, player2 });
 
 					game.CurrentPlayer.Should().Be(player1);
 				}
@@ -180,7 +180,7 @@ namespace UnitTests
                     player1.AddCards(new[] { Card.ThreeOfClubs });
                     player2.AddCards(new[] { Card.TwoOfClubs });
 
-                    game = dealer.StartGame(new[] { player1, player2 });
+                    game = dealer.StartGameAndChooseStartingPlayer(new[] { player1, player2 });
 					
 					game.CurrentPlayer.Should().Be(player2);
 				}
@@ -191,7 +191,7 @@ namespace UnitTests
                     player2.AddCards(new[] { Card.ThreeOfClubs });
                     player3.AddCards(new[] { Card.TwoOfClubs });
 
-                    game = dealer.StartGame(new[] { player1, player2, player3 });
+                    game = dealer.StartGameAndChooseStartingPlayer(new[] { player1, player2, player3 });
 
 					game.CurrentPlayer.Should().Be(player3);
 				}

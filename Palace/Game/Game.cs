@@ -4,23 +4,17 @@ using System.Linq;
 
 namespace Palace
 {
-	
-
-    
-
-   
-
 	public class Game
 	{
-        internal Game(IEnumerable<IPlayer> players, IRulesValidator rulesValidator)
-            : this(players, rulesValidator, new List<Card>())
+        internal Game(IEnumerable<IPlayer> players, ICanLayCards canLayCards)
+            : this(players, canLayCards, new List<Card>())
         {
 
 		}
 
-        internal Game(IEnumerable<IPlayer> players, IRulesValidator rulesValidator, IEnumerable<Card> cardsInPile)
+        internal Game(IEnumerable<IPlayer> players, ICanLayCards canLayCards, IEnumerable<Card> cardsInPile)
         {
-            this._rulesValidator = rulesValidator;
+            this.canLayCards = canLayCards;
             this._players = new LinkedList<IPlayer>(players);
             this._playPile = new Stack<Card>(cardsInPile);
 
@@ -29,13 +23,13 @@ namespace Palace
 
 		public ResultOutcome PlayCards (IPlayer player, ICollection<Card> cards)
 		{
-            if (cards.Except(player.Cards).Any())
+		    if (cards.Except(player.Cards).Any())
                 throw new ArgumentException("You cannot play cards you don't have!");
 
             if (cards.Select(card => card.Value).Distinct().Count() != 1)
                 throw new ArgumentException("You cannot play more than one type of card");
 
-            if (!_rulesValidator.CardsPassRules(cards, _playPile.Any() ? _playPile.Peek() : null)) 
+            if (!this.canLayCards.CardsPassRules(cards, _playPile.Any() ? _playPile.Peek() : null)) 
 				return ResultOutcome.Fail;
 				
 			player.RemoveCards (cards);
@@ -77,7 +71,7 @@ namespace Palace
 		private LinkedList<IPlayer> _players;
 		protected Stack<Card> _playPile;
 
-	    private IRulesValidator _rulesValidator;
+	    private ICanLayCards canLayCards;
 	}
 
 }

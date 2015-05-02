@@ -2,7 +2,7 @@
 
 namespace Palace
 {
-    interface IRulesValidator
+    interface ICanLayCards
     {
         bool CardsPassRules(IEnumerable<Card> cardsToPlay, Card lastCardPlayed);
     }

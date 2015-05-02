@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace Palace
 {
-	public interface IGameStartValidator
+	public interface ICanStartGame
 	{
 		bool GameIsReadyToStart(ICollection<IPlayer> players);
 	}
 
-    public class GameStartValidator : IGameStartValidator
+    public class CanStartGame : ICanStartGame
     {
         public bool GameIsReadyToStart(ICollection<IPlayer> players)
         {

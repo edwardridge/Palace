@@ -1,5 +1,7 @@
 ﻿namespace Palace
 {
+    using System;
+
     public class Card
     {
 		public Suit Suit { get; private set; }
@@ -19,8 +21,17 @@
 			this.CardOrientation = cardOrientation;
         }
 
-		public virtual bool Equals(Card comparison){
-			return this.Suit == comparison.Suit && this.Value == comparison.Value;
+        public override int GetHashCode()
+        {
+            return (int)this.Value.GetHashCode() + (int)this.Suit.GetHashCode();
+        }
+
+		public override bool Equals(Object comparison)
+		{
+		    var comparisonCard = comparison as Card;
+		    if (comparisonCard ==  null)
+		        return false;
+			return this.Suit == comparisonCard.Suit && this.Value == comparisonCard.Value;
 		}
 
         public static Card AceOfClubs { get { return new Card(CardValue.Ace, Suit.Club); } }
@@ -37,8 +48,8 @@
 
         public static Card SevenOfClubs { get { return new Card(CardValue.Seven, Suit.Club); } }
 
-        public static Card EightOfClubs { get { return new Card(CardValue.Seven, Suit.Club); } }
+        public static Card EightOfClubs { get { return new Card(CardValue.Eight, Suit.Club); } }
 
-        public static Card FourOfSpades { get { return new Card(CardValue.Seven, Suit.Spade); } }
+        public static Card FourOfSpades { get { return new Card(CardValue.Four, Suit.Spade); } }
     }
 }
