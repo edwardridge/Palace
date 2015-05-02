@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Palace
+﻿namespace Palace
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     public class Dealer : IRulesValidator
     {
         public Dealer(Deck deck, ICanStartGame canStartGame)
             : this(deck, canStartGame, new Dictionary<CardValue, RuleForCard>())
         {
-
         }
 
         public Dealer(Deck deck, ICanStartGame canStartGame, Dictionary<CardValue, RuleForCard> rulesForCardsByValue)
@@ -75,7 +74,6 @@ namespace Palace
                 return false;
             if (ruleForLastCardPlayed == RuleForCard.LowerThan && playersCard.Value > lastCardPlayed.Value)
                 return false;
-            
 
             return true;
         }
@@ -88,7 +86,9 @@ namespace Palace
         }
 
         private Deck _deck;
+
         private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
+
         private ICanStartGame canStartGame;
     }
 }

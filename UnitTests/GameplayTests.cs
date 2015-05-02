@@ -1,12 +1,15 @@
-﻿using System;
-using NUnit.Framework;
-using Palace;
-using System.Linq;
-using FluentAssertions;
-using System.Collections.Generic;
-
-namespace UnitTests
+﻿namespace UnitTests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using FluentAssertions;
+
+    using NUnit.Framework;
+
+    using Palace;
+
     using UnitTests.Helpers;
 
     [TestFixture]
@@ -34,7 +37,6 @@ namespace UnitTests
             playingCardsPlayerHasOutcome.ShouldThrow<ArgumentException>();
         }
 
-
         [Test]
         public void Player_Can_Play_Card_Player_Has()
         {
@@ -58,7 +60,6 @@ namespace UnitTests
             Action result = () => game.PlayCards(player1, cardsPlayerPlays);
 
             result.ShouldThrow<ArgumentException>();
-
         }
 
         [Test]
@@ -138,7 +139,7 @@ namespace UnitTests
         [Test]
         public void When_Player_Plays_One_Card_They_Receive_One_Card()
         {
-            //            var cardToPlay = Card.AceOfClubs;
+            // var cardToPlay = Card.AceOfClubs;
             var player1 = new StubReadyPlayer(Card.AceOfClubs);
             var game = dealer.StartGame(new[] { player1 });
             game.PlayCards(player1, Card.AceOfClubs);
@@ -148,162 +149,156 @@ namespace UnitTests
     }
 
     [TestFixture]
-        public class StandardClassRules{
+    public class StandardClassRules
+    {
+        private Dealer dealer;
 
-                private Dealer dealer;
+        [SetUp]
+        public void Setup()
+        {
+            dealer = DealerHelper.TestDealer();
+        }
 
-                [SetUp]
-                public void Setup()
-                {
-                    dealer = DealerHelper.TestDealer();
-                }
+        [Test]
+        public void Playing_Card_Higher_In_Value_Is_Valid()
+        {
+            var cardToPlay = Card.ThreeOfClubs;
+            var player1 = new StubReadyPlayer(cardToPlay);
 
-                [Test]
-                public void Playing_Card_Higher_In_Value_Is_Valid()
-                {
-                    var cardToPlay = Card.ThreeOfClubs;
-                    var player1 = new StubReadyPlayer (cardToPlay);
+            var cardInPile = new Stack<Card>();
+            cardInPile.Push(Card.TwoOfClubs);
+            var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
+            var outcome = game.PlayCards(player1, cardToPlay);
 
-                    var cardInPile = new Stack<Card>();
-                    cardInPile.Push (Card.TwoOfClubs);
-                    var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
-                    var outcome = game.PlayCards (player1, cardToPlay);
+            outcome.Should().Be(ResultOutcome.Success);
+        }
 
-                    outcome.Should ().Be (ResultOutcome.Success);
-                }
+        [Test]
+        public void Playing_Card_Lower_In_Value_Isnt_Valid()
+        {
+            var cardToPlay = Card.ThreeOfClubs;
+            var player1 = new StubReadyPlayer(cardToPlay);
 
-                [Test]
-                public void Playing_Card_Lower_In_Value_Isnt_Valid()
-                {
-                    var cardToPlay = Card.ThreeOfClubs;
-                    var player1 = new StubReadyPlayer(cardToPlay);
+            var cardInPile = Card.FiveOfClubs;
+            var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, new[] { cardInPile });
+            var outcome = game.PlayCards(player1, cardToPlay);
 
-                    var cardInPile = Card.FiveOfClubs;
-                    var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, new[]{cardInPile});
-                    var outcome = game.PlayCards(player1, cardToPlay);
+            outcome.Should().Be(ResultOutcome.Fail);
+            player1.Cards.Count().Should().Be(1);
+        }
 
-                    outcome.Should().Be(ResultOutcome.Fail);
-                    player1.Cards.Count().Should().Be(1);
-                }
+        [Test]
+        public void Play_Card_Of_Same_Value_Is_Valid()
+        {
+            var cardToPlay = Card.FourOfClubs;
+            var player1 = new StubReadyPlayer(cardToPlay);
 
-                [Test]
-                public void Play_Card_Of_Same_Value_Is_Valid()
-                {
-                    var cardToPlay = Card.FourOfClubs;
-                    var player1 = new StubReadyPlayer(cardToPlay);
+            var cardInPile = new List<Card>(new[] { Card.FourOfClubs });
+            var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
+            var outcome = game.PlayCards(player1, cardToPlay);
 
-                    var cardInPile = new List<Card>(new[] { Card.FourOfClubs });
-                    var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
-                    var outcome = game.PlayCards(player1, cardToPlay);
+            outcome.Should().Be(ResultOutcome.Success);
+        }
+    }
 
-                    outcome.Should().Be(ResultOutcome.Success);
-                }
-            }
+    [TestFixture]
+    public class WithSevenAsLowerThanCard
+    {
+        private Dictionary<CardValue, RuleForCard> cardTypes;
 
-            [TestFixture]
-            public class WithSevenAsLowerThanCard
-            {
-                Dictionary<CardValue, RuleForCard> cardTypes;
+        private Dealer dealer;
 
-                private Dealer dealer;
-                [SetUp]
-                public void Setup()
-                {
-                    cardTypes = new Dictionary<CardValue, RuleForCard>();
-                    cardTypes.Add(CardValue.Seven, RuleForCard.LowerThan);
-                    dealer = DealerHelper.TestDealerWithRules(cardTypes);
-                }
+        [SetUp]
+        public void Setup()
+        {
+            cardTypes = new Dictionary<CardValue, RuleForCard>();
+            cardTypes.Add(CardValue.Seven, RuleForCard.LowerThan);
+            dealer = DealerHelper.TestDealerWithRules(cardTypes);
+        }
 
-                [Test]
-                public void Playing_Card_Higher_In_Value_Isnt_Valid()
-                {
-                    var cardToPlay = Card.EightOfClubs;
-                    var player1 = new StubReadyPlayer(cardToPlay);
+        [Test]
+        public void Playing_Card_Higher_In_Value_Isnt_Valid()
+        {
+            var cardToPlay = Card.EightOfClubs;
+            var player1 = new StubReadyPlayer(cardToPlay);
 
-                    var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
-                    var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
-                    var outcome = game.PlayCards(player1, cardToPlay);
+            var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
+            var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
+            var outcome = game.PlayCards(player1, cardToPlay);
 
-                    outcome.Should().Be(ResultOutcome.Fail);
-                    player1.Cards.Count().Should().Be(1);
-                }
+            outcome.Should().Be(ResultOutcome.Fail);
+            player1.Cards.Count().Should().Be(1);
+        }
 
-                [Test]
-                public void Playing_Card_Lower_In_Value_Is_Valid()
-                {
-                    var cardToPlay = Card.SixOfClubs;
-                    var player1 = new StubReadyPlayer(cardToPlay);
+        [Test]
+        public void Playing_Card_Lower_In_Value_Is_Valid()
+        {
+            var cardToPlay = Card.SixOfClubs;
+            var player1 = new StubReadyPlayer(cardToPlay);
 
-                    var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
-                    var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
-                    var outcome = game.PlayCards(player1, cardToPlay);
+            var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
+            var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
+            var outcome = game.PlayCards(player1, cardToPlay);
 
-                    outcome.Should().Be(ResultOutcome.Success);
-                }
+            outcome.Should().Be(ResultOutcome.Success);
+        }
 
-                [Test]
-                public void Playing_Card_Of_Same_Value_Is_Valid()
-                {
-                    var cardToPlay = Card.SevenOfClubs;
-                    var player1 = new StubReadyPlayer(cardToPlay);
+        [Test]
+        public void Playing_Card_Of_Same_Value_Is_Valid()
+        {
+            var cardToPlay = Card.SevenOfClubs;
+            var player1 = new StubReadyPlayer(cardToPlay);
 
-                    var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
-                    var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
-                    var outcome = game.PlayCards(player1, cardToPlay);
+            var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
+            var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
+            var outcome = game.PlayCards(player1, cardToPlay);
 
-                    outcome.Should().Be(ResultOutcome.Success);
-                }
-            }
+            outcome.Should().Be(ResultOutcome.Success);
+        }
+    }
 
-            [TestFixture]
-            public class WithTwoAsResetCard
-            {
-                Dictionary<CardValue, RuleForCard> rulesForCardsByValue;
+    [TestFixture]
+    public class WithTwoAsResetCard
+    {
+        private Dictionary<CardValue, RuleForCard> rulesForCardsByValue;
 
-                private Dealer dealer;
+        private Dealer dealer;
 
-                [SetUp]
-                public void Setup()
-                {
-                    rulesForCardsByValue = new Dictionary<CardValue, RuleForCard>();
-                    rulesForCardsByValue.Add(CardValue.Two, RuleForCard.Reset);
-                    dealer = DealerHelper.TestDealerWithRules(rulesForCardsByValue);
-                }
+        [SetUp]
+        public void Setup()
+        {
+            rulesForCardsByValue = new Dictionary<CardValue, RuleForCard>();
+            rulesForCardsByValue.Add(CardValue.Two, RuleForCard.Reset);
+            dealer = DealerHelper.TestDealerWithRules(rulesForCardsByValue);
+        }
 
-                [Test]
-                public void After_Playing_Reset_Card_Any_Card_IsValid()
-                {
-                    var cardToPlay = Card.SixOfClubs;
-                    var player1 = new StubReadyPlayer(cardToPlay);
+        [Test]
+        public void After_Playing_Reset_Card_Any_Card_IsValid()
+        {
+            var cardToPlay = Card.SixOfClubs;
+            var player1 = new StubReadyPlayer(cardToPlay);
 
-                    var cardInPile = new List<Card>(new[] { Card.TwoOfClubs });
-                    var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
-                    var outcome = game.PlayCards(player1, cardToPlay);
+            var cardInPile = new List<Card>(new[] { Card.TwoOfClubs });
+            var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
+            var outcome = game.PlayCards(player1, cardToPlay);
 
-                    outcome.Should().Be(ResultOutcome.Success);
-                }
+            outcome.Should().Be(ResultOutcome.Success);
+        }
 
-                [Test]
-                public void Two_Card_Resets_The_Play_Pile()
-                {
-                    var player1 = new StubReadyPlayer(new List<Card>(){Card.SixOfClubs, Card.SevenOfClubs});
-                    var player2 = new StubReadyPlayer(Card.TwoOfClubs);
+        [Test]
+        public void Two_Card_Resets_The_Play_Pile()
+        {
+            var player1 = new StubReadyPlayer(new List<Card>() { Card.SixOfClubs, Card.SevenOfClubs });
+            var player2 = new StubReadyPlayer(Card.TwoOfClubs);
 
-                    var game = dealer.StartGame(new[] { player1, player2 }, player1);
-                    game.PlayCards(player1, Card.SevenOfClubs);
-                    game.PlayCards(player2, Card.TwoOfClubs);
-                    //Playing this card without the reset card would not be valid
-                    var outcome = game.PlayCards(player1, Card.SixOfClubs); 
+            var game = dealer.StartGame(new[] { player1, player2 }, player1);
+            game.PlayCards(player1, Card.SevenOfClubs);
+            game.PlayCards(player2, Card.TwoOfClubs);
 
-                    outcome.Should().Be(ResultOutcome.Success);
-                }
-            }
-        
+            // Playing this card without the reset card would not be valid
+            var outcome = game.PlayCards(player1, Card.SixOfClubs);
 
-        //public static Deck NonShufflingDeck()
-        //{
-        //    return new Deck(new NonShuffler());
-        //}
-    
+            outcome.Should().Be(ResultOutcome.Success);
+        }
+    }
 }
-
