@@ -39,7 +39,7 @@
         {
             player1 = new StubReadyPlayer();
             player2 = new StubReadyPlayer();
-            var deck = new Deck(new NonShuffler());
+            var deck = new StandardDeck();
             dealer = new Dealer(deck, new DummyCanStartGame());
             dealer.DealIntialCards(new List<IPlayer>() { player1, player2 });
             game = dealer.StartGame(new List<IPlayer>() { player1, player2 });
@@ -81,7 +81,7 @@
             var player1 = new MockPlayerBuilder().WithState(PlayerState.Setup).Build();
             var player2 = new MockPlayerBuilder().WithState(PlayerState.Ready).Build();
 
-            var dealer = new Dealer(new Deck(new NonShuffler()), new CanStartGame());
+            var dealer = new Dealer(new StandardDeck(), new CanStartGame());
 
             Action outcome = () => dealer.StartGame(new[] { player1, player2 });
 
@@ -111,7 +111,7 @@
         public void Setup()
         {
             player1 = new Player("Ed");
-            dealer = new Dealer(new Deck(new NonShuffler()), new CanStartGame());
+            dealer = new Dealer(new StandardDeck(), new CanStartGame());
         }
 
         [Test]

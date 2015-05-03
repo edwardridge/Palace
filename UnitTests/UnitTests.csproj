@@ -47,8 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\DealerHelper.cs" />
-    <Compile Include="Shufflers\NonShuffler.cs" />
-    <Compile Include="Shufflers\PredeterminedShuffler.cs" />
     <Compile Include="GameInitialiseTests.cs" />
     <Compile Include="GameplayTests.cs" />
     <Compile Include="Helpers\CardHelpers.cs" />

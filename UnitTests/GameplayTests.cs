@@ -65,7 +65,8 @@
         [Test]
         public void When_Player_Plays_Card_Card_Is_Removed_From_Hand()
         {
-            var dealerForThisTest = new Dealer(new Deck(new PredeterminedShuffler(new[] { Card.ThreeOfClubs })), new DummyCanStartGame());
+            var deck = new PredeterminedDeck(new[] { Card.ThreeOfClubs });
+            var dealerForThisTest = new Dealer(deck, new DummyCanStartGame());
             var cardToPlay = Card.FourOfClubs;
             var player1 = new StubReadyPlayer(cardToPlay);
 
@@ -90,7 +91,8 @@
         [Test]
         public void When_PLayer_Plays_Multiple_Cards_Cards_Are_Removed_From_Hand()
         {
-            var dealerForThisTest = new Dealer(new Deck(new PredeterminedShuffler(new[] { Card.AceOfClubs, Card.AceOfClubs })), new DummyCanStartGame());
+            var deck = new PredeterminedDeck(new[] { Card.AceOfClubs, Card.AceOfClubs });
+            var dealerForThisTest = new Dealer(deck, new DummyCanStartGame());
             var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
             var player1 = new StubReadyPlayer(cardsToPlay);
 
@@ -320,7 +322,7 @@
         {
             var rulesForCardByValue = new Dictionary<CardValue, RuleForCard>();
             rulesForCardByValue.Add(CardValue.Jack, RuleForCard.ReverseOrderOfPlay);
-            dealer = new Dealer(new Deck(new NonShuffler()), new DummyCanStartGame(), rulesForCardByValue);
+            dealer = new Dealer(new StandardDeck(), new DummyCanStartGame(), rulesForCardByValue);
         }
 
         [Test]

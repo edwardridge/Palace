@@ -3,19 +3,21 @@ using System.Linq;
 
 namespace Palace
 {
-	public class Deck : ICardDealer
+	public abstract class Deck : ICardDealer
 	{
-		private ICollection<Card> cards;
+		protected ICollection<Card> cards;
 
-		public Deck(IShuffler shuffler) : this(shuffler, new Pack()){
+		internal Deck(IEnumerable<Card> cards)
+		{
+		    this.cards = new List<Card>(cards);
 		}
 
-		public Deck(IShuffler shuffler, Pack pack)
-	    {
-			cards = pack.Cards;
+        //public Deck(IShuffler shuffler, Pack pack)
+        //{
+        //    cards = pack.Cards;
 
-			cards = shuffler.ShuffleCards (cards);
-		}
+        //    cards = shuffler.ShuffleCards (cards);
+        //}
 
 		//Aside from setup we can assume we want in hand cards
 		public IEnumerable<Card> DealCards (int count){

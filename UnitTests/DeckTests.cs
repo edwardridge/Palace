@@ -16,9 +16,7 @@ namespace UnitTests
 
 			[SetUp]
 			public void Setup(){
-				var nonShuffler = new NonShuffler ();
-				Pack pack = new Pack ();
-				deck = new Deck (nonShuffler, pack);
+				deck = new StandardDeck();
 			}
 
 			[Test]
@@ -93,9 +91,9 @@ namespace UnitTests
 			[SetUp]
 			public void Setup(){
 				var order = CardHelpers.ConvertIntegersToCardsWithSuitClub(new List<int>(){ 7,2,10,3,5,2,5,6,4,8,12,51});
-				var predeterminedShuffler = new PredeterminedShuffler (order);
-				Pack pack = new Pack ();
-				deck = new Deck (predeterminedShuffler, pack);
+				//var predeterminedShuffler = new PredeterminedShuffler (order);
+				//Pack pack = new Pack ();
+                deck = new PredeterminedDeck(order);
 				preDeckCount = deck.CardCount ();
 			}
 
@@ -138,9 +136,8 @@ namespace UnitTests
 			Deck deck;
 			[SetUp]
 			public void Setup(){
-				IShuffler randomiser = new NonShuffler ();
-				Pack pack = new Pack (2);
-				deck = new Deck (randomiser, pack);
+                //Deck with two random cards
+				deck = new PredeterminedDeck(new []{Card.AceOfClubs, Card.AceOfClubs});
 			}
 
 			[Test]

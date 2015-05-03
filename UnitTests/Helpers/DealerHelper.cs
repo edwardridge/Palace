@@ -11,12 +11,12 @@ namespace UnitTests.Helpers
     {
         public static Dealer TestDealer()
         {
-            return new Dealer(new Deck(new NonShuffler()), new DummyCanStartGame());
+            return new Dealer(new StandardDeck(), new DummyCanStartGame());
         }
 
         public static Dealer TestDealerWithRules(Dictionary<CardValue, RuleForCard> rulesForCardByValue)
         {
-            return new Dealer(new Deck(new NonShuffler()), new DummyCanStartGame(), rulesForCardByValue);
+            return new Dealer(new StandardDeck(), new DummyCanStartGame(), rulesForCardByValue);
         }
     }
 }
