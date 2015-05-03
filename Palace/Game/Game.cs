@@ -4,16 +4,21 @@ namespace Palace
     using System.Collections.Generic;
     using System.Linq;
 
-    public class Game
+    public interface IReverseOrderOfPlay
     {
-        internal Game(IEnumerable<IPlayer> players, IRulesValidator rulesValidator, ICardDealer cardDealer)
-            : this(players, rulesValidator, cardDealer, new List<Card>())
+        void ReverseOrderOfPlay();
+    }
+
+    public class Game : IReverseOrderOfPlay
+    {
+        internal Game(IEnumerable<IPlayer> players, IRulesProcessesor rulesProcessesor, ICardDealer cardDealer)
+            : this(players, rulesProcessesor, cardDealer, new List<Card>())
         {
         }
 
-        internal Game(IEnumerable<IPlayer> players, IRulesValidator rulesValidator, ICardDealer cardDealer, IEnumerable<Card> cardsInPile)
+        internal Game(IEnumerable<IPlayer> players, IRulesProcessesor rulesProcessesor, ICardDealer cardDealer, IEnumerable<Card> cardsInPile)
         {
-            this.rulesValidator = rulesValidator;
+            this.rulesProcessesor = rulesProcessesor;
             this._players = new LinkedList<IPlayer>(players);
             this._playPile = new Stack<Card>(cardsInPile);
             this._cardDealer = cardDealer;
@@ -30,7 +35,7 @@ namespace Palace
             if (cards.Select(card => card.Value).Distinct().Count() != 1)
                 throw new ArgumentException("You cannot play more than one type of card");
 
-            if (!this.rulesValidator.CardsPassRules(cards, _playPile.Any() ? _playPile.Peek() : null))
+            if (!this.rulesProcessesor.ProcessRulesForGame(this, cards, _playPile.Any() ? _playPile.Peek() : null))
                 return ResultOutcome.Fail;
 
             player.RemoveCards(cards);
@@ -41,8 +46,8 @@ namespace Palace
 
             player.AddCards(_cardDealer.DealCards(cards.Count));
 
-            if (cards.First().Value == CardValue.Jack)
-                _orderIsGoingForward = !_orderIsGoingForward;
+            //if (cards.First().Value == CardValue.Jack)
+            //    _orderIsGoingForward = !_orderIsGoingForward;
 
             this.chooseCurrentPlayer();
 
@@ -97,10 +102,15 @@ namespace Palace
 
         private Stack<Card> _playPile;
 
-        private IRulesValidator rulesValidator;
+        private IRulesProcessesor rulesProcessesor;
 
         private ICardDealer _cardDealer;
 
         private bool _orderIsGoingForward;
+
+        public void ReverseOrderOfPlay()
+        {
+            _orderIsGoingForward = !_orderIsGoingForward;
+        }
     }
 }

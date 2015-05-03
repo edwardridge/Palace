@@ -353,4 +353,30 @@
         }
 
     }
+
+    [TestFixture]
+    public class WithEightAsReverseOrderOfPlayCard
+    {
+        private Dealer dealer;
+        [SetUp]
+        public void Setup()
+        {
+            var rulesForCardsByValue = new Dictionary<CardValue, RuleForCard>();
+            rulesForCardsByValue.Add(CardValue.Eight, RuleForCard.ReverseOrderOfPlay);
+            dealer = DealerHelper.TestDealerWithRules(rulesForCardsByValue);
+        }
+
+        [Test]
+        public void Playing_Reverse_Order_Of_Play_Card_Reverses_Order_Of_Play()
+        {
+            var player1 = new StubReadyPlayer(Card.JackOfClubs, "Ed");
+            var player2 = new StubReadyPlayer(Card.EightOfClubs);
+            var player3 = new StubReadyPlayer("Liam");
+
+            var game = dealer.StartGame(new[] { player1, player2, player3 }, player2);
+            game.PlayCards(player2, Card.EightOfClubs);
+
+            game.CurrentPlayer.Should().Be(player1);
+        }
+    }
 }

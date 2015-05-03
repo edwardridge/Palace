@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class Dealer : IRulesValidator
+    public class Dealer : IRulesProcessesor
     {
         public Dealer(Deck deck, ICanStartGame canStartGame)
             : this(deck, canStartGame, new Dictionary<CardValue, RuleForCard>())
@@ -57,16 +57,18 @@
             return game;
         }
 
-        public bool CardsPassRules(IEnumerable<Card> cardsToPlay, Card lastCardPlayed)
+        public bool ProcessRulesForGame(IReverseOrderOfPlay order, IEnumerable<Card> cardsToPlay, Card lastCardPlayed)
         {
             var cardsList = cardsToPlay as IList<Card> ?? cardsToPlay.ToList();
-
+            var playersCard = cardsList.First();
+            var rulesForPlayersCard = this.getRuleForCardFromCardValue(playersCard.Value);
+            if (rulesForPlayersCard == RuleForCard.ReverseOrderOfPlay)
+                order.ReverseOrderOfPlay();
             if (lastCardPlayed == null)
                 return true;
 
-            var playersCard = cardsList.First();
             var ruleForLastCardPlayed = this.getRuleForCardFromCardValue(lastCardPlayed.Value);
-            var rulesForPlayersCard = this.getRuleForCardFromCardValue(playersCard.Value);
+            
 
             if (ruleForLastCardPlayed == RuleForCard.Reset || rulesForPlayersCard == RuleForCard.Reset)
                 return true;
@@ -74,6 +76,8 @@
                 return false;
             if (ruleForLastCardPlayed == RuleForCard.LowerThan && playersCard.Value > lastCardPlayed.Value)
                 return false;
+
+            
 
             return true;
         }

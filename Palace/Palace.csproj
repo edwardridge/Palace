@@ -38,7 +38,7 @@
     <Compile Include="Deck\PredeterminedDeck.cs" />
     <Compile Include="Deck\StandardDeck.cs" />
     <Compile Include="Game\Dealer.cs" />
-    <Compile Include="Game\IRulesValidator.cs" />
+    <Compile Include="Game\IRulesProcessesor.cs" />
     <Compile Include="Game\ICardDealer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
