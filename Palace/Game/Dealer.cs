@@ -57,38 +57,6 @@
             return game;
         }
 
-        //public bool ProcessRulesForGame(IReverseOrderOfPlay order, IEnumerable<Card> cardsToPlay, Card lastCardPlayed)
-        //{
-        //    var cardsList = cardsToPlay as IList<Card> ?? cardsToPlay.ToList();
-        //    var playersCard = cardsList.First();
-        //    var rulesForPlayersCard = this.getRuleForCardFromCardValue(playersCard.Value);
-        //    if (rulesForPlayersCard == RuleForCard.ReverseOrderOfPlay)
-        //        order.ReverseOrderOfPlay();
-        //    if (lastCardPlayed == null)
-        //        return true;
-
-        //    var ruleForLastCardPlayed = this.getRuleForCardFromCardValue(lastCardPlayed.Value);
-            
-
-        //    if (ruleForLastCardPlayed == RuleForCard.Reset || rulesForPlayersCard == RuleForCard.Reset)
-        //        return true;
-        //    if (ruleForLastCardPlayed == RuleForCard.Standard && playersCard.Value < lastCardPlayed.Value)
-        //        return false;
-        //    if (ruleForLastCardPlayed == RuleForCard.LowerThan && playersCard.Value > lastCardPlayed.Value)
-        //        return false;
-
-            
-
-        //    return true;
-        //}
-
-        //private RuleForCard getRuleForCardFromCardValue(CardValue cardValue)
-        //{
-        //    RuleForCard ruleForCard;
-        //    _rulesForCardsByValue.TryGetValue(cardValue, out ruleForCard);
-        //    return ruleForCard == 0 ? RuleForCard.Standard : ruleForCard;
-        //}
-
         private Deck _deck;
 
         private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;

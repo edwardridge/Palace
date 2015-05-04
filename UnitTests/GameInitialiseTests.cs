@@ -144,9 +144,9 @@
                         new Card(CardValue.Ace, Suit.Club, CardOrientation.FaceUp)
                     });
 
-            var outcome = player1.Ready();
+            Action outcome = () => player1.Ready();
 
-            outcome.Should().Be(ResultOutcome.Success);
+            outcome.ShouldNotThrow();
         }
 
         [Test]

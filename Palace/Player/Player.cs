@@ -50,11 +50,11 @@ namespace Palace
 			return _cards.Where (card => card.CardOrientation == cardLocation).Count ();
 		}
 
-		public ResultOutcome Ready ()
+		public void Ready ()
 		{
 			_state = PlayerState.Ready;
 
-			return ResultOutcome.Success;
+			//return ResultOutcome.Success;
 		}
 
 		public Card LowestCardInValue{
