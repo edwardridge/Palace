@@ -11,14 +11,14 @@ namespace Palace
 
     public class Game : IReverseOrderOfPlay
     {
-        internal Game(IEnumerable<IPlayer> players, IRulesProcessesor rulesProcessesor, ICardDealer cardDealer)
+        internal Game(IEnumerable<IPlayer> players, RulesProcessesor rulesProcessesor, ICardDealer cardDealer)
             : this(players, rulesProcessesor, cardDealer, new List<Card>())
         {
         }
 
-        internal Game(IEnumerable<IPlayer> players, IRulesProcessesor rulesProcessesor, ICardDealer cardDealer, IEnumerable<Card> cardsInPile)
+        internal Game(IEnumerable<IPlayer> players, RulesProcessesor rulesProcessesor, ICardDealer cardDealer, IEnumerable<Card> cardsInPile)
         {
-            this.rulesProcessesor = rulesProcessesor;
+            this._rulesProcessesor = rulesProcessesor;
             this._players = new LinkedList<IPlayer>(players);
             this._playPile = new Stack<Card>(cardsInPile);
             this._cardDealer = cardDealer;
@@ -35,8 +35,12 @@ namespace Palace
             if (cards.Select(card => card.Value).Distinct().Count() != 1)
                 throw new ArgumentException("You cannot play more than one type of card");
 
-            if (!this.rulesProcessesor.ProcessRulesForGame(this, cards, _playPile.Any() ? _playPile.Peek() : null))
+            var cardToPlay = cards.First();
+
+            if (!this._rulesProcessesor.ProcessRulesForGame(this, cardToPlay, _playPile.Any() ? _playPile.Peek() : null))
                 return ResultOutcome.Fail;
+
+            _orderIsGoingForward = this._rulesProcessesor.ChooseOrderOfPlay(_orderIsGoingForward, cardToPlay);
 
             player.RemoveCards(cards);
             foreach (Card card in cards)
@@ -102,7 +106,7 @@ namespace Palace
 
         private Stack<Card> _playPile;
 
-        private IRulesProcessesor rulesProcessesor;
+        private RulesProcessesor _rulesProcessesor;
 
         private ICardDealer _cardDealer;
 

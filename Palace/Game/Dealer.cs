@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class Dealer : IRulesProcessesor
+    public class Dealer
     {
         public Dealer(Deck deck, ICanStartGame canStartGame)
             : this(deck, canStartGame, new Dictionary<CardValue, RuleForCard>())
@@ -32,7 +32,7 @@
             if (!this.canStartGame.GameIsReadyToStart(players))
                 throw new InvalidOperationException("The game is not ready to start");
 
-            var game = new Game(players, this, _deck);
+            var game = new Game(players, new RulesProcessesor(_rulesForCardsByValue), _deck);
             if (startingPlayer == null)
             {
                 startingPlayer = players.First();
@@ -52,42 +52,42 @@
 
         public Game StartGameWithPlayPile(ICollection<IPlayer> players, IPlayer startingPlayer, IEnumerable<Card> cardsInPile)
         {
-            var game = new Game(players, this, _deck, cardsInPile);
+            var game = new Game(players, new RulesProcessesor(_rulesForCardsByValue), _deck, cardsInPile);
             game.Start(startingPlayer);
             return game;
         }
 
-        public bool ProcessRulesForGame(IReverseOrderOfPlay order, IEnumerable<Card> cardsToPlay, Card lastCardPlayed)
-        {
-            var cardsList = cardsToPlay as IList<Card> ?? cardsToPlay.ToList();
-            var playersCard = cardsList.First();
-            var rulesForPlayersCard = this.getRuleForCardFromCardValue(playersCard.Value);
-            if (rulesForPlayersCard == RuleForCard.ReverseOrderOfPlay)
-                order.ReverseOrderOfPlay();
-            if (lastCardPlayed == null)
-                return true;
+        //public bool ProcessRulesForGame(IReverseOrderOfPlay order, IEnumerable<Card> cardsToPlay, Card lastCardPlayed)
+        //{
+        //    var cardsList = cardsToPlay as IList<Card> ?? cardsToPlay.ToList();
+        //    var playersCard = cardsList.First();
+        //    var rulesForPlayersCard = this.getRuleForCardFromCardValue(playersCard.Value);
+        //    if (rulesForPlayersCard == RuleForCard.ReverseOrderOfPlay)
+        //        order.ReverseOrderOfPlay();
+        //    if (lastCardPlayed == null)
+        //        return true;
 
-            var ruleForLastCardPlayed = this.getRuleForCardFromCardValue(lastCardPlayed.Value);
+        //    var ruleForLastCardPlayed = this.getRuleForCardFromCardValue(lastCardPlayed.Value);
             
 
-            if (ruleForLastCardPlayed == RuleForCard.Reset || rulesForPlayersCard == RuleForCard.Reset)
-                return true;
-            if (ruleForLastCardPlayed == RuleForCard.Standard && playersCard.Value < lastCardPlayed.Value)
-                return false;
-            if (ruleForLastCardPlayed == RuleForCard.LowerThan && playersCard.Value > lastCardPlayed.Value)
-                return false;
+        //    if (ruleForLastCardPlayed == RuleForCard.Reset || rulesForPlayersCard == RuleForCard.Reset)
+        //        return true;
+        //    if (ruleForLastCardPlayed == RuleForCard.Standard && playersCard.Value < lastCardPlayed.Value)
+        //        return false;
+        //    if (ruleForLastCardPlayed == RuleForCard.LowerThan && playersCard.Value > lastCardPlayed.Value)
+        //        return false;
 
             
 
-            return true;
-        }
+        //    return true;
+        //}
 
-        private RuleForCard getRuleForCardFromCardValue(CardValue cardValue)
-        {
-            RuleForCard ruleForCard;
-            _rulesForCardsByValue.TryGetValue(cardValue, out ruleForCard);
-            return ruleForCard == 0 ? RuleForCard.Standard : ruleForCard;
-        }
+        //private RuleForCard getRuleForCardFromCardValue(CardValue cardValue)
+        //{
+        //    RuleForCard ruleForCard;
+        //    _rulesForCardsByValue.TryGetValue(cardValue, out ruleForCard);
+        //    return ruleForCard == 0 ? RuleForCard.Standard : ruleForCard;
+        //}
 
         private Deck _deck;
 
