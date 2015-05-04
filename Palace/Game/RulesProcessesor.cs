@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace Palace
+﻿namespace Palace
 {
-    using System.Linq;
+    using System.Collections.Generic;
 
     public class RulesProcessesor
     {
@@ -13,9 +11,8 @@ namespace Palace
             this._rulesForCardsByValue = rulesForCardsByValue;
         }
 
-        public bool CardCanBePlayed(Card cardToPlay, Card lastCardPlayed)
+        internal bool CardCanBePlayed(Card cardToPlay, Card lastCardPlayed)
         {
-            
             if (lastCardPlayed == null)
                 return true;
 
@@ -32,16 +29,34 @@ namespace Palace
             return true;
         }
 
-        public OrderOfPlay ChooseOrderOfPlay(OrderOfPlay currentOrder, Card cardToPlay)
+        internal OrderOfPlay ChooseOrderOfPlay(OrderOfPlay currentOrder, Card cardToPlay)
         {
             var rulesForPlayersCard = this.getRuleForCardFromCardValue(cardToPlay.Value);
             if (rulesForPlayersCard == RuleForCard.ReverseOrderOfPlay)
-            {
                 return currentOrder == OrderOfPlay.Forward ? OrderOfPlay.Backward : OrderOfPlay.Forward;
-            }
-            //return !currentOrder;
 
             return currentOrder;
+        }
+
+        internal bool PlayPileShouldBeCleared(Card cardToPlay)
+        {
+            return getRuleForCardFromCardValue(cardToPlay.Value) == RuleForCard.Burn;
+        }
+
+        internal LinkedListNode<IPlayer> ChooseNextPlayer(
+            Card cardToPlay, 
+            LinkedList<IPlayer> players, 
+            LinkedListNode<IPlayer> currentPlayer, 
+            OrderOfPlay orderOfPlay)
+        {
+            var ruleForPlayersCard = getRuleForCardFromCardValue(cardToPlay.Value);
+            if (ruleForPlayersCard == RuleForCard.Burn)
+                return currentPlayer;
+
+            if (orderOfPlay == OrderOfPlay.Forward)
+                return currentPlayer.Next ?? players.First;
+            
+            return currentPlayer.Previous ?? players.Last;
         }
 
         private RuleForCard getRuleForCardFromCardValue(CardValue cardValue)
@@ -49,11 +64,6 @@ namespace Palace
             RuleForCard ruleForCard;
             _rulesForCardsByValue.TryGetValue(cardValue, out ruleForCard);
             return ruleForCard == 0 ? RuleForCard.Standard : ruleForCard;
-        }
-
-        internal bool PlayPileShouldBeCleared(Card cardToPlay)
-        {
-            return getRuleForCardFromCardValue(cardToPlay.Value) == RuleForCard.Burn;
         }
     }
 }

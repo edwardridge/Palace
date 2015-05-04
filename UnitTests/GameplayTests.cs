@@ -427,5 +427,17 @@
 
             outcome.Should().Be(ResultOutcome.Success);
         }
+
+        [Test]
+        public void After_Playing_Burn_Card_Player_Gets_Another_Turn()
+        {
+            var player1 = new StubReadyPlayer(Card.TenOfClubs);
+            var player2 = new StubReadyPlayer();
+            var game = dealer.StartGame(new[] { player1, player2 }, player1);
+
+            game.PlayCards(player1, Card.TenOfClubs);
+
+            game.CurrentPlayer.Should().Be(player1);
+        }
     }
 }

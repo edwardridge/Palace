@@ -25,7 +25,7 @@ namespace Palace
             this._cardDealer = cardDealer;
             this._orderOfPlay = OrderOfPlay.Forward;
 
-            _currentPlayerNode = _players.First;
+            this._currentPlayer = _players.First;
         }
 
         public ResultOutcome PlayCards(IPlayer player, ICollection<Card> cards)
@@ -53,17 +53,9 @@ namespace Palace
             player.RemoveCards(cards);
             player.AddCards(_cardDealer.DealCards(cards.Count));
 
-            this.chooseCurrentPlayer();
+            this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(cardToPlay, _players, this._currentPlayer, _orderOfPlay);
 
             return ResultOutcome.Success;
-        }
-
-        private void chooseCurrentPlayer()
-        {
-            if (this._orderOfPlay == OrderOfPlay.Forward)
-                this._currentPlayerNode = this._currentPlayerNode.Next ?? this._players.First;
-            else
-                this._currentPlayerNode = this._currentPlayerNode.Previous ?? this._players.Last;
         }
 
         public ResultOutcome PlayCards(IPlayer player, Card card)
@@ -91,16 +83,16 @@ namespace Palace
         {
             get
             {
-                return _currentPlayerNode.Value;
+                return this._currentPlayer.Value;
             }
         }
 
         internal void Start(IPlayer startingPlayer)
         {
-            _currentPlayerNode = _players.Find(startingPlayer);
+            this._currentPlayer = _players.Find(startingPlayer);
         }
 
-        private LinkedListNode<IPlayer> _currentPlayerNode;
+        private LinkedListNode<IPlayer> _currentPlayer;
 
         private LinkedList<IPlayer> _players;
 
