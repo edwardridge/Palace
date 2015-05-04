@@ -22,7 +22,7 @@ namespace Palace
             var rulesForPlayersCard = this.getRuleForCardFromCardValue(cardToPlay.Value);
             var ruleForLastCardPlayed = this.getRuleForCardFromCardValue(lastCardPlayed.Value);
 
-            if (rulesForPlayersCard == RuleForCard.Reset)
+            if (rulesForPlayersCard == RuleForCard.Reset || rulesForPlayersCard == RuleForCard.Burn)
                 return true;
             if (ruleForLastCardPlayed == RuleForCard.Standard && cardToPlay.Value < lastCardPlayed.Value)
                 return false;

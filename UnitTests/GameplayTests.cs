@@ -415,5 +415,17 @@
 
             game.PlayPileCardCount.Should().Be(0);
         }
+
+        [Test]
+        public void Can_Be_Played_Over_Cards_Of_Higher_Value()
+        {
+            var player1 = new StubReadyPlayer(Card.TenOfClubs);
+            var cardInPile = new List<Card>() { Card.JackOfClubs };
+            var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
+
+            var outcome = game.PlayCards(player1, Card.TenOfClubs);
+
+            outcome.Should().Be(ResultOutcome.Success);
+        }
     }
 }
