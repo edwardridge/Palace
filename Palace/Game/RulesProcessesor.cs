@@ -13,7 +13,7 @@ namespace Palace
             this._rulesForCardsByValue = rulesForCardsByValue;
         }
 
-        public bool ProcessRulesForGame(IReverseOrderOfPlay order, Card cardToPlay, Card lastCardPlayed)
+        public bool CardCanBePlayed(Card cardToPlay, Card lastCardPlayed)
         {
             
             if (lastCardPlayed == null)
@@ -22,7 +22,7 @@ namespace Palace
             var rulesForPlayersCard = this.getRuleForCardFromCardValue(cardToPlay.Value);
             var ruleForLastCardPlayed = this.getRuleForCardFromCardValue(lastCardPlayed.Value);
 
-            if (ruleForLastCardPlayed == RuleForCard.Reset || rulesForPlayersCard == RuleForCard.Reset)
+            if (rulesForPlayersCard == RuleForCard.Reset)
                 return true;
             if (ruleForLastCardPlayed == RuleForCard.Standard && cardToPlay.Value < lastCardPlayed.Value)
                 return false;
@@ -32,11 +32,14 @@ namespace Palace
             return true;
         }
 
-        public bool ChooseOrderOfPlay(bool currentOrder, Card cardToPlay)
+        public OrderOfPlay ChooseOrderOfPlay(OrderOfPlay currentOrder, Card cardToPlay)
         {
             var rulesForPlayersCard = this.getRuleForCardFromCardValue(cardToPlay.Value);
             if (rulesForPlayersCard == RuleForCard.ReverseOrderOfPlay)
-                return !currentOrder;
+            {
+                return currentOrder == OrderOfPlay.Forward ? OrderOfPlay.Backward : OrderOfPlay.Forward;
+            }
+            //return !currentOrder;
 
             return currentOrder;
         }

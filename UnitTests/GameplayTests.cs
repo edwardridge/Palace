@@ -7,6 +7,7 @@
     using FluentAssertions;
 
     using NUnit.Framework;
+    using NUnit.Framework.Constraints;
 
     using Palace;
 
@@ -308,6 +309,17 @@
 
             // Playing this card without the reset card would not be valid
             var outcome = game.PlayCards(player1, Card.SixOfClubs);
+
+            outcome.Should().Be(ResultOutcome.Success);
+        }
+
+        [Test]
+        public void Can_Be_Played_Over_Cards_Of_Higher_Value()
+        {
+            var player1 = new StubReadyPlayer(Card.TwoOfClubs);
+
+            var game = dealer.StartGameWithPlayPile(new [] {player1}, player1, new List<Card>(){Card.EightOfClubs});
+            var outcome = game.PlayCards(player1, Card.TwoOfClubs);
 
             outcome.Should().Be(ResultOutcome.Success);
         }

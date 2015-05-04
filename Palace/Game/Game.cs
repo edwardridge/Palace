@@ -4,12 +4,13 @@ namespace Palace
     using System.Collections.Generic;
     using System.Linq;
 
-    public interface IReverseOrderOfPlay
+    public enum OrderOfPlay
     {
-        void ReverseOrderOfPlay();
+        Forward = 1,
+        Backward = 2
     }
 
-    public class Game : IReverseOrderOfPlay
+    public class Game
     {
         internal Game(IEnumerable<IPlayer> players, RulesProcessesor rulesProcessesor, ICardDealer cardDealer)
             : this(players, rulesProcessesor, cardDealer, new List<Card>())
@@ -22,7 +23,7 @@ namespace Palace
             this._players = new LinkedList<IPlayer>(players);
             this._playPile = new Stack<Card>(cardsInPile);
             this._cardDealer = cardDealer;
-            this._orderIsGoingForward = true;
+            this._orderOfPlay = OrderOfPlay.Forward;
 
             _currentPlayerNode = _players.First;
         }
@@ -36,11 +37,12 @@ namespace Palace
                 throw new ArgumentException("You cannot play more than one type of card");
 
             var cardToPlay = cards.First();
+            var lastCardPlayed = _playPile.Any() ? _playPile.Peek() : null;
 
-            if (!this._rulesProcessesor.ProcessRulesForGame(this, cardToPlay, _playPile.Any() ? _playPile.Peek() : null))
+            if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, lastCardPlayed))
                 return ResultOutcome.Fail;
 
-            _orderIsGoingForward = this._rulesProcessesor.ChooseOrderOfPlay(_orderIsGoingForward, cardToPlay);
+            _orderOfPlay = this._rulesProcessesor.ChooseOrderOfPlay(_orderOfPlay, cardToPlay);
 
             player.RemoveCards(cards);
             foreach (Card card in cards)
@@ -60,7 +62,7 @@ namespace Palace
 
         private void chooseCurrentPlayer()
         {
-            if (this._orderIsGoingForward)
+            if (this._orderOfPlay == OrderOfPlay.Forward)
                 this._currentPlayerNode = this._currentPlayerNode.Next ?? this._players.First;
             else
                 this._currentPlayerNode = this._currentPlayerNode.Previous ?? this._players.Last;
@@ -110,11 +112,6 @@ namespace Palace
 
         private ICardDealer _cardDealer;
 
-        private bool _orderIsGoingForward;
-
-        public void ReverseOrderOfPlay()
-        {
-            _orderIsGoingForward = !_orderIsGoingForward;
-        }
+        private OrderOfPlay _orderOfPlay;
     }
 }
