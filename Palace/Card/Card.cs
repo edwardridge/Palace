@@ -56,5 +56,13 @@
         {
             return new Card(CardValue.Jack, Suit.Spade);
         } }
+
+        public static Card TenOfClubs
+        {
+            get
+            {
+                return new Card(CardValue.Ten, Suit.Club);
+            }
+        }
     }
 }

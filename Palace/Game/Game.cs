@@ -43,17 +43,15 @@ namespace Palace
                 return ResultOutcome.Fail;
 
             _orderOfPlay = this._rulesProcessesor.ChooseOrderOfPlay(_orderOfPlay, cardToPlay);
+            if(this._rulesProcessesor.PlayPileShouldBeCleared(cardToPlay))
+                this._playPile.Clear();
+            else
+                foreach (Card card in cards)            
+                    _playPile.Push(card);
+            
 
             player.RemoveCards(cards);
-            foreach (Card card in cards)
-            {
-                _playPile.Push(card);
-            }
-
             player.AddCards(_cardDealer.DealCards(cards.Count));
-
-            //if (cards.First().Value == CardValue.Jack)
-            //    _orderIsGoingForward = !_orderIsGoingForward;
 
             this.chooseCurrentPlayer();
 

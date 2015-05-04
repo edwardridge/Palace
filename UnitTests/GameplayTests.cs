@@ -298,7 +298,7 @@
         }
 
         [Test]
-        public void Two_Card_Resets_The_Play_Pile()
+        public void Resets_The_Play_Pile()
         {
             var player1 = new StubReadyPlayer(new List<Card>() { Card.SixOfClubs, Card.SevenOfClubs });
             var player2 = new StubReadyPlayer(Card.TwoOfClubs);
@@ -389,6 +389,31 @@
             game.PlayCards(player2, Card.EightOfClubs);
 
             game.CurrentPlayer.Should().Be(player1);
+        }
+    }
+
+    [TestFixture]
+    public class WithTenAsBurnCard
+    {
+        private Dealer dealer;
+        [SetUp]
+        public void Setup()
+        {
+            var rulesForCardByValue = new Dictionary<CardValue, RuleForCard>();
+            rulesForCardByValue.Add(CardValue.Ten, RuleForCard.Burn);
+            dealer = DealerHelper.TestDealerWithRules(rulesForCardByValue);
+        }
+
+        [Test]
+        public void Clears_The_Play_Pile()
+        {
+            var player1 = new StubReadyPlayer(Card.TenOfClubs);
+            var cardsInPile = new List<Card>() { Card.TwoOfClubs, Card.ThreeOfClubs };
+            var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardsInPile);
+            
+            game.PlayCards(player1, Card.TenOfClubs);
+
+            game.PlayPileCardCount.Should().Be(0);
         }
     }
 }

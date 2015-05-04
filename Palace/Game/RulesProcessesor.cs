@@ -50,5 +50,10 @@ namespace Palace
             _rulesForCardsByValue.TryGetValue(cardValue, out ruleForCard);
             return ruleForCard == 0 ? RuleForCard.Standard : ruleForCard;
         }
+
+        internal bool PlayPileShouldBeCleared(Card cardToPlay)
+        {
+            return getRuleForCardFromCardValue(cardToPlay.Value) == RuleForCard.Burn;
+        }
     }
 }
