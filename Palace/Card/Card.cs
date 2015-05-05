@@ -23,7 +23,7 @@
 
         public override int GetHashCode()
         {
-            return (int)this.Value.GetHashCode() + (int)this.Suit.GetHashCode();
+            return (int)this.Value.GetHashCode() + (int)this.Suit.GetHashCode() + (int)this.CardOrientation.GetHashCode();
         }
 
 		public override bool Equals(Object comparison)
@@ -31,7 +31,7 @@
 		    var comparisonCard = comparison as Card;
 		    if (comparisonCard ==  null)
 		        return false;
-			return this.Suit == comparisonCard.Suit && this.Value == comparisonCard.Value;
+			return this.Suit == comparisonCard.Suit && this.Value == comparisonCard.Value && this.CardOrientation == comparisonCard.CardOrientation;
 		}
 
         public static Card AceOfClubs { get { return new Card(CardValue.Ace, Suit.Club); } }

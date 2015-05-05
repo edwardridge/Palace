@@ -455,23 +455,28 @@
                                     Card.FourOfClubs,
                                     //In Hand for player 1
                                     Card.ThreeOfClubs,
+                                    Card.FourOfClubs,
                                     Card.FiveOfClubs,
                                     Card.SixOfClubs,
-                                    Card.FourOfClubs,
-                                    Card.ThreeOfClubs,
-                                    Card.FiveOfClubs,
+                                    Card.SevenOfClubs,
+                                    Card.TenOfClubs,
                                     //Face down for player 2
                                     Card.SixOfClubs,
                                     Card.FourOfClubs,
                                     Card.ThreeOfClubs,
                                     //In hand for player 2
-                                    Card.FiveOfClubs,
-                                    Card.SixOfClubs,
-                                    Card.FourOfClubs,
                                     Card.ThreeOfClubs,
                                     Card.FourOfClubs,
-                                    Card.ThreeOfClubs
+                                    Card.FiveOfClubs,
+                                    Card.SixOfClubs,
+                                    Card.SevenOfClubs,
+                                    Card.TenOfClubs
                                 };
+
+            var nextCardsToBeDrawn = new List<Card>()
+                                         {
+                                             
+                                         };
             var deck = new PredeterminedDeck(initialCards);
             var rules = new Dictionary<CardValue, RuleForCard>();
             rules.Add(CardValue.Two, RuleForCard.Reset);
@@ -485,18 +490,25 @@
             dealer.DealIntialCards(new []{player1, player2});
 
             player1.PutCardFaceUp(Card.ThreeOfClubs);
-            player1.PutCardFaceUp(Card.SixOfClubs);
             player1.PutCardFaceUp(Card.FourOfClubs);
+            player1.PutCardFaceUp(Card.FiveOfClubs);
             player1.Ready();
 
-            player2.PutCardFaceUp(Card.FiveOfClubs);
-            player2.PutCardFaceUp(Card.FourOfClubs);
             player2.PutCardFaceUp(Card.ThreeOfClubs);
+            player2.PutCardFaceUp(Card.FourOfClubs);
+            player2.PutCardFaceUp(Card.FiveOfClubs);
             player2.Ready();
 
             var game = dealer.StartGame(new[] { player1, player2 });
-
             player1.NumCards(CardOrientation.InHand).Should().Be(3);
+
+            game.PlayCards(player1, Card.SixOfClubs);
+            game.PlayCards(player2, Card.SevenOfClubs);
+
+            game.CurrentPlayer.Should().Be(player1);
+            player1.NumCards(CardOrientation.InHand).Should().Be(2);
+
+            
         }
     }
 }
