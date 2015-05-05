@@ -72,6 +72,12 @@ namespace UnitTests
 		#endregion
 
 		private ICollection<Card> _cards;
-	}
+
+
+        public ResultOutcome PutCardFaceUp(Card cardToPutFaceUp)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
 

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
 
     using FluentAssertions;
 
@@ -163,6 +164,27 @@
             var outcome = player1.PutCardFaceUp(new Card(CardValue.Ace, Suit.Club, CardOrientation.FaceUp));
 
             outcome.Should().Be(ResultOutcome.Fail);
+        }
+
+        [Test]
+        public void Player_Cannot_Put_Card_They_Dont_Have_Face_Up()
+        {
+            player1.AddCards(new []{ new Card(CardValue.Ace, Suit.Club, CardOrientation.InHand) });
+
+            Action outcome = () => player1.PutCardFaceUp(Card.EightOfClubs);
+
+            outcome.ShouldThrow<ArgumentException>();
+        }
+
+        [Test]
+        public void If_Player_Has_Same_Card_Face_Down_And_In_Hand_The_In_Hand_Card_Is_Put_Face_Up()
+        {
+            player1.AddCards(new[]{ new Card(CardValue.Ace, Suit.Club, CardOrientation.FaceDown), new Card(CardValue.Ace, Suit.Club, CardOrientation.InHand)  });
+
+            player1.PutCardFaceUp(Card.AceOfClubs);
+
+            player1.NumCards(CardOrientation.FaceDown).Should().Be(1);
+            player1.NumCards(CardOrientation.FaceUp).Should().Be(1);
         }
     }
 

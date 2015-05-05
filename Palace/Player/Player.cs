@@ -39,10 +39,15 @@ namespace Palace
 
 		public ResultOutcome PutCardFaceUp (Card cardToPutFaceUp)
 		{
+		    var cardIsInPlayersHand = _cards.Any(card => card.Equals(cardToPutFaceUp));
+		    if(!cardIsInPlayersHand)
+                throw new ArgumentException();
+
 			if(this.NumCards(CardOrientation.FaceUp) >= 3)
 				return ResultOutcome.Fail;
 
-			cardToPutFaceUp.CardOrientation = CardOrientation.FaceUp;
+		    _cards.First(card => card.Equals(cardToPutFaceUp) && card.CardOrientation != CardOrientation.FaceDown).CardOrientation = CardOrientation.FaceUp;
+//			cardToPutFaceUp.CardOrientation = CardOrientation.FaceUp;
 			return ResultOutcome.Success;
 		}
 

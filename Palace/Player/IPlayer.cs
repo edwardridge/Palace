@@ -15,6 +15,8 @@ namespace Palace
 
 		void RemoveCards(ICollection<Card> cards);
 
+        ResultOutcome PutCardFaceUp(Card cardToPutFaceUp);
+
 		Card LowestCardInValue { get; }
 	}
 }

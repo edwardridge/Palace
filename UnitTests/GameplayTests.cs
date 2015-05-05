@@ -440,4 +440,63 @@
             game.CurrentPlayer.Should().Be(player1);
         }
     }
+
+    [TestFixture]
+    public class GameSimulation
+    {
+        [Test]
+        public void Simulation()
+        {
+            var initialCards = new List<Card>()
+                                {
+                                    //Face down for player1
+                                    Card.FiveOfClubs,
+                                    Card.SixOfClubs,
+                                    Card.FourOfClubs,
+                                    //In Hand for player 1
+                                    Card.ThreeOfClubs,
+                                    Card.FiveOfClubs,
+                                    Card.SixOfClubs,
+                                    Card.FourOfClubs,
+                                    Card.ThreeOfClubs,
+                                    Card.FiveOfClubs,
+                                    //Face down for player 2
+                                    Card.SixOfClubs,
+                                    Card.FourOfClubs,
+                                    Card.ThreeOfClubs,
+                                    //In hand for player 2
+                                    Card.FiveOfClubs,
+                                    Card.SixOfClubs,
+                                    Card.FourOfClubs,
+                                    Card.ThreeOfClubs,
+                                    Card.FourOfClubs,
+                                    Card.ThreeOfClubs
+                                };
+            var deck = new PredeterminedDeck(initialCards);
+            var rules = new Dictionary<CardValue, RuleForCard>();
+            rules.Add(CardValue.Two, RuleForCard.Reset);
+            rules.Add(CardValue.Seven, RuleForCard.LowerThan);
+            rules.Add(CardValue.Ten, RuleForCard.Burn);
+            rules.Add(CardValue.Jack, RuleForCard.ReverseOrderOfPlay);
+
+            var player1 = new Player("Ed");
+            var player2 = new Player("Liam");
+            var dealer = new Dealer(deck, new CanStartGame(), rules);
+            dealer.DealIntialCards(new []{player1, player2});
+
+            player1.PutCardFaceUp(Card.ThreeOfClubs);
+            player1.PutCardFaceUp(Card.SixOfClubs);
+            player1.PutCardFaceUp(Card.FourOfClubs);
+            player1.Ready();
+
+            player2.PutCardFaceUp(Card.FiveOfClubs);
+            player2.PutCardFaceUp(Card.FourOfClubs);
+            player2.PutCardFaceUp(Card.ThreeOfClubs);
+            player2.Ready();
+
+            var game = dealer.StartGame(new[] { player1, player2 });
+
+            player1.NumCards(CardOrientation.InHand).Should().Be(3);
+        }
+    }
 }
