@@ -43,10 +43,10 @@
             return getRuleForCardFromCardValue(cardToPlay.Value) == RuleForCard.Burn;
         }
 
-        internal LinkedListNode<IPlayer> ChooseNextPlayer(
+        internal LinkedListNode<Player> ChooseNextPlayer(
             Card cardToPlay, 
-            LinkedList<IPlayer> players, 
-            LinkedListNode<IPlayer> currentPlayer, 
+            LinkedList<Player> players, 
+            LinkedListNode<Player> currentPlayer, 
             OrderOfPlay orderOfPlay)
         {
             var ruleForPlayersCard = getRuleForCardFromCardValue(cardToPlay.Value);

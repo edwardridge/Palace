@@ -18,16 +18,16 @@
             this.canStartGame = canStartGame;
         }
 
-        public void DealIntialCards(ICollection<IPlayer> players)
+        public void DealIntialCards(ICollection<Player> players)
         {
             foreach (var player in players)
             {
-                player.AddCards(_deck.DealCards(3, CardOrientation.FaceDown));
-                player.AddCards(_deck.DealCards(6, CardOrientation.InHand));
+                player.AddCardsToInHandPile(_deck.DealCards(3, CardOrientation.FaceDown));
+                player.AddCardsToInHandPile(_deck.DealCards(6, CardOrientation.InHand));
             }
         }
 
-        public Game StartGame(ICollection<IPlayer> players, IPlayer startingPlayer = null)
+        public Game StartGame(ICollection<Player> players, Player startingPlayer = null)
         {
             if (!this.canStartGame.GameIsReadyToStart(players))
                 throw new InvalidOperationException("The game is not ready to start");
@@ -39,7 +39,7 @@
 
                 foreach (var player in players)
                 {
-                    if (player.Cards == null || player.Cards.Count == 0)
+                    if (player.CardsInHand == null || player.CardsInHand.Count == 0)
                         continue;
                     if (player.LowestCardInValue.Value < startingPlayer.LowestCardInValue.Value)
                         startingPlayer = player;
@@ -50,7 +50,7 @@
             return game;
         }
 
-        public Game StartGameWithPlayPile(ICollection<IPlayer> players, IPlayer startingPlayer, IEnumerable<Card> cardsInPile)
+        public Game StartGameWithPlayPile(ICollection<Player> players, Player startingPlayer, IEnumerable<Card> cardsInPile)
         {
             var game = new Game(players, new RulesProcessesor(_rulesForCardsByValue), _deck, cardsInPile);
             game.Start(startingPlayer);

@@ -50,7 +50,6 @@
     <Compile Include="GameInitialiseTests.cs" />
     <Compile Include="GameplayTests.cs" />
     <Compile Include="Helpers\CardHelpers.cs" />
-    <Compile Include="Builders\MockPlayerBuilder.cs" />
     <Compile Include="DeckTests.cs" />
     <Compile Include="StubReadyPlayer.cs" />
   </ItemGroup>

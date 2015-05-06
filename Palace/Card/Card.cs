@@ -8,22 +8,16 @@
 
 		public CardValue Value { get; private set; }
 
-		public CardOrientation CardOrientation { get; set; }
 
-		public Card(CardValue value, Suit suit) : this(value, suit, CardOrientation.InHand)
-		{
-		}
-
-		public Card(CardValue value, Suit suit,  CardOrientation cardOrientation)
+		public Card(CardValue value, Suit suit)
         {
 			this.Suit = suit;
 			this.Value = value;
-			this.CardOrientation = cardOrientation;
         }
 
         public override int GetHashCode()
         {
-            return (int)this.Value.GetHashCode() + (int)this.Suit.GetHashCode() + (int)this.CardOrientation.GetHashCode();
+            return (int)this.Value.GetHashCode() + (int)this.Suit.GetHashCode();
         }
 
 		public override bool Equals(Object comparison)
@@ -31,7 +25,7 @@
 		    var comparisonCard = comparison as Card;
 		    if (comparisonCard ==  null)
 		        return false;
-			return this.Suit == comparisonCard.Suit && this.Value == comparisonCard.Value && this.CardOrientation == comparisonCard.CardOrientation;
+			return this.Suit == comparisonCard.Suit && this.Value == comparisonCard.Value;
 		}
 
         public static Card AceOfClubs { get { return new Card(CardValue.Ace, Suit.Club); } }

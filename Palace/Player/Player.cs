@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Palace
 {
-	public class Player : IPlayer
+	public class Player
 	{
 		public string Name {
 			get{ return _name; }
@@ -14,46 +14,68 @@ namespace Palace
 			get {return _state;}
 		}
 
-		public ICollection<Card> Cards {
-			get { return _cards; }
+		public ICollection<Card> CardsInHand {
+			get { return this._cardsInHand; }
 		}
+
+        public ICollection<Card> CardsFaceUp
+        {
+            get { return this._cardsFaceUp; }
+        }
+
+        public ICollection<Card> CardsFaceDown
+        {
+            get { return this._cardsFaceDown; }
+        }
 
 		public Player(string name){
 			this._name = name;
-			_cards = new List<Card> ();
+		    this._cardsFaceDown = new List<Card>();//.ToList();
+            this._cardsInHand = new List<Card>(); 
+            this._cardsFaceUp = new List<Card>(); // cardsFaceUp.ToList();
 			_state = PlayerState.Setup;
 		}
 
-		public void AddCards (IEnumerable<Card> cardsToBeAdded)
-		{
-			foreach (Card addedCard in cardsToBeAdded) {
-				this._cards.Add (addedCard);
-			}
-		}
+	    public void AddCardsToInHandPile(IEnumerable<Card> cardsToBeAdded)
+	    {
+            foreach (Card addedCard in cardsToBeAdded)
+            {
+                this._cardsInHand.Add(addedCard);
+            }
+	    }
 
-		public void RemoveCards(ICollection<Card> cardsToBeRemoved){
+	    public void AddCardToFaceDownPile(IEnumerable<Card> cardsToBeAdded)
+	    {
+            foreach (Card addedCard in cardsToBeAdded)
+            {
+                this._cardsFaceDown.Add(addedCard);
+            }
+	    }
+
+		public void RemoveCardsFromInHand(ICollection<Card> cardsToBeRemoved){
 			foreach (Card removedCard in cardsToBeRemoved) {
-				this._cards.Remove (removedCard);
+				this._cardsInHand.Remove (removedCard);
 			}
 		}
 
 		public ResultOutcome PutCardFaceUp (Card cardToPutFaceUp)
 		{
-		    var cardIsInPlayersHand = _cards.Any(card => card.Equals(cardToPutFaceUp));
+		    var cardIsInPlayersHand = this._cardsInHand.Any(card => card.Equals(cardToPutFaceUp));
 		    if(!cardIsInPlayersHand)
                 throw new ArgumentException();
 
-			if(this.NumCards(CardOrientation.FaceUp) >= 3)
+			if(this.NumCardsFaceUp >= 3)
 				return ResultOutcome.Fail;
 
-		    _cards.First(card => card.Equals(cardToPutFaceUp) && card.CardOrientation != CardOrientation.FaceDown).CardOrientation = CardOrientation.FaceUp;
-//			cardToPutFaceUp.CardOrientation = CardOrientation.FaceUp;
+            this._cardsFaceUp.Add(cardToPutFaceUp);
+		    this._cardsInHand.Remove(cardToPutFaceUp);
+
 			return ResultOutcome.Success;
 		}
 
-		public int NumCards(CardOrientation cardLocation){
-			return _cards.Where (card => card.CardOrientation == cardLocation).Count ();
-		}
+        public int NumCardsFaceUp { get { return _cardsFaceUp.Count; } }
+        public int NumCardsFaceDown { get { return _cardsFaceDown.Count; } }
+        public int NumCardsInHand { get { return _cardsInHand.Count; } }
 
 		public void Ready ()
 		{
@@ -63,12 +85,19 @@ namespace Palace
 		}
 
 		public Card LowestCardInValue{
-			get{ return _cards.ToList ().OrderBy (o => o.Value).FirstOrDefault (); }
+		    get
+		    {
+		        return this._cardsFaceUp.Union(_cardsInHand).ToList ().OrderBy (o => o.Value).FirstOrDefault ();
+		    }
 		}
 
 	    private string _name;
 
-		private ICollection<Card> _cards;
+        private List<Card> _cardsFaceDown;
+
+        private List<Card> _cardsInHand;
+
+        private List<Card> _cardsFaceUp;
 
 		private PlayerState _state;
 	}

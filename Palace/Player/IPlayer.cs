@@ -3,21 +3,21 @@ using System.Collections.Generic;
 
 namespace Palace
 {
-    public interface IPlayer
-	{
-		ICollection<Card> Cards { get; }
+    //public interface IPlayer
+    //{
+    //    ICollection<Card> CardsFaceUp { get; }
 
-		PlayerState State { get; }
+    //    PlayerState State { get; }
 
-		string Name { get; }
+    //    string Name { get; }
 
-		void AddCards(IEnumerable<Card> cards);
+    //    void AddCardsToInHandPile(IEnumerable<Card> cards);
 
-		void RemoveCards(ICollection<Card> cards);
+    //    void RemoveCards(ICollection<Card> cards);
 
-        ResultOutcome PutCardFaceUp(Card cardToPutFaceUp);
+    //    ResultOutcome PutCardFaceUp(Card cardToPutFaceUp);
 
-		Card LowestCardInValue { get; }
-	}
+    //    Card LowestCardInValue { get; }
+    //}
 }
 

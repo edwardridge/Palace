@@ -54,7 +54,7 @@ namespace Palace
 
 		private Card GetNextCard(CardOrientation cardOrientation){
 			var cardToReturn = cards.First();
-			cardToReturn.CardOrientation = cardOrientation;
+			//cardToReturn.CardOrientation = cardOrientation;
 
 			return cardToReturn;
 		}
