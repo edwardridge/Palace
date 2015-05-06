@@ -51,9 +51,9 @@
             return game;
         }
 
-        public Game StartGameWithPlayPile(ICollection<Player> players, Player startingPlayer, IEnumerable<Card> cardsInPile)
+        public Game StartGameWithPlayPile(Player startingPlayer, IEnumerable<Card> cardsInPile)
         {
-            var game = new Game(players, new RulesProcessesor(_rulesForCardsByValue), _deck, cardsInPile);
+            var game = new Game(_players, new RulesProcessesor(_rulesForCardsByValue), _deck, cardsInPile);
             game.Start(startingPlayer);
             return game;
         }
