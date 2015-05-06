@@ -13,32 +13,32 @@
 
         public Dealer(IEnumerable<Player> players, Deck deck, ICanStartGame canStartGame, Dictionary<CardValue, RuleForCard> rulesForCardsByValue)
         {
-            this._players = players;
+            this._players = players.ToList();
             this._deck = deck;
             this._rulesForCardsByValue = rulesForCardsByValue;
             this._canStartGame = canStartGame;
         }
 
-        public void DealIntialCards(ICollection<Player> players)
+        public void DealIntialCards()
         {
-            foreach (var player in players)
+            foreach (var player in _players)
             {
                 player.AddCardToFaceDownPile(_deck.DealCards(3));
                 player.AddCardsToInHandPile(_deck.DealCards(6));
             }
         }
 
-        public Game StartGame(ICollection<Player> players, Player startingPlayer = null)
+        public Game StartGame(Player startingPlayer = null)
         {
-            if (!this._canStartGame.IsReady(players))
+            if (!this._canStartGame.IsReady(_players))
                 throw new InvalidOperationException("The game is not ready to start");
 
-            var game = new Game(players, new RulesProcessesor(_rulesForCardsByValue), _deck);
+            var game = new Game(_players, new RulesProcessesor(_rulesForCardsByValue), _deck);
             if (startingPlayer == null)
             {
-                startingPlayer = players.First();
+                startingPlayer = _players.First();
 
-                foreach (var player in players)
+                foreach (var player in _players)
                 {
                     if (player.CardsInHand == null || player.NumCardsInHand == 0)
                         continue;
@@ -58,7 +58,7 @@
             return game;
         }
 
-        private readonly IEnumerable<Player> _players;
+        private readonly ICollection<Player> _players;
 
         private Deck _deck;
 

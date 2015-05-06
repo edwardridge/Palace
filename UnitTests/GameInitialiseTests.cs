@@ -42,8 +42,8 @@
             player2 = PlayerHelper.CreatePlayer();
             var deck = new StandardDeck();
             dealer = new Dealer(new []{player1, player2}, deck, new DummyCanStartGame());
-            dealer.DealIntialCards(new List<Player>() { player1, player2 });
-            game = dealer.StartGame(new List<Player>() { player1, player2 });
+            dealer.DealIntialCards();
+            game = dealer.StartGame();
         }
 
         [Test]
@@ -85,7 +85,7 @@
 
             var dealer = new Dealer(new[] { player1, player2 }, new StandardDeck(), new DefaultStartGameRules());
 
-            Action outcome = () => dealer.StartGame(new[] { player1, player2 });
+            Action outcome = () => dealer.StartGame();
 
             outcome.ShouldThrow<InvalidOperationException>();
         }
@@ -96,7 +96,7 @@
             var player1 = PlayerHelper.CreatePlayer();
             var player2 = PlayerHelper.CreatePlayer();
 
-            Action outcome = () => DealerHelper.TestDealer(new[]{player1, player2} ).StartGame(new[] { player1, player2 });
+            Action outcome = () => DealerHelper.TestDealer(new[]{player1, player2} ).StartGame();
 
             outcome.ShouldNotThrow();
         }
@@ -120,7 +120,7 @@
         public void Player_Cannot_Be_Ready_With_No_Face_Up_Cards()
         {
             // Don't put any cards face up
-            Action outcome = () => dealer.StartGame(new[] { player1 });
+            Action outcome = () => dealer.StartGame();
 
             outcome.ShouldThrow<InvalidOperationException>();
         }
@@ -130,7 +130,7 @@
         {
             player1.AddCardsToInHandPile(new[] { new Card(CardValue.Ace, Suit.Club), new Card(CardValue.Ace, Suit.Club) });
 
-            Action outcome = () => dealer.StartGame(new[] { player1 });
+            Action outcome = () => dealer.StartGame();
 
             outcome.ShouldThrow<InvalidOperationException>();
         }
@@ -223,7 +223,7 @@
             player1.AddCardsToInHandPile(new[] { Card.TwoOfClubs });
             player2.AddCardsToInHandPile(new[] { Card.ThreeOfClubs });
 
-            game = dealer.StartGame(new[] { player1, player2 });
+            game = dealer.StartGame();
 
             game.CurrentPlayer.Should().Be(player1);
         }
@@ -234,7 +234,7 @@
             player1.AddCardsToInHandPile(new[] { Card.ThreeOfClubs });
             player2.AddCardsToInHandPile(new[] { Card.TwoOfClubs });
 
-            game = dealer.StartGame(new[] { player1, player2 });
+            game = dealer.StartGame();
 
             game.CurrentPlayer.Should().Be(player2);
         }
@@ -246,7 +246,7 @@
             player2.AddCardsToInHandPile(new[] { Card.ThreeOfClubs });
             player3.AddCardsToInHandPile(new[] { Card.TwoOfClubs });
 
-            game = dealer.StartGame(new[] { player1, player2, player3 });
+            game = dealer.StartGame();
 
             game.CurrentPlayer.Should().Be(player3);
         }
