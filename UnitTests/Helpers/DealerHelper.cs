@@ -9,14 +9,14 @@ namespace UnitTests.Helpers
 
     public static class DealerHelper
     {
-        public static Dealer TestDealer()
+        public static Dealer TestDealer(IEnumerable<Player> players)
         {
-            return new Dealer(new StandardDeck(), new DummyCanStartGame());
+            return new Dealer(players, new StandardDeck(), new DummyCanStartGame());
         }
 
-        public static Dealer TestDealerWithRules(Dictionary<CardValue, RuleForCard> rulesForCardByValue)
+        public static Dealer TestDealerWithRules(IEnumerable<Player> players,Dictionary<CardValue, RuleForCard> rulesForCardByValue)
         {
-            return new Dealer(new StandardDeck(), new DummyCanStartGame(), rulesForCardByValue);
+            return new Dealer(players, new StandardDeck(), new DummyCanStartGame(), rulesForCardByValue);
         }
     }
 }

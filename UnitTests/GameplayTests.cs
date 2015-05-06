@@ -16,12 +16,12 @@
     [TestFixture]
     public class GameplayTests
     {
-        private Dealer dealer;
+        //private Dealer dealer;
 
         [SetUp]
         public void Setup()
         {
-            dealer = DealerHelper.TestDealer();
+            
         }
 
         [Test]
@@ -30,6 +30,7 @@
             var cardsPlayerHas = new List<Card>() { Card.FourOfClubs };
             var player1 = PlayerHelper.CreatePlayer(cardsPlayerHas);
 
+            var dealer = DealerHelper.TestDealer(new []{player1});
             var cardsPlayerPlays = Card.AceOfClubs;
             var game = dealer.StartGame(new[] { player1 }, player1);
 
@@ -43,7 +44,7 @@
         {
             var cardsPlayerHas = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
             var player1 = PlayerHelper.CreatePlayer(cardsPlayerHas);
-
+            var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.StartGame(new[] { player1 }, player1);
             var playingCardsPlayerHasOutcome = game.PlayCards(player1, cardsPlayerHas[0]);
 
@@ -55,7 +56,7 @@
         {
             var cardsPlayerHas = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
             var player1 = PlayerHelper.CreatePlayer(cardsPlayerHas);
-
+            var dealer = DealerHelper.TestDealer(new[] { player1 });
             var cardsPlayerPlays = new[] { Card.FourOfClubs, Card.FourOfSpades };
             var game = dealer.StartGame(new[] { player1 }, player1);
             Action result = () => game.PlayCards(player1, cardsPlayerPlays);
@@ -67,10 +68,9 @@
         public void When_Player_Plays_Card_Card_Is_Removed_From_Hand()
         {
             var deck = new PredeterminedDeck(new[] { Card.ThreeOfClubs });
-            var dealerForThisTest = new Dealer(deck, new DummyCanStartGame());
             var cardToPlay = Card.FourOfClubs;
             var player1 = PlayerHelper.CreatePlayer(cardToPlay);
-
+            var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.StartGame(new[] { player1 }, player1);
             game.PlayCards(player1, cardToPlay);
 
@@ -82,7 +82,7 @@
         {
             var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
             var player1 = PlayerHelper.CreatePlayer(cardsToPlay);
-
+            var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.StartGame(new[] { player1 }, player1);
             var playerPlaysMultipleCardsOfSameValueOutcome = game.PlayCards(player1, cardsToPlay);
 
@@ -93,11 +93,11 @@
         public void When_PLayer_Plays_Multiple_Cards_Cards_Are_Removed_From_Hand()
         {
             var deck = new PredeterminedDeck(new[] { Card.AceOfClubs, Card.AceOfClubs });
-            var dealerForThisTest = new Dealer(deck, new DummyCanStartGame());
+            
             var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
             var player1 = PlayerHelper.CreatePlayer(cardsToPlay);
-
-            var game = dealerForThisTest.StartGame(new[] { player1 }, player1);
+            var dealer = new Dealer(new[] { player1 }, deck, new DummyCanStartGame());
+            var game = dealer.StartGame(new[] { player1 }, player1);
             game.PlayCards(player1, cardsToPlay);
 
             player1.CardsFaceUp.Should().NotContain(cardsToPlay);
@@ -108,7 +108,7 @@
         {
             var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.AceOfClubs };
             var player1 = PlayerHelper.CreatePlayer(cardsToPlay);
-
+            var dealer = new Dealer(new[] { player1 }, new StandardDeck(), new DummyCanStartGame());
             var game = dealer.StartGame(new[] { player1 }, player1);
             Action playerPlaysMultipleCardsOfDifferentValueOutcome = () => game.PlayCards(player1, cardsToPlay);
 
@@ -120,7 +120,7 @@
         {
             var cardToPlay = Card.FourOfClubs;
             var player1 = PlayerHelper.CreatePlayer(cardToPlay);
-
+            var dealer = new Dealer(new[] { player1 }, new StandardDeck(), new DummyCanStartGame());
             var game = dealer.StartGame(new[] { player1 }, player1);
             game.PlayCards(player1, cardToPlay);
 
@@ -133,7 +133,7 @@
             var cardToPlay = Card.AceOfClubs;
             var player1 = PlayerHelper.CreatePlayer(cardToPlay, "Ed");
             var player2 = PlayerHelper.CreatePlayer("Liam");
-
+            var dealer = new Dealer(new[] { player1 }, new StandardDeck(), new DummyCanStartGame());
             var game = dealer.StartGame(new[] { player1, player2 }, player1);
             game.PlayCards(player1, cardToPlay);
 
@@ -144,6 +144,7 @@
         public void When_Player_Plays_One_Card_They_Receive_One_Card()
         {
             var player1 = PlayerHelper.CreatePlayer(Card.AceOfClubs);
+            var dealer = new Dealer(new[] { player1 }, new StandardDeck(), new DummyCanStartGame());
             var game = dealer.StartGame(new[] { player1 });
             game.PlayCards(player1, Card.AceOfClubs);
 
@@ -155,6 +156,7 @@
         {
             var cards = new List<Card>() { Card.AceOfClubs, Card.AceOfClubs };
             var player1 = PlayerHelper.CreatePlayer(cards);
+            var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.StartGame(new[] { player1 });
             game.PlayCards(player1, cards);
 
@@ -165,12 +167,12 @@
     [TestFixture]
     public class StandardClassRules
     {
-        private Dealer dealer;
+        //private Dealer dealer;
 
         [SetUp]
         public void Setup()
         {
-            dealer = DealerHelper.TestDealer();
+            
         }
 
         [Test]
@@ -178,7 +180,7 @@
         {
             var cardToPlay = Card.ThreeOfClubs;
             var player1 = PlayerHelper.CreatePlayer(cardToPlay);
-
+            var dealer = DealerHelper.TestDealer(new[]{player1});
             var cardInPile = new Stack<Card>();
             cardInPile.Push(Card.TwoOfClubs);
             var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
@@ -192,7 +194,7 @@
         {
             var cardToPlay = Card.ThreeOfClubs;
             var player1 = PlayerHelper.CreatePlayer(cardToPlay);
-
+            var dealer = DealerHelper.TestDealer(new[] { player1 });
             var cardInPile = Card.FiveOfClubs;
             var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, new[] { cardInPile });
             var outcome = game.PlayCards(player1, cardToPlay);
@@ -205,7 +207,7 @@
         {
             var cardToPlay = Card.FourOfClubs;
             var player1 = PlayerHelper.CreatePlayer(cardToPlay);
-
+            var dealer = DealerHelper.TestDealer(new[] { player1 });
             var cardInPile = new List<Card>(new[] { Card.FourOfClubs });
             var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
             var outcome = game.PlayCards(player1, cardToPlay);
@@ -219,14 +221,14 @@
     {
         private Dictionary<CardValue, RuleForCard> cardTypes;
 
-        private Dealer dealer;
+        //private Dealer dealer;
 
         [SetUp]
         public void Setup()
         {
             cardTypes = new Dictionary<CardValue, RuleForCard>();
             cardTypes.Add(CardValue.Seven, RuleForCard.LowerThan);
-            dealer = DealerHelper.TestDealerWithRules(cardTypes);
+            
         }
 
         [Test]
@@ -234,7 +236,7 @@
         {
             var cardToPlay = Card.EightOfClubs;
             var player1 = PlayerHelper.CreatePlayer(cardToPlay);
-
+            var dealer = DealerHelper.TestDealerWithRules(new[]{player1}, cardTypes);
             var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
             var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
             var outcome = game.PlayCards(player1, cardToPlay);
@@ -247,7 +249,7 @@
         {
             var cardToPlay = Card.SixOfClubs;
             var player1 = PlayerHelper.CreatePlayer(cardToPlay);
-
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, cardTypes);
             var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
             var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
             var outcome = game.PlayCards(player1, cardToPlay);
@@ -260,7 +262,7 @@
         {
             var cardToPlay = Card.SevenOfClubs;
             var player1 = PlayerHelper.CreatePlayer(cardToPlay);
-
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, cardTypes);
             var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
             var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
             var outcome = game.PlayCards(player1, cardToPlay);
@@ -274,14 +276,14 @@
     {
         private Dictionary<CardValue, RuleForCard> rulesForCardsByValue;
 
-        private Dealer dealer;
+        //private Dealer dealer;
 
         [SetUp]
         public void Setup()
         {
             rulesForCardsByValue = new Dictionary<CardValue, RuleForCard>();
             rulesForCardsByValue.Add(CardValue.Two, RuleForCard.Reset);
-            dealer = DealerHelper.TestDealerWithRules(rulesForCardsByValue);
+            
         }
 
         [Test]
@@ -289,7 +291,7 @@
         {
             var cardToPlay = Card.SixOfClubs;
             var player1 = PlayerHelper.CreatePlayer(cardToPlay);
-
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, rulesForCardsByValue);
             var cardInPile = new List<Card>(new[] { Card.TwoOfClubs });
             var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
             var outcome = game.PlayCards(player1, cardToPlay);
@@ -302,7 +304,7 @@
         {
             var player1 = PlayerHelper.CreatePlayer(new List<Card>() { Card.SixOfClubs, Card.SevenOfClubs });
             var player2 = PlayerHelper.CreatePlayer(Card.TwoOfClubs);
-
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, rulesForCardsByValue);
             var game = dealer.StartGame(new[] { player1, player2 }, player1);
             game.PlayCards(player1, Card.SevenOfClubs);
             game.PlayCards(player2, Card.TwoOfClubs);
@@ -317,7 +319,7 @@
         public void Can_Be_Played_Over_Cards_Of_Higher_Value()
         {
             var player1 = PlayerHelper.CreatePlayer(Card.TwoOfClubs);
-
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, rulesForCardsByValue);
             var game = dealer.StartGameWithPlayPile(new [] {player1}, player1, new List<Card>(){Card.EightOfClubs});
             var outcome = game.PlayCards(player1, Card.TwoOfClubs);
 
@@ -328,13 +330,14 @@
     [TestFixture]
     public class WithJackAsReverseOrderOfPlayCard
     {
-        private Dealer dealer;
-        [SetUp]
+        //private Dealer dealer;
+        private Dictionary<CardValue, RuleForCard> rulesForCardByValue;
+            [SetUp]
         public void Setup()
         {
-            var rulesForCardByValue = new Dictionary<CardValue, RuleForCard>();
+            rulesForCardByValue = new Dictionary<CardValue, RuleForCard>();
             rulesForCardByValue.Add(CardValue.Jack, RuleForCard.ReverseOrderOfPlay);
-            dealer = new Dealer(new StandardDeck(), new DummyCanStartGame(), rulesForCardByValue);
+            
         }
 
         [Test]
@@ -343,7 +346,7 @@
             var player1 = PlayerHelper.CreatePlayer("Ed");
             var player2 = PlayerHelper.CreatePlayer(Card.JackOfClubs);
             var player3 = PlayerHelper.CreatePlayer("Liam");
-
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, rulesForCardByValue);
             var game = dealer.StartGame(new[] { player1, player2, player3 }, player2);
             game.PlayCards(player2, Card.JackOfClubs);
 
@@ -356,7 +359,7 @@
             var player1 = PlayerHelper.CreatePlayer(Card.AceOfClubs, "Ed");
             var player2 = PlayerHelper.CreatePlayer(Card.JackOfClubs);
             var player3 = PlayerHelper.CreatePlayer("Liam");
-
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2, player3 }, rulesForCardByValue);
             var game = dealer.StartGame(new[] { player1, player2, player3 }, player2);
             game.PlayCards(player2, Card.JackOfClubs);
             game.PlayCards(player1, Card.AceOfClubs);
@@ -369,13 +372,15 @@
     [TestFixture]
     public class WithEightAsReverseOrderOfPlayCard
     {
-        private Dealer dealer;
+        //private Dealer dealer;
+
+        private Dictionary<CardValue, RuleForCard> rulesForCardsByValue;
         [SetUp]
         public void Setup()
         {
-            var rulesForCardsByValue = new Dictionary<CardValue, RuleForCard>();
+            rulesForCardsByValue = new Dictionary<CardValue, RuleForCard>();
             rulesForCardsByValue.Add(CardValue.Eight, RuleForCard.ReverseOrderOfPlay);
-            dealer = DealerHelper.TestDealerWithRules(rulesForCardsByValue);
+            //dealer = DealerHelper.TestDealerWithRules(rulesForCardsByValue);
         }
 
         [Test]
@@ -384,7 +389,7 @@
             var player1 = PlayerHelper.CreatePlayer(Card.JackOfClubs, "Ed");
             var player2 = PlayerHelper.CreatePlayer(Card.EightOfClubs);
             var player3 = PlayerHelper.CreatePlayer("Liam");
-
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2, player3 }, rulesForCardsByValue);
             var game = dealer.StartGame(new[] { player1, player2, player3 }, player2);
             game.PlayCards(player2, Card.EightOfClubs);
 
@@ -395,13 +400,15 @@
     [TestFixture]
     public class WithTenAsBurnCard
     {
-        private Dealer dealer;
+        //private Dealer dealer;
+
+        private Dictionary<CardValue, RuleForCard> rulesForCardsByValue;
         [SetUp]
         public void Setup()
         {
-            var rulesForCardByValue = new Dictionary<CardValue, RuleForCard>();
-            rulesForCardByValue.Add(CardValue.Ten, RuleForCard.Burn);
-            dealer = DealerHelper.TestDealerWithRules(rulesForCardByValue);
+            rulesForCardsByValue = new Dictionary<CardValue, RuleForCard>();
+            rulesForCardsByValue.Add(CardValue.Ten, RuleForCard.Burn);
+            
         }
 
         [Test]
@@ -409,6 +416,7 @@
         {
             var player1 = PlayerHelper.CreatePlayer(Card.TenOfClubs);
             var cardsInPile = new List<Card>() { Card.TwoOfClubs, Card.ThreeOfClubs };
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, rulesForCardsByValue);
             var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardsInPile);
             
             game.PlayCards(player1, Card.TenOfClubs);
@@ -421,6 +429,7 @@
         {
             var player1 = PlayerHelper.CreatePlayer(Card.TenOfClubs);
             var cardInPile = new List<Card>() { Card.JackOfClubs };
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, rulesForCardsByValue);
             var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
 
             var outcome = game.PlayCards(player1, Card.TenOfClubs);
@@ -433,6 +442,7 @@
         {
             var player1 = PlayerHelper.CreatePlayer(Card.TenOfClubs);
             var player2 = PlayerHelper.CreatePlayer();
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, rulesForCardsByValue);
             var game = dealer.StartGame(new[] { player1, player2 }, player1);
 
             game.PlayCards(player1, Card.TenOfClubs);
@@ -444,7 +454,7 @@
     [TestFixture]
     public class GameSimulation
     {
-        [Test, Ignore]
+        [Test]
         public void Simulation()
         {
             var initialCards = new List<Card>()
@@ -486,7 +496,7 @@
 
             var player1 = new Player("Ed");
             var player2 = new Player("Liam");
-            var dealer = new Dealer(deck, new CanStartGame(), rules);
+            var dealer = new Dealer(new[]{player1, player2}, deck, new DefaultStartGameRules(), rules);
             dealer.DealIntialCards(new []{player1, player2});
 
             player1.PutCardFaceUp(Card.ThreeOfClubs);
@@ -500,15 +510,18 @@
             player2.Ready();
 
             var game = dealer.StartGame(new[] { player1, player2 });
-            //player1.NumCardsFaceUp(CardOrientation.InHand).Should().Be(3);
+            player1.NumCardsInHand.Should().Be(3);
 
             game.PlayCards(player1, Card.SixOfClubs);
             game.PlayCards(player2, Card.SevenOfClubs);
 
             game.CurrentPlayer.Should().Be(player1);
-            //player1.NumCardsFaceUp(CardOrientation.InHand).Should().Be(2);
+            player1.NumCardsInHand.Should().Be(2);
 
-            
+            game.PlayCards(player2, Card.TenOfClubs);
+            game.PlayPileCardCount.Should().Be(0);
+
+
         }
     }
 }

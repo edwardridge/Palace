@@ -6,16 +6,17 @@
 
     public class Dealer
     {
-        public Dealer(Deck deck, ICanStartGame canStartGame)
-            : this(deck, canStartGame, new Dictionary<CardValue, RuleForCard>())
+        public Dealer(IEnumerable<Player> players, Deck deck, ICanStartGame canStartGame)
+            : this(players, deck, canStartGame, new Dictionary<CardValue, RuleForCard>())
         {
         }
 
-        public Dealer(Deck deck, ICanStartGame canStartGame, Dictionary<CardValue, RuleForCard> rulesForCardsByValue)
+        public Dealer(IEnumerable<Player> players, Deck deck, ICanStartGame canStartGame, Dictionary<CardValue, RuleForCard> rulesForCardsByValue)
         {
+            this._players = players;
             this._deck = deck;
             this._rulesForCardsByValue = rulesForCardsByValue;
-            this.canStartGame = canStartGame;
+            this._canStartGame = canStartGame;
         }
 
         public void DealIntialCards(ICollection<Player> players)
@@ -29,7 +30,7 @@
 
         public Game StartGame(ICollection<Player> players, Player startingPlayer = null)
         {
-            if (!this.canStartGame.GameIsReadyToStart(players))
+            if (!this._canStartGame.IsReady(players))
                 throw new InvalidOperationException("The game is not ready to start");
 
             var game = new Game(players, new RulesProcessesor(_rulesForCardsByValue), _deck);
@@ -57,10 +58,12 @@
             return game;
         }
 
+        private readonly IEnumerable<Player> _players;
+
         private Deck _deck;
 
         private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
 
-        private ICanStartGame canStartGame;
+        private ICanStartGame _canStartGame;
     }
 }

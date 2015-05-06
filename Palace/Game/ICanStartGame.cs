@@ -6,12 +6,12 @@ namespace Palace
 {
 	public interface ICanStartGame
 	{
-		bool GameIsReadyToStart(ICollection<Player> players);
+		bool IsReady(ICollection<Player> players);
 	}
 
-    public class CanStartGame : ICanStartGame
+    public class DefaultStartGameRules : ICanStartGame
     {
-        public bool GameIsReadyToStart(ICollection<Player> players)
+        public bool IsReady(ICollection<Player> players)
         {
             var playersHaveThreeCardsFaceUp = !(players.Any(p => p.NumCardsFaceUp != 3));
             //return true;

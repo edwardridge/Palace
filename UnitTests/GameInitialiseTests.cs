@@ -15,7 +15,7 @@
 
     public class DummyCanStartGame : ICanStartGame
     {
-        public bool GameIsReadyToStart(ICollection<Player> players)
+        public bool IsReady(ICollection<Player> players)
         {
             return true;
         }
@@ -41,7 +41,7 @@
             player1 = PlayerHelper.CreatePlayer();
             player2 = PlayerHelper.CreatePlayer();
             var deck = new StandardDeck();
-            dealer = new Dealer(deck, new DummyCanStartGame());
+            dealer = new Dealer(new []{player1, player2}, deck, new DummyCanStartGame());
             dealer.DealIntialCards(new List<Player>() { player1, player2 });
             game = dealer.StartGame(new List<Player>() { player1, player2 });
         }
@@ -83,7 +83,7 @@
             var player2 = PlayerHelper.CreatePlayer();
             player2.Ready();
 
-            var dealer = new Dealer(new StandardDeck(), new CanStartGame());
+            var dealer = new Dealer(new[] { player1, player2 }, new StandardDeck(), new DefaultStartGameRules());
 
             Action outcome = () => dealer.StartGame(new[] { player1, player2 });
 
@@ -96,7 +96,7 @@
             var player1 = PlayerHelper.CreatePlayer();
             var player2 = PlayerHelper.CreatePlayer();
 
-            Action outcome = () => DealerHelper.TestDealer().StartGame(new[] { player1, player2 });
+            Action outcome = () => DealerHelper.TestDealer(new[]{player1, player2} ).StartGame(new[] { player1, player2 });
 
             outcome.ShouldNotThrow();
         }
@@ -113,7 +113,7 @@
         public void Setup()
         {
             player1 = new Player("Ed");
-            dealer = new Dealer(new StandardDeck(), new CanStartGame());
+            dealer = new Dealer(new[]{player1}, new StandardDeck(), new DefaultStartGameRules());
         }
 
         [Test]
@@ -214,7 +214,7 @@
             player1 = PlayerHelper.CreatePlayer();
             player2 = PlayerHelper.CreatePlayer();
             player3 = PlayerHelper.CreatePlayer();
-            dealer = DealerHelper.TestDealer();
+            dealer = DealerHelper.TestDealer(new[]{player1, player2, player3});
         }
 
         [Test]
