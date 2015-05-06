@@ -51,7 +51,7 @@
     <Compile Include="GameplayTests.cs" />
     <Compile Include="Helpers\CardHelpers.cs" />
     <Compile Include="DeckTests.cs" />
-    <Compile Include="StubReadyPlayer.cs" />
+    <Compile Include="Helpers\PlayerHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

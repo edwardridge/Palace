@@ -21,57 +21,57 @@
         }
     }
 
-    // [TestFixture]
-    // public static class GameInitialiseTests
-    // {
-    //[TestFixture]
-    //public class SetupGame
-    //{
-    //    private Dealer dealer;
+     [TestFixture]
+     public static class GameInitialiseTests
+     {
+    [TestFixture]
+    public class SetupGame
+    {
+        private Dealer dealer;
 
-    //    private Game game;
+        private Game game;
 
-    //    private IPlayer player1;
+        private Player player1;
 
-    //    private IPlayer player2;
+        private Player player2;
 
-    //    [SetUp]
-    //    public void Setup()
-    //    {
-    //        player1 = StubReadyPlayer.CreatePlayer();
-    //        player2 = StubReadyPlayer.CreatePlayer();
-    //        var deck = new StandardDeck();
-    //        dealer = new Dealer(deck, new DummyCanStartGame());
-    //        dealer.DealIntialCards(new List<IPlayer>() { player1, player2 });
-    //        game = dealer.StartGame(new List<IPlayer>() { player1, player2 });
-    //    }
+        [SetUp]
+        public void Setup()
+        {
+            player1 = PlayerHelper.CreatePlayer();
+            player2 = PlayerHelper.CreatePlayer();
+            var deck = new StandardDeck();
+            dealer = new Dealer(deck, new DummyCanStartGame());
+            dealer.DealIntialCards(new List<Player>() { player1, player2 });
+            game = dealer.StartGame(new List<Player>() { player1, player2 });
+        }
 
-    //    [Test]
-    //    public void Setup_With_Two_Players_Two_Players_Are_In_Game()
-    //    {
-    //        var playerCount = game.NumberOfPlayers;
+        [Test]
+        public void Setup_With_Two_Players_Two_Players_Are_In_Game()
+        {
+            var playerCount = game.NumberOfPlayers;
 
-    //        playerCount.Should().Be(2);
-    //    }
+            playerCount.Should().Be(2);
+        }
 
-    //    [Test]
-    //    public void Player_1_Has_6_In_Hand_Cards()
-    //    {
-    //        player1.Cards.Count(card => card.CardOrientation == CardOrientation.InHand).Should().Be(6);
-    //    }
+        [Test]
+        public void Player_1_Has_6_In_Hand_Cards()
+        {
+            player1.NumCardsInHand.Should().Be(6);
+        }
 
-    //    [Test]
-    //    public void Player_2_Has_6_In_Hand_Cards()
-    //    {
-    //        player2.Cards.Count(card => card.CardOrientation == CardOrientation.InHand).Should().Be(6);
-    //    }
+        [Test]
+        public void Player_2_Has_6_In_Hand_Cards()
+        {
+            player2.NumCardsInHand.Should().Be(6);
+        }
 
-    //    [Test]
-    //    public void Player_1_Has_3_Face_Down_Cards()
-    //    {
-    //        player1.Cards.Count(card => card.CardOrientation == CardOrientation.FaceDown).Should().Be(3);
-    //    }
-    //}
+        [Test]
+        public void Player_1_Has_3_Face_Down_Cards()
+        {
+            player1.NumCardsFaceDown.Should().Be(3);
+        }
+    }
 
     [TestFixture]
     public class GameStart
@@ -79,8 +79,8 @@
         [Test]
         public void Cannot_Start_When_Both_Players_Not_Ready()
         {
-            var player1 = StubReadyPlayer.CreatePlayer();
-            var player2 = StubReadyPlayer.CreatePlayer();
+            var player1 = PlayerHelper.CreatePlayer();
+            var player2 = PlayerHelper.CreatePlayer();
             player2.Ready();
 
             var dealer = new Dealer(new StandardDeck(), new CanStartGame());
@@ -93,8 +93,8 @@
         [Test]
         public void Can_Start_When_Both_Players_Are_Ready()
         {
-            var player1 = StubReadyPlayer.CreatePlayer();
-            var player2 = StubReadyPlayer.CreatePlayer();
+            var player1 = PlayerHelper.CreatePlayer();
+            var player2 = PlayerHelper.CreatePlayer();
 
             Action outcome = () => DealerHelper.TestDealer().StartGame(new[] { player1, player2 });
 
@@ -211,9 +211,9 @@
         public void Setup()
         {
             // player1Builder = new MockPlayerBuilder ().WithState (PlayerState.Ready).WithName ("Ed");
-            player1 = StubReadyPlayer.CreatePlayer();
-            player2 = StubReadyPlayer.CreatePlayer();
-            player3 = StubReadyPlayer.CreatePlayer();
+            player1 = PlayerHelper.CreatePlayer();
+            player2 = PlayerHelper.CreatePlayer();
+            player3 = PlayerHelper.CreatePlayer();
             dealer = DealerHelper.TestDealer();
         }
 
@@ -253,4 +253,4 @@
     }
 }
 
-//}
+ }

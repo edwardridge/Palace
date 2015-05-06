@@ -12,24 +12,12 @@ namespace Palace
 		    this.cards = new List<Card>(cards);
 		}
 
-        //public Deck(IShuffler shuffler, Pack pack)
-        //{
-        //    cards = pack.Cards;
-
-        //    cards = shuffler.ShuffleCards (cards);
-        //}
-
-		//Aside from setup we can assume we want in hand cards
-		public IEnumerable<Card> DealCards (int count){
-			return this.DealCards (count, CardOrientation.InHand);
-		}
-
-        public IEnumerable<Card> DealCards(int count, CardOrientation cardOrientation)
+        public IEnumerable<Card> DealCards(int count)
 		{
 			var returnCards = new List<Card>() ;
 
 			for(int i = 0 ;(i < count) && (cards.Count > 0); i++){
-				var card = GetNextCard (cardOrientation);
+				var card = GetNextCard ();
 				returnCards.Add(card);
 				RemoveCard (card);
 			}
@@ -52,7 +40,7 @@ namespace Palace
 			return cards.Count;
 		}
 
-		private Card GetNextCard(CardOrientation cardOrientation){
+		private Card GetNextCard(){
 			var cardToReturn = cards.First();
 			//cardToReturn.CardOrientation = cardOrientation;
 

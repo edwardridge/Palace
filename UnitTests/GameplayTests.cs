@@ -28,7 +28,7 @@
         public void Player_Cannot_Play_Card_Player_Doesnt_Have()
         {
             var cardsPlayerHas = new List<Card>() { Card.FourOfClubs };
-            var player1 = StubReadyPlayer.CreatePlayer(cardsPlayerHas);
+            var player1 = PlayerHelper.CreatePlayer(cardsPlayerHas);
 
             var cardsPlayerPlays = Card.AceOfClubs;
             var game = dealer.StartGame(new[] { player1 }, player1);
@@ -42,7 +42,7 @@
         public void Player_Can_Play_Card_Player_Has()
         {
             var cardsPlayerHas = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
-            var player1 = StubReadyPlayer.CreatePlayer(cardsPlayerHas);
+            var player1 = PlayerHelper.CreatePlayer(cardsPlayerHas);
 
             var game = dealer.StartGame(new[] { player1 }, player1);
             var playingCardsPlayerHasOutcome = game.PlayCards(player1, cardsPlayerHas[0]);
@@ -54,7 +54,7 @@
         public void When_Playing_Multiple_Cards_Player_Cannot_PLay_Card_They_Dont_Have()
         {
             var cardsPlayerHas = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
-            var player1 = StubReadyPlayer.CreatePlayer(cardsPlayerHas);
+            var player1 = PlayerHelper.CreatePlayer(cardsPlayerHas);
 
             var cardsPlayerPlays = new[] { Card.FourOfClubs, Card.FourOfSpades };
             var game = dealer.StartGame(new[] { player1 }, player1);
@@ -69,7 +69,7 @@
             var deck = new PredeterminedDeck(new[] { Card.ThreeOfClubs });
             var dealerForThisTest = new Dealer(deck, new DummyCanStartGame());
             var cardToPlay = Card.FourOfClubs;
-            var player1 = StubReadyPlayer.CreatePlayer(cardToPlay);
+            var player1 = PlayerHelper.CreatePlayer(cardToPlay);
 
             var game = dealer.StartGame(new[] { player1 }, player1);
             game.PlayCards(player1, cardToPlay);
@@ -81,7 +81,7 @@
         public void Can_Play_Multiple_Cards_Of_Same_Value()
         {
             var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
-            var player1 = StubReadyPlayer.CreatePlayer(cardsToPlay);
+            var player1 = PlayerHelper.CreatePlayer(cardsToPlay);
 
             var game = dealer.StartGame(new[] { player1 }, player1);
             var playerPlaysMultipleCardsOfSameValueOutcome = game.PlayCards(player1, cardsToPlay);
@@ -95,7 +95,7 @@
             var deck = new PredeterminedDeck(new[] { Card.AceOfClubs, Card.AceOfClubs });
             var dealerForThisTest = new Dealer(deck, new DummyCanStartGame());
             var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
-            var player1 = StubReadyPlayer.CreatePlayer(cardsToPlay);
+            var player1 = PlayerHelper.CreatePlayer(cardsToPlay);
 
             var game = dealerForThisTest.StartGame(new[] { player1 }, player1);
             game.PlayCards(player1, cardsToPlay);
@@ -107,7 +107,7 @@
         public void Cannot_Play_Multiple_Cards_Of_Different_Value()
         {
             var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.AceOfClubs };
-            var player1 = StubReadyPlayer.CreatePlayer(cardsToPlay);
+            var player1 = PlayerHelper.CreatePlayer(cardsToPlay);
 
             var game = dealer.StartGame(new[] { player1 }, player1);
             Action playerPlaysMultipleCardsOfDifferentValueOutcome = () => game.PlayCards(player1, cardsToPlay);
@@ -119,7 +119,7 @@
         public void When_Player_Plays_Card_Card_Is_Added_To_PlayPile()
         {
             var cardToPlay = Card.FourOfClubs;
-            var player1 = StubReadyPlayer.CreatePlayer(cardToPlay);
+            var player1 = PlayerHelper.CreatePlayer(cardToPlay);
 
             var game = dealer.StartGame(new[] { player1 }, player1);
             game.PlayCards(player1, cardToPlay);
@@ -131,8 +131,8 @@
         public void When_Player_Plays_Card_Its_Next_Players_Turn()
         {
             var cardToPlay = Card.AceOfClubs;
-            var player1 = StubReadyPlayer.CreatePlayer(cardToPlay, "Ed");
-            var player2 = StubReadyPlayer.CreatePlayer("Liam");
+            var player1 = PlayerHelper.CreatePlayer(cardToPlay, "Ed");
+            var player2 = PlayerHelper.CreatePlayer("Liam");
 
             var game = dealer.StartGame(new[] { player1, player2 }, player1);
             game.PlayCards(player1, cardToPlay);
@@ -143,7 +143,7 @@
         [Test]
         public void When_Player_Plays_One_Card_They_Receive_One_Card()
         {
-            var player1 = StubReadyPlayer.CreatePlayer(Card.AceOfClubs);
+            var player1 = PlayerHelper.CreatePlayer(Card.AceOfClubs);
             var game = dealer.StartGame(new[] { player1 });
             game.PlayCards(player1, Card.AceOfClubs);
 
@@ -154,7 +154,7 @@
         public void When_Player_Plays_Two_Cards_They_Receive_Two_Cards()
         {
             var cards = new List<Card>() { Card.AceOfClubs, Card.AceOfClubs };
-            var player1 = StubReadyPlayer.CreatePlayer(cards);
+            var player1 = PlayerHelper.CreatePlayer(cards);
             var game = dealer.StartGame(new[] { player1 });
             game.PlayCards(player1, cards);
 
@@ -177,7 +177,7 @@
         public void Playing_Card_Higher_In_Value_Is_Valid()
         {
             var cardToPlay = Card.ThreeOfClubs;
-            var player1 = StubReadyPlayer.CreatePlayer(cardToPlay);
+            var player1 = PlayerHelper.CreatePlayer(cardToPlay);
 
             var cardInPile = new Stack<Card>();
             cardInPile.Push(Card.TwoOfClubs);
@@ -191,7 +191,7 @@
         public void Playing_Card_Lower_In_Value_Isnt_Valid()
         {
             var cardToPlay = Card.ThreeOfClubs;
-            var player1 = StubReadyPlayer.CreatePlayer(cardToPlay);
+            var player1 = PlayerHelper.CreatePlayer(cardToPlay);
 
             var cardInPile = Card.FiveOfClubs;
             var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, new[] { cardInPile });
@@ -204,7 +204,7 @@
         public void Play_Card_Of_Same_Value_Is_Valid()
         {
             var cardToPlay = Card.FourOfClubs;
-            var player1 = StubReadyPlayer.CreatePlayer(cardToPlay);
+            var player1 = PlayerHelper.CreatePlayer(cardToPlay);
 
             var cardInPile = new List<Card>(new[] { Card.FourOfClubs });
             var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
@@ -233,7 +233,7 @@
         public void Playing_Card_Higher_In_Value_Isnt_Valid()
         {
             var cardToPlay = Card.EightOfClubs;
-            var player1 = StubReadyPlayer.CreatePlayer(cardToPlay);
+            var player1 = PlayerHelper.CreatePlayer(cardToPlay);
 
             var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
             var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
@@ -246,7 +246,7 @@
         public void Playing_Card_Lower_In_Value_Is_Valid()
         {
             var cardToPlay = Card.SixOfClubs;
-            var player1 = StubReadyPlayer.CreatePlayer(cardToPlay);
+            var player1 = PlayerHelper.CreatePlayer(cardToPlay);
 
             var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
             var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
@@ -259,7 +259,7 @@
         public void Playing_Card_Of_Same_Value_Is_Valid()
         {
             var cardToPlay = Card.SevenOfClubs;
-            var player1 = StubReadyPlayer.CreatePlayer(cardToPlay);
+            var player1 = PlayerHelper.CreatePlayer(cardToPlay);
 
             var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
             var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
@@ -288,7 +288,7 @@
         public void After_Playing_Reset_Card_Any_Card_IsValid()
         {
             var cardToPlay = Card.SixOfClubs;
-            var player1 = StubReadyPlayer.CreatePlayer(cardToPlay);
+            var player1 = PlayerHelper.CreatePlayer(cardToPlay);
 
             var cardInPile = new List<Card>(new[] { Card.TwoOfClubs });
             var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
@@ -300,8 +300,8 @@
         [Test]
         public void Resets_The_Play_Pile()
         {
-            var player1 = StubReadyPlayer.CreatePlayer(new List<Card>() { Card.SixOfClubs, Card.SevenOfClubs });
-            var player2 = StubReadyPlayer.CreatePlayer(Card.TwoOfClubs);
+            var player1 = PlayerHelper.CreatePlayer(new List<Card>() { Card.SixOfClubs, Card.SevenOfClubs });
+            var player2 = PlayerHelper.CreatePlayer(Card.TwoOfClubs);
 
             var game = dealer.StartGame(new[] { player1, player2 }, player1);
             game.PlayCards(player1, Card.SevenOfClubs);
@@ -316,7 +316,7 @@
         [Test]
         public void Can_Be_Played_Over_Cards_Of_Higher_Value()
         {
-            var player1 = StubReadyPlayer.CreatePlayer(Card.TwoOfClubs);
+            var player1 = PlayerHelper.CreatePlayer(Card.TwoOfClubs);
 
             var game = dealer.StartGameWithPlayPile(new [] {player1}, player1, new List<Card>(){Card.EightOfClubs});
             var outcome = game.PlayCards(player1, Card.TwoOfClubs);
@@ -340,9 +340,9 @@
         [Test]
         public void After_Playing_Reverse_Order_Card_Order_Is_Reversed_For_One_Turn()
         {
-            var player1 = StubReadyPlayer.CreatePlayer("Ed");
-            var player2 = StubReadyPlayer.CreatePlayer(Card.JackOfClubs);
-            var player3 = StubReadyPlayer.CreatePlayer("Liam");
+            var player1 = PlayerHelper.CreatePlayer("Ed");
+            var player2 = PlayerHelper.CreatePlayer(Card.JackOfClubs);
+            var player3 = PlayerHelper.CreatePlayer("Liam");
 
             var game = dealer.StartGame(new[] { player1, player2, player3 }, player2);
             game.PlayCards(player2, Card.JackOfClubs);
@@ -353,9 +353,9 @@
         [Test]
         public void After_Playing_Reverse_Order_Card_Order_Is_Reversed_For_Two_Turns()
         {
-            var player1 = StubReadyPlayer.CreatePlayer(Card.AceOfClubs, "Ed");
-            var player2 = StubReadyPlayer.CreatePlayer(Card.JackOfClubs);
-            var player3 = StubReadyPlayer.CreatePlayer("Liam");
+            var player1 = PlayerHelper.CreatePlayer(Card.AceOfClubs, "Ed");
+            var player2 = PlayerHelper.CreatePlayer(Card.JackOfClubs);
+            var player3 = PlayerHelper.CreatePlayer("Liam");
 
             var game = dealer.StartGame(new[] { player1, player2, player3 }, player2);
             game.PlayCards(player2, Card.JackOfClubs);
@@ -381,9 +381,9 @@
         [Test]
         public void Playing_Reverse_Order_Of_Play_Card_Reverses_Order_Of_Play()
         {
-            var player1 = StubReadyPlayer.CreatePlayer(Card.JackOfClubs, "Ed");
-            var player2 = StubReadyPlayer.CreatePlayer(Card.EightOfClubs);
-            var player3 = StubReadyPlayer.CreatePlayer("Liam");
+            var player1 = PlayerHelper.CreatePlayer(Card.JackOfClubs, "Ed");
+            var player2 = PlayerHelper.CreatePlayer(Card.EightOfClubs);
+            var player3 = PlayerHelper.CreatePlayer("Liam");
 
             var game = dealer.StartGame(new[] { player1, player2, player3 }, player2);
             game.PlayCards(player2, Card.EightOfClubs);
@@ -407,7 +407,7 @@
         [Test]
         public void Clears_The_Play_Pile()
         {
-            var player1 = StubReadyPlayer.CreatePlayer(Card.TenOfClubs);
+            var player1 = PlayerHelper.CreatePlayer(Card.TenOfClubs);
             var cardsInPile = new List<Card>() { Card.TwoOfClubs, Card.ThreeOfClubs };
             var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardsInPile);
             
@@ -419,7 +419,7 @@
         [Test]
         public void Can_Be_Played_Over_Cards_Of_Higher_Value()
         {
-            var player1 = StubReadyPlayer.CreatePlayer(Card.TenOfClubs);
+            var player1 = PlayerHelper.CreatePlayer(Card.TenOfClubs);
             var cardInPile = new List<Card>() { Card.JackOfClubs };
             var game = dealer.StartGameWithPlayPile(new[] { player1 }, player1, cardInPile);
 
@@ -431,8 +431,8 @@
         [Test]
         public void After_Playing_Burn_Card_Player_Gets_Another_Turn()
         {
-            var player1 = StubReadyPlayer.CreatePlayer(Card.TenOfClubs);
-            var player2 = StubReadyPlayer.CreatePlayer();
+            var player1 = PlayerHelper.CreatePlayer(Card.TenOfClubs);
+            var player2 = PlayerHelper.CreatePlayer();
             var game = dealer.StartGame(new[] { player1, player2 }, player1);
 
             game.PlayCards(player1, Card.TenOfClubs);

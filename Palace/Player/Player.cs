@@ -14,16 +14,16 @@ namespace Palace
 			get {return _state;}
 		}
 
-		public ICollection<Card> CardsInHand {
+		public IEnumerable<Card> CardsInHand {
 			get { return this._cardsInHand; }
 		}
 
-        public ICollection<Card> CardsFaceUp
+        public IEnumerable<Card> CardsFaceUp
         {
             get { return this._cardsFaceUp; }
         }
 
-        public ICollection<Card> CardsFaceDown
+        public IEnumerable<Card> CardsFaceDown
         {
             get { return this._cardsFaceDown; }
         }
@@ -52,25 +52,25 @@ namespace Palace
             }
 	    }
 
-		public void RemoveCardsFromInHand(ICollection<Card> cardsToBeRemoved){
+        public ResultOutcome PutCardFaceUp(Card cardToPutFaceUp)
+        {
+            var cardIsInPlayersHand = this._cardsInHand.Any(card => card.Equals(cardToPutFaceUp));
+            if (!cardIsInPlayersHand)
+                throw new ArgumentException();
+
+            if (this.NumCardsFaceUp >= 3)
+                return ResultOutcome.Fail;
+
+            this._cardsFaceUp.Add(cardToPutFaceUp);
+            this._cardsInHand.Remove(cardToPutFaceUp);
+
+            return ResultOutcome.Success;
+        }
+
+		internal void RemoveCardsFromInHand(ICollection<Card> cardsToBeRemoved){
 			foreach (Card removedCard in cardsToBeRemoved) {
 				this._cardsInHand.Remove (removedCard);
 			}
-		}
-
-		public ResultOutcome PutCardFaceUp (Card cardToPutFaceUp)
-		{
-		    var cardIsInPlayersHand = this._cardsInHand.Any(card => card.Equals(cardToPutFaceUp));
-		    if(!cardIsInPlayersHand)
-                throw new ArgumentException();
-
-			if(this.NumCardsFaceUp >= 3)
-				return ResultOutcome.Fail;
-
-            this._cardsFaceUp.Add(cardToPutFaceUp);
-		    this._cardsInHand.Remove(cardToPutFaceUp);
-
-			return ResultOutcome.Success;
 		}
 
         public int NumCardsFaceUp { get { return _cardsFaceUp.Count; } }

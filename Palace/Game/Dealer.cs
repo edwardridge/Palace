@@ -22,8 +22,8 @@
         {
             foreach (var player in players)
             {
-                player.AddCardsToInHandPile(_deck.DealCards(3, CardOrientation.FaceDown));
-                player.AddCardsToInHandPile(_deck.DealCards(6, CardOrientation.InHand));
+                player.AddCardToFaceDownPile(_deck.DealCards(3));
+                player.AddCardsToInHandPile(_deck.DealCards(6));
             }
         }
 
@@ -39,7 +39,7 @@
 
                 foreach (var player in players)
                 {
-                    if (player.CardsInHand == null || player.CardsInHand.Count == 0)
+                    if (player.CardsInHand == null || player.NumCardsInHand == 0)
                         continue;
                     if (player.LowestCardInValue.Value < startingPlayer.LowestCardInValue.Value)
                         startingPlayer = player;
