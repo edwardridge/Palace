@@ -105,21 +105,22 @@
     [TestFixture]
     public class PlayerReady
     {
-        private Player player1;
+        //private Player player1;
 
-        private Dealer dealer;
+        //private Dealer dealer;
 
         [SetUp]
         public void Setup()
         {
-            player1 = new Player("Ed");
-            dealer = new Dealer(new[]{player1}, new StandardDeck(), new DefaultStartGameRules());
+            //player1 = new Player("Ed");
+            //dealer = new Dealer(new[]{player1}, new StandardDeck(), new DefaultStartGameRules());
         }
 
         [Test]
         public void Player_Cannot_Be_Ready_With_No_Face_Up_Cards()
         {
-            // Don't put any cards face up
+            var player = PlayerHelper.CreatePlayer();
+            var dealer = new Dealer(new[] { player }, new StandardDeck(), new DefaultStartGameRules());
             Action outcome = () => dealer.StartGame();
 
             outcome.ShouldThrow<InvalidOperationException>();
@@ -128,9 +129,12 @@
         [Test]
         public void Player_Cannot_Be_Ready_With_Two_Face_Up_Cards()
         {
-            player1.AddCardsToInHandPile(new[] { new Card(CardValue.Ace, Suit.Club), new Card(CardValue.Ace, Suit.Club) });
+            var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs });
+            var dealerForThisTest = new Dealer(new[] { player }, new StandardDeck(), new DefaultStartGameRules());
+            player.PutCardFaceUp(Card.AceOfClubs);
+            player.PutCardFaceUp(Card.EightOfClubs);
 
-            Action outcome = () => dealer.StartGame();
+            Action outcome = () => dealerForThisTest.StartGame();
 
             outcome.ShouldThrow<InvalidOperationException>();
         }
@@ -138,15 +142,13 @@
         [Test]
         public void Player_Can_Be_Ready_When_Three_Cards_Are_Face_Up()
         {
-            player1.AddCardsToInHandPile(
-                new[]
-                    {
-                        new Card(CardValue.Ace, Suit.Club), 
-                        new Card(CardValue.Ace, Suit.Club), 
-                        new Card(CardValue.Ace, Suit.Club)
-                    });
+            var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs });
+            var dealerForThisTest = new Dealer(new[] { player }, new StandardDeck(), new DefaultStartGameRules());
+            player.PutCardFaceUp(Card.AceOfClubs);
+            player.PutCardFaceUp(Card.EightOfClubs);
+            player.PutCardFaceUp(Card.FiveOfClubs);
 
-            Action outcome = () => player1.Ready();
+            Action outcome = () => dealerForThisTest.StartGame();
 
             outcome.ShouldNotThrow();
         }
@@ -154,20 +156,12 @@
         [Test]
         public void Player_Cannot_Put_Fourth_Card_Face_Up()
         {
-            player1.AddCardsToInHandPile(
-                new[]
-                    {
-                        Card.AceOfClubs, 
-                        Card.EightOfClubs, 
-                        Card.FourOfClubs,
-                        Card.JackOfClubs
-                    });
+            var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs,Card.JackOfClubs });
+            player.PutCardFaceUp(Card.AceOfClubs);
+            player.PutCardFaceUp(Card.EightOfClubs);
+            player.PutCardFaceUp(Card.FiveOfClubs);
 
-            player1.PutCardFaceUp(Card.AceOfClubs);
-            player1.PutCardFaceUp(Card.EightOfClubs);
-            player1.PutCardFaceUp(Card.FourOfClubs);
-
-            var outcome = player1.PutCardFaceUp(Card.JackOfClubs);
+            var outcome = player.PutCardFaceUp(Card.JackOfClubs);
 
             outcome.Should().Be(ResultOutcome.Fail);
         }
@@ -175,9 +169,9 @@
         [Test]
         public void Player_Cannot_Put_Card_They_Dont_Have_Face_Up()
         {
-            player1.AddCardsToInHandPile(new[] { new Card(CardValue.Ace, Suit.Club) });
+            var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs });
 
-            Action outcome = () => player1.PutCardFaceUp(Card.EightOfClubs);
+            Action outcome = () => player.PutCardFaceUp(Card.EightOfClubs);
 
             outcome.ShouldThrow<ArgumentException>();
         }
@@ -185,30 +179,31 @@
         [Test]
         public void Player_Can_Swap_Face_Up_Card_For_In_Hand_Card()
         {
-            player1.AddCardsToInHandPile(new[]{Card.AceOfClubs,Card.EightOfClubs});
-            player1.PutCardFaceUp(Card.AceOfClubs);
-            player1.PutCardFaceUp(Card.EightOfClubs, Card.AceOfClubs);
+            var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs });
+            player.PutCardFaceUp(Card.AceOfClubs);
+            player.PutCardFaceUp(Card.EightOfClubs, Card.AceOfClubs);
 
 
-            player1.CardsFaceUp.Should().Contain(Card.EightOfClubs);
-            player1.CardsFaceUp.Should().NotContain(Card.AceOfClubs);
+            player.CardsFaceUp.Should().Contain(Card.EightOfClubs);
+            player.CardsFaceUp.Should().NotContain(Card.AceOfClubs);
         }
 
         [Test]
         public void When_Swapping_Face_Up_Card_Face_Up_Card_Is_Added_To_In_Hand_Pile()
         {
-            player1.AddCardsToInHandPile(new[]{Card.AceOfClubs, Card.EightOfClubs});
-            player1.PutCardFaceUp(Card.AceOfClubs);
-            player1.PutCardFaceUp(Card.EightOfClubs, Card.AceOfClubs);
+            var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs });
+            player.PutCardFaceUp(Card.AceOfClubs);
+            player.PutCardFaceUp(Card.EightOfClubs, Card.AceOfClubs);
 
-            player1.CardsInHand.Should().Contain(Card.AceOfClubs);
+            player.CardsInHand.Should().Contain(Card.AceOfClubs);
         }
 
         [Test]
         public void Cannot_Swap_Face_Up_Card_Player_Doesnt_Have()
         {
-            player1.AddCardsToInHandPile(new[]{Card.AceOfClubs});
-            Action action = () => player1.PutCardFaceUp(Card.AceOfClubs, Card.EightOfClubs);
+            var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs });
+            
+            Action action = () => player.PutCardFaceUp(Card.AceOfClubs, Card.SevenOfClubs);
 
             action.ShouldThrow<ArgumentException>();
         }
@@ -216,56 +211,68 @@
         [Test]
         public void Can_Swap_Card_When_Player_Has_Three_Face_Up_Cards()
         {
-            player1.AddCardsToInHandPile(new[]{Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs, Card.FourOfClubs});
-            player1.PutCardFaceUp(Card.AceOfClubs);
-            player1.PutCardFaceUp(Card.EightOfClubs);
-            player1.PutCardFaceUp(Card.FiveOfClubs);
-            var result = player1.PutCardFaceUp(Card.FourOfClubs, Card.AceOfClubs);
+            var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs, Card.FourOfClubs });
+            player.PutCardFaceUp(Card.AceOfClubs);
+            player.PutCardFaceUp(Card.EightOfClubs);
+            player.PutCardFaceUp(Card.FiveOfClubs);
+
+            var result = player.PutCardFaceUp(Card.FourOfClubs, Card.AceOfClubs);
 
             result.Should().Be(ResultOutcome.Success);
         }
 
         [Test]
+        public void Cannot_Swap_Cards_When_Player_Is_Ready()
+        {
+            var player = PlayerHelper.CreatePlayer(new[] { Card.EightOfClubs });
+            player.Ready();
+
+            var result = player.PutCardFaceUp(Card.EightOfClubs);
+
+            result.Should().Be(ResultOutcome.Fail);
+        }
+
+        [Test]
         public void If_Player_Has_Same_Card_Face_Down_And_In_Hand_The_In_Hand_Card_Is_Put_Face_Up()
         {
-            player1.AddCardsToInHandPile(new[] { new Card(CardValue.Ace, Suit.Club), new Card(CardValue.Ace, Suit.Club) });
+            var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.AceOfClubs });
+            
+            player.PutCardFaceUp(Card.AceOfClubs);
 
-            player1.PutCardFaceUp(Card.AceOfClubs);
-
-            player1.NumCardsFaceUp.Should().Be(1);
-            player1.NumCardsInHand.Should().Be(1);
+            player.NumCardsFaceUp.Should().Be(1);
+            player.NumCardsInHand.Should().Be(1);
         }
     }
 
     [TestFixture]
     public class FirstMoveWhenAllPlayersAreReady
     {
-        private Player player1;
+        //private Player player1;
 
-        private Player player2;
+        //private Player player2;
 
-        private Player player3;
+        //private Player player3;
 
         private Game game;
 
-        private Dealer dealer;
+        //private Dealer dealer;
 
         [SetUp]
         public void Setup()
         {
             // player1Builder = new MockPlayerBuilder ().WithState (PlayerState.Ready).WithName ("Ed");
-            player1 = PlayerHelper.CreatePlayer();
-            player2 = PlayerHelper.CreatePlayer();
-            player3 = PlayerHelper.CreatePlayer();
-            dealer = DealerHelper.TestDealer(new[]{player1, player2, player3});
+            //player1 = PlayerHelper.CreatePlayer();
+            //player2 = PlayerHelper.CreatePlayer();
+            //player3 = PlayerHelper.CreatePlayer();
+            //dealer = DealerHelper.TestDealer(new[]{player1, player2, player3});
         }
 
         [Test]
         public void P1_Has_Lowest_Card_P1_Goes_First()
         {
-            player1.AddCardsToInHandPile(new[] { Card.TwoOfClubs });
-            player2.AddCardsToInHandPile(new[] { Card.ThreeOfClubs });
-
+            var player1 = PlayerHelper.CreatePlayer(Card.TwoOfClubs);
+            var player2 = PlayerHelper.CreatePlayer(Card.ThreeOfClubs);
+            var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
             game = dealer.StartGame();
 
             game.CurrentPlayer.Should().Be(player1);
@@ -274,8 +281,9 @@
         [Test]
         public void P2_Has_Lowest_Card_P2_Goes_First()
         {
-            player1.AddCardsToInHandPile(new[] { Card.ThreeOfClubs });
-            player2.AddCardsToInHandPile(new[] { Card.TwoOfClubs });
+            var player1 = PlayerHelper.CreatePlayer(Card.ThreeOfClubs);
+            var player2 = PlayerHelper.CreatePlayer(Card.TwoOfClubs);
+            var dealer = new Dealer(new[] { player1, player2 }, new StandardDeck(), new DefaultStartGameRules());
 
             game = dealer.StartGame();
 
@@ -285,9 +293,10 @@
         [Test]
         public void P3_Has_Lowest_Card_P3_Goes_First()
         {
-            player1.AddCardsToInHandPile(new[] { Card.ThreeOfClubs });
-            player2.AddCardsToInHandPile(new[] { Card.ThreeOfClubs });
-            player3.AddCardsToInHandPile(new[] { Card.TwoOfClubs });
+            var player1 = PlayerHelper.CreatePlayer(Card.ThreeOfClubs);
+            var player2 = PlayerHelper.CreatePlayer(Card.ThreeOfClubs);
+            var player3 = PlayerHelper.CreatePlayer(Card.TwoOfClubs);
+            var dealer = new Dealer(new[] { player1, player2, player3 }, new StandardDeck(), new DefaultStartGameRules());
 
             game = dealer.StartGame();
 

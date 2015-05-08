@@ -32,8 +32,8 @@ namespace UnitTests
 
         public static Player CreatePlayer(IEnumerable<Card> cards, string name)
         {
-            var player = new Player(name);
-            player.AddCardsToInHandPile(cards);
+            var player = new Player(name, cards);
+            //player.AddCardsToInHandPile(cards);
             return player;
         }
     }

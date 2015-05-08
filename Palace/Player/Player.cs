@@ -4,7 +4,9 @@ using System.Linq;
 
 namespace Palace
 {
-	public class Player
+    using System.Runtime.InteropServices.ComTypes;
+
+    public class Player
 	{
 		public string Name {
 			get{ return _name; }
@@ -28,15 +30,20 @@ namespace Palace
             get { return this._cardsFaceDown; }
         }
 
-		public Player(string name){
-			this._name = name;
-		    this._cardsFaceDown = new List<Card>();//.ToList();
-            this._cardsInHand = new List<Card>(); 
+	    public Player(string name, IEnumerable<Card> cardsInHand)
+	    {
+            this._name = name;
+            this._cardsFaceDown = new List<Card>();//.ToList();
+            this._cardsInHand = new List<Card>(cardsInHand);
             this._cardsFaceUp = new List<Card>(); // cardsFaceUp.ToList();
-			_state = PlayerState.Setup;
+            _state = PlayerState.Setup;
+	    }
+
+		public Player(string name) : this(name, new List<Card>()) {
+			
 		}
 
-	    public void AddCardsToInHandPile(IEnumerable<Card> cardsToBeAdded)
+	    internal void AddCardsToInHandPile(IEnumerable<Card> cardsToBeAdded)
 	    {
             foreach (Card addedCard in cardsToBeAdded)
             {
@@ -54,6 +61,8 @@ namespace Palace
 
         public ResultOutcome PutCardFaceUp(Card cardToPutFaceUp, Card faceUpCardToSwap = null)
         {
+            if(_state != PlayerState.Setup) return ResultOutcome.Fail;
+            
             if (faceUpCardToSwap != null)
                 this.MoveCardToNewPile(faceUpCardToSwap, _cardsInHand, _cardsFaceUp);
             
