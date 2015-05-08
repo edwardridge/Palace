@@ -454,7 +454,7 @@
     [TestFixture]
     public class GameSimulation
     {
-        [Test]
+        [Test, Ignore]
         public void Simulation()
         {
             var initialCards = new List<Card>()

@@ -52,22 +52,31 @@ namespace Palace
             }
 	    }
 
-        public ResultOutcome PutCardFaceUp(Card cardToPutFaceUp)
+        public ResultOutcome PutCardFaceUp(Card cardToPutFaceUp, Card faceUpCardToSwap = null)
         {
-            var cardIsInPlayersHand = this._cardsInHand.Any(card => card.Equals(cardToPutFaceUp));
-            if (!cardIsInPlayersHand)
-                throw new ArgumentException();
-
+            if (faceUpCardToSwap != null)
+                this.MoveCardToNewPile(faceUpCardToSwap, _cardsInHand, _cardsFaceUp);
+            
             if (this.NumCardsFaceUp >= 3)
                 return ResultOutcome.Fail;
 
-            this._cardsFaceUp.Add(cardToPutFaceUp);
-            this._cardsInHand.Remove(cardToPutFaceUp);
+            this.MoveCardToNewPile(cardToPutFaceUp, _cardsFaceUp, _cardsInHand);
 
             return ResultOutcome.Success;
         }
 
-		internal void RemoveCardsFromInHand(ICollection<Card> cardsToBeRemoved){
+	    private void MoveCardToNewPile(Card cardToPutFaceUp, ICollection<Card> pileToAddTo, ICollection<Card> pileToRemoveFrom)
+	    {
+            var cardIsInPlayersHand = pileToRemoveFrom.Any(card => card.Equals(cardToPutFaceUp));
+
+	        if (!cardIsInPlayersHand)
+	            throw new ArgumentException();
+
+            pileToAddTo.Add(cardToPutFaceUp);
+            pileToRemoveFrom.Remove(cardToPutFaceUp);
+	    }
+
+	    internal void RemoveCardsFromInHand(ICollection<Card> cardsToBeRemoved){
 			foreach (Card removedCard in cardsToBeRemoved) {
 				this._cardsInHand.Remove (removedCard);
 			}

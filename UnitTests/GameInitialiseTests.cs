@@ -183,6 +183,49 @@
         }
 
         [Test]
+        public void Player_Can_Swap_Face_Up_Card_For_In_Hand_Card()
+        {
+            player1.AddCardsToInHandPile(new[]{Card.AceOfClubs,Card.EightOfClubs});
+            player1.PutCardFaceUp(Card.AceOfClubs);
+            player1.PutCardFaceUp(Card.EightOfClubs, Card.AceOfClubs);
+
+
+            player1.CardsFaceUp.Should().Contain(Card.EightOfClubs);
+            player1.CardsFaceUp.Should().NotContain(Card.AceOfClubs);
+        }
+
+        [Test]
+        public void When_Swapping_Face_Up_Card_Face_Up_Card_Is_Added_To_In_Hand_Pile()
+        {
+            player1.AddCardsToInHandPile(new[]{Card.AceOfClubs, Card.EightOfClubs});
+            player1.PutCardFaceUp(Card.AceOfClubs);
+            player1.PutCardFaceUp(Card.EightOfClubs, Card.AceOfClubs);
+
+            player1.CardsInHand.Should().Contain(Card.AceOfClubs);
+        }
+
+        [Test]
+        public void Cannot_Swap_Face_Up_Card_Player_Doesnt_Have()
+        {
+            player1.AddCardsToInHandPile(new[]{Card.AceOfClubs});
+            Action action = () => player1.PutCardFaceUp(Card.AceOfClubs, Card.EightOfClubs);
+
+            action.ShouldThrow<ArgumentException>();
+        }
+
+        [Test]
+        public void Can_Swap_Card_When_Player_Has_Three_Face_Up_Cards()
+        {
+            player1.AddCardsToInHandPile(new[]{Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs, Card.FourOfClubs});
+            player1.PutCardFaceUp(Card.AceOfClubs);
+            player1.PutCardFaceUp(Card.EightOfClubs);
+            player1.PutCardFaceUp(Card.FiveOfClubs);
+            var result = player1.PutCardFaceUp(Card.FourOfClubs, Card.AceOfClubs);
+
+            result.Should().Be(ResultOutcome.Success);
+        }
+
+        [Test]
         public void If_Player_Has_Same_Card_Face_Down_And_In_Hand_The_In_Hand_Card_Is_Put_Face_Up()
         {
             player1.AddCardsToInHandPile(new[] { new Card(CardValue.Ace, Suit.Club), new Card(CardValue.Ace, Suit.Club) });
