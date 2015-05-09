@@ -64,7 +64,7 @@
             var cardsList = cards as IList<Card> ?? cards.ToList();
             var cardToPlay = cardsList.First();
             var ruleForPlayersCard = getRuleForCardFromCardValue(cardToPlay.Value);
-            if (ruleForPlayersCard == RuleForCard.Burn)
+            if (ruleForPlayersCard == RuleForCard.Burn || cardsList.Count >= 4)
                 return currentPlayer;
 
             var nextPlayer = ChoosePlayerFromOrderOfPlay(orderOfPlay, players, currentPlayer);

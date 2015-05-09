@@ -584,6 +584,20 @@
             game.PlayPileCardCount.Should().Be(0);
 
         }
+
+        [Test]
+        public void Player_Gets_Another_Turn()
+        {
+            var cardsToPlay = new[] { Card.FiveOfClubs, Card.FiveOfClubs, Card.FiveOfClubs, Card.FiveOfClubs };
+            var player1 = PlayerHelper.CreatePlayer(cardsToPlay);
+            var player2 = PlayerHelper.CreatePlayer();
+            var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
+            var game = dealer.StartGameWithPlayPile(player1, new[] { Card.TwoOfClubs, Card.ThreeOfClubs });
+
+            var outcome = game.PlayCards(player1, cardsToPlay);
+
+            game.CurrentPlayer.Should().Be(player1);
+        }
     }
 
     [TestFixture]
