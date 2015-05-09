@@ -61,6 +61,9 @@
             LinkedListNode<Player> currentPlayer, 
             OrderOfPlay orderOfPlay)
         {
+            if (cards == null)
+                return ChoosePlayerFromOrderOfPlay(orderOfPlay, players, currentPlayer);
+
             var cardsList = cards as IList<Card> ?? cards.ToList();
             var cardToPlay = cardsList.First();
             var ruleForPlayersCard = getRuleForCardFromCardValue(cardToPlay.Value);
@@ -72,9 +75,8 @@
                 return nextPlayer;
 
             foreach (var card in cardsList)
-            {
                 nextPlayer = ChoosePlayerFromOrderOfPlay(orderOfPlay, players, nextPlayer);
-            }
+            
             return nextPlayer;
         }
 

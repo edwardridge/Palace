@@ -102,5 +102,12 @@ namespace Palace
         private ICardDealer _cardDealer;
 
         private OrderOfPlay _orderOfPlay;
+
+        public void PlayerCannotPlayCards(Player player)
+        {
+            player.AddCardsToInHandPile(_playPile);
+            _playPile.Clear();
+            _currentPlayer = _rulesProcessesor.ChooseNextPlayer(null, _players, _currentPlayer, _orderOfPlay);
+        }
     }
 }

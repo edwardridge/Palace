@@ -601,6 +601,47 @@
     }
 
     [TestFixture]
+    public class WhenPlayerCannotPlayCards
+    {
+        [Test]
+        public void Player_Gets_All_Cards_In_Play_Pile()
+        {
+            var player1 = PlayerHelper.CreatePlayer();
+            var dealer = DealerHelper.TestDealer(new[] { player1 });
+            var game = dealer.StartGameWithPlayPile(player1, new[] { Card.FiveOfClubs, Card.FourOfClubs });
+
+            game.PlayerCannotPlayCards(player1);
+
+            player1.NumCardsInHand.Should().Be(2);
+        }
+
+        [Test]
+        public void Play_Pile_Is_Cleared()
+        {
+            var player1 = PlayerHelper.CreatePlayer();
+            var dealer = DealerHelper.TestDealer(new[] { player1 });
+            var game = dealer.StartGameWithPlayPile(player1, new[] { Card.EightOfClubs, Card.FourOfSpades, Card.SixOfClubs });
+
+            game.PlayerCannotPlayCards(player1);
+
+            game.PlayPileCardCount.Should().Be(0);
+        }
+
+        [Test]
+        public void Its_Next_Players_Turn()
+        {
+            var player1 = PlayerHelper.CreatePlayer();
+            var player2 = PlayerHelper.CreatePlayer();
+            var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
+            var game = dealer.StartGameWithPlayPile(player1, new[] { Card.AceOfClubs, Card.FiveOfClubs });
+
+            game.PlayerCannotPlayCards(player1);
+
+            game.CurrentPlayer.Should().Be(player2);
+        }
+    }
+
+    [TestFixture]
     public class GameSimulation
     {
         [Test]
