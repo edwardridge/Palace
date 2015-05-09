@@ -476,6 +476,20 @@
 
             game.CurrentPlayer.Should().Be(player3);
         }
+
+        [Test]
+        public void With_Second_Player_As_Current_Player_After_Playing_Skips_Next_Player()
+        {
+            var player1 = PlayerHelper.CreatePlayer();
+            var player2 = PlayerHelper.CreatePlayer(Card.EightOfClubs);
+            var player3 = PlayerHelper.CreatePlayer();
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2, player3 }, ruleForCardsByValue);
+            var game = dealer.StartGame(player2);
+
+            game.PlayCards(player2, Card.EightOfClubs);
+
+            game.CurrentPlayer.Should().Be(player1);
+        }
     }
 
     [TestFixture]
