@@ -1,5 +1,6 @@
 ﻿namespace Palace_Console
 {
+    using System;
     using System.Collections.Generic;
 
     using Palace;
@@ -15,6 +16,24 @@
             ruleForCardsByValue.Add(CardValue.Eight, RuleForCard.SeeThrough);
             ruleForCardsByValue.Add(CardValue.Jack, RuleForCard.SkipPlayer);
             ruleForCardsByValue.Add(CardValue.Ace, RuleForCard.ReverseOrderOfPlay);
+            var player1 = new Player("Ed");
+            var player2 = new Player("Soph");
+            var players = new[] { player1, player2 };
+            var dealer = new Dealer(players, new StandardDeck(), new DefaultStartGameRules());
+            dealer.DealIntialCards();
+
+            var output = "";
+            foreach (var player in players)
+            {
+                output += player.Name + "\n";
+                output += "Cards: ";
+                foreach (var inHandCards in player.CardsInHand)
+                    output += inHandCards.Value + " of " + inHandCards.Suit + "\n";
+                output += "\n";
+            }
+            Console.WriteLine(output);
+            var t = Console.ReadLine();
+            
         }
     }
 }
