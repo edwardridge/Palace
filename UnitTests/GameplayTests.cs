@@ -1,6 +1,7 @@
 ﻿namespace UnitTests
 {
     using System;
+    using System.CodeDom;
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.InteropServices;
@@ -506,6 +507,47 @@
             game.PlayCards(player1, cardsToPlay);
 
             game.CurrentPlayer.Should().Be(player4);
+        }
+    }
+
+    [TestFixture]
+    public class WithFiveAsSeeThroughCard
+    {
+        private Dictionary<CardValue, RuleForCard> ruleForCardsByValue; 
+        
+        [SetUp]
+        public void Setup()
+        {
+            ruleForCardsByValue = new Dictionary<CardValue, RuleForCard>();  
+            ruleForCardsByValue.Add(CardValue.Five, RuleForCard.SeeThrough);
+        }
+
+        [Test]
+        public void Can_Be_Played_Over_Card_Of_Higher_Value()
+        {
+            var player1 = PlayerHelper.CreatePlayer(Card.FiveOfClubs);
+            var player2 = PlayerHelper.CreatePlayer();
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, ruleForCardsByValue);
+            var game = dealer.StartGameWithPlayPile(player1, new[]{Card.SevenOfClubs});
+            
+            var outcome = game.PlayCards(player1, Card.FiveOfClubs);
+
+            outcome.Should().Be(ResultOutcome.Success);
+        }
+
+        [Test]
+        public void After_Playing_Card_Next_Player_Cannot_Play_Card_Lower_Than_Previous_Card()
+        {
+            var player1 = PlayerHelper.CreatePlayer(Card.FiveOfClubs);
+            var player2 = PlayerHelper.CreatePlayer(Card.SixOfClubs);
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, ruleForCardsByValue);
+            var game = dealer.StartGameWithPlayPile(player1, new[] { Card.SevenOfClubs });
+
+            game.PlayCards(player1, Card.FiveOfClubs);
+            var outcome = game.PlayCards(player2, Card.SixOfClubs);
+
+            outcome.Should().Be(ResultOutcome.Fail);
+
         }
     }
 

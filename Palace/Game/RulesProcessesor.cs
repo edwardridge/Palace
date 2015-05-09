@@ -12,15 +12,23 @@
             this._rulesForCardsByValue = rulesForCardsByValue;
         }
 
-        internal bool CardCanBePlayed(Card cardToPlay, Card lastCardPlayed)
+        internal bool CardCanBePlayed(Card cardToPlay, IEnumerable<Card> playPile)
         {
+            var playPileAsList = playPile as IList<Card> ?? playPile.ToList();
+            var lastCardPlayed = playPileAsList.Any() ? playPileAsList.First() : null;
             if (lastCardPlayed == null)
                 return true;
 
             var rulesForPlayersCard = this.getRuleForCardFromCardValue(cardToPlay.Value);
             var ruleForLastCardPlayed = this.getRuleForCardFromCardValue(lastCardPlayed.Value);
 
-            if (rulesForPlayersCard == RuleForCard.Reset || rulesForPlayersCard == RuleForCard.Burn)
+            if (ruleForLastCardPlayed == RuleForCard.SeeThrough)
+            {
+                var playPileExceptLastCard = playPileAsList.Except(new[]{lastCardPlayed});
+                return CardCanBePlayed(cardToPlay, playPileExceptLastCard);
+            }
+            
+            if (rulesForPlayersCard == RuleForCard.Reset || rulesForPlayersCard == RuleForCard.Burn || rulesForPlayersCard == RuleForCard.SeeThrough)
                 return true;
             if (ruleForLastCardPlayed == RuleForCard.Standard && cardToPlay.Value < lastCardPlayed.Value)
                 return false;
@@ -50,7 +58,8 @@
             LinkedListNode<Player> currentPlayer, 
             OrderOfPlay orderOfPlay)
         {
-            var cardToPlay = cards.First();
+            var cardsList = cards as IList<Card> ?? cards.ToList();
+            var cardToPlay = cardsList.First();
             var ruleForPlayersCard = getRuleForCardFromCardValue(cardToPlay.Value);
             if (ruleForPlayersCard == RuleForCard.Burn)
                 return currentPlayer;
@@ -59,7 +68,7 @@
             if (ruleForPlayersCard != RuleForCard.SkipPlayer)
                 return nextPlayer;
 
-            foreach (var card in cards)
+            foreach (var card in cardsList)
             {
                 nextPlayer = ChoosePlayerFromOrderOfPlay(orderOfPlay, players, nextPlayer);
             }

@@ -39,7 +39,7 @@ namespace Palace
             var cardToPlay = cards.First();
             var lastCardPlayed = _playPile.Any() ? _playPile.Peek() : null;
 
-            if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, lastCardPlayed))
+            if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, _playPile))
                 return ResultOutcome.Fail;
 
             _orderOfPlay = this._rulesProcessesor.ChooseOrderOfPlay(_orderOfPlay, cardToPlay);
