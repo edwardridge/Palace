@@ -3,6 +3,7 @@
     using System;
     using System.CodeDom;
     using System.Collections.Generic;
+    using System.ComponentModel.Design;
     using System.Linq;
     using System.Runtime.InteropServices;
 
@@ -564,6 +565,24 @@
             var outcome = game.PlayCards(player3, Card.SixOfClubs);
 
             outcome.Should().Be(ResultOutcome.Fail);
+        }
+    }
+
+    [TestFixture]
+    public class PlayingFourOfAKind
+    {
+        [Test]
+        public void Burns_The_Play_Pile()
+        {
+            var cardsToPlay = new[] { Card.FiveOfClubs, Card.FiveOfClubs, Card.FiveOfClubs, Card.FiveOfClubs };
+            var player1 = PlayerHelper.CreatePlayer(cardsToPlay);
+            var dealer = DealerHelper.TestDealer(new[] { player1 });
+            var game = dealer.StartGameWithPlayPile(player1, new[] { Card.TwoOfClubs, Card.ThreeOfClubs });
+
+            var outcome = game.PlayCards(player1, cardsToPlay);
+
+            game.PlayPileCardCount.Should().Be(0);
+
         }
     }
 

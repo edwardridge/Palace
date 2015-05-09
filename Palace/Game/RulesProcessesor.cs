@@ -47,9 +47,12 @@
             return currentOrder;
         }
 
-        internal bool PlayPileShouldBeCleared(Card cardToPlay)
+        internal bool PlayPileShouldBeCleared(IEnumerable<Card> cardsToPlay)
         {
-            return getRuleForCardFromCardValue(cardToPlay.Value) == RuleForCard.Burn;
+            var fourOfAKind = cardsToPlay.Count() >= 4;
+            var isBurnCard = getRuleForCardFromCardValue(cardsToPlay.First().Value) == RuleForCard.Burn;
+
+            return fourOfAKind || isBurnCard;
         }
 
         internal LinkedListNode<Player> ChooseNextPlayer(

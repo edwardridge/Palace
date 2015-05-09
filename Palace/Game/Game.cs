@@ -37,13 +37,12 @@ namespace Palace
                 throw new ArgumentException("You cannot play more than one type of card");
 
             var cardToPlay = cards.First();
-            var lastCardPlayed = _playPile.Any() ? _playPile.Peek() : null;
-
+            
             if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, _playPile))
                 return ResultOutcome.Fail;
 
             _orderOfPlay = this._rulesProcessesor.ChooseOrderOfPlay(_orderOfPlay, cardToPlay);
-            if(this._rulesProcessesor.PlayPileShouldBeCleared(cardToPlay))
+            if(this._rulesProcessesor.PlayPileShouldBeCleared(cards))
                 this._playPile.Clear();
             else
                 foreach (Card card in cards)            
