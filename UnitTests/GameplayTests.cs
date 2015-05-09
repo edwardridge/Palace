@@ -452,9 +452,36 @@
     }
 
     [TestFixture]
+    public class WithEightAsSkipPlayerCard
+    {
+        private Dictionary<CardValue, RuleForCard> ruleForCardsByValue;
+        
+        [SetUp]
+        public void Setup()
+        {
+            ruleForCardsByValue = new Dictionary<CardValue, RuleForCard>();
+            ruleForCardsByValue.Add(CardValue.Eight, RuleForCard.SkipPlayer);
+        }
+
+        [Test]
+        public void After_Playing_Skips_Next_Player()
+        {
+            var player1 = PlayerHelper.CreatePlayer(Card.EightOfClubs);
+            var player2 = PlayerHelper.CreatePlayer();
+            var player3 = PlayerHelper.CreatePlayer();
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2, player3 }, ruleForCardsByValue);
+            var game = dealer.StartGame();
+
+            game.PlayCards(player1, Card.EightOfClubs);
+
+            game.CurrentPlayer.Should().Be(player3);
+        }
+    }
+
+    [TestFixture]
     public class GameSimulation
     {
-        [Test, Ignore]
+        [Test]
         public void Simulation()
         {
             var initialCards = new List<Card>()

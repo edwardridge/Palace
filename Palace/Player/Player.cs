@@ -51,7 +51,7 @@ namespace Palace
             }
 	    }
 
-	    public void AddCardToFaceDownPile(IEnumerable<Card> cardsToBeAdded)
+	    internal void AddCardToFaceDownPile(IEnumerable<Card> cardsToBeAdded)
 	    {
             foreach (Card addedCard in cardsToBeAdded)
             {

@@ -53,6 +53,15 @@
             if (ruleForPlayersCard == RuleForCard.Burn)
                 return currentPlayer;
 
+            var nextPlayer = ChoosePlayerFromOrderOfPlay(orderOfPlay, players, currentPlayer);
+            if (ruleForPlayersCard != RuleForCard.SkipPlayer)
+                return nextPlayer;
+
+            return ChoosePlayerFromOrderOfPlay(orderOfPlay, players, nextPlayer);
+        }
+
+        private LinkedListNode<Player> ChoosePlayerFromOrderOfPlay(OrderOfPlay orderOfPlay, LinkedList<Player> players, LinkedListNode<Player> currentPlayer)
+        {
             if (orderOfPlay == OrderOfPlay.Forward)
                 return currentPlayer.Next ?? players.First;
             
