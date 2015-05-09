@@ -549,6 +549,22 @@
             outcome.Should().Be(ResultOutcome.Fail);
 
         }
+
+        [Test]
+        public void After_Two_Players_Play_See_Through_Card_Next_Player_Cannot_Play_Lower_Card_Than_Previous_Card()
+        {
+            var player1 = PlayerHelper.CreatePlayer(Card.FiveOfClubs);
+            var player2 = PlayerHelper.CreatePlayer(Card.FiveOfClubs);
+            var player3 = PlayerHelper.CreatePlayer(Card.SixOfClubs);
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2, player3 }, ruleForCardsByValue);
+            var game = dealer.StartGameWithPlayPile(player1, new[]{Card.SevenOfClubs});
+            game.PlayCards(player1, Card.FiveOfClubs);
+            game.PlayCards(player2, Card.FiveOfClubs);
+
+            var outcome = game.PlayCards(player3, Card.SixOfClubs);
+
+            outcome.Should().Be(ResultOutcome.Fail);
+        }
     }
 
     [TestFixture]
