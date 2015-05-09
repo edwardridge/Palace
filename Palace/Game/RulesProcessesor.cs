@@ -1,6 +1,7 @@
 ﻿namespace Palace
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     public class RulesProcessesor
     {
@@ -44,11 +45,12 @@
         }
 
         internal LinkedListNode<Player> ChooseNextPlayer(
-            Card cardToPlay, 
+            IEnumerable<Card> cards, 
             LinkedList<Player> players, 
             LinkedListNode<Player> currentPlayer, 
             OrderOfPlay orderOfPlay)
         {
+            var cardToPlay = cards.First();
             var ruleForPlayersCard = getRuleForCardFromCardValue(cardToPlay.Value);
             if (ruleForPlayersCard == RuleForCard.Burn)
                 return currentPlayer;
@@ -57,7 +59,11 @@
             if (ruleForPlayersCard != RuleForCard.SkipPlayer)
                 return nextPlayer;
 
-            return ChoosePlayerFromOrderOfPlay(orderOfPlay, players, nextPlayer);
+            foreach (var card in cards)
+            {
+                nextPlayer = ChoosePlayerFromOrderOfPlay(orderOfPlay, players, nextPlayer);
+            }
+            return nextPlayer;
         }
 
         private LinkedListNode<Player> ChoosePlayerFromOrderOfPlay(OrderOfPlay orderOfPlay, LinkedList<Player> players, LinkedListNode<Player> currentPlayer)

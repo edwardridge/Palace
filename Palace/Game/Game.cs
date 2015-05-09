@@ -53,7 +53,7 @@ namespace Palace
             player.RemoveCardsFromInHand(cards);
             player.AddCardsToInHandPile(_cardDealer.DealCards(cards.Count));
 
-            this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(cardToPlay, _players, this._currentPlayer, _orderOfPlay);
+            this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(cards, _players, this._currentPlayer, _orderOfPlay);
 
             return ResultOutcome.Success;
         }

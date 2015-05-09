@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.InteropServices;
 
     using FluentAssertions;
 
@@ -489,6 +490,22 @@
             game.PlayCards(player2, Card.EightOfClubs);
 
             game.CurrentPlayer.Should().Be(player1);
+        }
+
+        [Test]
+        public void Playing_Two_Skip_Cards_Skips_Two_Players()
+        {
+            var cardsToPlay = new[]{Card.EightOfClubs, Card.EightOfClubs};
+            var player1 = PlayerHelper.CreatePlayer(cardsToPlay, "Ed");
+            var player2 = PlayerHelper.CreatePlayer();
+            var player3 = PlayerHelper.CreatePlayer();
+            var player4 = PlayerHelper.CreatePlayer("Liam");
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2, player3, player4 }, ruleForCardsByValue);
+            var game = dealer.StartGame();
+
+            game.PlayCards(player1, cardsToPlay);
+
+            game.CurrentPlayer.Should().Be(player4);
         }
     }
 
