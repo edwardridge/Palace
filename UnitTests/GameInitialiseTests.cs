@@ -283,7 +283,7 @@
         {
             var player1 = PlayerHelper.CreatePlayer(Card.ThreeOfClubs);
             var player2 = PlayerHelper.CreatePlayer(Card.TwoOfClubs);
-            var dealer = new Dealer(new[] { player1, player2 }, new StandardDeck(), new DefaultStartGameRules());
+            var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
 
             game = dealer.StartGame();
 
@@ -296,7 +296,7 @@
             var player1 = PlayerHelper.CreatePlayer(Card.ThreeOfClubs);
             var player2 = PlayerHelper.CreatePlayer(Card.ThreeOfClubs);
             var player3 = PlayerHelper.CreatePlayer(Card.TwoOfClubs);
-            var dealer = new Dealer(new[] { player1, player2, player3 }, new StandardDeck(), new DefaultStartGameRules());
+            var dealer = DealerHelper.TestDealer(new[] { player1, player2, player3 });
 
             game = dealer.StartGame();
 
