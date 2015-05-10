@@ -86,6 +86,14 @@ namespace Palace
             }
         }
 
+        public Card LastCardPlayed
+        {
+            get
+            {
+                return _playPile.Count == 0 ? null : _playPile.Peek();
+            }
+        }
+
         internal void Start(Player startingPlayer)
         {
             this._currentPlayer = _players.Find(startingPlayer);
