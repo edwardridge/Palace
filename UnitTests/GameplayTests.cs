@@ -81,15 +81,29 @@
         }
 
         [Test]
-        public void Can_Play_Multiple_Cards_Of_Same_Value()
+        public void Can_Play_Multiple_Cards_Of_Same_Value_And_Same_Suit()
         {
             var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
             var player1 = PlayerHelper.CreatePlayer(cardsToPlay);
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.StartGame(player1);
+            
             var playerPlaysMultipleCardsOfSameValueOutcome = game.PlayCards(player1, cardsToPlay);
 
             playerPlaysMultipleCardsOfSameValueOutcome.Should().Be(ResultOutcome.Success);
+        }
+
+        [Test]
+        public void Can_Play_Multiple_Cards_Of_Same_Value_And_Different_Suit()
+        {
+            var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.FourOfSpades };
+            var player1 = PlayerHelper.CreatePlayer(cardsToPlay);
+            var dealer = DealerHelper.TestDealer(new[] { player1 });
+            var game = dealer.StartGame();
+            
+            var outcome = game.PlayCards(player1, cardsToPlay);
+
+            outcome.Should().Be(ResultOutcome.Success);
         }
 
         [Test]
