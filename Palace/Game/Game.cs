@@ -51,7 +51,7 @@ namespace Palace
 
             player.RemoveCardsFromInHand(cards);
 
-            while(player.NumCardsInHand != 3 && _cardDealer.CardsRemaining)
+            while(player.NumCardsInHand < 3 && _cardDealer.CardsRemaining)
                 player.AddCardsToInHandPile(_cardDealer.DealCards(1));
             
             this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(cards, _players, this._currentPlayer, _orderOfPlay);

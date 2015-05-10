@@ -195,7 +195,7 @@
         }
 
         [Test]
-        public void Player_Only_Receives_A_Maximum_Of_Three_Cards_When_Playing()
+        public void When_Player_Has_Four_Cards_And_Takes_Turn_They_Dont_Get_Any_More_Cards()
         {
             var cards = new[] { Card.AceOfClubs, Card.AceOfClubs, Card.AceOfClubs, Card.AceOfClubs };
             var player1 = PlayerHelper.CreatePlayer(cards);
@@ -205,6 +205,18 @@
             game.PlayCards(player1, cards);
 
             player1.NumCardsInHand.Should().Be(3);
+        }
+
+        [Test]
+        public void When_Player_Has_Five_Cards_And_Takes_Turn_They_Dont_Get_Any_More_Cards()
+        {
+            var player1 = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs, Card.FourOfSpades, Card.SixOfClubs });
+            var dealer = DealerHelper.TestDealer(new[] { player1 });
+            var game = dealer.StartGame();
+
+            game.PlayCards(player1, Card.AceOfClubs);
+
+            player1.NumCardsInHand.Should().Be(4);
         }
     }
 

@@ -53,13 +53,18 @@
                 }
                 else
                 {
-                    var indexes = line.Split(',').Select(int.Parse);
-                    var cardToPlay = currentPlayer.CardsInHand.ToArray().Where((w,i)=> indexes.Contains(i));
-                    game.PlayCards(currentPlayer, cardToPlay.ToList());    
+                    try
+                    {
+                        var indexes = line.Split(',').Select(int.Parse);
+                        var cardToPlay = currentPlayer.CardsInHand.ToArray().Where((w, i) => indexes.Contains(i));
+                        game.PlayCards(currentPlayer, cardToPlay.ToList());
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Error reading input, please try again.");
+                    }
                 }
                 
-                
-
                 currentPlayer = game.CurrentPlayer;
                 Console.WriteLine("It's " + currentPlayer.Name + " turn");
                 Console.WriteLine(PrintPlayersCards(currentPlayer));
@@ -94,12 +99,18 @@
             }
             else
             {
-                var cardToPutFaceUp = currentPlayer.CardsInHand.ToArray()[int.Parse(line)];
-                var outcome = currentPlayer.PutCardFaceUp(cardToPutFaceUp);
-                if (outcome == ResultOutcome.Success)
-                    Console.WriteLine("Success \n");
-                if (outcome == ResultOutcome.Fail)
-                    Console.WriteLine("Fail \n");
+                try
+                {
+                    var indexes = line.Split(',').Select(int.Parse);
+                    var cardsToPutFaceUp = currentPlayer.CardsInHand.ToArray().Where((w, i) => indexes.Contains(i));
+                    foreach (var card in cardsToPutFaceUp)
+                        currentPlayer.PutCardFaceUp(card);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Error reading input, please try again.");
+                }
+                
                 Console.WriteLine(PrintPlayersCards(currentPlayer));
             }
             return false;
