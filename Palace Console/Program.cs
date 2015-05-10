@@ -53,8 +53,9 @@
                 }
                 else
                 {
-                    var cardToPlay = currentPlayer.CardsInHand.ToArray()[int.Parse(line)];
-                    game.PlayCards(currentPlayer, cardToPlay);    
+                    var indexes = line.Split(',').Select(int.Parse);
+                    var cardToPlay = currentPlayer.CardsInHand.ToArray().Where((w,i)=> indexes.Contains(i));
+                    game.PlayCards(currentPlayer, cardToPlay.ToList());    
                 }
                 
                 
