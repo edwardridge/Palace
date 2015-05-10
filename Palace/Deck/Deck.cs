@@ -25,7 +25,15 @@ namespace Palace
 			return returnCards;
 		}
 
-		public int CardsOfSuite (Suit suit)
+	    public bool CardsRemaining
+	    {
+	        get
+	        {
+	            return cards.Any();
+	        }
+	    }
+
+	    public int CardsOfSuite (Suit suit)
 		{
 			return cards.Count (card => card.Suit == suit);
 		}

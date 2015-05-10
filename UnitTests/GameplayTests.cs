@@ -146,24 +146,25 @@
         [Test]
         public void When_Player_Plays_One_Card_They_Receive_One_Card()
         {
-            var player1 = PlayerHelper.CreatePlayer(Card.AceOfClubs);
+            var player1 = PlayerHelper.CreatePlayer(new[]{Card.AceOfClubs, Card.EightOfClubs, Card.FourOfClubs});
             var dealer = new Dealer(new[] { player1 }, new StandardDeck(), new DummyCanStartGame());
             var game = dealer.StartGame();
             game.PlayCards(player1, Card.AceOfClubs);
 
-            player1.NumCardsInHand.Should().Be(1);
+            player1.NumCardsInHand.Should().Be(3);
         }
 
         [Test]
         public void When_Player_Plays_Two_Cards_They_Receive_Two_Cards()
         {
-            var cards = new List<Card>() { Card.AceOfClubs, Card.AceOfClubs };
-            var player1 = PlayerHelper.CreatePlayer(cards);
+            var cardsToPlay = new List<Card>() { Card.AceOfClubs, Card.AceOfClubs };
+            var otherCard = new List<Card>() { Card.EightOfClubs };
+            var player1 = PlayerHelper.CreatePlayer(cardsToPlay.Union(otherCard));
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.StartGame();
-            game.PlayCards(player1, cards);
+            game.PlayCards(player1, cardsToPlay);
 
-            player1.NumCardsInHand.Should().Be(cards.Count);
+            player1.NumCardsInHand.Should().Be(3);
         }
 
         [Test]
@@ -175,6 +176,19 @@
             var game = dealer.StartGame();
 
             game.PlayCards(player1, Card.AceOfClubs);
+
+            player1.NumCardsInHand.Should().Be(3);
+        }
+
+        [Test]
+        public void Player_Only_Receives_A_Maximum_Of_Three_Cards_When_Playing()
+        {
+            var cards = new[] { Card.AceOfClubs, Card.AceOfClubs, Card.AceOfClubs, Card.AceOfClubs };
+            var player1 = PlayerHelper.CreatePlayer(cards);
+            var dealer = DealerHelper.TestDealer(new[] { player1 });
+            var game = dealer.StartGame();
+
+            game.PlayCards(player1, cards);
 
             player1.NumCardsInHand.Should().Be(3);
         }
