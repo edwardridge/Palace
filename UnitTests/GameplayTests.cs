@@ -165,6 +165,19 @@
 
             player1.NumCardsInHand.Should().Be(cards.Count);
         }
+
+        [Test]
+        public void Player_Doesnt_Get_Card_If_They_Have_More_Than_Three_Cards()
+        {
+            var cards = new[] { Card.AceOfClubs, Card.EightOfClubs, Card.FourOfClubs, Card.SevenOfClubs };
+            var player1 = PlayerHelper.CreatePlayer(cards);
+            var dealer = DealerHelper.TestDealer(new[] { player1 });
+            var game = dealer.StartGame();
+
+            game.PlayCards(player1, Card.AceOfClubs);
+
+            player1.NumCardsInHand.Should().Be(3);
+        }
     }
 
     [TestFixture]
