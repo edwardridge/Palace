@@ -28,7 +28,7 @@
     public class SetupGame
     {
         private Dealer dealer;
-
+        
         private Game game;
 
         private Player player1;

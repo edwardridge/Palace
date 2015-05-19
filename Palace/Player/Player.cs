@@ -8,26 +8,43 @@ namespace Palace
 
     public class Player
 	{
+        internal Player()
+        {
+            
+        }
+
 		public string Name {
 			get{ return _name; }
+            internal set
+            {
+                _name = value; 
+            }
 		}
 
 		public PlayerState State {
 			get {return _state;}
+            internal set
+            {
+                _state = value;
+            }
 		}
 
-		public IEnumerable<Card> CardsInHand {
+        public List<Card> CardsInHand
+        {
 			get { return this._cardsInHand; }
+            internal set { this._cardsInHand = value; }
 		}
 
-        public IEnumerable<Card> CardsFaceUp
+        public List<Card> CardsFaceUp
         {
             get { return this._cardsFaceUp; }
+            internal set { this._cardsFaceUp = value; }
         }
 
-        public IEnumerable<Card> CardsFaceDown
+        public List<Card> CardsFaceDown
         {
             get { return this._cardsFaceDown; }
+            internal set { this._cardsFaceDown = value; }
         }
 
 	    public Player(string name, IEnumerable<Card> cardsInHand)
@@ -105,11 +122,26 @@ namespace Palace
 		public Card LowestCardInValue{
 		    get
 		    {
+		        if (_cardsFaceUp == null && _cardsInHand == null)
+		            return null;
 		        return this._cardsFaceUp.Union(_cardsInHand).ToList ().OrderBy (o => o.Value).FirstOrDefault ();
 		    }
 		}
 
-	    private string _name;
+        public override int GetHashCode()
+        {
+            return _name.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            var objAsPlayer = obj as Player;
+            if (objAsPlayer == null)
+                return false;
+            return this._name.Equals(objAsPlayer._name);
+        }
+
+        private string _name;
 
         private List<Card> _cardsFaceDown;
 

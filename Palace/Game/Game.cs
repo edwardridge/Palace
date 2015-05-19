@@ -4,6 +4,10 @@ namespace Palace
     using System.Collections.Generic;
     using System.Linq;
 
+    using Palace.Repository;
+
+    using Raven.Client.Document;
+
     public enum OrderOfPlay
     {
         Forward = 1,
@@ -12,6 +16,20 @@ namespace Palace
 
     public class Game
     {
+
+        internal Game()
+        {
+            
+        }
+
+        internal Game(SavedGame savedGame)
+        {
+            this._rulesProcessesor = savedGame.RulesProcessesor;
+            this._players = new LinkedList<Player>(savedGame.Players);
+            
+            
+        }
+        
         internal Game(IEnumerable<Player> players, RulesProcessesor rulesProcessesor, ICardDealer cardDealer)
             : this(players, rulesProcessesor, cardDealer, new List<Card>())
         {
@@ -26,6 +44,7 @@ namespace Palace
             this._orderOfPlay = OrderOfPlay.Forward;
 
             this._currentPlayer = _players.First;
+            
         }
 
         public ResultOutcome PlayCards(Player player, ICollection<Card> cards)
@@ -64,11 +83,19 @@ namespace Palace
             return PlayCards(player, new[] { card });
         }
 
+        
         public int PlayPileCardCount
         {
             get
             {
+                if (_playPile == null)
+                    return 0;
                 return _playPile.Count;
+            }
+            internal set
+            {
+                var test = value;
+                //noop
             }
         }
 
@@ -80,13 +107,7 @@ namespace Palace
             }
         }
 
-        public Player CurrentPlayer
-        {
-            get
-            {
-                return this._currentPlayer.Value;
-            }
-        }
+        
 
         public Card LastCardPlayed
         {
@@ -94,11 +115,84 @@ namespace Palace
             {
                 return _playPile.Count == 0 ? null : _playPile.Peek();
             }
+            internal set
+            {
+                
+            }
         }
 
         internal void Start(Player startingPlayer)
         {
             this._currentPlayer = _players.Find(startingPlayer);
+        }
+
+        internal Stack<Card> PlayPile
+        {
+            get
+            {
+                return _playPile;
+            }
+            set
+            {
+                _playPile = value;
+            }
+        }
+
+        internal LinkedList<Player> Players
+        {
+            get { return _players; }
+            set
+            {
+                this._players = value;
+            }
+        }
+
+        internal RulesProcessesor RulesProcessesor
+        {
+            get
+            {
+                return _rulesProcessesor;
+            }
+            set
+            {
+                _rulesProcessesor = value;
+            }
+        }
+
+        internal ICardDealer CardDealer
+        {
+            get
+            {
+                return _cardDealer;
+            }
+            set
+            {
+                _cardDealer = value;
+            }
+        }
+
+        internal OrderOfPlay OrderOfPlay
+        {
+            get
+            {
+                return _orderOfPlay;
+            }
+            set
+            {
+                _orderOfPlay = value;
+            }
+        }
+
+        public Player CurrentPlayer
+        {
+            get
+            {
+                return this._currentPlayer != null ? this._currentPlayer.Value : null;
+            }
+            internal set
+            {
+                this._currentPlayer = _players.Find(value);
+            }
         }
 
         private LinkedListNode<Player> _currentPlayer;

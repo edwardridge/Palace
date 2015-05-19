@@ -2,12 +2,16 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Xml.Serialization;
 
     using Palace;
+    using Palace.Repository;
 
     class Program
     {
+        private static Game game;
         static void Main(string[] args)
         {
             var rules = InitialiseRules();
@@ -33,7 +37,7 @@
             }
 
 
-            var game = dealer.StartGame();
+            game = dealer.StartGame();
             currentPlayer = game.CurrentPlayer;
 
             Console.WriteLine("It's " + currentPlayer.Name + " turn");
@@ -51,6 +55,12 @@
                 {
                     game.PlayerCannotPlayCards(currentPlayer);
                 }
+                else if (line.Equals("s"))
+                {
+                    var gameRepository = new GameRepository(DocumentSession.GetDocumentSession());
+                    gameRepository.Save(game);
+                }
+                
                 else
                 {
                     try
@@ -96,6 +106,12 @@
                     else
                         return true;
                 }
+            }
+            else if (line.Contains("o"))
+            {
+                var lineItems = line.Split(',');
+                var gameRepository = new GameRepository(DocumentSession.GetDocumentSession());
+                game = gameRepository.Open(int.Parse(lineItems[1]));
             }
             else
             {

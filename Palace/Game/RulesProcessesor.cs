@@ -5,11 +5,19 @@
 
     public class RulesProcessesor
     {
-        private readonly Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
+        private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
 
         public RulesProcessesor(Dictionary<CardValue, RuleForCard> rulesForCardsByValue)
         {
             this._rulesForCardsByValue = rulesForCardsByValue;
+        }
+
+        private Dictionary<CardValue, RuleForCard> RulesForCardsByValue
+        {
+            get
+            {
+                return this._rulesForCardsByValue;
+            }
         }
 
         internal bool CardCanBePlayed(Card cardToPlay, IEnumerable<Card> playPile)
@@ -91,7 +99,7 @@
         private RuleForCard getRuleForCardFromCardValue(CardValue cardValue)
         {
             RuleForCard ruleForCard;
-            _rulesForCardsByValue.TryGetValue(cardValue, out ruleForCard);
+            this.RulesForCardsByValue.TryGetValue(cardValue, out ruleForCard);
             return ruleForCard == 0 ? RuleForCard.Standard : ruleForCard;
         }
     }
