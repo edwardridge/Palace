@@ -4,12 +4,35 @@
 
     public class Card
     {
-		public Suit Suit { get; private set; }
+        private Suit _suit;
 
-		public CardValue Value { get; private set; }
+        private CardValue _value;
 
+        public Suit Suit
+        {
+            get
+            {
+                return this._suit;
+            }
+            internal set
+            {
+                this._suit = value;
+            }
+        }
 
-		public Card(CardValue value, Suit suit)
+        public CardValue Value
+        {
+            get
+            {
+                return this._value;
+            }
+            private set
+            {
+                this._value = value;
+            }
+        }
+
+        public Card(CardValue value, Suit suit)
         {
 			this.Suit = suit;
 			this.Value = value;

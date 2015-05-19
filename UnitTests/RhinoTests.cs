@@ -51,7 +51,7 @@ namespace UnitTests
         public void Can_Open_Game()
         {
             GameRepository gameRepository = new GameRepository(DocumentSession.GetDocumentSession());
-            Game game = gameRepository.Open(961);
+            Game game = gameRepository.Open(993);
             var currentPlayer = game.CurrentPlayer;
             game.PlayCards(currentPlayer, currentPlayer.CardsInHand[0]);
             game.NumberOfPlayers.Should().Be(2);

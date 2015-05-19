@@ -113,11 +113,13 @@ namespace Palace
         {
             get
             {
+                if (_playPile == null)
+                    return null;
                 return _playPile.Count == 0 ? null : _playPile.Peek();
             }
             internal set
             {
-                
+                var p = value;
             }
         }
 

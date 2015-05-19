@@ -37,7 +37,7 @@
             }
 
 
-            game = dealer.StartGame();
+            //game = dealer.StartGame();
             currentPlayer = game.CurrentPlayer;
 
             Console.WriteLine("It's " + currentPlayer.Name + " turn");
@@ -112,6 +112,7 @@
                 var lineItems = line.Split(',');
                 var gameRepository = new GameRepository(DocumentSession.GetDocumentSession());
                 game = gameRepository.Open(int.Parse(lineItems[1]));
+                return true;
             }
             else
             {
