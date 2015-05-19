@@ -19,7 +19,7 @@ namespace UnitTests
 
     using DocumentSession = Palace.Repository.DocumentSession;
 
-    [TestFixture]
+    [TestFixture, Ignore]
     public class RhinoTests
     {
         private IDocumentSession GetDocumentSession()
