@@ -57,7 +57,7 @@
                 }
                 else if (line.Equals("s"))
                 {
-                    var gameRepository = new GameRepository(DocumentSession.GetDocumentSession());
+                    var gameRepository = new GameRepository(new PalaceDocumentSession().GetDocumentSession());
                     gameRepository.Save(game);
                 }
                 
@@ -110,8 +110,8 @@
             else if (line.Contains("o"))
             {
                 var lineItems = line.Split(',');
-                var gameRepository = new GameRepository(DocumentSession.GetDocumentSession());
-                game = gameRepository.Open(int.Parse(lineItems[1]));
+                var gameRepository = new GameRepository(new PalaceDocumentSession().GetDocumentSession());
+                game = gameRepository.Open(lineItems[1]);
                 return true;
             }
             else

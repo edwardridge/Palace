@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace UnitTests
@@ -13,24 +9,27 @@ namespace UnitTests
     using Palace.Repository;
 
     using Raven.Client;
-    using Raven.Client.Document;
+    using Raven.Client.Embedded;
 
     using UnitTests.Helpers;
 
-    using DocumentSession = Palace.Repository.DocumentSession;
-
-    [TestFixture, Ignore]
-    public class RhinoTests
+    public class TestPalaceDocumentSession
     {
-        private IDocumentSession GetDocumentSession()
+        public IDocumentSession GetDocumentSession()
         {
-            var documentStore = new DocumentStore()
-                                              {
-                                                  Url = "http://localhost:8080"
-                                              };
+            var documentStore = new EmbeddableDocumentStore()
+            {
+                RunInMemory = true
+            };
             documentStore.Initialize();
             return documentStore.OpenSession("Palace");
         }
+      
+    }
+
+    [TestFixture]
+    public class RhinoTests
+    {
         [Test]
         public void Can_Save_Game()
         {
@@ -42,25 +41,43 @@ namespace UnitTests
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, rulesForCardByValue);
             dealer.DealIntialCards();
             var game = dealer.StartGame();
-            var gameRepository = new GameRepository(DocumentSession.GetDocumentSession());
+            var gameRepository = new GameRepository(new PalaceDocumentSession().GetDocumentSession());
             gameRepository.Save(game);
-            
         }
 
         [Test]
         public void Can_Open_Game()
         {
-            GameRepository gameRepository = new GameRepository(DocumentSession.GetDocumentSession());
-            Game game = gameRepository.Open(993);
+            GameRepository gameRepository = new GameRepository(new PalaceDocumentSession().GetDocumentSession());
+            Game game = gameRepository.Open("993");
             var currentPlayer = game.CurrentPlayer;
             game.PlayCards(currentPlayer, currentPlayer.CardsInHand[0]);
             game.NumberOfPlayers.Should().Be(2);
         }
 
         [Test]
+
+        public void Game_Is_Same_Object_Once_Saved()
+        {
+            var player1 = PlayerHelper.CreatePlayer("Ed");
+            var player2 = PlayerHelper.CreatePlayer("Soph");
+
+            var rulesForCardByValue = new Dictionary<CardValue, RuleForCard>();
+            rulesForCardByValue.Add(CardValue.Ten, RuleForCard.Burn);
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, rulesForCardByValue);
+            dealer.DealIntialCards();
+            var game = dealer.StartGame();
+            var gameRepository = new GameRepository(new PalaceDocumentSession().GetDocumentSession());
+            gameRepository.Save(game);
+
+            var gameFromRepository = gameRepository.Open(game.Id.ToString());
+            gameFromRepository.Should().Be(game);
+        }
+
+        [Test]
         public void Save_Player()
         {
-            var playerRepository = new PlayerRepository(DocumentSession.GetDocumentSession());
+            var playerRepository = new PlayerRepository(new PalaceDocumentSession().GetDocumentSession());
             var player = new Player("Ed", new[]{Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs});
             player.PutCardFaceUp(Card.AceOfClubs);
             player.Ready();
@@ -70,7 +87,7 @@ namespace UnitTests
         [Test]
         public void Load_Player()
         {
-            Player player = new PlayerRepository(DocumentSession.GetDocumentSession()).Load(97);
+            Player player = new PlayerRepository(new PalaceDocumentSession().GetDocumentSession()).Load(97);
             var test = 1;
         }
 

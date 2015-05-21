@@ -4,10 +4,6 @@ namespace Palace
     using System.Collections.Generic;
     using System.Linq;
 
-    using Palace.Repository;
-
-    using Raven.Client.Document;
-
     public enum OrderOfPlay
     {
         Forward = 1,
@@ -16,27 +12,21 @@ namespace Palace
 
     public class Game
     {
+        public Guid Id { get; internal set; }
 
         internal Game()
         {
-            
+            //Used for Rhino only
         }
 
-        internal Game(SavedGame savedGame)
-        {
-            this._rulesProcessesor = savedGame.RulesProcessesor;
-            this._players = new LinkedList<Player>(savedGame.Players);
-            
-            
-        }
-        
-        internal Game(IEnumerable<Player> players, RulesProcessesor rulesProcessesor, ICardDealer cardDealer)
-            : this(players, rulesProcessesor, cardDealer, new List<Card>())
+        internal Game(IEnumerable<Player> players, RulesProcessesor rulesProcessesor, ICardDealer cardDealer, Guid id)
+            : this(players, rulesProcessesor, cardDealer, new List<Card>(), id)
         {
         }
 
-        internal Game(IEnumerable<Player> players, RulesProcessesor rulesProcessesor, ICardDealer cardDealer, IEnumerable<Card> cardsInPile)
+        internal Game(IEnumerable<Player> players, RulesProcessesor rulesProcessesor, ICardDealer cardDealer, IEnumerable<Card> cardsInPile, Guid id)
         {
+            this.Id = id;
             this._rulesProcessesor = rulesProcessesor;
             this._players = new LinkedList<Player>(players);
             this._playPile = new Stack<Card>(cardsInPile);
@@ -83,7 +73,13 @@ namespace Palace
             return PlayCards(player, new[] { card });
         }
 
-        
+        public void PlayerCannotPlayCards(Player player)
+        {
+            player.AddCardsToInHandPile(_playPile);
+            _playPile.Clear();
+            _currentPlayer = _rulesProcessesor.ChooseNextPlayer(null, _players, _currentPlayer, _orderOfPlay);
+        }
+
         public int PlayPileCardCount
         {
             get
@@ -107,8 +103,6 @@ namespace Palace
             }
         }
 
-        
-
         public Card LastCardPlayed
         {
             get
@@ -122,6 +116,8 @@ namespace Palace
                 var p = value;
             }
         }
+
+        
 
         internal void Start(Player startingPlayer)
         {
@@ -209,11 +205,6 @@ namespace Palace
 
         private OrderOfPlay _orderOfPlay;
 
-        public void PlayerCannotPlayCards(Player player)
-        {
-            player.AddCardsToInHandPile(_playPile);
-            _playPile.Clear();
-            _currentPlayer = _rulesProcessesor.ChooseNextPlayer(null, _players, _currentPlayer, _orderOfPlay);
-        }
+        
     }
 }

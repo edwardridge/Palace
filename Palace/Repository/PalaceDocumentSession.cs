@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace Palace.Repository
 {
+    using System.Runtime.InteropServices;
+
     using Raven.Client;
     using Raven.Client.Document;
 
-    public static class DocumentSession
+    public class PalaceDocumentSession
     {
-        public static IDocumentSession GetDocumentSession()
+        public IDocumentSession GetDocumentSession()
         {
             var documentStore = new DocumentStore()
             {

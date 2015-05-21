@@ -59,7 +59,7 @@
     <Compile Include="Player\Player.cs" />
     <Compile Include="Player\PlayerState.cs" />
     <Compile Include="Deck\Deck.cs" />
-    <Compile Include="Repository\DocumentSession.cs" />
+    <Compile Include="Repository\PalaceDocumentSession.cs" />
     <Compile Include="Repository\GameRepository.cs" />
     <Compile Include="Repository\PlayerRepository.cs" />
     <Compile Include="Result\ResultOutcome.cs" />
