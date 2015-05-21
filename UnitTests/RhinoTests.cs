@@ -49,7 +49,7 @@ namespace UnitTests
         public void Can_Open_Game()
         {
             GameRepository gameRepository = new GameRepository(new PalaceDocumentSession().GetDocumentSession());
-            Game game = gameRepository.Open("993");
+            Game game = gameRepository.Open("e23c8755-a935-4cda-a2b7-4cd027446958");
             var currentPlayer = game.CurrentPlayer;
             game.PlayCards(currentPlayer, currentPlayer.CardsInHand[0]);
             game.NumberOfPlayers.Should().Be(2);
