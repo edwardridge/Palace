@@ -48,6 +48,36 @@
         }
 
         [Test]
+        public void Player_Can_Play_Multiple_Face_Up_Cards_Of_Same_Value()
+        {
+            var cardsToPlay = new[] { Card.AceOfClubs, Card.AceOfClubs };
+            var player = PlayerHelper.CreatePlayer(cardsToPlay);
+            player.PutCardFaceUp(Card.AceOfClubs);
+            player.PutCardFaceUp(Card.AceOfClubs);
+            var dealer = DealerHelper.TestDealer(new[]{player});
+            var game = dealer.StartGame();
+
+            var outcome = game.PlayFaceUpCards(player, cardsToPlay);
+
+            outcome.Should().Be(ResultOutcome.Success);
+        }
+
+        [Test]
+        public void Player_Cannot_Play_Multiple_Face_Up_Cards_Of_Different_Value()
+        {
+            var cardsToPlay = new[] { Card.AceOfClubs, Card.EightOfClubs };
+            var player = PlayerHelper.CreatePlayer(cardsToPlay);
+            player.PutCardFaceUp(cardsToPlay[0]);
+            player.PutCardFaceUp(cardsToPlay[1]);
+            var dealer = DealerHelper.TestDealer(new[] { player });
+            var game = dealer.StartGame();
+
+            Action outcome = () => game.PlayFaceUpCards(player, cardsToPlay);
+
+            outcome.ShouldThrow<ArgumentException>();
+        }
+
+        [Test]
         public void Player_Can_Play_Card_Player_Has()
         {
             var cardsPlayerHas = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };

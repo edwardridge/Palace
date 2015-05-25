@@ -38,11 +38,7 @@ namespace Palace
 
         public ResultOutcome PlayCards(Player player, ICollection<Card> cards)
         {
-            if (cards.Except(player.CardsInHand).Any())
-                throw new ArgumentException("You cannot play cards you don't have!");
-
-            if (cards.Select(card => card.Value).Distinct().Count() != 1)
-                throw new ArgumentException("You cannot play more than one type of card");
+            IfArgumentsAreInvalidThenThrow(player, cards, player.CardsInHand);
 
             return PlayCardAndChooseNextPlayer(player, cards);
         }
@@ -52,13 +48,26 @@ namespace Palace
             return PlayCards(player, new[] { card });
         }
 
-        public ResultOutcome PlayFaceUpCards(Player player1, Card card)
+        public ResultOutcome PlayFaceUpCards(Player player, Card card)
         {
-            if (new[]{card}.Except(player1.CardsFaceUp).Any())
+            return PlayFaceUpCards(player, new[] { card });
+        }
+
+        public ResultOutcome PlayFaceUpCards(Player player, ICollection<Card> cards)
+        {
+            IfArgumentsAreInvalidThenThrow(player, cards, player.CardsFaceUp);
+
+            if (player.NumCardsInHand >= 3) return ResultOutcome.Fail;
+            return PlayCardAndChooseNextPlayer(player, cards);
+        }
+
+        private void IfArgumentsAreInvalidThenThrow(Player player, ICollection<Card> cards, ICollection<Card> cardsToCheck)
+        {
+            if (cards.Except(cardsToCheck).Any())
                 throw new ArgumentException("You cannot play cards you don't have!");
 
-            if (player1.NumCardsInHand >= 3) return ResultOutcome.Fail;
-            return PlayCardAndChooseNextPlayer(player1, new[] { card });
+            if (cards.Select(card => card.Value).Distinct().Count() != 1)
+                throw new ArgumentException("You cannot play more than one type of card");
         }
 
         public void PlayerCannotPlayCards(Player player)
@@ -91,7 +100,6 @@ namespace Palace
 
             return ResultOutcome.Success;
         }
-
         
         public int PlayPileCardCount
         {
