@@ -35,6 +35,19 @@
         }
 
         [Test]
+        public void Player_Cannot_Play_Face_Up_Card_Player_Doesnt_Have()
+        {
+            var cardToPlay = Card.AceOfClubs;
+            var player = PlayerHelper.CreatePlayer(cardToPlay);
+            player.PutCardFaceUp(cardToPlay);
+            var dealer = DealerHelper.TestDealer(new[]{player});
+            var game = dealer.StartGame();
+            Action outcome = () => game.PlayFaceUpCards(player, Card.EightOfClubs);
+
+            outcome.ShouldThrow<ArgumentException>();
+        }
+
+        [Test]
         public void Player_Can_Play_Card_Player_Has()
         {
             var cardsPlayerHas = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };

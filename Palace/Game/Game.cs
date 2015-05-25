@@ -54,6 +54,9 @@ namespace Palace
 
         public ResultOutcome PlayFaceUpCards(Player player1, Card card)
         {
+            if (new[]{card}.Except(player1.CardsFaceUp).Any())
+                throw new ArgumentException("You cannot play cards you don't have!");
+
             if (player1.NumCardsInHand >= 3) return ResultOutcome.Fail;
             return PlayCardAndChooseNextPlayer(player1, new[] { card });
         }
