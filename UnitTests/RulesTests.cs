@@ -178,6 +178,33 @@ namespace UnitTests
     }
 
     [TestFixture]
+    public class WithSevenAsLowerThanCardWhenPlayerPlaysFaceUpCard
+    {
+        private Dictionary<CardValue, RuleForCard> rulesForCardsByValue;
+
+        //private Dealer dealer;
+
+        [SetUp]
+        public void Setup()
+        {
+            rulesForCardsByValue = new Dictionary<CardValue, RuleForCard>();
+            rulesForCardsByValue.Add(CardValue.Seven, RuleForCard.LowerThan);
+        }
+
+        [Test]
+        public void Playing_Card_Higher_In_Value_Isnt_Valid()
+        {
+            var cardToPlay = Card.EightOfClubs;
+            var player = PlayerHelper.CreatePlayer(new[]{cardToPlay});
+            player.PutCardFaceUp(cardToPlay);
+            var dealer = DealerHelper.TestDealerWithRules(new[]{player}, rulesForCardsByValue);
+            var game = dealer.StartGameWithPlayPile(player, new[] { Card.SevenOfClubs });
+            var outcome = game.PlayFaceUpCards(player, cardToPlay);
+            outcome.Should().Be(ResultOutcome.Fail);
+        }
+    }
+
+    [TestFixture]
     public class WithJackAsReverseOrderOfPlayCard
     {
         //private Dealer dealer;

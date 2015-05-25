@@ -45,32 +45,18 @@ namespace Palace
             if (cards.Select(card => card.Value).Distinct().Count() != 1)
                 throw new ArgumentException("You cannot play more than one type of card");
 
-            var cardToPlay = cards.First();
-            
-            if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, _playPile))
-                return ResultOutcome.Fail;
-
-            _orderOfPlay = this._rulesProcessesor.ChooseOrderOfPlay(_orderOfPlay, cardToPlay);
-            if(this._rulesProcessesor.PlayPileShouldBeCleared(cards))
-                this._playPile.Clear();
-            else
-                foreach (Card card in cards)            
-                    _playPile.Push(card);
-            
-
-            player.RemoveCardsFromInHand(cards);
-
-            while(player.NumCardsInHand < 3 && _cardDealer.CardsRemaining)
-                player.AddCardsToInHandPile(_cardDealer.DealCards(1));
-            
-            this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(cards, _players, this._currentPlayer, _orderOfPlay);
-
-            return ResultOutcome.Success;
+            return PlayCardAndChooseNextPlayer(player, cards);
         }
 
         public ResultOutcome PlayCards(Player player, Card card)
         {
             return PlayCards(player, new[] { card });
+        }
+
+        public ResultOutcome PlayFaceUpCards(Player player1, Card card)
+        {
+            if (player1.NumCardsInHand >= 3) return ResultOutcome.Fail;
+            return PlayCardAndChooseNextPlayer(player1, new[] { card });
         }
 
         public void PlayerCannotPlayCards(Player player)
@@ -80,6 +66,31 @@ namespace Palace
             _currentPlayer = _rulesProcessesor.ChooseNextPlayer(null, _players, _currentPlayer, _orderOfPlay);
         }
 
+        private ResultOutcome PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards)
+        {
+            var cardToPlay = cards.First();
+
+            if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, _playPile))
+                return ResultOutcome.Fail;
+
+            _orderOfPlay = this._rulesProcessesor.ChooseOrderOfPlay(_orderOfPlay, cardToPlay);
+            if (this._rulesProcessesor.PlayPileShouldBeCleared(cards))
+                this._playPile.Clear();
+            else
+                foreach (Card card in cards)
+                    _playPile.Push(card);
+
+            player.RemoveCardsFromInHand(cards);
+
+            while (player.NumCardsInHand < 3 && _cardDealer.CardsRemaining)
+                player.AddCardsToInHandPile(_cardDealer.DealCards(1));
+
+            this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(cards, _players, this._currentPlayer, _orderOfPlay);
+
+            return ResultOutcome.Success;
+        }
+
+        
         public int PlayPileCardCount
         {
             get
@@ -204,13 +215,5 @@ namespace Palace
         private ICardDealer _cardDealer;
 
         private OrderOfPlay _orderOfPlay;
-
-
-
-        public ResultOutcome PlayFaceUpCards(Player player1, Card card)
-        {
-            if (player1.NumCardsInHand >= 3) return ResultOutcome.Fail;
-            return ResultOutcome.Success;
-        }
     }
 }
