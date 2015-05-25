@@ -27,7 +27,7 @@ namespace UnitTests
       
     }
 
-    [TestFixture]
+    [TestFixture, Ignore]
     public class RhinoTests
     {
         [Test]

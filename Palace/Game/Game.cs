@@ -205,6 +205,12 @@ namespace Palace
 
         private OrderOfPlay _orderOfPlay;
 
-        
+
+
+        public ResultOutcome PlayFaceUpCards(Player player1, Card card)
+        {
+            if (player1.NumCardsInHand >= 3) return ResultOutcome.Fail;
+            return ResultOutcome.Success;
+        }
     }
 }

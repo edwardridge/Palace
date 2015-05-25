@@ -70,6 +70,7 @@
     <Compile Include="DeckTests.cs" />
     <Compile Include="Helpers\PlayerHelper.cs" />
     <Compile Include="RhinoTests.cs" />
+    <Compile Include="RulesTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
