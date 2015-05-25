@@ -34,7 +34,6 @@ namespace Palace
             this._orderOfPlay = OrderOfPlay.Forward;
 
             this._currentPlayer = _players.First;
-            
         }
 
         public ResultOutcome PlayCards(Player player, ICollection<Card> cards)

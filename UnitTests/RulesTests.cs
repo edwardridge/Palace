@@ -199,8 +199,23 @@ namespace UnitTests
             player.PutCardFaceUp(cardToPlay);
             var dealer = DealerHelper.TestDealerWithRules(new[]{player}, rulesForCardsByValue);
             var game = dealer.StartGameWithPlayPile(player, new[] { Card.SevenOfClubs });
+            
             var outcome = game.PlayFaceUpCards(player, cardToPlay);
+            
             outcome.Should().Be(ResultOutcome.Fail);
+        }
+
+        [Test]
+        public void Playing_Card_Lower_In_Value_Is_Valid()
+        {
+            var cardToPlay = Card.SixOfClubs;
+            var player = PlayerHelper.CreatePlayer(cardToPlay);
+            var dealer = DealerHelper.TestDealerWithRules(new[]{player}, rulesForCardsByValue);
+            var game = dealer.StartGameWithPlayPile(player, new[] { Card.SevenOfClubs });
+            
+            var outcome = game.PlayCards(player, cardToPlay);
+
+            outcome.Should().Be(ResultOutcome.Success);
         }
     }
 
