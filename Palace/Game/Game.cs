@@ -85,7 +85,7 @@ namespace Palace
                 return ResultOutcome.Fail;
 
             _orderOfPlay = this._rulesProcessesor.ChooseOrderOfPlay(_orderOfPlay, cardToPlay);
-            if (this._rulesProcessesor.PlayPileShouldBeCleared(cards))
+            if (this._rulesProcessesor.PlayPileShouldBeCleared(cards, _playPile))
                 this._playPile.Clear();
             else
                 foreach (Card card in cards)

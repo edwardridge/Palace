@@ -55,10 +55,19 @@
             return currentOrder;
         }
 
-        internal bool PlayPileShouldBeCleared(IEnumerable<Card> cardsToPlay)
+        internal bool PlayPileShouldBeCleared(IEnumerable<Card> cardsToPlay, IEnumerable<Card> playPile)
         {
-            var fourOfAKind = cardsToPlay.Count() >= 4;
-            var isBurnCard = getRuleForCardFromCardValue(cardsToPlay.First().Value) == RuleForCard.Burn;
+            var cardsToCheck = cardsToPlay.ToList();
+            var lastFourCardsInPlayPile = playPile.Reverse().Take(4);
+            foreach (var card in lastFourCardsInPlayPile)
+            {
+                if (card.Value == cardsToCheck.First().Value)
+                    cardsToCheck.Add(card);
+                else
+                    break;
+            }
+            var fourOfAKind = cardsToCheck.Count() >= 4;
+            var isBurnCard = getRuleForCardFromCardValue(cardsToCheck.First().Value) == RuleForCard.Burn;
 
             return fourOfAKind || isBurnCard;
         }

@@ -488,6 +488,42 @@ namespace UnitTests
     }
 
     [TestFixture]
+    public class PlayingFourOfAKindOverTwoTurns
+    {
+        [Test]
+        public void Burns_The_Play_Pile()
+        {
+            var player1 = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.AceOfClubs });
+            var player2 = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.AceOfClubs });
+            var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
+            var game = dealer.StartGame();
+            game.PlayCards(player1, new[] { Card.AceOfClubs, Card.AceOfClubs });
+            game.PlayCards(player2, new[] { Card.AceOfClubs, Card.AceOfClubs });
+
+            game.PlayPileCardCount.Should().Be(0);
+        }
+    }
+
+    [TestFixture]
+    public class PlayingFourOfAKindOverThreeTurns
+    {
+        [Test]
+        public void Burns_The_Play_Pile()
+        {
+            var player1 = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.AceOfClubs, Card.AceOfClubs });
+            var player2 = PlayerHelper.CreatePlayer(Card.AceOfClubs);
+            var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
+            var game = dealer.StartGame();
+
+            game.PlayCards(player1, new[] { Card.AceOfClubs, Card.AceOfClubs });
+            game.PlayCards(player2, Card.AceOfClubs);
+            game.PlayCards(player1, Card.AceOfClubs);
+
+            game.PlayPileCardCount.Should().Be(0);
+        }
+    }
+
+    [TestFixture]
     public class WhenPlayerCannotPlayCards
     {
         [Test]
