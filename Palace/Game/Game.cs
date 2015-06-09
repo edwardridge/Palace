@@ -36,16 +36,16 @@ namespace Palace
             this._currentPlayer = _players.First;
         }
 
-        public ResultOutcome PlayCards(Player player, ICollection<Card> cards)
+        public ResultOutcome PlayInHandCards(Player player, ICollection<Card> cards)
         {
             IfArgumentsAreInvalidThenThrow(player, cards, player.CardsInHand);
 
             return PlayCardAndChooseNextPlayer(player, cards);
         }
 
-        public ResultOutcome PlayCards(Player player, Card card)
+        public ResultOutcome PlayInHandCards(Player player, Card card)
         {
-            return PlayCards(player, new[] { card });
+            return this.PlayInHandCards(player, new[] { card });
         }
 
         public ResultOutcome PlayFaceUpCards(Player player, Card card)

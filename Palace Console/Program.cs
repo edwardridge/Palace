@@ -67,7 +67,7 @@
                     {
                         var indexes = line.Split(',').Select(int.Parse);
                         var cardToPlay = currentPlayer.CardsInHand.ToArray().Where((w, i) => indexes.Contains(i));
-                        game.PlayCards(currentPlayer, cardToPlay.ToList());
+                        game.PlayInHandCards(currentPlayer, cardToPlay.ToList());
                     }
                     catch (Exception)
                     {
