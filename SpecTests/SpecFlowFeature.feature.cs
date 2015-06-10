@@ -71,13 +71,19 @@ namespace SpecTests
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add two numbers", ((string[])(null)));
 #line 3
 this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Player",
+                        "CardsInHand"});
+            table1.AddRow(new string[] {
+                        "Ed",
+                        "TenOfClubs, FourOfClubs, AceOfClubs"});
 #line 4
- testRunner.Given("I have two players, called Ed and Sophie, with three cards each in a game in prog" +
-                    "ress", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 5
- testRunner.When("Ed plays a card", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 6
- testRunner.Then("Ed should be given a card from the deck", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Given("I have the following players and cards", ((string)(null)), table1, "Given ");
+#line 7
+ testRunner.When("\'Ed\' plays the \'TenOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 8
+ testRunner.Then("\'Ed\' should be have three cards", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

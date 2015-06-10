@@ -157,7 +157,15 @@ namespace Palace
             }
         }
 
-        internal LinkedList<Player> Players
+        public IReadOnlyCollection<Player> Players
+        {
+            get
+            {
+                return _players.ToList().AsReadOnly();
+            }
+        } 
+
+        internal LinkedList<Player> PlayersLinkedList
         {
             get { return _players; }
             set

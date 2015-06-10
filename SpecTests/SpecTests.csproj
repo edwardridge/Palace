@@ -107,7 +107,7 @@
     <Compile Include="Helpers\CardHelpers.cs" />
     <Compile Include="Helpers\DealerHelper.cs" />
     <Compile Include="Helpers\PlayerHelper.cs" />
-    <Compile Include="PlayingOneCardMeansYouReceiveOneCardSteps.cs" />
+    <Compile Include="PlayingOneCardMeansYouReceiveOneCardStepsV2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpecFlowFeature.feature.cs">
       <AutoGen>True</AutoGen>
