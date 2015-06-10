@@ -79,6 +79,8 @@ namespace Palace
 
         private ResultOutcome PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards)
         {
+            if(_currentPlayer.Value.Equals(player) == false) return ResultOutcome.Fail;
+            ;
             var cardToPlay = cards.First();
 
             if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, _playPile))

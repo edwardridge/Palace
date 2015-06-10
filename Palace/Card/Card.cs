@@ -67,12 +67,15 @@
 
         public static Card EightOfClubs { get { return new Card(CardValue.Eight, Suit.Club); } }
 
+        public static Card NineOfClubs { get { return new Card(CardValue.Nine, Suit.Club); } }
+
         public static Card FourOfSpades { get { return new Card(CardValue.Four, Suit.Spade); } }
 
-        public static Card JackOfClubs { get
-        {
-            return new Card(CardValue.Jack, Suit.Spade);
-        } }
+        public static Card JackOfClubs { get { return new Card(CardValue.Jack, Suit.Spade); } }
+
+        public static Card QueenOfClubs { get { return new Card(CardValue.Queen, Suit.Spade); } }
+
+        public static Card KingOfClubs { get { return new Card(CardValue.King, Suit.Spade); } }
 
         public static Card TenOfClubs
         {

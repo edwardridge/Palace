@@ -114,6 +114,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SpecFlowFeature.feature</DependentUpon>
     </Compile>
+    <Compile Include="TakingATurnWhenItsNotYourTurn.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TakingATurnWhenItsNotYourTurn.feature</DependentUpon>
+    </Compile>
+    <Compile Include="TakingATurnWhenItsNotYourTurnSteps.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -121,6 +127,10 @@
     <None Include="SpecFlowFeature.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SpecFlowFeature.feature.cs</LastGenOutput>
+    </None>
+    <None Include="TakingATurnWhenItsNotYourTurn.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>TakingATurnWhenItsNotYourTurn.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

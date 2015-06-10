@@ -6,6 +6,7 @@ namespace SpecTests
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using System.Media;
 
     using FluentAssertions;
 
@@ -16,6 +17,7 @@ namespace SpecTests
     [Binding]
     public class PlayingOneCardMeansYouReceiveOneCardStepsV2
     {
+        
         private ICollection<Player> players;
 
         private Player currentPlayer;
@@ -23,6 +25,16 @@ namespace SpecTests
         private Dealer dealer;
 
         private Game game;
+
+        private ResultWrapper resultWrapper;
+
+        private ResultOutcome result;
+
+        public PlayingOneCardMeansYouReceiveOneCardStepsV2(ResultWrapper resultWrapper)
+        {
+            this.resultWrapper = resultWrapper;
+        }
+
          [Given(@"I have the following players and cards")]
         public void GivenIHaveTheFollowingPlayersAndCards(Table table)
         {
@@ -41,11 +53,21 @@ namespace SpecTests
              game = dealer.StartGame();
         }
 
+         [Given(@"it is '(.*)' turn")]
+         public void GivenItIsTurn(string playerName)
+         {
+             var playerToStart = players.First(f => f.Name.Equals(playerName));
+             dealer = DealerHelper.TestDealer(players);
+             game = dealer.StartGame(playerToStart);
+         }
+
         [When(@"'(.*)' plays the '(.*)'")]
         public void WhenPlaysThe(string playerName, string card)
         {
             currentPlayer = players.First(p => p.Name.Equals(playerName));
-            game.PlayInHandCards(currentPlayer, GetCardFromStringValue(card));
+            result = game.PlayInHandCards(currentPlayer, GetCardFromStringValue(card));
+            resultWrapper.resultOutcome = result;
+
         }
 
 
@@ -69,14 +91,41 @@ namespace SpecTests
         {
             switch (card)
             {
-                case "TenOfClubs":
-                    return Card.TenOfClubs;
+                case "TwoOfClubs":
+                    return Card.TwoOfClubs;
+                case "ThreeOfClubs":
+                    return Card.ThreeOfClubs;
                 case "FourOfClubs":
                     return Card.FourOfClubs;
+                case "FiveOfClubs":
+                    return Card.FiveOfClubs;
+                case "SixOfClubs":
+                    return Card.SixOfClubs;
+                case "SevenOfClubs":
+                    return Card.SevenOfClubs;
+                case "EightOfClubs":
+                    return Card.EightOfClubs;
+                case "TenOfClubs":
+                    return Card.TenOfClubs;
+                case "JackOfClubs":
+                    return Card.JackOfClubs;
+                case "QueenOfClubs":
+                    return Card.JackOfClubs;
+                case "KingOfClubs":
+                    return Card.JackOfClubs;
                 case "AceOfClubs":
                     return Card.AceOfClubs;
                 default: throw new Exception();
             }
+        }
+    }
+
+    public class ResultWrapper
+    {
+        public ResultOutcome resultOutcome;
+
+        public ResultWrapper()
+        {
         }
     }
 
