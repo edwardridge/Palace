@@ -11,7 +11,6 @@
     [TestFixture]
     public class GameplayChangingGameStateTests
     {
-        // Changing Game state
         [Test]
         public void When_Player_Plays_Card_Card_Is_Added_To_PlayPile()
         {
