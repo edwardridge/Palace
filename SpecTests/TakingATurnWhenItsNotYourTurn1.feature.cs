@@ -19,20 +19,20 @@ namespace SpecTests
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "1.9.0.77")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Playing one card means you receive one card")]
-    public partial class PlayingOneCardMeansYouReceiveOneCardFeature
+    [NUnit.Framework.DescriptionAttribute("TakingATurnWhenItsNotYourTurn")]
+    public partial class TakingATurnWhenItsNotYourTurnFeature
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "SpecFlowFeature.feature"
+#line 1 "TakingATurnWhenItsNotYourTurn.feature"
 #line hidden
         
         [NUnit.Framework.TestFixtureSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Playing one card means you receive one card", "", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "TakingATurnWhenItsNotYourTurn", "Trying to take a turn when it isn\'t your turn", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -65,11 +65,13 @@ namespace SpecTests
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("When you have three cards and play a card you get one card")]
-        public virtual void WhenYouHaveThreeCardsAndPlayACardYouGetOneCard()
+        [NUnit.Framework.DescriptionAttribute("Trying to take a turn when it isn\'t your turn")]
+        [NUnit.Framework.CategoryAttribute("mytag")]
+        public virtual void TryingToTakeATurnWhenItIsnTYourTurn()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("When you have three cards and play a card you get one card", ((string[])(null)));
-#line 3
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Trying to take a turn when it isn\'t your turn", new string[] {
+                        "mytag"});
+#line 5
 this.ScenarioSetup(scenarioInfo);
 #line hidden
             TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
@@ -81,12 +83,14 @@ this.ScenarioSetup(scenarioInfo);
             table1.AddRow(new string[] {
                         "Liam",
                         "TwoOfClubs, ThreeOfClubs, QueenOfClubs"});
-#line 4
+#line 6
  testRunner.Given("I have the following players and cards", ((string)(null)), table1, "Given ");
-#line 8
- testRunner.When("\'Ed\' plays the \'TenOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 9
- testRunner.Then("\'Ed\' should be have three cards", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 10
+ testRunner.And("it is \'Ed\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 11
+ testRunner.When("\'Liam\' plays the \'TwoOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 12
+ testRunner.Then("this should not be allowed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

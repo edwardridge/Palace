@@ -37,7 +37,7 @@
         }
     }
 
-    [TestFixture]
+    [TestFixture, Ignore]
     public class GameSimulation
     {
         [Test]
