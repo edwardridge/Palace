@@ -15,7 +15,7 @@ namespace SpecTests
     using SpecTests.Helpers;
 
     [Binding]
-    public class PlayingOneCardMeansYouReceiveOneCardStepsV2
+    public class Setup
     {
         
         private ICollection<Player> players;
@@ -30,7 +30,7 @@ namespace SpecTests
 
         private ResultOutcome result;
 
-        public PlayingOneCardMeansYouReceiveOneCardStepsV2(ResultWrapper resultWrapper)
+        public Setup(ResultWrapper resultWrapper)
         {
             this.resultWrapper = resultWrapper;
         }
@@ -69,16 +69,6 @@ namespace SpecTests
             resultWrapper.resultOutcome = result;
 
         }
-
-
-        [Then(@"'(.*)' should be have three cards")]
-        public void ThenShouldBeHaveThreeCards(string playerName)
-        {
-            var playerForAssertion = players.First(p => p.Name.Equals(playerName));
-            playerForAssertion.NumCardsInHand.Should().Be(3);
-        }
-
-
 
         public List<Card> GetCardsFromCsvString(string csvString)
         {
