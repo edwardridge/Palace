@@ -64,14 +64,14 @@ namespace Palace
         {
             IfArgumentsAreInvalidThenThrow(player, cards, player.CardsFaceUp);
 
-            if (player.NumCardsInHand >= 3) return new Result(ResultOutcome.Fail);
+            if (player.NumCardsInHand >= 3) return new Result("Cannot play face up card when you have cards in hand");
             return PlayCardAndChooseNextPlayer(player, cards, PlayerCardTypes.FaceUp);
         }
 
         public Result PlayFaceDownCards(Player player, Card card)
         {
-            if (player.NumCardsInHand != 0) return new Result(ResultOutcome.Fail);
-            if (player.NumCardsFaceUp != 0) return new Result(ResultOutcome.Fail);
+            if (player.NumCardsInHand != 0) return new Result("Cannot play face down card when you have cards in hand");
+            if (player.NumCardsFaceUp != 0) return new Result("Cannot play face down card when you have face up cards");
             IfArgumentsAreInvalidThenThrow(player, new[]{card}, player.CardsFaceDown);
             return PlayCardAndChooseNextPlayer(player, new[] { card }, PlayerCardTypes.FaceDown);
         }
@@ -94,12 +94,12 @@ namespace Palace
 
         private Result PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardType)
         {
-            if(_currentPlayer.Value.Equals(player) == false) return new Result(ResultOutcome.Fail);
+            if(_currentPlayer.Value.Equals(player) == false) return new Result("It isn't your turn!");
             ;
             var cardToPlay = cards.First();
 
             if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, _playPile))
-                return new Result(ResultOutcome.Fail);
+                return new Result("This card is invalid to play");
 
             _orderOfPlay = this._rulesProcessesor.ChooseOrderOfPlay(_orderOfPlay, cardToPlay);
             if (this._rulesProcessesor.PlayPileShouldBeCleared(cards, _playPile))
@@ -112,7 +112,7 @@ namespace Palace
 
             this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(cards, _players, this._currentPlayer, _orderOfPlay);
 
-            return new Result(ResultOutcome.Success);
+            return new Result();
         }
 
         private void RemoveCardsFromPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardTypes)

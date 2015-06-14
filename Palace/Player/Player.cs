@@ -112,17 +112,17 @@ namespace Palace
         public Result PutCardFaceUp(Card cardToPutFaceUp, Card faceUpCardToSwap = null)
         {
             if (_state != PlayerState.Setup)
-                return new Result(ResultOutcome.Fail);
+                return new Result("Cannot put card face up");
 
             if (faceUpCardToSwap != null)
                 this.MoveCardToNewPile(faceUpCardToSwap, _cardsInHand, _cardsFaceUp);
 
             if (this.NumCardsFaceUp >= 3)
-                return new Result(ResultOutcome.Fail);
+                return new Result("Cannot put more than 3 cards face up");
 
             this.MoveCardToNewPile(cardToPutFaceUp, _cardsFaceUp, _cardsInHand);
 
-            return new Result(ResultOutcome.Success);
+            return new Result();
         }
 
         public void RemoveCardsFromFaceDown(ICollection<Card> cards)
