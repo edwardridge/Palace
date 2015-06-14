@@ -45,11 +45,16 @@ namespace SpecTests
             foreach (var row in table.Rows)
             {
                 string name;
-                string cardsString;
+                string cardsInHandString;
+                string cardsFaceDownString;
                 row.TryGetValue("Player", out name);
-                row.TryGetValue("CardsInHand", out cardsString);
-                var cards = GetCardsFromCsvString(cardsString);
-                var player = PlayerHelper.CreatePlayer(cards, name);
+                row.TryGetValue("CardsInHand", out cardsInHandString);
+                row.TryGetValue("CardsFaceDown", out cardsFaceDownString);
+                var cardsInHand = GetCardsFromCsvString(cardsInHandString);
+                List<Card> cardsFaceDown = new List<Card>();
+                if(cardsFaceDownString != null)
+                    cardsFaceDown = GetCardsFromCsvString(cardsFaceDownString);
+                var player = PlayerHelper.CreatePlayer(cardsInHand, name, cardsFaceDown);
                 players.Add(player);
             }
             ruleForCardsByValue = new Dictionary<CardValue, RuleForCard>();
@@ -100,8 +105,17 @@ namespace SpecTests
             resultWrapper.resultOutcome = result;
         }
 
+        [When(@"'(.*)' plays the face down card '(.*)'")]
+        public void WhenPlaysTheFaceDownCard(string playerName, string card)
+        {
+            currentPlayer = players.First(p => p.Name.Equals(playerName));
+            result = game.PlayFaceDownCards(currentPlayer, GetCardFromStringValue(card));
+            resultWrapper.resultOutcome = result;
+        }
+
         private List<Card> GetCardsFromCsvString(string csvString)
         {
+            if(string.IsNullOrEmpty(csvString)) return new List<Card>();
             var cardsSplit = csvString.Replace(" ", string.Empty).Split(',');
             var cards = cardsSplit.Select(GetCardFromStringValue).ToList();
             return cards;

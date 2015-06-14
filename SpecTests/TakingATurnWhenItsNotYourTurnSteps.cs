@@ -27,5 +27,12 @@ namespace SpecTests
         {
             resultWrapper.resultOutcome.Should().Be(ResultOutcome.Fail);
         }
+
+        [Then(@"this should be allowed")]
+        public void ThenThisShouldBeAllowed()
+        {
+            resultWrapper.resultOutcome.Should().Be(ResultOutcome.Success);
+        }
+
     }
 }

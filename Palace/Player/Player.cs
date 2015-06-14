@@ -47,13 +47,17 @@ namespace Palace
             internal set { this._cardsFaceDown = value; }
         }
 
-	    public Player(string name, IEnumerable<Card> cardsInHand)
-	    {
+        public Player(string name, IEnumerable<Card> cardsInHand, IEnumerable<Card> cardsFaceDown)
+        {
             this._name = name;
-            this._cardsFaceDown = new List<Card>();//.ToList();
+            this._cardsFaceDown = new List<Card>(cardsFaceDown);//.ToList();
             this._cardsInHand = new List<Card>(cardsInHand);
             this._cardsFaceUp = new List<Card>(); // cardsFaceUp.ToList();
             _state = PlayerState.Setup;
+        }
+
+	    public Player(string name, IEnumerable<Card> cardsInHand): this(name, cardsInHand, new List<Card>())
+	    {
 	    }
 
 		public Player(string name) : this(name, new List<Card>()) {
@@ -150,6 +154,8 @@ namespace Palace
         private List<Card> _cardsFaceUp;
 
 		private PlayerState _state;
+
+        
 	}
 
 }

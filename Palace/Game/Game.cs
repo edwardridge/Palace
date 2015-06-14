@@ -61,6 +61,13 @@ namespace Palace
             return PlayCardAndChooseNextPlayer(player, cards);
         }
 
+        public ResultOutcome PlayFaceDownCards(Player player, Card card)
+        {
+            if(player.NumCardsInHand != 0) return ResultOutcome.Fail;
+            IfArgumentsAreInvalidThenThrow(player, new[]{card}, player.CardsFaceDown);
+            return PlayCardAndChooseNextPlayer(player, new[] { card });
+        }
+
         private void IfArgumentsAreInvalidThenThrow(Player player, ICollection<Card> cards, ICollection<Card> cardsToCheck)
         {
             if (cards.Except(cardsToCheck).Any())
@@ -235,5 +242,7 @@ namespace Palace
         private ICardDealer _cardDealer;
 
         private OrderOfPlay _orderOfPlay;
+
+        
     }
 }

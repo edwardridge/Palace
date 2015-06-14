@@ -113,6 +113,11 @@
     <Compile Include="Helpers\CardHelpers.cs" />
     <Compile Include="Helpers\DealerHelper.cs" />
     <Compile Include="Helpers\PlayerHelper.cs" />
+    <Compile Include="PlayingFaceDownCards.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PlayingFaceDownCards.feature</DependentUpon>
+    </Compile>
     <Compile Include="Setup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TakingATurnWhenItsNotYourTurn1.feature.cs">
@@ -135,6 +140,10 @@
       <LastGenOutput>GameplayTests.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
+    <None Include="PlayingFaceDownCards.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PlayingFaceDownCards.feature.cs</LastGenOutput>
+    </None>
     <None Include="TakingATurnWhenItsNotYourTurn.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TakingATurnWhenItsNotYourTurn1.feature.cs</LastGenOutput>
