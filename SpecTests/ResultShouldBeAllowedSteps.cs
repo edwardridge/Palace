@@ -12,11 +12,11 @@ namespace SpecTests
     using Palace;
 
     [Binding]
-    public class TakingATurnWhenItsNotYourTurnSteps
+    public class ResultShouldBeAllowedSteps
     {
         private ResultWrapper resultWrapper;
 
-        public TakingATurnWhenItsNotYourTurnSteps(ResultWrapper resultWrapper)
+        public ResultShouldBeAllowedSteps(ResultWrapper resultWrapper)
         {
             this.resultWrapper = resultWrapper;
         }

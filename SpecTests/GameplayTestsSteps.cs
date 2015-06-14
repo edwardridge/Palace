@@ -26,6 +26,14 @@ namespace SpecTests
             game.Players.First(p => p.Name.Equals(p0)).NumCardsInHand.Should().Be(3);
         }
 
+        [Then(@"'(.*)' should have '(.*)' cards face down")]
+        public void ThenShouldHaveCardsFaceDown(string p0, int p1)
+        {
+            var game = ScenarioContext.Current.Get<Game>("game");
+            game.Players.First(p => p.Name.Equals(p0)).NumCardsFaceDown.Should().Be(p1);
+        }
+
+
     }
 
 

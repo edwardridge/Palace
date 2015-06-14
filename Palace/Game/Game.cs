@@ -10,6 +10,13 @@ namespace Palace
         Backward = 2
     }
 
+    public enum PlayerCardTypes
+    {
+        InHand = 1,
+        FaceUp = 2,
+        FaceDown = 3
+    }
+
     public class Game
     {
         public Guid Id { get; internal set; }
@@ -40,7 +47,7 @@ namespace Palace
         {
             IfArgumentsAreInvalidThenThrow(player, cards, player.CardsInHand);
 
-            return PlayCardAndChooseNextPlayer(player, cards);
+            return PlayCardAndChooseNextPlayer(player, cards, PlayerCardTypes.InHand);
         }
 
         public ResultOutcome PlayInHandCards(Player player, Card card)
@@ -58,7 +65,7 @@ namespace Palace
             IfArgumentsAreInvalidThenThrow(player, cards, player.CardsFaceUp);
 
             if (player.NumCardsInHand >= 3) return ResultOutcome.Fail;
-            return PlayCardAndChooseNextPlayer(player, cards);
+            return PlayCardAndChooseNextPlayer(player, cards, PlayerCardTypes.FaceUp);
         }
 
         public ResultOutcome PlayFaceDownCards(Player player, Card card)
@@ -66,7 +73,7 @@ namespace Palace
             if (player.NumCardsInHand != 0) return ResultOutcome.Fail;
             if (player.NumCardsFaceUp != 0) return ResultOutcome.Fail;
             IfArgumentsAreInvalidThenThrow(player, new[]{card}, player.CardsFaceDown);
-            return PlayCardAndChooseNextPlayer(player, new[] { card });
+            return PlayCardAndChooseNextPlayer(player, new[] { card }, PlayerCardTypes.FaceDown);
         }
 
         private void IfArgumentsAreInvalidThenThrow(Player player, ICollection<Card> cards, ICollection<Card> cardsToCheck)
@@ -85,7 +92,7 @@ namespace Palace
             _currentPlayer = _rulesProcessesor.ChooseNextPlayer(null, _players, _currentPlayer, _orderOfPlay);
         }
 
-        private ResultOutcome PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards)
+        private ResultOutcome PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardTypes)
         {
             if(_currentPlayer.Value.Equals(player) == false) return ResultOutcome.Fail;
             ;
@@ -101,11 +108,16 @@ namespace Palace
                 foreach (Card card in cards)
                     _playPile.Push(card);
 
-            player.RemoveCardsFromInHand(cards);
+            if (playerCardTypes == PlayerCardTypes.InHand)
+            {
+                player.RemoveCardsFromInHand(cards);
 
-            while (player.NumCardsInHand < 3 && _cardDealer.CardsRemaining)
-                player.AddCardsToInHandPile(_cardDealer.DealCards(1));
-
+                while (player.NumCardsInHand < 3 && _cardDealer.CardsRemaining)
+                    player.AddCardsToInHandPile(_cardDealer.DealCards(1));
+            }
+            if (playerCardTypes == PlayerCardTypes.FaceDown)
+                player.RemoveCardsFromFaceDown(cards);
+            
             this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(cards, _players, this._currentPlayer, _orderOfPlay);
 
             return ResultOutcome.Success;

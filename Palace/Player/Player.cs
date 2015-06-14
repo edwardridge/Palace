@@ -155,7 +155,11 @@ namespace Palace
 
 		private PlayerState _state;
 
-        
+        public void RemoveCardsFromFaceDown(ICollection<Card> cards)
+        {
+            foreach (var card in cards)
+                this.CardsFaceDown.Remove(card);
+            }
 	}
 
 }

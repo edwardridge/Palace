@@ -8,7 +8,7 @@ namespace SpecTests
     using Palace;
 
     [Binding]
-    public class WhoShouldStartSteps
+    public class ItShouldBePlayersTurnSteps
     {   
         [Then(@"it should be '(.*)' turn")]
         public void ThenItShouldBeTurn(string p0)

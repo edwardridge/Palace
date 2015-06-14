@@ -22,3 +22,4 @@ Scenario: Can play face down card when you have no in hand cards
 	| Ed      | TwoOfClubs    |
 	When 'Ed' plays the face down card 'TwoOfClubs'
 	Then this should be allowed
+	And 'Ed' should have '0' cards face down

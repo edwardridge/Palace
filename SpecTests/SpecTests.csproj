@@ -125,13 +125,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TakingATurnWhenItsNotYourTurn.feature</DependentUpon>
     </Compile>
-    <Compile Include="TakingATurnWhenItsNotYourTurnSteps.cs" />
+    <Compile Include="ResultShouldBeAllowedSteps.cs" />
     <Compile Include="WhoStarts.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>WhoStarts.feature</DependentUpon>
     </Compile>
-    <Compile Include="WhoShouldStartSteps.cs" />
+    <Compile Include="ItShouldBePlayersTurnSteps.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
