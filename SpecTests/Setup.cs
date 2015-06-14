@@ -55,8 +55,7 @@ namespace SpecTests
             ruleForCardsByValue = new Dictionary<CardValue, RuleForCard>();
              dealer = DealerHelper.TestDealer(players);
              game = dealer.StartGame();
-             ScenarioContext.Current.Add("game", game);
-             ScenarioContext.Current.Add("dealer", dealer);
+             this.ReplaceGameAndDealerInScenarioContext(game, dealer);
         }
 
          [Given(@"it is '(.*)' turn")]
@@ -65,20 +64,32 @@ namespace SpecTests
              var playerToStart = players.First(f => f.Name.Equals(playerName));
              dealer = DealerHelper.TestDealer(players);
              game = dealer.StartGame(playerToStart);
+             this.ReplaceGameAndDealerInScenarioContext(game, dealer);
          }
 
          [Given(@"the following cards have rules")]
          public void GivenTheFollowingCardsHaveRules(Table table)
          {
-             ruleForCardsByValue.Add(CardValue.Two, RuleForCard.Reset);
+             foreach (var row in table.Rows)
+             {
+                 string cardValueAsString;
+                 string ruleForCardAsString;
+                 row.TryGetValue("CardValue", out cardValueAsString);
+                 row.TryGetValue("Rule", out ruleForCardAsString);
+                 ruleForCardsByValue.Add(GetCardValueFromStringValue(cardValueAsString), GetRuleForCardFromStringValue(ruleForCardAsString));                 
+             }
              dealer = DealerHelper.TestDealerWithRules(players, ruleForCardsByValue);
              game = dealer.StartGame();
-             ScenarioContext.Current.Remove("game");
-             ScenarioContext.Current.Remove("dealer");
-             ScenarioContext.Current.Add("game", game);
-             ScenarioContext.Current.Add("dealer", dealer);
+             this.ReplaceGameAndDealerInScenarioContext(game, dealer);
          }
 
+        private void ReplaceGameAndDealerInScenarioContext(Game replaceGame, Dealer replaceDealer)
+        {
+            ScenarioContext.Current.Remove("game");
+            ScenarioContext.Current.Remove("dealer");
+            ScenarioContext.Current.Add("game", replaceGame);
+            ScenarioContext.Current.Add("dealer", replaceDealer);
+        }
 
         [When(@"'(.*)' plays the '(.*)'")]
         public void WhenPlaysThe(string playerName, string card)
@@ -86,7 +97,6 @@ namespace SpecTests
             currentPlayer = players.First(p => p.Name.Equals(playerName));
             result = game.PlayInHandCards(currentPlayer, GetCardFromStringValue(card));
             resultWrapper.resultOutcome = result;
-
         }
 
         public List<Card> GetCardsFromCsvString(string csvString)
@@ -127,6 +137,49 @@ namespace SpecTests
                 case "AceOfClubs":
                     return Card.AceOfClubs;
                 default: throw new Exception("Card in test does not map");
+            }
+        }
+
+        private CardValue GetCardValueFromStringValue(string cardValue)
+        {
+            switch (cardValue)
+            {
+                case "Two":
+                    return CardValue.Two;
+                case "Three":
+                    return CardValue.Three;
+                case "Four":
+                    return CardValue.Four;
+                case "Five":
+                    return CardValue.Five;
+                case "Six":
+                    return CardValue.Six;
+                case "Seven":
+                    return CardValue.Seven;
+                case "Eight":
+                    return CardValue.Eight;
+                case "Nine":
+                    return CardValue.Nine;
+                case "Ten":
+                    return CardValue.Ten;
+                case "Jack":
+                    return CardValue.Jack;
+                case "Queen":
+                    return CardValue.Queen;
+                case "King":
+                    return CardValue.King;
+                case "AceOfClubs":
+                    return CardValue.Ace;
+                default: throw new Exception("Card in test does not map");
+            }
+        }
+
+        private RuleForCard GetRuleForCardFromStringValue(string ruleForCard)
+        {
+            switch (ruleForCard)
+            {
+                case "Reset": return RuleForCard.Reset;
+                default: throw new Exception("Rule for card in test not found");
             }
         }
     }
