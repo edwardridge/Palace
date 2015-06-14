@@ -109,20 +109,20 @@ namespace Palace
             }
         }
 
-        public ResultOutcome PutCardFaceUp(Card cardToPutFaceUp, Card faceUpCardToSwap = null)
+        public Result PutCardFaceUp(Card cardToPutFaceUp, Card faceUpCardToSwap = null)
         {
             if (_state != PlayerState.Setup)
-                return ResultOutcome.Fail;
+                return new Result(ResultOutcome.Fail);
 
             if (faceUpCardToSwap != null)
                 this.MoveCardToNewPile(faceUpCardToSwap, _cardsInHand, _cardsFaceUp);
 
             if (this.NumCardsFaceUp >= 3)
-                return ResultOutcome.Fail;
+                return new Result(ResultOutcome.Fail);
 
             this.MoveCardToNewPile(cardToPutFaceUp, _cardsFaceUp, _cardsInHand);
 
-            return ResultOutcome.Success;
+            return new Result(ResultOutcome.Success);
         }
 
         public void RemoveCardsFromFaceDown(ICollection<Card> cards)

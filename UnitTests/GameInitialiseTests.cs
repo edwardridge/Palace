@@ -161,7 +161,7 @@
             player.PutCardFaceUp(Card.EightOfClubs);
             player.PutCardFaceUp(Card.FiveOfClubs);
 
-            var outcome = player.PutCardFaceUp(Card.JackOfClubs);
+            var outcome = player.PutCardFaceUp(Card.JackOfClubs).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Fail);
         }
@@ -216,7 +216,7 @@
             player.PutCardFaceUp(Card.EightOfClubs);
             player.PutCardFaceUp(Card.FiveOfClubs);
 
-            var result = player.PutCardFaceUp(Card.FourOfClubs, Card.AceOfClubs);
+            var result = player.PutCardFaceUp(Card.FourOfClubs, Card.AceOfClubs).ResultOutcome;
 
             result.Should().Be(ResultOutcome.Success);
         }
@@ -227,7 +227,7 @@
             var player = PlayerHelper.CreatePlayer(new[] { Card.EightOfClubs });
             player.Ready();
 
-            var result = player.PutCardFaceUp(Card.EightOfClubs);
+            var result = player.PutCardFaceUp(Card.EightOfClubs).ResultOutcome;
 
             result.Should().Be(ResultOutcome.Fail);
         }
