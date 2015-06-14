@@ -83,13 +83,14 @@ namespace SpecTests
              this.ReplaceGameAndDealerInScenarioContext(game, dealer);
          }
 
-        private void ReplaceGameAndDealerInScenarioContext(Game replaceGame, Dealer replaceDealer)
-        {
-            ScenarioContext.Current.Remove("game");
-            ScenarioContext.Current.Remove("dealer");
-            ScenarioContext.Current.Add("game", replaceGame);
-            ScenarioContext.Current.Add("dealer", replaceDealer);
-        }
+
+         [When(@"The game starts")]
+         public void WhenTheGameStarts()
+         {
+             dealer = ScenarioContext.Current.Get<Dealer>("dealer");
+             game = dealer.StartGame();
+             this.ReplaceGameAndDealerInScenarioContext(game, dealer);
+         }
 
         [When(@"'(.*)' plays the '(.*)'")]
         public void WhenPlaysThe(string playerName, string card)
@@ -99,7 +100,7 @@ namespace SpecTests
             resultWrapper.resultOutcome = result;
         }
 
-        public List<Card> GetCardsFromCsvString(string csvString)
+        private List<Card> GetCardsFromCsvString(string csvString)
         {
             var cardsSplit = csvString.Replace(" ", string.Empty).Split(',');
             var cards = cardsSplit.Select(GetCardFromStringValue).ToList();
@@ -181,6 +182,14 @@ namespace SpecTests
                 case "Reset": return RuleForCard.Reset;
                 default: throw new Exception("Rule for card in test not found");
             }
+        }
+
+        private void ReplaceGameAndDealerInScenarioContext(Game replaceGame, Dealer replaceDealer)
+        {
+            ScenarioContext.Current.Remove("game");
+            ScenarioContext.Current.Remove("dealer");
+            ScenarioContext.Current.Add("game", replaceGame);
+            ScenarioContext.Current.Add("dealer", replaceDealer);
         }
     }
 
