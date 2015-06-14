@@ -65,10 +65,10 @@ namespace SpecTests
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Player with lowest card starts")]
-        public virtual void PlayerWithLowestCardStarts()
+        [NUnit.Framework.DescriptionAttribute("Player with lowest card starts - lowest card two of clubs")]
+        public virtual void PlayerWithLowestCardStarts_LowestCardTwoOfClubs()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player with lowest card starts", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player with lowest card starts - lowest card two of clubs", ((string[])(null)));
 #line 3
 this.ScenarioSetup(scenarioInfo);
 #line hidden
@@ -87,6 +87,90 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("The game starts", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 9
  testRunner.Then("it should be \'Liam\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Player with lowest card starts - lowest card three of clubs")]
+        public virtual void PlayerWithLowestCardStarts_LowestCardThreeOfClubs()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player with lowest card starts - lowest card three of clubs", ((string[])(null)));
+#line 11
+this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Player",
+                        "CardsInHand"});
+            table2.AddRow(new string[] {
+                        "Ed",
+                        "ThreeOfClubs, FourOfClubs, AceOfClubs"});
+            table2.AddRow(new string[] {
+                        "Liam",
+                        "FourOfClubs, FiveOfClubs, QueenOfClubs"});
+#line 12
+ testRunner.Given("I have the following players and cards", ((string)(null)), table2, "Given ");
+#line 16
+ testRunner.When("The game starts", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 17
+ testRunner.Then("it should be \'Ed\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Player with lowest card starts - lowest card seven of clubs")]
+        public virtual void PlayerWithLowestCardStarts_LowestCardSevenOfClubs()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player with lowest card starts - lowest card seven of clubs", ((string[])(null)));
+#line 19
+this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Player",
+                        "CardsInHand"});
+            table3.AddRow(new string[] {
+                        "Ed",
+                        "EightOfClubs, NineOfClubs, AceOfClubs"});
+            table3.AddRow(new string[] {
+                        "Liam",
+                        "SevenOfClubs, TenOfClubs, QueenOfClubs"});
+#line 20
+ testRunner.Given("I have the following players and cards", ((string)(null)), table3, "Given ");
+#line 24
+ testRunner.When("The game starts", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 25
+ testRunner.Then("it should be \'Liam\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Player with lowest card starts - with three players, lowest card three of clubs")]
+        public virtual void PlayerWithLowestCardStarts_WithThreePlayersLowestCardThreeOfClubs()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player with lowest card starts - with three players, lowest card three of clubs", ((string[])(null)));
+#line 27
+this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Player",
+                        "CardsInHand"});
+            table4.AddRow(new string[] {
+                        "Ed",
+                        "EightOfClubs, NineOfClubs, AceOfClubs"});
+            table4.AddRow(new string[] {
+                        "Liam",
+                        "SevenOfClubs, TenOfClubs, QueenOfClubs"});
+            table4.AddRow(new string[] {
+                        "David",
+                        "ThreeOfClubs, KingOfClubs, QueenOfClubs"});
+#line 28
+ testRunner.Given("I have the following players and cards", ((string)(null)), table4, "Given ");
+#line 33
+ testRunner.When("The game starts", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 34
+ testRunner.Then("it should be \'David\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

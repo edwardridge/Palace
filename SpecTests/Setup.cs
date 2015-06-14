@@ -98,6 +98,8 @@ namespace SpecTests
                     return Card.SevenOfClubs;
                 case "EightOfClubs":
                     return Card.EightOfClubs;
+                case "NineOfClubs":
+                    return Card.NineOfClubs;
                 case "TenOfClubs":
                     return Card.TenOfClubs;
                 case "JackOfClubs":
@@ -108,7 +110,7 @@ namespace SpecTests
                     return Card.JackOfClubs;
                 case "AceOfClubs":
                     return Card.AceOfClubs;
-                default: throw new Exception();
+                default: throw new Exception("Card in test does not map");
             }
         }
     }
