@@ -68,12 +68,13 @@ namespace Palace
             return PlayCardAndChooseNextPlayer(player, cards, PlayerCardTypes.FaceUp);
         }
 
-        public ResultOutcome PlayFaceDownCards(Player player, Card card)
+        public Result PlayFaceDownCards(Player player, Card card)
         {
-            if (player.NumCardsInHand != 0) return ResultOutcome.Fail;
-            if (player.NumCardsFaceUp != 0) return ResultOutcome.Fail;
+            if (player.NumCardsInHand != 0) return new Result(ResultOutcome.Fail);
+            if (player.NumCardsFaceUp != 0) return new Result(ResultOutcome.Fail);
             IfArgumentsAreInvalidThenThrow(player, new[]{card}, player.CardsFaceDown);
-            return PlayCardAndChooseNextPlayer(player, new[] { card }, PlayerCardTypes.FaceDown);
+            var resultOutcome = PlayCardAndChooseNextPlayer(player, new[] { card }, PlayerCardTypes.FaceDown);
+            return new Result(resultOutcome);
         }
 
         private void IfArgumentsAreInvalidThenThrow(Player player, ICollection<Card> cards, ICollection<Card> cardsToCheck)

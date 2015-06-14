@@ -131,8 +131,8 @@ namespace SpecTests
         public void WhenPlaysTheFaceDownCard(string playerName, string card)
         {
             currentPlayer = players.First(p => p.Name.Equals(playerName));
-            result = game.PlayFaceDownCards(currentPlayer, GetCardFromStringValue(card));
-            resultWrapper.resultOutcome = result;
+            var resultOutcome = game.PlayFaceDownCards(currentPlayer, GetCardFromStringValue(card)).ResultOutcome;
+            resultWrapper.resultOutcome = resultOutcome;
         }
 
         [When(@"'(.*)' plays the face up card '(.*)'")]
