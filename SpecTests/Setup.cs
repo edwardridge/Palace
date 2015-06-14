@@ -33,12 +33,13 @@ namespace SpecTests
         public Setup(ResultWrapper resultWrapper)
         {
             this.resultWrapper = resultWrapper;
+            //this.game = game;
         }
 
          [Given(@"I have the following players and cards")]
         public void GivenIHaveTheFollowingPlayersAndCards(Table table)
         {
-            players = new Collection<Player>();
+            players = new List<Player>();
             foreach (var row in table.Rows)
             {
                 string name;
@@ -51,6 +52,8 @@ namespace SpecTests
             }
              dealer = DealerHelper.TestDealer(players);
              game = dealer.StartGame();
+             ScenarioContext.Current.Add("game", game);
+             ScenarioContext.Current.Add("dealer", dealer);
         }
 
          [Given(@"it is '(.*)' turn")]
