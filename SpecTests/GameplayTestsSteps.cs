@@ -20,10 +20,10 @@ namespace SpecTests
         }
 
         [Then(@"'(.*)' should have '(.*)' cards in hand")]
-        public void ThenShouldHaveCardsInHand(string p0, int p1)
+        public void ThenShouldHaveCardsInHand(string playerName, int cardCount)
         {
             var game = ScenarioContext.Current.Get<Game>("game");
-            game.Players.First(p => p.Name.Equals(p0)).NumCardsInHand.Should().Be(3);
+            game.Players.First(p => p.Name.Equals(playerName)).NumCardsInHand.Should().Be(3);
         }
 
         [Then(@"'(.*)' should have '(.*)' cards face down")]
@@ -33,6 +33,12 @@ namespace SpecTests
             game.Players.First(p => p.Name.Equals(p0)).NumCardsFaceDown.Should().Be(p1);
         }
 
+        [Then(@"'(.*)' should have '(.*)' cards face up")]
+        public void ThenShouldHaveCardsFaceUp(string p0, int p1)
+        {
+            var game = ScenarioContext.Current.Get<Game>("game");
+            game.Players.First(p => p.Name.Equals(p0)).NumCardsFaceUp.Should().Be(p1);
+        }
 
     }
 

@@ -128,6 +128,8 @@ namespace Palace
             }
             if (playerCardTypes == PlayerCardTypes.FaceDown)
                 player.RemoveCardsFromFaceDown(cards);
+            if (playerCardTypes == PlayerCardTypes.FaceUp)
+                player.RemoveCardsFromFaceUp(cards);
         }
 
         public int PlayPileCardCount

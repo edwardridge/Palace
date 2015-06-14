@@ -126,6 +126,15 @@ namespace SpecTests
             resultWrapper.resultOutcome = result;
         }
 
+        [When(@"'(.*)' plays the face up card '(.*)'")]
+        public void WhenPlaysTheFaceUpCard(string playerName, string card)
+        {
+            currentPlayer = players.First(p => p.Name.Equals(playerName));
+            result = game.PlayFaceUpCards(currentPlayer, GetCardFromStringValue(card));
+            resultWrapper.resultOutcome = result;
+        }
+
+
         private List<Card> GetCardsFromCsvString(string csvString)
         {
             if(string.IsNullOrEmpty(csvString)) return new List<Card>();

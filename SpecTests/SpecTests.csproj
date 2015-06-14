@@ -113,6 +113,11 @@
     <Compile Include="Helpers\CardHelpers.cs" />
     <Compile Include="Helpers\DealerHelper.cs" />
     <Compile Include="Helpers\PlayerHelper.cs" />
+    <Compile Include="PlayFaceUpCard.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PlayFaceUpCard.feature</DependentUpon>
+    </Compile>
     <Compile Include="PlayingFaceDownCards.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -140,6 +145,10 @@
       <LastGenOutput>GameplayTests.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
+    <None Include="PlayFaceUpCard.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PlayFaceUpCard.feature.cs</LastGenOutput>
+    </None>
     <None Include="PlayingFaceDownCards.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PlayingFaceDownCards.feature.cs</LastGenOutput>
