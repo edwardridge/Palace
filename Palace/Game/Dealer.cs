@@ -42,7 +42,14 @@
                 {
                     if (player.CardsInHand == null || player.NumCardsInHand == 0)
                         continue;
-                    if (player.LowestCardInValue.Value < startingPlayer.LowestCardInValue.Value)
+                    var resetCardValue = _rulesForCardsByValue.FirstOrDefault(rule => rule.Value == RuleForCard.Reset).Key;
+                    var lowestNonResetCardValue = player.CardsInHand
+                                                        .Where(card => card.Value != resetCardValue)
+                                                        .OrderBy(o=>o.Value)
+                                                        .First()
+                                                        .Value;
+
+                    if (lowestNonResetCardValue < startingPlayer.LowestCardInValue.Value)
                         startingPlayer = player;
                 }
             }

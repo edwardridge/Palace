@@ -30,6 +30,8 @@ namespace SpecTests
 
         private ResultOutcome result;
 
+        private Dictionary<CardValue, RuleForCard> ruleForCardsByValue; 
+
         public Setup(ResultWrapper resultWrapper)
         {
             this.resultWrapper = resultWrapper;
@@ -50,6 +52,7 @@ namespace SpecTests
                 var player = PlayerHelper.CreatePlayer(cards, name);
                 players.Add(player);
             }
+            ruleForCardsByValue = new Dictionary<CardValue, RuleForCard>();
              dealer = DealerHelper.TestDealer(players);
              game = dealer.StartGame();
              ScenarioContext.Current.Add("game", game);
@@ -63,6 +66,19 @@ namespace SpecTests
              dealer = DealerHelper.TestDealer(players);
              game = dealer.StartGame(playerToStart);
          }
+
+         [Given(@"the following cards have rules")]
+         public void GivenTheFollowingCardsHaveRules(Table table)
+         {
+             ruleForCardsByValue.Add(CardValue.Two, RuleForCard.Reset);
+             dealer = DealerHelper.TestDealerWithRules(players, ruleForCardsByValue);
+             game = dealer.StartGame();
+             ScenarioContext.Current.Remove("game");
+             ScenarioContext.Current.Remove("dealer");
+             ScenarioContext.Current.Add("game", game);
+             ScenarioContext.Current.Add("dealer", dealer);
+         }
+
 
         [When(@"'(.*)' plays the '(.*)'")]
         public void WhenPlaysThe(string playerName, string card)

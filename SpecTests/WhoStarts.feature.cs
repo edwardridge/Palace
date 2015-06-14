@@ -174,6 +174,42 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Player with lowest card starts - lowest non-reset card three of clubs.")]
+        public virtual void PlayerWithLowestCardStarts_LowestNon_ResetCardThreeOfClubs_()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player with lowest card starts - lowest non-reset card three of clubs.", ((string[])(null)));
+#line 36
+this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Player",
+                        "CardsInHand"});
+            table5.AddRow(new string[] {
+                        "Ed",
+                        "ThreeOfClubs, FourOfClubs, AceOfClubs"});
+            table5.AddRow(new string[] {
+                        "Liam",
+                        "TwoOfClubs, FourOfClubs, QueenOfClubs"});
+#line 37
+ testRunner.Given("I have the following players and cards", ((string)(null)), table5, "Given ");
+#line hidden
+            TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                        "CardValue",
+                        "Rule"});
+            table6.AddRow(new string[] {
+                        "Two",
+                        "Reset"});
+#line 41
+ testRunner.And("the following cards have rules", ((string)(null)), table6, "And ");
+#line 44
+ testRunner.When("The game starts", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 45
+ testRunner.Then("it should be \'Ed\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore
