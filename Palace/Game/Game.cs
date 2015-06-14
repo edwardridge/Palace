@@ -92,7 +92,7 @@ namespace Palace
             _currentPlayer = _rulesProcessesor.ChooseNextPlayer(null, _players, _currentPlayer, _orderOfPlay);
         }
 
-        private ResultOutcome PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardTypes)
+        private ResultOutcome PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardType)
         {
             if(_currentPlayer.Value.Equals(player) == false) return ResultOutcome.Fail;
             ;
@@ -108,21 +108,28 @@ namespace Palace
                 foreach (Card card in cards)
                     _playPile.Push(card);
 
-            if (playerCardTypes == PlayerCardTypes.InHand)
-            {
-                player.RemoveCardsFromInHand(cards);
+            this.RemoveCardsFromPlayer(player, cards, playerCardType);
 
-                while (player.NumCardsInHand < 3 && _cardDealer.CardsRemaining)
-                    player.AddCardsToInHandPile(_cardDealer.DealCards(1));
-            }
-            if (playerCardTypes == PlayerCardTypes.FaceDown)
-                player.RemoveCardsFromFaceDown(cards);
-            
             this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(cards, _players, this._currentPlayer, _orderOfPlay);
 
             return ResultOutcome.Success;
         }
-        
+
+        private void RemoveCardsFromPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardTypes)
+        {
+            if (playerCardTypes == PlayerCardTypes.InHand)
+            {
+                player.RemoveCardsFromInHand(cards);
+
+                while (player.NumCardsInHand < 3 && this._cardDealer.CardsRemaining)
+                {
+                    player.AddCardsToInHandPile(this._cardDealer.DealCards(1));
+                }
+            }
+            if (playerCardTypes == PlayerCardTypes.FaceDown)
+                player.RemoveCardsFromFaceDown(cards);
+        }
+
         public int PlayPileCardCount
         {
             get
@@ -159,8 +166,6 @@ namespace Palace
                 var p = value;
             }
         }
-
-        
 
         internal void Start(Player startingPlayer)
         {

@@ -16,9 +16,8 @@ Scenario: Cannot play face down card when you have a face up card
 		Then this should not be allowed
 
 Scenario: Can play face down card when you have no in hand cards
-
 	Given I have the following players and cards
-	| Player | CardsFaceDown |
+	| Player  | CardsFaceDown |
 	| Ed      | TwoOfClubs    |
 	When 'Ed' plays the face down card 'TwoOfClubs'
 	Then this should be allowed
