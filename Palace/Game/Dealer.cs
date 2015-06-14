@@ -43,10 +43,10 @@
                     if (player.CardsInHand == null || player.NumCardsInHand == 0)
                         continue;
                     var resetCardValue = _rulesForCardsByValue.FirstOrDefault(rule => rule.Value == RuleForCard.Reset).Key;
-                    var lowestCarValueForCurrentPlayer = GetLowestNonResetCardValueForPlayer(player, resetCardValue);
-                    var lowestCarValueForStartingPlayer = GetLowestNonResetCardValueForPlayer(startingPlayer, resetCardValue);
+                    var lowestCardValueForCurrentPlayer = GetLowestNonResetCardValueForPlayer(player, resetCardValue);
+                    var lowestCardValueForStartingPlayer = GetLowestNonResetCardValueForPlayer(startingPlayer, resetCardValue);
 
-                    if (lowestCarValueForCurrentPlayer < lowestCarValueForStartingPlayer)
+                    if (lowestCardValueForCurrentPlayer < lowestCardValueForStartingPlayer)
                         startingPlayer = player;
                 }
             }
