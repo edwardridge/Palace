@@ -104,6 +104,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="GameplayTests.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GameplayTests.feature</DependentUpon>
+    </Compile>
+    <Compile Include="GameplayTestsSteps.cs" />
     <Compile Include="Helpers\CardHelpers.cs" />
     <Compile Include="Helpers\DealerHelper.cs" />
     <Compile Include="Helpers\PlayerHelper.cs" />
@@ -124,6 +130,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="GameplayTests.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GameplayTests.feature.cs</LastGenOutput>
+    </None>
     <None Include="packages.config" />
     <None Include="TakingATurnWhenItsNotYourTurn.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
