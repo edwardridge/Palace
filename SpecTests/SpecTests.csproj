@@ -115,10 +115,10 @@
       <DependentUpon>TakingATurnWhenItsNotYourTurn.feature</DependentUpon>
     </Compile>
     <Compile Include="TakingATurnWhenItsNotYourTurnSteps.cs" />
-    <Compile Include="TestFeature.feature.cs">
+    <Compile Include="WhoStarts.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>TestFeature.feature</DependentUpon>
+      <DependentUpon>WhoStarts.feature</DependentUpon>
     </Compile>
     <Compile Include="WhoShouldStartSteps.cs" />
   </ItemGroup>
@@ -129,9 +129,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TakingATurnWhenItsNotYourTurn1.feature.cs</LastGenOutput>
     </None>
-    <None Include="TestFeature.feature">
+    <None Include="WhoStarts.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>TestFeature.feature.cs</LastGenOutput>
+      <LastGenOutput>WhoStarts.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
