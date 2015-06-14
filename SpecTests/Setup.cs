@@ -64,7 +64,7 @@ namespace SpecTests
                 if(cardsFaceDownString != null)
                     cardsFaceDown = GetCardsFromCsvString(cardsFaceDownString);
 
-                var player = PlayerHelper.CreatePlayer(cardsInHand.Union(cardsFaceUp), name, cardsFaceDown);
+                var player = PlayerHelper.CreatePlayer(cardsInHand.Concat(cardsFaceUp), name, cardsFaceDown);
                 foreach (var card in cardsFaceUp)
                     player.PutCardFaceUp(card);
                 
@@ -101,6 +101,15 @@ namespace SpecTests
              this.ReplaceGameAndDealerInScenarioContext(game, dealer);
          }
 
+         [Given(@"the deck has no more cards")]
+         public void GivenTheDeckHasNoMoreCards()
+         {
+             var remainingCards = new List<Card>();
+             dealer = new Dealer(players, new PredeterminedDeck(remainingCards), new DummyCanStartGame(), ruleForCardsByValue);
+             game = dealer.StartGame();
+             this.ReplaceGameAndDealerInScenarioContext(game, dealer);
+         }
+
 
          [When(@"The game starts")]
          public void WhenTheGameStarts()
@@ -113,7 +122,7 @@ namespace SpecTests
         [When(@"'(.*)' plays the '(.*)'")]
         public void WhenPlaysThe(string playerName, string card)
         {
-            currentPlayer = players.First(p => p.Name.Equals(playerName));
+            currentPlayer = game.Players.First(p => p.Name.Equals(playerName));
             result = game.PlayInHandCards(currentPlayer, GetCardFromStringValue(card));
             resultWrapper.resultOutcome = result;
         }

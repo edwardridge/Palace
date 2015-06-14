@@ -104,6 +104,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="FullGameTests.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FullGameTests.feature</DependentUpon>
+    </Compile>
     <Compile Include="GameplayTests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -140,6 +145,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="FullGameTests.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>FullGameTests.feature.cs</LastGenOutput>
+    </None>
     <None Include="GameplayTests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>GameplayTests.feature.cs</LastGenOutput>
