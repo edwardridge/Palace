@@ -63,7 +63,8 @@ namespace Palace
 
         public ResultOutcome PlayFaceDownCards(Player player, Card card)
         {
-            if(player.NumCardsInHand != 0) return ResultOutcome.Fail;
+            if (player.NumCardsInHand != 0) return ResultOutcome.Fail;
+            if (player.NumCardsFaceUp != 0) return ResultOutcome.Fail;
             IfArgumentsAreInvalidThenThrow(player, new[]{card}, player.CardsFaceDown);
             return PlayCardAndChooseNextPlayer(player, new[] { card });
         }

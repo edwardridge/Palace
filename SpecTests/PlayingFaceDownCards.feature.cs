@@ -89,17 +89,54 @@ this.ScenarioSetup(scenarioInfo);
 #line 9
  testRunner.Then("this should not be allowed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Cannot play face down card when you have a face up card")]
+        public virtual void CannotPlayFaceDownCardWhenYouHaveAFaceUpCard()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot play face down card when you have a face up card", ((string[])(null)));
+#line 11
+this.ScenarioSetup(scenarioInfo);
+#line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
                         "Player",
-                        "CardsFaceDown"});
+                        "CardsFaceDown",
+                        "CardsFaceUp"});
             table2.AddRow(new string[] {
                         "Ed",
-                        "TwoOfClubs"});
-#line 11
+                        "TwoOfClubs",
+                        "FourOfClubs"});
+#line 12
  testRunner.Given("I have the following players and cards", ((string)(null)), table2, "Given ");
-#line 14
- testRunner.When("\'Ed\' plays the face down card \'TwoOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 15
+  testRunner.When("\'Ed\' plays the face down card \'TwoOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 16
+  testRunner.Then("this should not be allowed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Can play face down card when you have no in hand cards")]
+        public virtual void CanPlayFaceDownCardWhenYouHaveNoInHandCards()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can play face down card when you have no in hand cards", ((string[])(null)));
+#line 18
+this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Player",
+                        "CardsFaceDown"});
+            table3.AddRow(new string[] {
+                        "Ed",
+                        "TwoOfClubs"});
+#line 20
+ testRunner.Given("I have the following players and cards", ((string)(null)), table3, "Given ");
+#line 23
+ testRunner.When("\'Ed\' plays the face down card \'TwoOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 24
  testRunner.Then("this should be allowed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

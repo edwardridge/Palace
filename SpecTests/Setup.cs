@@ -47,20 +47,33 @@ namespace SpecTests
                 string name;
                 string cardsInHandString;
                 string cardsFaceDownString;
+                string cardsFaceUpString;
+
                 row.TryGetValue("Player", out name);
                 row.TryGetValue("CardsInHand", out cardsInHandString);
                 row.TryGetValue("CardsFaceDown", out cardsFaceDownString);
+                row.TryGetValue("CardsFaceUp", out cardsFaceUpString);
+
                 var cardsInHand = GetCardsFromCsvString(cardsInHandString);
-                List<Card> cardsFaceDown = new List<Card>();
+
+                var cardsFaceUp = new List<Card>();
+                if (cardsFaceUpString != null)
+                    cardsFaceUp = GetCardsFromCsvString(cardsFaceUpString);
+
+                var cardsFaceDown = new List<Card>();
                 if(cardsFaceDownString != null)
                     cardsFaceDown = GetCardsFromCsvString(cardsFaceDownString);
-                var player = PlayerHelper.CreatePlayer(cardsInHand, name, cardsFaceDown);
+
+                var player = PlayerHelper.CreatePlayer(cardsInHand.Union(cardsFaceUp), name, cardsFaceDown);
+                foreach (var card in cardsFaceUp)
+                    player.PutCardFaceUp(card);
+                
                 players.Add(player);
             }
             ruleForCardsByValue = new Dictionary<CardValue, RuleForCard>();
-             dealer = DealerHelper.TestDealer(players);
-             game = dealer.StartGame();
-             this.ReplaceGameAndDealerInScenarioContext(game, dealer);
+            dealer = DealerHelper.TestDealer(players);
+            game = dealer.StartGame();
+            this.ReplaceGameAndDealerInScenarioContext(game, dealer);
         }
 
          [Given(@"it is '(.*)' turn")]
