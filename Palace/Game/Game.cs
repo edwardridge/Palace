@@ -43,29 +43,31 @@ namespace Palace
             this._currentPlayer = _players.First;
         }
 
-        public ResultOutcome PlayInHandCards(Player player, ICollection<Card> cards)
+        public Result PlayInHandCards(Player player, ICollection<Card> cards)
         {
             IfArgumentsAreInvalidThenThrow(player, cards, player.CardsInHand);
 
-            return PlayCardAndChooseNextPlayer(player, cards, PlayerCardTypes.InHand);
+            var resultOutcome = PlayCardAndChooseNextPlayer(player, cards, PlayerCardTypes.InHand);
+            return new Result(resultOutcome);
         }
 
-        public ResultOutcome PlayInHandCards(Player player, Card card)
+        public Result PlayInHandCards(Player player, Card card)
         {
             return this.PlayInHandCards(player, new[] { card });
         }
 
-        public ResultOutcome PlayFaceUpCards(Player player, Card card)
+        public Result PlayFaceUpCards(Player player, Card card)
         {
             return PlayFaceUpCards(player, new[] { card });
         }
 
-        public ResultOutcome PlayFaceUpCards(Player player, ICollection<Card> cards)
+        public Result PlayFaceUpCards(Player player, ICollection<Card> cards)
         {
             IfArgumentsAreInvalidThenThrow(player, cards, player.CardsFaceUp);
 
-            if (player.NumCardsInHand >= 3) return ResultOutcome.Fail;
-            return PlayCardAndChooseNextPlayer(player, cards, PlayerCardTypes.FaceUp);
+            if (player.NumCardsInHand >= 3) return new Result(ResultOutcome.Fail);
+            var resultOutcome = PlayCardAndChooseNextPlayer(player, cards, PlayerCardTypes.FaceUp);
+            return new Result(resultOutcome);
         }
 
         public Result PlayFaceDownCards(Player player, Card card)

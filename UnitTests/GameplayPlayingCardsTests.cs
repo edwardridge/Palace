@@ -52,7 +52,7 @@
             var dealer = DealerHelper.TestDealer(new[] { player });
             var game = dealer.StartGame();
 
-            var outcome = game.PlayFaceUpCards(player, cardsToPlay);
+            var outcome = game.PlayFaceUpCards(player, cardsToPlay).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
         }
@@ -79,7 +79,7 @@
             var player1 = PlayerHelper.CreatePlayer(cardsPlayerHas);
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.StartGame();
-            var playingCardsPlayerHasOutcome = game.PlayInHandCards(player1, cardsPlayerHas[0]);
+            var playingCardsPlayerHasOutcome = game.PlayInHandCards(player1, cardsPlayerHas[0]).ResultOutcome;
 
             playingCardsPlayerHasOutcome.Should().Be(ResultOutcome.Success);
         }
@@ -117,7 +117,7 @@
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.StartGame(player1);
 
-            var playerPlaysMultipleCardsOfSameValueOutcome = game.PlayInHandCards(player1, cardsToPlay);
+            var playerPlaysMultipleCardsOfSameValueOutcome = game.PlayInHandCards(player1, cardsToPlay).ResultOutcome;
 
             playerPlaysMultipleCardsOfSameValueOutcome.Should().Be(ResultOutcome.Success);
         }
@@ -130,7 +130,7 @@
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.StartGame();
 
-            var outcome = game.PlayInHandCards(player1, cardsToPlay);
+            var outcome = game.PlayInHandCards(player1, cardsToPlay).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
         }
@@ -146,7 +146,7 @@
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.StartGame();
 
-            var outcome = game.PlayFaceUpCards(player1, Card.FiveOfClubs);
+            var outcome = game.PlayFaceUpCards(player1, Card.FiveOfClubs).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Fail);
         }

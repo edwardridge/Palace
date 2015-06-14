@@ -123,8 +123,8 @@ namespace SpecTests
         public void WhenPlaysThe(string playerName, string card)
         {
             currentPlayer = game.Players.First(p => p.Name.Equals(playerName));
-            result = game.PlayInHandCards(currentPlayer, GetCardFromStringValue(card));
-            resultWrapper.resultOutcome = result;
+            var resultOutcome = game.PlayInHandCards(currentPlayer, GetCardFromStringValue(card)).ResultOutcome;
+            resultWrapper.resultOutcome = resultOutcome;
         }
 
         [When(@"'(.*)' plays the face down card '(.*)'")]
@@ -139,8 +139,8 @@ namespace SpecTests
         public void WhenPlaysTheFaceUpCard(string playerName, string card)
         {
             currentPlayer = players.First(p => p.Name.Equals(playerName));
-            result = game.PlayFaceUpCards(currentPlayer, GetCardFromStringValue(card));
-            resultWrapper.resultOutcome = result;
+            var resultOutcome = game.PlayFaceUpCards(currentPlayer, GetCardFromStringValue(card)).ResultOutcome;
+            resultWrapper.resultOutcome = resultOutcome;
         }
 
 

@@ -34,7 +34,7 @@ namespace UnitTests
             var cardInPile = new Stack<Card>();
             cardInPile.Push(Card.TwoOfClubs);
             var game = dealer.StartGameWithPlayPile(player1, cardInPile);
-            var outcome = game.PlayInHandCards(player1, cardToPlay);
+            var outcome = game.PlayInHandCards(player1, cardToPlay).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
         }
@@ -47,7 +47,7 @@ namespace UnitTests
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var cardInPile = Card.FiveOfClubs;
             var game = dealer.StartGameWithPlayPile(player1, new[] { cardInPile });
-            var outcome = game.PlayInHandCards(player1, cardToPlay);
+            var outcome = game.PlayInHandCards(player1, cardToPlay).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Fail);
         }
@@ -60,7 +60,7 @@ namespace UnitTests
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var cardInPile = new List<Card>(new[] { Card.FourOfClubs });
             var game = dealer.StartGameWithPlayPile(player1, cardInPile);
-            var outcome = game.PlayInHandCards(player1, cardToPlay);
+            var outcome = game.PlayInHandCards(player1, cardToPlay).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
         }
@@ -89,7 +89,7 @@ namespace UnitTests
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, cardTypes);
             var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
             var game = dealer.StartGameWithPlayPile(player1, cardInPile);
-            var outcome = game.PlayInHandCards(player1, cardToPlay);
+            var outcome = game.PlayInHandCards(player1, cardToPlay).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Fail);
         }
@@ -102,7 +102,7 @@ namespace UnitTests
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, cardTypes);
             var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
             var game = dealer.StartGameWithPlayPile(player1, cardInPile);
-            var outcome = game.PlayInHandCards(player1, cardToPlay);
+            var outcome = game.PlayInHandCards(player1, cardToPlay).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
         }
@@ -115,7 +115,7 @@ namespace UnitTests
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, cardTypes);
             var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
             var game = dealer.StartGameWithPlayPile(player1, cardInPile);
-            var outcome = game.PlayInHandCards(player1, cardToPlay);
+            var outcome = game.PlayInHandCards(player1, cardToPlay).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
         }
@@ -144,7 +144,7 @@ namespace UnitTests
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, rulesForCardsByValue);
             var cardInPile = new List<Card>(new[] { Card.TwoOfClubs });
             var game = dealer.StartGameWithPlayPile(player1, cardInPile);
-            var outcome = game.PlayInHandCards(player1, cardToPlay);
+            var outcome = game.PlayInHandCards(player1, cardToPlay).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
         }
@@ -160,7 +160,7 @@ namespace UnitTests
             game.PlayInHandCards(player2, Card.TwoOfClubs);
 
             // Playing this card without the reset card would not be valid
-            var outcome = game.PlayInHandCards(player1, Card.SixOfClubs);
+            var outcome = game.PlayInHandCards(player1, Card.SixOfClubs).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
         }
@@ -171,7 +171,7 @@ namespace UnitTests
             var player1 = PlayerHelper.CreatePlayer(Card.TwoOfClubs);
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, rulesForCardsByValue);
             var game = dealer.StartGameWithPlayPile(player1, new List<Card>() { Card.EightOfClubs });
-            var outcome = game.PlayInHandCards(player1, Card.TwoOfClubs);
+            var outcome = game.PlayInHandCards(player1, Card.TwoOfClubs).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
         }
@@ -200,7 +200,7 @@ namespace UnitTests
             var dealer = DealerHelper.TestDealerWithRules(new[]{player}, rulesForCardsByValue);
             var game = dealer.StartGameWithPlayPile(player, new[] { Card.SevenOfClubs });
             
-            var outcome = game.PlayFaceUpCards(player, cardToPlay);
+            var outcome = game.PlayFaceUpCards(player, cardToPlay).ResultOutcome;
             
             outcome.Should().Be(ResultOutcome.Fail);
         }
@@ -213,7 +213,7 @@ namespace UnitTests
             var dealer = DealerHelper.TestDealerWithRules(new[]{player}, rulesForCardsByValue);
             var game = dealer.StartGameWithPlayPile(player, new[] { Card.SevenOfClubs });
             
-            var outcome = game.PlayInHandCards(player, cardToPlay);
+            var outcome = game.PlayInHandCards(player, cardToPlay).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
         }
@@ -322,7 +322,7 @@ namespace UnitTests
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, rulesForCardsByValue);
             var game = dealer.StartGameWithPlayPile(player1, cardInPile);
 
-            var outcome = game.PlayInHandCards(player1, Card.TenOfClubs);
+            var outcome = game.PlayInHandCards(player1, Card.TenOfClubs).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
         }
@@ -418,7 +418,7 @@ namespace UnitTests
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, ruleForCardsByValue);
             var game = dealer.StartGameWithPlayPile(player1, new[] { Card.SevenOfClubs });
 
-            var outcome = game.PlayInHandCards(player1, Card.FiveOfClubs);
+            var outcome = game.PlayInHandCards(player1, Card.FiveOfClubs).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
         }
@@ -432,7 +432,7 @@ namespace UnitTests
             var game = dealer.StartGameWithPlayPile(player1, new[] { Card.SevenOfClubs });
 
             game.PlayInHandCards(player1, Card.FiveOfClubs);
-            var outcome = game.PlayInHandCards(player2, Card.SixOfClubs);
+            var outcome = game.PlayInHandCards(player2, Card.SixOfClubs).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Fail);
 
@@ -449,7 +449,7 @@ namespace UnitTests
             game.PlayInHandCards(player1, Card.FiveOfClubs);
             game.PlayInHandCards(player2, Card.FiveOfClubs);
 
-            var outcome = game.PlayInHandCards(player3, Card.SixOfClubs);
+            var outcome = game.PlayInHandCards(player3, Card.SixOfClubs).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Fail);
         }
