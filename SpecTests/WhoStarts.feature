@@ -43,3 +43,13 @@ Scenario: Player with lowest card starts - lowest non-reset card three of clubs.
 	| Two       | Reset |
 	When The game starts
 	Then it should be 'Ed' turn
+
+Given I have the following players and cards
+	| Player | CardsInHand                         |
+	| Ed     | TwoOfClubs, FourOfClubs, AceOfClubs |
+	| Liam   | ThreeOfClubs, FourOfClubs, QueenOfClubs |
+	And the following cards have rules
+	| CardValue | Rule  |
+	| Two       | Reset |
+	When The game starts
+	Then it should be 'Liam' turn

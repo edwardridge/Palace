@@ -208,6 +208,31 @@ this.ScenarioSetup(scenarioInfo);
 #line 45
  testRunner.Then("it should be \'Ed\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
+            TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Player",
+                        "CardsInHand"});
+            table7.AddRow(new string[] {
+                        "Ed",
+                        "TwoOfClubs, FourOfClubs, AceOfClubs"});
+            table7.AddRow(new string[] {
+                        "Liam",
+                        "ThreeOfClubs, FourOfClubs, QueenOfClubs"});
+#line 47
+testRunner.Given("I have the following players and cards", ((string)(null)), table7, "Given ");
+#line hidden
+            TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
+                        "CardValue",
+                        "Rule"});
+            table8.AddRow(new string[] {
+                        "Two",
+                        "Reset"});
+#line 51
+ testRunner.And("the following cards have rules", ((string)(null)), table8, "And ");
+#line 54
+ testRunner.When("The game starts", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 55
+ testRunner.Then("it should be \'Liam\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
             this.ScenarioCleanup();
         }
     }

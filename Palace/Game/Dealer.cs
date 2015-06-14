@@ -43,19 +43,22 @@
                     if (player.CardsInHand == null || player.NumCardsInHand == 0)
                         continue;
                     var resetCardValue = _rulesForCardsByValue.FirstOrDefault(rule => rule.Value == RuleForCard.Reset).Key;
-                    var lowestNonResetCardValue = player.CardsInHand
-                                                        .Where(card => card.Value != resetCardValue)
-                                                        .OrderBy(o=>o.Value)
-                                                        .First()
-                                                        .Value;
+                    var lowestCarValueForCurrentPlayer = GetLowestNonResetCardValueForPlayer(player, resetCardValue);
+                    var lowestCarValueForStartingPlayer = GetLowestNonResetCardValueForPlayer(startingPlayer, resetCardValue);
 
-                    if (lowestNonResetCardValue < startingPlayer.LowestCardInValue.Value)
+                    if (lowestCarValueForCurrentPlayer < lowestCarValueForStartingPlayer)
                         startingPlayer = player;
                 }
             }
 
             game.Start(startingPlayer);
             return game;
+        }
+
+        private static CardValue GetLowestNonResetCardValueForPlayer(Player player, CardValue resetCardValue)
+        {
+            var lowestNonResetCardValue = player.CardsInHand.Where(card => card.Value != resetCardValue).OrderBy(o => o.Value).First().Value;
+            return lowestNonResetCardValue;
         }
 
         public Game StartGameWithPlayPile(Player startingPlayer, IEnumerable<Card> cardsInPile)
