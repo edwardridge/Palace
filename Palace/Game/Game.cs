@@ -47,8 +47,7 @@ namespace Palace
         {
             IfArgumentsAreInvalidThenThrow(player, cards, player.CardsInHand);
 
-            var resultOutcome = PlayCardAndChooseNextPlayer(player, cards, PlayerCardTypes.InHand);
-            return new Result(resultOutcome);
+            return PlayCardAndChooseNextPlayer(player, cards, PlayerCardTypes.InHand);
         }
 
         public Result PlayInHandCards(Player player, Card card)
@@ -66,8 +65,7 @@ namespace Palace
             IfArgumentsAreInvalidThenThrow(player, cards, player.CardsFaceUp);
 
             if (player.NumCardsInHand >= 3) return new Result(ResultOutcome.Fail);
-            var resultOutcome = PlayCardAndChooseNextPlayer(player, cards, PlayerCardTypes.FaceUp);
-            return new Result(resultOutcome);
+            return PlayCardAndChooseNextPlayer(player, cards, PlayerCardTypes.FaceUp);
         }
 
         public Result PlayFaceDownCards(Player player, Card card)
@@ -75,8 +73,7 @@ namespace Palace
             if (player.NumCardsInHand != 0) return new Result(ResultOutcome.Fail);
             if (player.NumCardsFaceUp != 0) return new Result(ResultOutcome.Fail);
             IfArgumentsAreInvalidThenThrow(player, new[]{card}, player.CardsFaceDown);
-            var resultOutcome = PlayCardAndChooseNextPlayer(player, new[] { card }, PlayerCardTypes.FaceDown);
-            return new Result(resultOutcome);
+            return PlayCardAndChooseNextPlayer(player, new[] { card }, PlayerCardTypes.FaceDown);
         }
 
         private void IfArgumentsAreInvalidThenThrow(Player player, ICollection<Card> cards, ICollection<Card> cardsToCheck)
@@ -95,14 +92,14 @@ namespace Palace
             _currentPlayer = _rulesProcessesor.ChooseNextPlayer(null, _players, _currentPlayer, _orderOfPlay);
         }
 
-        private ResultOutcome PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardType)
+        private Result PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardType)
         {
-            if(_currentPlayer.Value.Equals(player) == false) return ResultOutcome.Fail;
+            if(_currentPlayer.Value.Equals(player) == false) return new Result(ResultOutcome.Fail);
             ;
             var cardToPlay = cards.First();
 
             if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, _playPile))
-                return ResultOutcome.Fail;
+                return new Result(ResultOutcome.Fail);
 
             _orderOfPlay = this._rulesProcessesor.ChooseOrderOfPlay(_orderOfPlay, cardToPlay);
             if (this._rulesProcessesor.PlayPileShouldBeCleared(cards, _playPile))
@@ -115,7 +112,7 @@ namespace Palace
 
             this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(cards, _players, this._currentPlayer, _orderOfPlay);
 
-            return ResultOutcome.Success;
+            return new Result(ResultOutcome.Success);
         }
 
         private void RemoveCardsFromPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardTypes)
