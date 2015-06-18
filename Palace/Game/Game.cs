@@ -39,6 +39,7 @@ namespace Palace
             this._playPile = new Stack<Card>(cardsInPile);
             this._cardDealer = cardDealer;
             this._orderOfPlay = OrderOfPlay.Forward;
+            this._gameOver = false;
 
             this._currentPlayer = _players.First;
         }
@@ -94,8 +95,9 @@ namespace Palace
 
         private Result PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardType)
         {
+            if(_gameOver) return new GameOverResult();
             if(_currentPlayer.Value.Equals(player) == false) return new Result("It isn't your turn!");
-            ;
+            
             var cardToPlay = cards.First();
 
             if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, _playPile))
@@ -110,8 +112,11 @@ namespace Palace
 
             this.RemoveCardsFromPlayer(player, cards, playerCardType);
 
-            if(player.NumCardsFaceDown == 0 && player.NumCardsFaceUp == 0 & player.NumCardsInHand == 0)
+            if (player.NumCardsFaceDown == 0 && player.NumCardsFaceUp == 0 & player.NumCardsInHand == 0)
+            {
+                this._gameOver = true;
                 return new GameOverResult();
+            }
 
             this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(cards, _players, this._currentPlayer, _orderOfPlay);
 
@@ -266,7 +271,7 @@ namespace Palace
 
         private OrderOfPlay _orderOfPlay;
 
-        
+        private bool _gameOver;
     }
 
     public class GameOverResult : Result

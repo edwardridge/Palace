@@ -18,6 +18,14 @@ namespace SpecTests
             result.ResultOutcome.Should().Be(ResultOutcome.GameOver);
         }
 
+        [Then(@"you are notified the game is over")]
+        public void ThenYouAreNotifiedTheGameIsOver()
+        {
+            var result = ScenarioContext.Current.Get<Result>("result");
+            result.ResultOutcome.Should().Be(ResultOutcome.GameOver);
+        }
+
+
         [Then(@"'(.*)' wins the game")]
         public void ThenWinsTheGame(string p0)
         {

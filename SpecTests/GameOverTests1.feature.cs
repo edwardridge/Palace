@@ -92,6 +92,70 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("When the game is over you and a player plays a card you are notified the game is " +
+            "over")]
+        public virtual void WhenTheGameIsOverYouAndAPlayerPlaysACardYouAreNotifiedTheGameIsOver()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("When the game is over you and a player plays a card you are notified the game is " +
+                    "over", ((string[])(null)));
+#line 13
+this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Player",
+                        "CardsFaceDown"});
+            table2.AddRow(new string[] {
+                        "Ed",
+                        "TwoOfClubs"});
+            table2.AddRow(new string[] {
+                        "Liam",
+                        "ThreeOfClubs, FourOfClubs"});
+#line 14
+ testRunner.Given("I have the following players and cards", ((string)(null)), table2, "Given ");
+#line 18
+ testRunner.And("it is \'Ed\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 19
+ testRunner.When("\'Ed\' plays the face down card \'TwoOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 20
+ testRunner.And("\'Liam\' plays the face down card \'ThreeOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 21
+ testRunner.Then("you are notified the game is over", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("When the game is over and a player plays a card that card isn\'t removed")]
+        public virtual void WhenTheGameIsOverAndAPlayerPlaysACardThatCardIsnTRemoved()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("When the game is over and a player plays a card that card isn\'t removed", ((string[])(null)));
+#line 23
+this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Player",
+                        "CardsFaceDown"});
+            table3.AddRow(new string[] {
+                        "Ed",
+                        "TwoOfClubs"});
+            table3.AddRow(new string[] {
+                        "Liam",
+                        "ThreeOfClubs"});
+#line 24
+ testRunner.Given("I have the following players and cards", ((string)(null)), table3, "Given ");
+#line 28
+ testRunner.And("it is \'Ed\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 29
+ testRunner.When("\'Ed\' plays the face down card \'TwoOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 30
+ testRunner.And("\'Liam\' plays the face down card \'ThreeOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 31
+ testRunner.Then("\'Liam\' should have \'1\' cards face down", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

@@ -109,7 +109,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FullGameTests.feature</DependentUpon>
     </Compile>
-    <Compile Include="GameOverTests.feature.cs">
+    <Compile Include="GameOverTests1.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>GameOverTests.feature</DependentUpon>
@@ -157,7 +157,7 @@
     </None>
     <None Include="GameOverTests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>GameOverTests.feature.cs</LastGenOutput>
+      <LastGenOutput>GameOverTests1.feature.cs</LastGenOutput>
     </None>
     <None Include="GameplayTests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
