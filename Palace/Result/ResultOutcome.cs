@@ -6,10 +6,11 @@ namespace Palace
     using System.Linq;
 
     public enum ResultOutcome
-	{
-		Fail = 1,
-		Success = 2
-	}
+    {
+        Fail = 1,
+        Success = 2,
+        GameOver
+    }
 
     public class Result
     {
@@ -32,7 +33,7 @@ namespace Palace
             this._errorMessages.Add(message);
         }
 
-        public ResultOutcome ResultOutcome
+        public virtual ResultOutcome ResultOutcome
         {
             get
             {

@@ -110,6 +110,9 @@ namespace Palace
 
             this.RemoveCardsFromPlayer(player, cards, playerCardType);
 
+            if(player.NumCardsFaceDown == 0 && player.NumCardsFaceUp == 0 & player.NumCardsInHand == 0)
+                return new GameOverResult();
+
             this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(cards, _players, this._currentPlayer, _orderOfPlay);
 
             return new Result();
@@ -264,5 +267,18 @@ namespace Palace
         private OrderOfPlay _orderOfPlay;
 
         
+    }
+
+    public class GameOverResult : Result
+    {
+        public GameOverResult()
+        {
+            
+        }
+
+        public override ResultOutcome ResultOutcome
+        {
+            get { return ResultOutcome.GameOver; }
+        }
     }
 }

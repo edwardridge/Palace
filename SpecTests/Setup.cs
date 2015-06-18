@@ -26,17 +26,7 @@ namespace SpecTests
 
         private Game game;
 
-        private ResultWrapper resultWrapper;
-
-        private ResultOutcome result;
-
         private Dictionary<CardValue, RuleForCard> ruleForCardsByValue; 
-
-        public Setup(ResultWrapper resultWrapper)
-        {
-            this.resultWrapper = resultWrapper;
-            //this.game = game;
-        }
 
          [Given(@"I have the following players and cards")]
         public void GivenIHaveTheFollowingPlayersAndCards(Table table)
@@ -123,24 +113,27 @@ namespace SpecTests
         public void WhenPlaysThe(string playerName, string card)
         {
             currentPlayer = game.Players.First(p => p.Name.Equals(playerName));
-            var resultOutcome = game.PlayInHandCards(currentPlayer, GetCardFromStringValue(card)).ResultOutcome;
-            resultWrapper.resultOutcome = resultOutcome;
+            var result = game.PlayInHandCards(currentPlayer, GetCardFromStringValue(card));
+            ScenarioContext.Current.Remove("result");
+            ScenarioContext.Current.Add("result", result);
         }
 
         [When(@"'(.*)' plays the face down card '(.*)'")]
         public void WhenPlaysTheFaceDownCard(string playerName, string card)
         {
             currentPlayer = players.First(p => p.Name.Equals(playerName));
-            var resultOutcome = game.PlayFaceDownCards(currentPlayer, GetCardFromStringValue(card)).ResultOutcome;
-            resultWrapper.resultOutcome = resultOutcome;
+            var result = game.PlayFaceDownCards(currentPlayer, GetCardFromStringValue(card));
+            ScenarioContext.Current.Remove("result");
+            ScenarioContext.Current.Add("result", result);
         }
 
         [When(@"'(.*)' plays the face up card '(.*)'")]
         public void WhenPlaysTheFaceUpCard(string playerName, string card)
         {
             currentPlayer = players.First(p => p.Name.Equals(playerName));
-            var resultOutcome = game.PlayFaceUpCards(currentPlayer, GetCardFromStringValue(card)).ResultOutcome;
-            resultWrapper.resultOutcome = resultOutcome;
+            var result = game.PlayFaceUpCards(currentPlayer, GetCardFromStringValue(card));
+            ScenarioContext.Current.Remove("result");
+            ScenarioContext.Current.Add("result", result);
         }
 
 
@@ -237,15 +230,4 @@ namespace SpecTests
             ScenarioContext.Current.Add("dealer", replaceDealer);
         }
     }
-
-    public class ResultWrapper
-    {
-        public ResultOutcome resultOutcome;
-
-        public ResultWrapper()
-        {
-        }
-    }
-
-    
 }

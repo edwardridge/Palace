@@ -137,9 +137,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 22
  testRunner.When("\'Ed\' plays the face down card \'TwoOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 23
- testRunner.Then("this should be allowed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 24
- testRunner.And("\'Ed\' should have \'0\' cards face down", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("\'Ed\' should have \'0\' cards face down", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

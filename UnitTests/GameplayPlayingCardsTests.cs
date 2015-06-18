@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using FluentAssertions;
 
@@ -46,7 +47,7 @@
         public void Can_Play_Multiple_Face_Up_Cards_Of_Same_Value()
         {
             var cardsToPlay = new[] { Card.AceOfClubs, Card.AceOfClubs };
-            var player = PlayerHelper.CreatePlayer(cardsToPlay);
+            var player = PlayerHelper.CreatePlayer(cardsToPlay.Concat(new[]{ Card.FiveOfClubs }));
             player.PutCardFaceUp(Card.AceOfClubs);
             player.PutCardFaceUp(Card.AceOfClubs);
             var dealer = DealerHelper.TestDealer(new[] { player });
