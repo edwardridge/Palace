@@ -114,8 +114,7 @@ namespace SpecTests
         {
             currentPlayer = game.Players.First(p => p.Name.Equals(playerName));
             var result = game.PlayInHandCards(currentPlayer, GetCardFromStringValue(card));
-            ScenarioContext.Current.Remove("result");
-            ScenarioContext.Current.Add("result", result);
+            ScenarioContext.Current.Set(result);
         }
 
         [When(@"'(.*)' plays the face down card '(.*)'")]
@@ -123,8 +122,7 @@ namespace SpecTests
         {
             currentPlayer = players.First(p => p.Name.Equals(playerName));
             var result = game.PlayFaceDownCards(currentPlayer, GetCardFromStringValue(card));
-            ScenarioContext.Current.Remove("result");
-            ScenarioContext.Current.Add("result", result);
+            ScenarioContext.Current.Set(result);
         }
 
         [When(@"'(.*)' plays the face up card '(.*)'")]
@@ -132,8 +130,7 @@ namespace SpecTests
         {
             currentPlayer = players.First(p => p.Name.Equals(playerName));
             var result = game.PlayFaceUpCards(currentPlayer, GetCardFromStringValue(card));
-            ScenarioContext.Current.Remove("result");
-            ScenarioContext.Current.Add("result", result);
+            ScenarioContext.Current.Set(result);
         }
 
 

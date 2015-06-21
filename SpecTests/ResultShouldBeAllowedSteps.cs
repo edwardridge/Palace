@@ -17,14 +17,14 @@ namespace SpecTests
         [Then(@"this should not be allowed")]
         public void ThenThisShouldNotBeAllowed()
         {
-            var result = ScenarioContext.Current.Get<Result>("result");
+            var result = ScenarioContext.Current.Get<Result>();
             result.ResultOutcome.Should().Be(ResultOutcome.Fail);
         }
 
         [Then(@"this should be allowed")]
         public void ThenThisShouldBeAllowed()
         {
-            var result = ScenarioContext.Current.Get<Result>("result");
+            var result = ScenarioContext.Current.Get<Result>();
             result.ResultOutcome.Should().Be(ResultOutcome.Success);
         }
 
