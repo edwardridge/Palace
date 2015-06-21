@@ -65,10 +65,12 @@ namespace SpecTests
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Gameplay tests")]
-        public virtual void GameplayTests()
+        [NUnit.Framework.DescriptionAttribute("Playing an in hand card adds that card to the play pile, change whose turn it is " +
+            "and the player should get a card")]
+        public virtual void PlayingAnInHandCardAddsThatCardToThePlayPileChangeWhoseTurnItIsAndThePlayerShouldGetACard()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Gameplay tests", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Playing an in hand card adds that card to the play pile, change whose turn it is " +
+                    "and the player should get a card", ((string[])(null)));
 #line 3
 this.ScenarioSetup(scenarioInfo);
 #line hidden
@@ -94,6 +96,19 @@ this.ScenarioSetup(scenarioInfo);
 #line 12
  testRunner.And("\'Ed\' should have \'3\' cards in hand", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Playing two in hand card adds those cards to the play pile, changes whose turn it" +
+            " is and the players should get a card")]
+        public virtual void PlayingTwoInHandCardAddsThoseCardsToThePlayPileChangesWhoseTurnItIsAndThePlayersShouldGetACard()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Playing two in hand card adds those cards to the play pile, changes whose turn it" +
+                    " is and the players should get a card", ((string[])(null)));
+#line 14
+this.ScenarioSetup(scenarioInfo);
+#line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
                         "Player",
                         "CardsInHand"});
@@ -103,19 +118,19 @@ this.ScenarioSetup(scenarioInfo);
             table2.AddRow(new string[] {
                         "Liam",
                         "ThreeOfClubs, FourOfClubs, QueenOfClubs"});
-#line 14
+#line 16
  testRunner.Given("I have the following players and cards", ((string)(null)), table2, "Given ");
-#line 18
- testRunner.And("it is \'Ed\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 19
- testRunner.When("\'Ed\' plays the \'TwoOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 20
- testRunner.And("\'Liam\' plays the \'ThreeOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("it is \'Ed\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 21
- testRunner.Then("the number of cards in the play pile should be \'2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.When("\'Ed\' plays the \'TwoOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 22
- testRunner.And("it should be \'Ed\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("\'Liam\' plays the \'ThreeOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 23
+ testRunner.Then("the number of cards in the play pile should be \'2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 24
+ testRunner.And("it should be \'Ed\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 25
  testRunner.And("\'Liam\' should have \'3\' cards in hand", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();

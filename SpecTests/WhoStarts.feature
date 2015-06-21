@@ -44,6 +44,7 @@ Scenario: Player with lowest card starts - lowest non-reset card three of clubs.
 	When The game starts
 	Then it should be 'Ed' turn
 
+Scenario: Second test for player with lowest card starts - lowest non-reset card three of clubs. 
 Given I have the following players and cards
 	| Player | CardsInHand                         |
 	| Ed     | TwoOfClubs, FourOfClubs, AceOfClubs |

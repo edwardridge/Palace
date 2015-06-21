@@ -63,7 +63,7 @@ namespace SpecTests
             ruleForCardsByValue = new Dictionary<CardValue, RuleForCard>();
             dealer = DealerHelper.TestDealer(players);
             game = dealer.StartGame();
-            this.ReplaceGameAndDealerInScenarioContext(game, dealer);
+            this.ReplaceGameInScenarioContext(game);
         }
 
          [Given(@"it is '(.*)' turn")]
@@ -72,7 +72,7 @@ namespace SpecTests
              var playerToStart = players.First(f => f.Name.Equals(playerName));
              dealer = DealerHelper.TestDealer(players);
              game = dealer.StartGame(playerToStart);
-             this.ReplaceGameAndDealerInScenarioContext(game, dealer);
+             this.ReplaceGameInScenarioContext(game);
          }
 
          [Given(@"the following cards have rules")]
@@ -88,7 +88,7 @@ namespace SpecTests
              }
              dealer = DealerHelper.TestDealerWithRules(players, ruleForCardsByValue);
              game = dealer.StartGame();
-             this.ReplaceGameAndDealerInScenarioContext(game, dealer);
+             this.ReplaceGameInScenarioContext(game);
          }
 
          [Given(@"the deck has no more cards")]
@@ -97,16 +97,16 @@ namespace SpecTests
              var remainingCards = new List<Card>();
              dealer = new Dealer(players, new PredeterminedDeck(remainingCards), new DummyCanStartGame(), ruleForCardsByValue);
              game = dealer.StartGame();
-             this.ReplaceGameAndDealerInScenarioContext(game, dealer);
+             this.ReplaceGameInScenarioContext(game);
          }
 
 
          [When(@"The game starts")]
          public void WhenTheGameStarts()
          {
-             dealer = ScenarioContext.Current.Get<Dealer>("dealer");
+  //           dealer = ScenarioContext.Current.Get<Dealer>();
              game = dealer.StartGame();
-             this.ReplaceGameAndDealerInScenarioContext(game, dealer);
+             this.ReplaceGameInScenarioContext(game);
          }
 
         [When(@"'(.*)' plays the '(.*)'")]
@@ -219,12 +219,9 @@ namespace SpecTests
             }
         }
 
-        private void ReplaceGameAndDealerInScenarioContext(Game replaceGame, Dealer replaceDealer)
+        private void ReplaceGameInScenarioContext(Game replaceGame)
         {
-            ScenarioContext.Current.Remove("game");
-            ScenarioContext.Current.Remove("dealer");
-            ScenarioContext.Current.Add("game", replaceGame);
-            ScenarioContext.Current.Add("dealer", replaceDealer);
+            ScenarioContext.Current.Set(replaceGame);
         }
     }
 }

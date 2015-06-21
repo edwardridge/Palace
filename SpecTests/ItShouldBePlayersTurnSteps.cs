@@ -9,11 +9,17 @@ namespace SpecTests
 
     [Binding]
     public class ItShouldBePlayersTurnSteps
-    {   
+    {
+        private Game game;
+        
+        public ItShouldBePlayersTurnSteps()
+        {
+            game = ScenarioContext.Current.Get<Game>();
+        }
+
         [Then(@"it should be '(.*)' turn")]
         public void ThenItShouldBeTurn(string p0)
         {
-            var game = ScenarioContext.Current.Get<Game>("game");
             game.CurrentPlayer.Name.Should().Be(p0);
         }
     }

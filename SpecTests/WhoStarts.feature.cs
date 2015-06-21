@@ -208,6 +208,19 @@ this.ScenarioSetup(scenarioInfo);
 #line 45
  testRunner.Then("it should be \'Ed\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Second test for player with lowest card starts - lowest non-reset card three of c" +
+            "lubs.")]
+        public virtual void SecondTestForPlayerWithLowestCardStarts_LowestNon_ResetCardThreeOfClubs_()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Second test for player with lowest card starts - lowest non-reset card three of c" +
+                    "lubs.", ((string[])(null)));
+#line 47
+this.ScenarioSetup(scenarioInfo);
+#line hidden
             TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
                         "Player",
                         "CardsInHand"});
@@ -217,7 +230,7 @@ this.ScenarioSetup(scenarioInfo);
             table7.AddRow(new string[] {
                         "Liam",
                         "ThreeOfClubs, FourOfClubs, QueenOfClubs"});
-#line 47
+#line 48
 testRunner.Given("I have the following players and cards", ((string)(null)), table7, "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
@@ -226,11 +239,11 @@ testRunner.Given("I have the following players and cards", ((string)(null)), tab
             table8.AddRow(new string[] {
                         "Two",
                         "Reset"});
-#line 51
+#line 52
  testRunner.And("the following cards have rules", ((string)(null)), table8, "And ");
-#line 54
- testRunner.When("The game starts", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 55
+ testRunner.When("The game starts", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 56
  testRunner.Then("it should be \'Liam\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
