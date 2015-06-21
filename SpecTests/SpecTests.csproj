@@ -121,9 +121,6 @@
       <DependentUpon>GameplayTests.feature</DependentUpon>
     </Compile>
     <Compile Include="GameplayTestsSteps.cs" />
-    <Compile Include="Helpers\CardHelpers.cs" />
-    <Compile Include="Helpers\DealerHelper.cs" />
-    <Compile Include="Helpers\PlayerHelper.cs" />
     <Compile Include="PlayFaceUpCard.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -185,6 +182,10 @@
     <ProjectReference Include="..\Palace\Palace.csproj">
       <Project>{79ab397f-203b-4521-81ec-1ba40c4f2776}</Project>
       <Name>Palace</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestHelpers\TestHelpers.csproj">
+      <Project>{99574DF5-18B6-4AD1-B931-AA7A709A80A3}</Project>
+      <Name>TestHelpers</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

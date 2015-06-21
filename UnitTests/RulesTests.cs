@@ -12,7 +12,7 @@ namespace UnitTests
 
     using Palace;
 
-    using UnitTests.Helpers;
+    using TestHelpers;
 
     [TestFixture]
     public class StandardClassRules

@@ -1,4 +1,4 @@
-﻿namespace SpecTests.Helpers
+﻿namespace TestHelpers
 {
     using System.Collections.Generic;
 

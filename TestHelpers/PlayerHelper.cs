@@ -1,8 +1,9 @@
-﻿using Palace;
-using System.Collections.Generic;
-
-namespace UnitTests
+﻿namespace TestHelpers
 {
+    using System.Collections.Generic;
+
+    using Palace;
+
     public static class PlayerHelper
     {
         public static Player CreatePlayer()
@@ -30,12 +31,13 @@ namespace UnitTests
             return CreatePlayer(cards, "Test");
         }
 
-        public static Player CreatePlayer(IEnumerable<Card> cards, string name)
+        public static Player CreatePlayer(IEnumerable<Card> cardsInHand, string name, IEnumerable<Card> cardsFaceDown = null)
         {
-            var player = new Player(name, cards);
-            //player.AddCardsToInHandPile(cards);
+            var cardsFaceDownToAdd = cardsFaceDown ?? new List<Card>();
+            var player = new Player(name, cardsInHand, cardsFaceDownToAdd);
+
+            // player.AddCardsToInHandPile(cards);
             return player;
         }
     }
 }
-

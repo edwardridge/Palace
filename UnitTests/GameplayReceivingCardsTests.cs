@@ -9,7 +9,7 @@
 
     using Palace;
 
-    using UnitTests.Helpers;
+    using TestHelpers;
 
     [TestFixture]
     public class GameplayReceivingCardsTests

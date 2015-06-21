@@ -11,7 +11,7 @@ namespace UnitTests
     using Raven.Client;
     using Raven.Client.Embedded;
 
-    using UnitTests.Helpers;
+    using TestHelpers;
 
     public class TestPalaceDocumentSession
     {

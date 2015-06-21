@@ -6,6 +6,8 @@ using FluentAssertions;
 
 namespace UnitTests
 {
+    using TestHelpers;
+
     [TestFixture]
     public class DeckTests
     {

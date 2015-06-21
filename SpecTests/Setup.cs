@@ -12,12 +12,11 @@ namespace SpecTests
 
     using Palace;
 
-    using SpecTests.Helpers;
+    using TestHelpers;
 
     [Binding]
     public class Setup
     {
-        
         private ICollection<Player> players;
 
         private Player currentPlayer;

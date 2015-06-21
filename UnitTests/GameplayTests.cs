@@ -8,6 +8,8 @@
 
     using Palace;
 
+    using TestHelpers;
+
     [TestFixture]
     public class GameplayChangingGameStateTests
     {

@@ -11,7 +11,7 @@
 
     using Palace;
 
-    using UnitTests.Helpers;
+    using TestHelpers;
 
     public class DummyCanStartGame : ICanStartGame
     {
