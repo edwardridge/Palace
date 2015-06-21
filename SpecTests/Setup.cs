@@ -1,16 +1,12 @@
-﻿using System;
-using TechTalk.SpecFlow;
-
-namespace SpecTests
+﻿namespace SpecTests
 {
+    using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Linq;
-    using System.Media;
-
-    using FluentAssertions;
 
     using Palace;
+
+    using TechTalk.SpecFlow;
 
     using TestHelpers;
 
@@ -27,86 +23,58 @@ namespace SpecTests
 
         private Dictionary<CardValue, RuleForCard> ruleForCardsByValue;
 
-         [Given(@"I have the following players and cards")]
+        [Given(@"I have the following players and cards")]
         public void GivenIHaveTheFollowingPlayersAndCards(Table table)
         {
-            players = new List<Player>();
-            foreach (var row in table.Rows)
-            {
-                string name;
-                string cardsInHandString;
-                string cardsFaceDownString;
-                string cardsFaceUpString;
-
-                row.TryGetValue("Player", out name);
-                row.TryGetValue("CardsInHand", out cardsInHandString);
-                row.TryGetValue("CardsFaceDown", out cardsFaceDownString);
-                row.TryGetValue("CardsFaceUp", out cardsFaceUpString);
-
-                var cardsInHand = GetCardsFromCsvString(cardsInHandString);
-
-                var cardsFaceUp = new List<Card>();
-                if (cardsFaceUpString != null)
-                    cardsFaceUp = GetCardsFromCsvString(cardsFaceUpString);
-
-                var cardsFaceDown = new List<Card>();
-                if(cardsFaceDownString != null)
-                    cardsFaceDown = GetCardsFromCsvString(cardsFaceDownString);
-
-                var player = PlayerHelper.CreatePlayer(cardsInHand.Concat(cardsFaceUp), name, cardsFaceDown);
-                foreach (var card in cardsFaceUp)
-                    player.PutCardFaceUp(card);
-                
-                players.Add(player);
-            }
+            players = this.GetPlayersFromTable(table);
             ruleForCardsByValue = new Dictionary<CardValue, RuleForCard>();
             dealer = DealerHelper.TestDealer(players);
             game = dealer.StartGame();
             ScenarioContext.Current.Set(game);
         }
 
-         [Given(@"it is '(.*)' turn")]
-         public void GivenItIsTurn(string playerName)
-         {
-             var playerToStart = players.First(f => f.Name.Equals(playerName));
-             dealer = DealerHelper.TestDealer(players);
-             game = dealer.StartGame(playerToStart);
-             ScenarioContext.Current.Set(game);
-         }
+        [Given(@"it is '(.*)' turn")]
+        public void GivenItIsTurn(string playerName)
+        {
+            var playerToStart = players.First(f => f.Name.Equals(playerName));
+            dealer = DealerHelper.TestDealer(players);
+            game = dealer.StartGame(playerToStart);
+            ScenarioContext.Current.Set(game);
+        }
 
-         [Given(@"the following cards have rules")]
-         public void GivenTheFollowingCardsHaveRules(Table table)
-         {
-             foreach (var row in table.Rows)
-             {
-                 string cardValueAsString;
-                 string ruleForCardAsString;
-                 row.TryGetValue("CardValue", out cardValueAsString);
-                 row.TryGetValue("Rule", out ruleForCardAsString);
-                 ruleForCardsByValue.Add(GetCardValueFromStringValue(cardValueAsString), GetRuleForCardFromStringValue(ruleForCardAsString));                 
-             }
-             dealer = DealerHelper.TestDealerWithRules(players, ruleForCardsByValue);
-             game = dealer.StartGame();
-             ScenarioContext.Current.Set(game);
-         }
+        [Given(@"the following cards have rules")]
+        public void GivenTheFollowingCardsHaveRules(Table table)
+        {
+            foreach (var row in table.Rows)
+            {
+                string cardValueAsString;
+                string ruleForCardAsString;
+                row.TryGetValue("CardValue", out cardValueAsString);
+                row.TryGetValue("Rule", out ruleForCardAsString);
+                ruleForCardsByValue.Add(GetCardValueFromStringValue(cardValueAsString), GetRuleForCardFromStringValue(ruleForCardAsString));
+            }
 
-         [Given(@"the deck has no more cards")]
-         public void GivenTheDeckHasNoMoreCards()
-         {
-             var remainingCards = new List<Card>();
-             dealer = new Dealer(players, new PredeterminedDeck(remainingCards), new DummyCanStartGame(), ruleForCardsByValue);
-             game = dealer.StartGame();
-             ScenarioContext.Current.Set(game);
-         }
+            dealer = DealerHelper.TestDealerWithRules(players, ruleForCardsByValue);
+            game = dealer.StartGame();
+            ScenarioContext.Current.Set(game);
+        }
 
+        [Given(@"the deck has no more cards")]
+        public void GivenTheDeckHasNoMoreCards()
+        {
+            var remainingCards = new List<Card>();
+            dealer = new Dealer(players, new PredeterminedDeck(remainingCards), new DummyCanStartGame(), ruleForCardsByValue);
+            game = dealer.StartGame();
+            ScenarioContext.Current.Set(game);
+        }
 
-         [When(@"The game starts")]
-         public void WhenTheGameStarts()
-         {
-  //           dealer = ScenarioContext.Current.Get<Dealer>();
-             game = dealer.StartGame();
-             ScenarioContext.Current.Set(game);
-         }
+        [When(@"The game starts")]
+        public void WhenTheGameStarts()
+        {
+            // dealer = ScenarioContext.Current.Get<Dealer>();
+            game = dealer.StartGame();
+            ScenarioContext.Current.Set(game);
+        }
 
         [When(@"'(.*)' plays the '(.*)'")]
         public void WhenPlaysThe(string playerName, string card)
@@ -132,10 +100,47 @@ namespace SpecTests
             ScenarioContext.Current.Set(result);
         }
 
+        private List<Player> GetPlayersFromTable(Table table)
+        {
+            var playersFromTable = new List<Player>();
+            foreach (var row in table.Rows)
+            {
+                string name;
+                string cardsInHandString;
+                string cardsFaceDownString;
+                string cardsFaceUpString;
+
+                row.TryGetValue("Player", out name);
+                row.TryGetValue("CardsInHand", out cardsInHandString);
+                row.TryGetValue("CardsFaceDown", out cardsFaceDownString);
+                row.TryGetValue("CardsFaceUp", out cardsFaceUpString);
+
+                var cardsInHand = this.GetCardsFromCsvString(cardsInHandString);
+
+                var cardsFaceUp = new List<Card>();
+                if (cardsFaceUpString != null)
+                    cardsFaceUp = this.GetCardsFromCsvString(cardsFaceUpString);
+
+                var cardsFaceDown = new List<Card>();
+                if (cardsFaceDownString != null)
+                    cardsFaceDown = this.GetCardsFromCsvString(cardsFaceDownString);
+
+                var player = PlayerHelper.CreatePlayer(cardsInHand.Concat(cardsFaceUp), name, cardsFaceDown);
+                foreach (var card in cardsFaceUp)
+                {
+                    player.PutCardFaceUp(card);
+                }
+
+                playersFromTable.Add(player);
+            }
+
+            return playersFromTable;
+        }
 
         private List<Card> GetCardsFromCsvString(string csvString)
         {
-            if(string.IsNullOrEmpty(csvString)) return new List<Card>();
+            if (string.IsNullOrEmpty(csvString))
+                return new List<Card>();
             var cardsSplit = csvString.Replace(" ", string.Empty).Split(',');
             var cards = cardsSplit.Select(GetCardFromStringValue).ToList();
             return cards;
@@ -171,7 +176,8 @@ namespace SpecTests
                     return Card.JackOfClubs;
                 case "AceOfClubs":
                     return Card.AceOfClubs;
-                default: throw new Exception("Card in test does not map");
+                default:
+                    throw new Exception("Card in test does not map");
             }
         }
 
@@ -205,7 +211,8 @@ namespace SpecTests
                     return CardValue.King;
                 case "AceOfClubs":
                     return CardValue.Ace;
-                default: throw new Exception("Card in test does not map");
+                default:
+                    throw new Exception("Card in test does not map");
             }
         }
 
@@ -213,8 +220,10 @@ namespace SpecTests
         {
             switch (ruleForCard)
             {
-                case "Reset": return RuleForCard.Reset;
-                default: throw new Exception("Rule for card in test not found");
+                case "Reset":
+                    return RuleForCard.Reset;
+                default:
+                    throw new Exception("Rule for card in test not found");
             }
         }
     }
