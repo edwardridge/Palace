@@ -26,7 +26,7 @@ namespace SpecTests
 
         private Game game;
 
-        private Dictionary<CardValue, RuleForCard> ruleForCardsByValue; 
+        private Dictionary<CardValue, RuleForCard> ruleForCardsByValue;
 
          [Given(@"I have the following players and cards")]
         public void GivenIHaveTheFollowingPlayersAndCards(Table table)
@@ -63,7 +63,7 @@ namespace SpecTests
             ruleForCardsByValue = new Dictionary<CardValue, RuleForCard>();
             dealer = DealerHelper.TestDealer(players);
             game = dealer.StartGame();
-            this.ReplaceGameInScenarioContext(game);
+            ScenarioContext.Current.Set(game);
         }
 
          [Given(@"it is '(.*)' turn")]
@@ -72,7 +72,7 @@ namespace SpecTests
              var playerToStart = players.First(f => f.Name.Equals(playerName));
              dealer = DealerHelper.TestDealer(players);
              game = dealer.StartGame(playerToStart);
-             this.ReplaceGameInScenarioContext(game);
+             ScenarioContext.Current.Set(game);
          }
 
          [Given(@"the following cards have rules")]
@@ -88,7 +88,7 @@ namespace SpecTests
              }
              dealer = DealerHelper.TestDealerWithRules(players, ruleForCardsByValue);
              game = dealer.StartGame();
-             this.ReplaceGameInScenarioContext(game);
+             ScenarioContext.Current.Set(game);
          }
 
          [Given(@"the deck has no more cards")]
@@ -97,7 +97,7 @@ namespace SpecTests
              var remainingCards = new List<Card>();
              dealer = new Dealer(players, new PredeterminedDeck(remainingCards), new DummyCanStartGame(), ruleForCardsByValue);
              game = dealer.StartGame();
-             this.ReplaceGameInScenarioContext(game);
+             ScenarioContext.Current.Set(game);
          }
 
 
@@ -106,7 +106,7 @@ namespace SpecTests
          {
   //           dealer = ScenarioContext.Current.Get<Dealer>();
              game = dealer.StartGame();
-             this.ReplaceGameInScenarioContext(game);
+             ScenarioContext.Current.Set(game);
          }
 
         [When(@"'(.*)' plays the '(.*)'")]
@@ -217,11 +217,6 @@ namespace SpecTests
                 case "Reset": return RuleForCard.Reset;
                 default: throw new Exception("Rule for card in test not found");
             }
-        }
-
-        private void ReplaceGameInScenarioContext(Game replaceGame)
-        {
-            ScenarioContext.Current.Set(replaceGame);
         }
     }
 }
