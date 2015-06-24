@@ -259,6 +259,19 @@ namespace Palace
             }
         }
 
+        public override bool Equals(object obj)
+        {
+            var objAsGame = obj as Game;
+            if(objAsGame == null) return false;
+
+            return this.Id == objAsGame.Id
+                && this._cardDealer == objAsGame._cardDealer 
+                && this._gameOver == objAsGame._gameOver
+                && this._players == objAsGame._players
+                && this._currentPlayer == objAsGame._currentPlayer
+                && this._rulesProcessesor == objAsGame._rulesProcessesor;
+        }
+
         private LinkedListNode<Player> _currentPlayer;
 
         private LinkedList<Player> _players;
