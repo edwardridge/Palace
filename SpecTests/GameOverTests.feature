@@ -8,6 +8,7 @@ Scenario: When player plays their last card they win
 	And it is 'Ed' turn
 	When 'Ed' plays the face down card 'TwoOfClubs'
 	Then the game is over
+	And 'Ed' has won
 
 
 Scenario: When the game is over you and a player plays a card you are notified the game is over
@@ -19,6 +20,7 @@ Scenario: When the game is over you and a player plays a card you are notified t
 	When 'Ed' plays the face down card 'TwoOfClubs'
 	And 'Liam' plays the face down card 'ThreeOfClubs'
 	Then you are notified the game is over
+	And 'Ed' has won
 
 Scenario: When the game is over and a player plays a card that card isn't removed
 	Given I have the following players and cards

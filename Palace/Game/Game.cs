@@ -4,13 +4,13 @@ namespace Palace
     using System.Collections.Generic;
     using System.Linq;
 
-    public enum OrderOfPlay
+    internal enum OrderOfPlay
     {
         Forward = 1,
         Backward = 2
     }
 
-    public enum PlayerCardTypes
+    internal enum PlayerCardTypes
     {
         InHand = 1,
         FaceUp = 2,
@@ -100,7 +100,7 @@ namespace Palace
 
         private Result PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardType)
         {
-            if(_gameOver) return new GameOverResult();
+            if(_gameOver) return new GameOverResult(_currentPlayer.Value);
             if(_currentPlayer.Value.Equals(player) == false) return new Result("It isn't your turn!");
             
             var cardToPlay = cards.First();
@@ -120,7 +120,7 @@ namespace Palace
             if (player.NumCardsFaceDown == 0 && player.NumCardsFaceUp == 0 & player.NumCardsInHand == 0)
             {
                 this._gameOver = true;
-                return new GameOverResult();
+                return new GameOverResult(player);
             }
 
             this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(cards, _players, this._currentPlayer, _orderOfPlay);
@@ -276,14 +276,18 @@ namespace Palace
 
     public class GameOverResult : Result
     {
-        public GameOverResult()
+        private readonly Player winner;
+
+        public GameOverResult(Player winner)
         {
-            
+            this.winner = winner;
         }
 
         public override ResultOutcome ResultOutcome
         {
             get { return ResultOutcome.GameOver; }
         }
+
+        public Player Winner { get { return winner;  }  }
     }
 }

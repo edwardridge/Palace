@@ -28,11 +28,11 @@ namespace SpecTests
             result.ResultOutcome.Should().Be(ResultOutcome.GameOver);
         }
 
-
-        [Then(@"'(.*)' wins the game")]
-        public void ThenWinsTheGame(string p0)
+        [Then(@"'(.*)' has won")]
+        public void ThenHasWon(string p0)
         {
-            
+            var resultAsGameOver = result as GameOverResult;
+            resultAsGameOver.Winner.Name.Should().Be(p0);
         }
     }
 }
