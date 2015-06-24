@@ -93,6 +93,11 @@ namespace Palace
             _currentPlayer = _rulesProcessesor.ChooseNextPlayer(null, _players, _currentPlayer, _orderOfPlay);
         }
 
+        internal void Start(Player startingPlayer)
+        {
+            this._currentPlayer = _players.Find(startingPlayer);
+        }
+
         private Result PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardType)
         {
             if(_gameOver) return new GameOverResult();
@@ -177,11 +182,6 @@ namespace Palace
             }
         }
 
-        internal void Start(Player startingPlayer)
-        {
-            this._currentPlayer = _players.Find(startingPlayer);
-        }
-
         internal Stack<Card> PlayPile
         {
             get
@@ -257,19 +257,6 @@ namespace Palace
             {
                 this._currentPlayer = _players.Find(value);
             }
-        }
-
-        public override bool Equals(object obj)
-        {
-            var objAsGame = obj as Game;
-            if(objAsGame == null) return false;
-
-            return this.Id == objAsGame.Id
-                && this._cardDealer == objAsGame._cardDealer 
-                && this._gameOver == objAsGame._gameOver
-                && this._players == objAsGame._players
-                && this._currentPlayer == objAsGame._currentPlayer
-                && this._rulesProcessesor == objAsGame._rulesProcessesor;
         }
 
         private LinkedListNode<Player> _currentPlayer;
