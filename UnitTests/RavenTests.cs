@@ -28,7 +28,7 @@ namespace UnitTests
     }
 
     [TestFixture, Ignore]
-    public class RhinoTests
+    public class RavenTests
     {
         [Test]
         public void Can_Save_Game()

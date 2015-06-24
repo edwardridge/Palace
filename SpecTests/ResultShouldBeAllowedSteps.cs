@@ -1,20 +1,16 @@
-﻿using System;
-using TechTalk.SpecFlow;
-
-namespace SpecTests
+﻿namespace SpecTests
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-
     using FluentAssertions;
 
     using Palace;
+
+    using TechTalk.SpecFlow;
 
     [Binding]
     public class ResultShouldBeAllowedSteps
     {
         private Result result;
+
         public ResultShouldBeAllowedSteps()
         {
             result = ScenarioContext.Current.Get<Result>();
@@ -31,6 +27,5 @@ namespace SpecTests
         {
             result.ResultOutcome.Should().Be(ResultOutcome.Success);
         }
-
     }
 }
