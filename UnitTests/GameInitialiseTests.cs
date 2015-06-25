@@ -69,7 +69,7 @@
         [Test]
         public void Player_1_Has_3_Face_Down_Cards()
         {
-            player1.NumCardsFaceDown.Should().Be(3);
+            player1.CardsFaceDown.Count.Should().Be(3);
         }
     }
 

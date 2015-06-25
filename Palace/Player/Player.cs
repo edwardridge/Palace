@@ -157,14 +157,6 @@ namespace Palace
             }
         }
 
-        public int NumCardsFaceDown
-        {
-            get
-            {
-                return _cardsFaceDown.Count;
-            }
-        }
-
         public int NumCardsInHand
         {
             get

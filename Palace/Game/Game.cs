@@ -117,7 +117,7 @@ namespace Palace
 
             this.RemoveCardsFromPlayer(player, cards, playerCardType);
 
-            if (player.NumCardsFaceDown == 0 && player.CardsFaceUp.Count == 0 & player.NumCardsInHand == 0)
+            if (player.CardsFaceDown.Count == 0 && player.CardsFaceUp.Count == 0 & player.NumCardsInHand == 0)
             {
                 this._gameOver = true;
                 return new GameOverResult(player);
