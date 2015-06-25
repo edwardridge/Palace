@@ -65,13 +65,13 @@ namespace Palace
         {
             IfArgumentsAreInvalidThenThrow(player, cards, player.CardsFaceUp);
 
-            if (player.NumCardsInHand >= 3) return new Result("Cannot play face up card when you have cards in hand");
+            if (player.CardsInHand.Count >= 3) return new Result("Cannot play face up card when you have cards in hand");
             return PlayCardAndChooseNextPlayer(player, cards, PlayerCardTypes.FaceUp);
         }
 
         public Result PlayFaceDownCards(Player player, Card card)
         {
-            if (player.NumCardsInHand != 0) return new Result("Cannot play face down card when you have cards in hand");
+            if (player.CardsInHand.Count != 0) return new Result("Cannot play face down card when you have cards in hand");
             if (player.CardsFaceUp.Count != 0) return new Result("Cannot play face down card when you have face up cards");
             IfArgumentsAreInvalidThenThrow(player, new[]{card}, player.CardsFaceDown);
             return PlayCardAndChooseNextPlayer(player, new[] { card }, PlayerCardTypes.FaceDown);
@@ -117,7 +117,7 @@ namespace Palace
 
             this.RemoveCardsFromPlayer(player, cards, playerCardType);
 
-            if (player.CardsFaceDown.Count == 0 && player.CardsFaceUp.Count == 0 & player.NumCardsInHand == 0)
+            if (player.CardsFaceDown.Count == 0 && player.CardsFaceUp.Count == 0 & player.CardsInHand.Count == 0)
             {
                 this._gameOver = true;
                 return new GameOverResult(player);
@@ -134,7 +134,7 @@ namespace Palace
             {
                 player.RemoveCardsFromInHand(cards);
 
-                while (player.NumCardsInHand < 3 && this._cardDealer.CardsRemaining)
+                while (player.CardsInHand.Count < 3 && this._cardDealer.CardsRemaining)
                 {
                     player.AddCardsToInHandPile(this._cardDealer.DealCards(1));
                 }

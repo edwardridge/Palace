@@ -157,14 +157,6 @@ namespace Palace
             }
         }
 
-        public int NumCardsInHand
-        {
-            get
-            {
-                return _cardsInHand.Count;
-            }
-        }
-
         public void Ready()
         {
             _state = PlayerState.Ready;

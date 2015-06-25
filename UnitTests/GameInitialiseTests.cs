@@ -57,13 +57,13 @@
         [Test]
         public void Player_1_Has_6_In_Hand_Cards()
         {
-            player1.NumCardsInHand.Should().Be(6);
+            player1.CardsInHand.Count.Should().Be(6);
         }
 
         [Test]
         public void Player_2_Has_6_In_Hand_Cards()
         {
-            player2.NumCardsInHand.Should().Be(6);
+            player2.CardsInHand.Count.Should().Be(6);
         }
 
         [Test]
@@ -240,7 +240,7 @@
             player.PutCardFaceUp(Card.AceOfClubs);
 
             player.CardsFaceUp.Count.Should().Be(1);
-            player.NumCardsInHand.Should().Be(1);
+            player.CardsInHand.Count.Should().Be(1);
         }
     }
 

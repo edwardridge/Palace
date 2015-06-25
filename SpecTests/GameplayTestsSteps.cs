@@ -28,7 +28,7 @@ namespace SpecTests
         [Then(@"'(.*)' should have '(.*)' cards in hand")]
         public void ThenShouldHaveCardsInHand(string playerName, int cardCount)
         {
-            game.Players.First(p => p.Name.Equals(playerName)).NumCardsInHand.Should().Be(3);
+            game.Players.First(p => p.Name.Equals(playerName)).CardsInHand.Count.Should().Be(3);
         }
 
         [Then(@"'(.*)' should have '(.*)' cards face down")]

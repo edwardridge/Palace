@@ -98,13 +98,13 @@
             player2.Ready();
 
             var game = dealer.StartGame();
-            player1.NumCardsInHand.Should().Be(3);
+            player1.CardsInHand.Count.Should().Be(3);
 
             game.PlayInHandCards(player1, Card.SixOfClubs);
             game.PlayInHandCards(player2, Card.SevenOfClubs);
 
             game.CurrentPlayer.Should().Be(player1);
-            player1.NumCardsInHand.Should().Be(2);
+            player1.CardsInHand.Count.Should().Be(2);
 
             game.PlayInHandCards(player2, Card.TenOfClubs);
             game.PlayPile.Count.Should().Be(0);

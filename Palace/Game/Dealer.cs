@@ -40,7 +40,7 @@
 
                 foreach (var player in _players)
                 {
-                    if (player.CardsInHand == null || player.NumCardsInHand == 0)
+                    if (player.CardsInHand == null || player.CardsInHand.Count == 0)
                         continue;
                     var resetCardValue = _rulesForCardsByValue.FirstOrDefault(rule => rule.Value == RuleForCard.Reset).Key;
                     var lowestCardValueForCurrentPlayer = GetLowestNonResetCardValueForPlayer(player, resetCardValue);

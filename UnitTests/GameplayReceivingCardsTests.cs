@@ -49,7 +49,7 @@
             var game = dealer.StartGame();
             game.PlayInHandCards(player1, Card.AceOfClubs);
 
-            player1.NumCardsInHand.Should().Be(3);
+            player1.CardsInHand.Count.Should().Be(3);
         }
 
         [Test]
@@ -62,7 +62,7 @@
             var game = dealer.StartGame();
             game.PlayInHandCards(player1, cardsToPlay);
 
-            player1.NumCardsInHand.Should().Be(3);
+            player1.CardsInHand.Count.Should().Be(3);
         }
 
         [Test]
@@ -75,7 +75,7 @@
 
             game.PlayInHandCards(player1, Card.AceOfClubs);
 
-            player1.NumCardsInHand.Should().Be(3);
+            player1.CardsInHand.Count.Should().Be(3);
         }
 
         [Test]
@@ -88,7 +88,7 @@
 
             game.PlayInHandCards(player1, cards);
 
-            player1.NumCardsInHand.Should().Be(3);
+            player1.CardsInHand.Count.Should().Be(3);
         }
 
         [Test]
@@ -100,7 +100,7 @@
 
             game.PlayInHandCards(player1, Card.AceOfClubs);
 
-            player1.NumCardsInHand.Should().Be(4);
+            player1.CardsInHand.Count.Should().Be(4);
         }
     }
 }

@@ -535,7 +535,7 @@ namespace UnitTests
 
             game.PlayerCannotPlayCards(player1);
 
-            player1.NumCardsInHand.Should().Be(2);
+            player1.CardsInHand.Count.Should().Be(2);
         }
 
         [Test]
