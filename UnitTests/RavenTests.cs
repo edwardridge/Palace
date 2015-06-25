@@ -28,7 +28,7 @@ namespace UnitTests
       
     }
 
-    [TestFixture]
+    [TestFixture, Ignore]
     public class RavenTests
     {
         [Test]

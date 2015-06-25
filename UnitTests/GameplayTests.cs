@@ -22,7 +22,7 @@
             var game = dealer.StartGame(player1);
             game.PlayInHandCards(player1, cardToPlay);
 
-            game.PlayPileCardCount.Should().Be(1);
+            game.PlayPile.Count.Should().Be(1);
         }
 
         [Test]
@@ -107,7 +107,7 @@
             player1.NumCardsInHand.Should().Be(2);
 
             game.PlayInHandCards(player2, Card.TenOfClubs);
-            game.PlayPileCardCount.Should().Be(0);
+            game.PlayPile.Count.Should().Be(0);
         }
     }
 }

@@ -145,21 +145,6 @@ namespace Palace
                 player.RemoveCardsFromFaceUp(cards);
         }
 
-        public int PlayPileCardCount
-        {
-            get
-            {
-                if (_playPile == null)
-                    return 0;
-                return _playPile.Count;
-            }
-            internal set
-            {
-                var test = value;
-                //noop
-            }
-        }
-
         public int NumberOfPlayers
         {
             get
@@ -182,13 +167,13 @@ namespace Palace
             }
         }
 
-        internal Stack<Card> PlayPile
+        public Stack<Card> PlayPile
         {
             get
             {
                 return _playPile;
             }
-            set
+            internal set
             {
                 _playPile = value;
             }

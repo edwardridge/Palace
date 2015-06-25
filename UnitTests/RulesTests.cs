@@ -311,7 +311,7 @@ namespace UnitTests
 
             game.PlayInHandCards(player1, Card.TenOfClubs);
 
-            game.PlayPileCardCount.Should().Be(0);
+            game.PlayPile.Count.Should().Be(0);
         }
 
         [Test]
@@ -468,7 +468,7 @@ namespace UnitTests
 
             var outcome = game.PlayInHandCards(player1, cardsToPlay);
 
-            game.PlayPileCardCount.Should().Be(0);
+            game.PlayPile.Count.Should().Be(0);
 
         }
 
@@ -500,7 +500,7 @@ namespace UnitTests
             game.PlayInHandCards(player1, new[] { Card.AceOfClubs, Card.AceOfClubs });
             game.PlayInHandCards(player2, new[] { Card.AceOfClubs, Card.AceOfClubs });
 
-            game.PlayPileCardCount.Should().Be(0);
+            game.PlayPile.Count.Should().Be(0);
         }
     }
 
@@ -519,7 +519,7 @@ namespace UnitTests
             game.PlayInHandCards(player2, Card.AceOfClubs);
             game.PlayInHandCards(player1, Card.AceOfClubs);
 
-            game.PlayPileCardCount.Should().Be(0);
+            game.PlayPile.Count.Should().Be(0);
         }
     }
 
@@ -547,7 +547,7 @@ namespace UnitTests
 
             game.PlayerCannotPlayCards(player1);
 
-            game.PlayPileCardCount.Should().Be(0);
+            game.PlayPile.Count.Should().Be(0);
         }
 
         [Test]
