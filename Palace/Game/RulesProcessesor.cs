@@ -55,38 +55,26 @@
             return currentOrder;
         }
 
-        internal bool PlayPileShouldBeCleared(IEnumerable<Card> cardsToPlay, IEnumerable<Card> playPile)
+        internal bool PlayPileShouldBeCleared(IEnumerable<Card> playPile)
         {
-            var cardsToCheck = cardsToPlay.ToList();
-            var lastFourCardsInPlayPile = playPile.Reverse().Take(4);
-            foreach (var card in lastFourCardsInPlayPile)
-            {
-                if (card.Value == cardsToCheck.First().Value)
-                    cardsToCheck.Add(card);
-                else
-                    break;
-            }
-            var fourOfAKind = cardsToCheck.Count() >= 4;
-            var isBurnCard = getRuleForCardFromCardValue(cardsToCheck.First().Value) == RuleForCard.Burn;
-
-            return fourOfAKind || isBurnCard;
+            return this.ShouldBurn(playPile);
         }
 
         internal LinkedListNode<Player> ChooseNextPlayer(
-            IEnumerable<Card> cards, 
+            IEnumerable<Card> playPile, 
             LinkedList<Player> players, 
             LinkedListNode<Player> currentPlayer, 
             OrderOfPlay orderOfPlay)
         {
-            if (cards == null)
+            var cardsList = playPile as IList<Card> ?? playPile.ToList();
+
+            if (!cardsList.Any())
                 return ChoosePlayerFromOrderOfPlay(orderOfPlay, players, currentPlayer);
 
-            var cardsList = cards as IList<Card> ?? cards.ToList();
-            var cardToPlay = cardsList.First();
-            var ruleForPlayersCard = getRuleForCardFromCardValue(cardToPlay.Value);
-            if (ruleForPlayersCard == RuleForCard.Burn || cardsList.Count >= 4)
+            if (ShouldBurn(cardsList))
                 return currentPlayer;
 
+            var ruleForPlayersCard = getRuleForCardFromCardValue(cardsList.First().Value);
             var nextPlayer = ChoosePlayerFromOrderOfPlay(orderOfPlay, players, currentPlayer);
             if (ruleForPlayersCard != RuleForCard.SkipPlayer)
                 return nextPlayer;
@@ -95,6 +83,15 @@
                 nextPlayer = ChoosePlayerFromOrderOfPlay(orderOfPlay, players, nextPlayer);
             
             return nextPlayer;
+        }
+
+        private bool ShouldBurn(IEnumerable<Card> cardsToCheck)
+        {
+            var cardsToCheckAsList = cardsToCheck as IList<Card> ?? cardsToCheck.ToList();
+            var lastFourCardsAreSameValue = cardsToCheckAsList.Count() >= 4 && cardsToCheckAsList.Take(4).Select(s => s.Value).Distinct().Count() == 1;
+
+            var isBurnCard = this.getRuleForCardFromCardValue(cardsToCheckAsList.First().Value) == RuleForCard.Burn;
+            return isBurnCard || lastFourCardsAreSameValue;
         }
 
         private LinkedListNode<Player> ChoosePlayerFromOrderOfPlay(OrderOfPlay orderOfPlay, LinkedList<Player> players, LinkedListNode<Player> currentPlayer)

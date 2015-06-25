@@ -135,6 +135,45 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("When four cards of the same value are played in different turns, the play pile is" +
+            " burnt and the last player gets another turn")]
+        public virtual void WhenFourCardsOfTheSameValueArePlayedInDifferentTurnsThePlayPileIsBurntAndTheLastPlayerGetsAnotherTurn()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("When four cards of the same value are played in different turns, the play pile is" +
+                    " burnt and the last player gets another turn", ((string[])(null)));
+#line 27
+this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Player",
+                        "CardsInHand"});
+            table3.AddRow(new string[] {
+                        "Ed",
+                        "TwoOfClubs, TwoOfClubs"});
+            table3.AddRow(new string[] {
+                        "Liam",
+                        "TwoOfClubs, TwoOfClubs"});
+#line 28
+testRunner.Given("I have the following players and cards", ((string)(null)), table3, "Given ");
+#line 32
+testRunner.And("it is \'Ed\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 33
+testRunner.When("\'Ed\' plays the \'TwoOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 34
+testRunner.And("\'Liam\' plays the \'TwoOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 35
+testRunner.And("\'Ed\' plays the \'TwoOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 36
+testRunner.And("\'Liam\' plays the \'TwoOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 37
+testRunner.Then("this should be allowed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 38
+testRunner.And("it should be \'Liam\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

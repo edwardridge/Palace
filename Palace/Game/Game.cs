@@ -81,7 +81,7 @@ namespace Palace
         {
             player.AddCardsToInHandPile(_playPile);
             _playPile.Clear();
-            _currentPlayer = _rulesProcessesor.ChooseNextPlayer(null, _players, _currentPlayer, _orderOfPlay);
+            _currentPlayer = _rulesProcessesor.ChooseNextPlayer(_playPile, _players, _currentPlayer, _orderOfPlay);
         }
 
         internal void Start(Player startingPlayer)
@@ -109,11 +109,7 @@ namespace Palace
                 return new Result("This card is invalid to play");
 
             _orderOfPlay = this._rulesProcessesor.ChooseOrderOfPlay(_orderOfPlay, cardToPlay);
-            if (this._rulesProcessesor.PlayPileShouldBeCleared(cards, _playPile))
-                this._playPile.Clear();
-            else
-                foreach (Card card in cards)
-                    _playPile.Push(card);
+            
 
             this.RemoveCardsFromPlayer(player, cards, playerCardType);
 
@@ -123,8 +119,14 @@ namespace Palace
                 return new GameOverResult(player);
             }
 
-            this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(cards, _players, this._currentPlayer, _orderOfPlay);
+            foreach (Card card in cards)
+                _playPile.Push(card);
 
+            this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(_playPile, _players, this._currentPlayer, _orderOfPlay);
+
+            if (this._rulesProcessesor.PlayPileShouldBeCleared(_playPile))
+                this._playPile.Clear();
+            
             return new Result();
         }
 

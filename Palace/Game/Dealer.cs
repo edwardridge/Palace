@@ -55,18 +55,18 @@
             return game;
         }
 
-        private static CardValue GetLowestNonResetCardValueForPlayer(Player player, CardValue resetCardValue)
-        {
-            var lowestNonResetCardValue = player.CardsInHand.Where(card => card.Value != resetCardValue).OrderBy(o => o.Value).First().Value;
-            return lowestNonResetCardValue;
-        }
-
         public Game StartGameWithPlayPile(Player startingPlayer, IEnumerable<Card> cardsInPile)
         {
             var id = Guid.NewGuid();
             var game = new Game(_players, new RulesProcessesor(_rulesForCardsByValue), _deck, cardsInPile, id);
             game.Start(startingPlayer);
             return game;
+        }
+
+        private static CardValue GetLowestNonResetCardValueForPlayer(Player player, CardValue resetCardValue)
+        {
+            var lowestNonResetCardValue = player.CardsInHand.Where(card => card.Value != resetCardValue).OrderBy(o => o.Value).First().Value;
+            return lowestNonResetCardValue;
         }
 
         private readonly ICollection<Player> _players;
