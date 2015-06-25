@@ -77,15 +77,6 @@ namespace Palace
             return PlayCardAndChooseNextPlayer(player, new[] { card }, PlayerCardTypes.FaceDown);
         }
 
-        private void IfArgumentsAreInvalidThenThrow(Player player, ICollection<Card> cards, ICollection<Card> cardsToCheck)
-        {
-            if (cards.Except(cardsToCheck).Any())
-                throw new ArgumentException("You cannot play cards you don't have!");
-
-            if (cards.Select(card => card.Value).Distinct().Count() != 1)
-                throw new ArgumentException("You cannot play more than one type of card");
-        }
-
         public void PlayerCannotPlayCards(Player player)
         {
             player.AddCardsToInHandPile(_playPile);
@@ -96,6 +87,15 @@ namespace Palace
         internal void Start(Player startingPlayer)
         {
             this._currentPlayer = _players.Find(startingPlayer);
+        }
+
+        private void IfArgumentsAreInvalidThenThrow(Player player, ICollection<Card> cards, ICollection<Card> cardsToCheck)
+        {
+            if (cards.Except(cardsToCheck).Any())
+                throw new ArgumentException("You cannot play cards you don't have!");
+
+            if (cards.Select(card => card.Value).Distinct().Count() != 1)
+                throw new ArgumentException("You cannot play more than one type of card");
         }
 
         private Result PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardType)
