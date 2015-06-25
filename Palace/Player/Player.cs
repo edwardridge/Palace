@@ -93,22 +93,6 @@ namespace Palace
 
         }
 
-        internal void AddCardsToInHandPile(IEnumerable<Card> cardsToBeAdded)
-        {
-            foreach (Card addedCard in cardsToBeAdded)
-            {
-                this._cardsInHand.Add(addedCard);
-            }
-        }
-
-        internal void AddCardToFaceDownPile(IEnumerable<Card> cardsToBeAdded)
-        {
-            foreach (Card addedCard in cardsToBeAdded)
-            {
-                this._cardsFaceDown.Add(addedCard);
-            }
-        }
-
         public Result PutCardFaceUp(Card cardToPutFaceUp, Card faceUpCardToSwap = null)
         {
             if (_state != PlayerState.Setup)
@@ -125,28 +109,33 @@ namespace Palace
             return new Result();
         }
 
-        public void RemoveCardsFromFaceDown(ICollection<Card> cards)
+        internal void AddCardsToInHandPile(IEnumerable<Card> cardsToBeAdded)
+        {
+            foreach (Card addedCard in cardsToBeAdded)
+            {
+                this._cardsInHand.Add(addedCard);
+            }
+        }
+
+        internal void AddCardToFaceDownPile(IEnumerable<Card> cardsToBeAdded)
+        {
+            foreach (Card addedCard in cardsToBeAdded)
+            {
+                this._cardsFaceDown.Add(addedCard);
+            }
+        }
+
+        internal void RemoveCardsFromFaceDown(ICollection<Card> cards)
         {
             foreach (var card in cards)
                 this.CardsFaceDown.Remove(card);
         }
 
-        public void RemoveCardsFromFaceUp(ICollection<Card> cards)
+        internal void RemoveCardsFromFaceUp(ICollection<Card> cards)
         {
             foreach (var card in cards)
                 this.CardsFaceUp.Remove(card);
 
-        }
-
-        private void MoveCardToNewPile(Card cardToPutFaceUp, ICollection<Card> pileToAddTo, ICollection<Card> pileToRemoveFrom)
-        {
-            var cardIsInPlayersHand = pileToRemoveFrom.Any(card => card.Equals(cardToPutFaceUp));
-
-            if (!cardIsInPlayersHand)
-                throw new ArgumentException();
-
-            pileToAddTo.Add(cardToPutFaceUp);
-            pileToRemoveFrom.Remove(cardToPutFaceUp);
         }
 
         internal void RemoveCardsFromInHand(ICollection<Card> cardsToBeRemoved)
@@ -157,6 +146,17 @@ namespace Palace
             }
         }
 
+        private void MoveCardToNewPile(Card cardToMove, ICollection<Card> pileToAddTo, ICollection<Card> pileToRemoveFrom)
+        {
+            var cardIsInPileToRemoveFrom = pileToRemoveFrom.Any(card => card.Equals(cardToMove));
+
+            if (!cardIsInPileToRemoveFrom)
+                throw new ArgumentException();
+
+            pileToAddTo.Add(cardToMove);
+            pileToRemoveFrom.Remove(cardToMove);
+        }
+
         public void Ready()
         {
             _state = PlayerState.Ready;
@@ -164,7 +164,7 @@ namespace Palace
             //return ResultOutcome.Success;
         }
 
-        public Card LowestCardInValue
+        internal Card LowestCardInValue
         {
             get
             {
