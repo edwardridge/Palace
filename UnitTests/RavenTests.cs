@@ -53,7 +53,7 @@ namespace UnitTests
             var game = gameRepository.Open("e23c8755-a935-4cda-a2b7-4cd027446958");
             var currentPlayer = game.CurrentPlayer;
             game.PlayInHandCards(currentPlayer, currentPlayer.CardsInHand[0]);
-            game.NumberOfPlayers.Should().Be(2);
+            game.Players.Count.Should().Be(2);
         }
 
         [Test]

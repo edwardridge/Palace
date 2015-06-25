@@ -145,14 +145,6 @@ namespace Palace
                 player.RemoveCardsFromFaceUp(cards);
         }
 
-        public int NumberOfPlayers
-        {
-            get
-            {
-                return _players.Count;
-            }
-        }
-
         public Card LastCardPlayed
         {
             get

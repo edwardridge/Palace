@@ -49,7 +49,7 @@
         [Test]
         public void Setup_With_Two_Players_Two_Players_Are_In_Game()
         {
-            var playerCount = game.NumberOfPlayers;
+            var playerCount = game.Players.Count;
 
             playerCount.Should().Be(2);
         }
