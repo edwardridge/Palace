@@ -40,7 +40,7 @@ namespace SpecTests
         [Then(@"'(.*)' should have '(.*)' cards face up")]
         public void ThenShouldHaveCardsFaceUp(string p0, int p1)
         {
-            game.Players.First(p => p.Name.Equals(p0)).NumCardsFaceUp.Should().Be(p1);
+            game.Players.First(p => p.Name.Equals(p0)).CardsFaceUp.Count.Should().Be(p1);
         }
 
     }

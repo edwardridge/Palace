@@ -92,7 +92,7 @@
 
             if (line.Equals("r"))
             {
-                if (currentPlayer.NumCardsFaceUp != 3)
+                if (currentPlayer.CardsFaceUp.Count != 3)
                     Console.WriteLine("You must put 3 cards up");
                 else
                 {

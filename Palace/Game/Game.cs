@@ -72,7 +72,7 @@ namespace Palace
         public Result PlayFaceDownCards(Player player, Card card)
         {
             if (player.NumCardsInHand != 0) return new Result("Cannot play face down card when you have cards in hand");
-            if (player.NumCardsFaceUp != 0) return new Result("Cannot play face down card when you have face up cards");
+            if (player.CardsFaceUp.Count != 0) return new Result("Cannot play face down card when you have face up cards");
             IfArgumentsAreInvalidThenThrow(player, new[]{card}, player.CardsFaceDown);
             return PlayCardAndChooseNextPlayer(player, new[] { card }, PlayerCardTypes.FaceDown);
         }
@@ -117,7 +117,7 @@ namespace Palace
 
             this.RemoveCardsFromPlayer(player, cards, playerCardType);
 
-            if (player.NumCardsFaceDown == 0 && player.NumCardsFaceUp == 0 & player.NumCardsInHand == 0)
+            if (player.NumCardsFaceDown == 0 && player.CardsFaceUp.Count == 0 & player.NumCardsInHand == 0)
             {
                 this._gameOver = true;
                 return new GameOverResult(player);

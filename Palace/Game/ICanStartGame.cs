@@ -13,7 +13,7 @@ namespace Palace
     {
         public bool IsReady(ICollection<Player> players)
         {
-            var playersHaveThreeCardsFaceUp = !(players.Any(p => p.NumCardsFaceUp != 3));
+            var playersHaveThreeCardsFaceUp = !(players.Any(p => p.CardsFaceUp.Count != 3));
             //return true;
             return playersHaveThreeCardsFaceUp;
         }

@@ -239,7 +239,7 @@
             
             player.PutCardFaceUp(Card.AceOfClubs);
 
-            player.NumCardsFaceUp.Should().Be(1);
+            player.CardsFaceUp.Count.Should().Be(1);
             player.NumCardsInHand.Should().Be(1);
         }
     }

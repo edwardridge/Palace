@@ -117,7 +117,7 @@ namespace Palace
             if (faceUpCardToSwap != null)
                 this.MoveCardToNewPile(faceUpCardToSwap, _cardsInHand, _cardsFaceUp);
 
-            if (this.NumCardsFaceUp >= 3)
+            if (this.CardsFaceUp.Count >= 3)
                 return new Result("Cannot put more than 3 cards face up");
 
             this.MoveCardToNewPile(cardToPutFaceUp, _cardsFaceUp, _cardsInHand);
@@ -154,14 +154,6 @@ namespace Palace
             foreach (Card removedCard in cardsToBeRemoved)
             {
                 this._cardsInHand.Remove(removedCard);
-            }
-        }
-
-        public int NumCardsFaceUp
-        {
-            get
-            {
-                return _cardsFaceUp.Count;
             }
         }
 
