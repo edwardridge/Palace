@@ -35,8 +35,9 @@
         {
             var cardToPlay = Card.AceOfClubs;
             var player = PlayerHelper.CreatePlayer(cardToPlay);
-            player.PutCardFaceUp(cardToPlay);
+            //player.PutCardFaceUp(cardToPlay);
             var dealer = DealerHelper.TestDealer(new[] { player });
+            dealer.PutCardFaceUp(player, cardToPlay);
             var game = dealer.StartGame();
             Action outcome = () => game.PlayFaceUpCards(player, Card.EightOfClubs);
 
@@ -48,9 +49,10 @@
         {
             var cardsToPlay = new[] { Card.AceOfClubs, Card.AceOfClubs };
             var player = PlayerHelper.CreatePlayer(cardsToPlay.Concat(new[]{ Card.FiveOfClubs }));
-            player.PutCardFaceUp(Card.AceOfClubs);
-            player.PutCardFaceUp(Card.AceOfClubs);
+            
             var dealer = DealerHelper.TestDealer(new[] { player });
+            dealer.PutCardFaceUp(player, Card.AceOfClubs);
+            dealer.PutCardFaceUp(player, Card.AceOfClubs);
             var game = dealer.StartGame();
 
             var outcome = game.PlayFaceUpCards(player, cardsToPlay).ResultOutcome;
@@ -63,9 +65,10 @@
         {
             var cardsToPlay = new[] { Card.AceOfClubs, Card.EightOfClubs };
             var player = PlayerHelper.CreatePlayer(cardsToPlay);
-            player.PutCardFaceUp(cardsToPlay[0]);
-            player.PutCardFaceUp(cardsToPlay[1]);
+            
             var dealer = DealerHelper.TestDealer(new[] { player });
+            dealer.PutCardFaceUp(player, cardsToPlay[0]);
+            dealer.PutCardFaceUp(player, cardsToPlay[1]);
             var game = dealer.StartGame();
 
             Action outcome = () => game.PlayFaceUpCards(player, cardsToPlay);
@@ -141,10 +144,11 @@
         {
             var player1 =
                 PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs, Card.FiveOfClubs, Card.JackOfClubs, Card.JackOfClubs });
-            player1.PutCardFaceUp(Card.AceOfClubs);
-            player1.PutCardFaceUp(Card.EightOfClubs);
-            player1.PutCardFaceUp(Card.FiveOfClubs);
+            
             var dealer = DealerHelper.TestDealer(new[] { player1 });
+            dealer.PutCardFaceUp(player1, Card.AceOfClubs);
+            dealer.PutCardFaceUp(player1, Card.EightOfClubs);
+            dealer.PutCardFaceUp(player1, Card.FiveOfClubs);
             var game = dealer.StartGame();
 
             var outcome = game.PlayFaceUpCards(player1, Card.FiveOfClubs).ResultOutcome;

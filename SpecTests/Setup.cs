@@ -139,11 +139,11 @@
                 if (cardsFaceDownString != null)
                     cardsFaceDown = this.GetCardsFromCsvString(cardsFaceDownString);
 
-                var player = PlayerHelper.CreatePlayer(cardsInHand.Concat(cardsFaceUp), name, cardsFaceDown);
-                foreach (var card in cardsFaceUp)
-                {
-                    player.PutCardFaceUp(card);
-                }
+                var player = PlayerHelper.CreatePlayer(cardsInHand, name, cardsFaceUp, cardsFaceDown);
+                //foreach (var card in cardsFaceUp)
+                //{
+                //    player.PutCardFaceUp(card);
+                //}
 
                 playersFromTable.Add(player);
             }

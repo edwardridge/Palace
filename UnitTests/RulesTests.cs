@@ -196,8 +196,9 @@ namespace UnitTests
         {
             var cardToPlay = Card.EightOfClubs;
             var player = PlayerHelper.CreatePlayer(new[]{cardToPlay});
-            player.PutCardFaceUp(cardToPlay);
+            
             var dealer = DealerHelper.TestDealerWithRules(new[]{player}, rulesForCardsByValue);
+            dealer.PutCardFaceUp(player, cardToPlay);
             var game = dealer.StartGameWithPlayPile(player, new[] { Card.SevenOfClubs });
             
             var outcome = game.PlayFaceUpCards(player, cardToPlay).ResultOutcome;

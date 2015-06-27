@@ -81,10 +81,10 @@
         {
             var player1 = PlayerHelper.CreatePlayer();
             var player2 = PlayerHelper.CreatePlayer();
-            player2.Ready();
-
+            
             var dealer = new Dealer(new[] { player1, player2 }, new StandardDeck(), new DefaultStartGameRules());
 
+            dealer.PlayerReady(player2);
             Action outcome = () => dealer.StartGame();
 
             outcome.ShouldThrow<InvalidOperationException>();
@@ -131,8 +131,8 @@
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs });
             var dealerForThisTest = new Dealer(new[] { player }, new StandardDeck(), new DefaultStartGameRules());
-            player.PutCardFaceUp(Card.AceOfClubs);
-            player.PutCardFaceUp(Card.EightOfClubs);
+            dealerForThisTest.PutCardFaceUp(player, Card.AceOfClubs);
+            dealerForThisTest.PutCardFaceUp(player, Card.EightOfClubs);
 
             Action outcome = () => dealerForThisTest.StartGame();
 
@@ -144,9 +144,9 @@
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs });
             var dealerForThisTest = new Dealer(new[] { player }, new StandardDeck(), new DefaultStartGameRules());
-            player.PutCardFaceUp(Card.AceOfClubs);
-            player.PutCardFaceUp(Card.EightOfClubs);
-            player.PutCardFaceUp(Card.FiveOfClubs);
+            dealerForThisTest.PutCardFaceUp(player, Card.AceOfClubs);
+            dealerForThisTest.PutCardFaceUp(player, Card.EightOfClubs);
+            dealerForThisTest.PutCardFaceUp(player, Card.FiveOfClubs);
 
             Action outcome = () => dealerForThisTest.StartGame();
 
@@ -157,11 +157,12 @@
         public void Player_Cannot_Put_Fourth_Card_Face_Up()
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs,Card.JackOfClubs });
-            player.PutCardFaceUp(Card.AceOfClubs);
-            player.PutCardFaceUp(Card.EightOfClubs);
-            player.PutCardFaceUp(Card.FiveOfClubs);
+            var dealer = DealerHelper.TestDealer(new[] { player });
+            dealer.PutCardFaceUp(player, Card.AceOfClubs);
+            dealer.PutCardFaceUp(player, Card.EightOfClubs);
+            dealer.PutCardFaceUp(player, Card.FiveOfClubs);
 
-            var outcome = player.PutCardFaceUp(Card.JackOfClubs).ResultOutcome;
+            var outcome = dealer.PutCardFaceUp(player, Card.JackOfClubs).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Fail);
         }
@@ -170,8 +171,8 @@
         public void Player_Cannot_Put_Card_They_Dont_Have_Face_Up()
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs });
-
-            Action outcome = () => player.PutCardFaceUp(Card.EightOfClubs);
+            var dealer = DealerHelper.TestDealer(new[] { player });
+            Action outcome = () => dealer.PutCardFaceUp(player, Card.EightOfClubs);
 
             outcome.ShouldThrow<ArgumentException>();
         }
@@ -180,9 +181,10 @@
         public void Player_Can_Swap_Face_Up_Card_For_In_Hand_Card()
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs });
-            player.PutCardFaceUp(Card.AceOfClubs);
-            player.PutCardFaceUp(Card.EightOfClubs, Card.AceOfClubs);
-
+            var dealer = DealerHelper.TestDealer(new[] { player });
+            
+            dealer.PutCardFaceUp(player, Card.AceOfClubs);
+            dealer.PutCardFaceUp(player, Card.EightOfClubs, Card.AceOfClubs);
 
             player.CardsFaceUp.Should().Contain(Card.EightOfClubs);
             player.CardsFaceUp.Should().NotContain(Card.AceOfClubs);
@@ -192,8 +194,9 @@
         public void When_Swapping_Face_Up_Card_Face_Up_Card_Is_Added_To_In_Hand_Pile()
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs });
-            player.PutCardFaceUp(Card.AceOfClubs);
-            player.PutCardFaceUp(Card.EightOfClubs, Card.AceOfClubs);
+            var dealer = DealerHelper.TestDealer(new[] { player });
+            dealer.PutCardFaceUp(player, Card.AceOfClubs);
+            dealer.PutCardFaceUp(player, Card.EightOfClubs, Card.AceOfClubs);
 
             player.CardsInHand.Should().Contain(Card.AceOfClubs);
         }
@@ -202,8 +205,8 @@
         public void Cannot_Swap_Face_Up_Card_Player_Doesnt_Have()
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs });
-            
-            Action action = () => player.PutCardFaceUp(Card.AceOfClubs, Card.SevenOfClubs);
+            var dealer = DealerHelper.TestDealer(new[] { player });
+            Action action = () => dealer.PutCardFaceUp(player, Card.AceOfClubs, Card.SevenOfClubs);
 
             action.ShouldThrow<ArgumentException>();
         }
@@ -212,11 +215,12 @@
         public void Can_Swap_Card_When_Player_Has_Three_Face_Up_Cards()
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs, Card.FourOfClubs });
-            player.PutCardFaceUp(Card.AceOfClubs);
-            player.PutCardFaceUp(Card.EightOfClubs);
-            player.PutCardFaceUp(Card.FiveOfClubs);
+            var dealer = DealerHelper.TestDealer(new[] { player });
+            dealer.PutCardFaceUp(player, Card.AceOfClubs);
+            dealer.PutCardFaceUp(player, Card.EightOfClubs);
+            dealer.PutCardFaceUp(player, Card.FiveOfClubs);
 
-            var result = player.PutCardFaceUp(Card.FourOfClubs, Card.AceOfClubs).ResultOutcome;
+            var result = dealer.PutCardFaceUp(player, Card.FourOfClubs, Card.AceOfClubs).ResultOutcome;
 
             result.Should().Be(ResultOutcome.Success);
         }
@@ -225,9 +229,10 @@
         public void Cannot_Swap_Cards_When_Player_Is_Ready()
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.EightOfClubs });
-            player.Ready();
+            var dealer = DealerHelper.TestDealer(new[] { player });
+            dealer.PlayerReady(player);
 
-            var result = player.PutCardFaceUp(Card.EightOfClubs).ResultOutcome;
+            var result = dealer.PutCardFaceUp(player, Card.EightOfClubs).ResultOutcome;
 
             result.Should().Be(ResultOutcome.Fail);
         }
@@ -236,8 +241,8 @@
         public void If_Player_Has_Same_Card_Face_Down_And_In_Hand_The_In_Hand_Card_Is_Put_Face_Up()
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.AceOfClubs });
-            
-            player.PutCardFaceUp(Card.AceOfClubs);
+            var dealer = DealerHelper.TestDealer(new[] { player });
+            dealer.PutCardFaceUp(player, Card.AceOfClubs);
 
             player.CardsFaceUp.Count.Should().Be(1);
             player.CardsInHand.Count.Should().Be(1);

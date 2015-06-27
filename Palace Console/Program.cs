@@ -120,8 +120,8 @@
                 {
                     var indexes = line.Split(',').Select(int.Parse);
                     var cardsToPutFaceUp = currentPlayer.CardsInHand.ToArray().Where((w, i) => indexes.Contains(i));
-                    foreach (var card in cardsToPutFaceUp)
-                        currentPlayer.PutCardFaceUp(card);
+                   // foreach (var card in cardsToPutFaceUp)
+                     //   currentPlayer.PutCardFaceUp(card);
                 }
                 catch (Exception)
                 {

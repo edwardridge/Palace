@@ -73,17 +73,23 @@ namespace Palace
             }
         }
 
-        public Player(string name, IEnumerable<Card> cardsInHand, IEnumerable<Card> cardsFaceDown)
+        public Player(string name, IEnumerable<Card> cardsInHand, IEnumerable<Card> cardsFaceUp, IEnumerable<Card> cardsFaceDown)
         {
             this._name = name;
             this._cardsFaceDown = new List<Card>(cardsFaceDown); //.ToList();
             this._cardsInHand = new List<Card>(cardsInHand);
-            this._cardsFaceUp = new List<Card>(); // cardsFaceUp.ToList();
+            this._cardsFaceUp = new List<Card>(cardsFaceUp); // cardsFaceUp.ToList();
             _state = PlayerState.Setup;
         }
 
+        public Player(string name, IEnumerable<Card> cardsInHand, IEnumerable<Card> cardsFaceUp)
+            : this(name, cardsInHand, cardsFaceUp, new List<Card>())
+        {
+            
+        }
+
         public Player(string name, IEnumerable<Card> cardsInHand)
-            : this(name, cardsInHand, new List<Card>())
+            : this(name, cardsInHand, new List<Card>(), new List<Card>())
         {
         }
 
@@ -93,7 +99,7 @@ namespace Palace
 
         }
 
-        public Result PutCardFaceUp(Card cardToPutFaceUp, Card faceUpCardToSwap = null)
+        internal Result PutCardFaceUp(Card cardToPutFaceUp, Card faceUpCardToSwap = null)
         {
             if (_state != PlayerState.Setup)
                 return new Result("Cannot put card face up");
@@ -146,18 +152,7 @@ namespace Palace
             }
         }
 
-        private void MoveCardToNewPile(Card cardToMove, ICollection<Card> pileToAddTo, ICollection<Card> pileToRemoveFrom)
-        {
-            var cardIsInPileToRemoveFrom = pileToRemoveFrom.Any(card => card.Equals(cardToMove));
-
-            if (!cardIsInPileToRemoveFrom)
-                throw new ArgumentException();
-
-            pileToAddTo.Add(cardToMove);
-            pileToRemoveFrom.Remove(cardToMove);
-        }
-
-        public void Ready()
+        internal void Ready()
         {
             _state = PlayerState.Ready;
 
@@ -172,6 +167,17 @@ namespace Palace
                     return null;
                 return this._cardsFaceUp.Union(_cardsInHand).ToList().OrderBy(o => o.Value).FirstOrDefault();
             }
+        }
+
+        private void MoveCardToNewPile(Card cardToMove, ICollection<Card> pileToAddTo, ICollection<Card> pileToRemoveFrom)
+        {
+            var cardIsInPileToRemoveFrom = pileToRemoveFrom.Any(card => card.Equals(cardToMove));
+
+            if (!cardIsInPileToRemoveFrom)
+                throw new ArgumentException();
+
+            pileToAddTo.Add(cardToMove);
+            pileToRemoveFrom.Remove(cardToMove);
         }
 
         public override int GetHashCode()

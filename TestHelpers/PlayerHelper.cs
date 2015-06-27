@@ -31,10 +31,11 @@
             return CreatePlayer(cards, "Test");
         }
 
-        public static Player CreatePlayer(IEnumerable<Card> cardsInHand, string name, IEnumerable<Card> cardsFaceDown = null)
+        public static Player CreatePlayer(IEnumerable<Card> cardsInHand, string name,  IEnumerable<Card> cardsFaceUp = null, IEnumerable<Card> cardsFaceDown = null)
         {
             var cardsFaceDownToAdd = cardsFaceDown ?? new List<Card>();
-            var player = new Player(name, cardsInHand, cardsFaceDownToAdd);
+            var cardsFaceUpToAdd = cardsFaceUp ?? new List<Card>();
+            var player = new Player(name, cardsInHand, cardsFaceUpToAdd, cardsFaceDownToAdd);
 
             // player.AddCardsToInHandPile(cards);
             return player;

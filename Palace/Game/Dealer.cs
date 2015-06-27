@@ -28,6 +28,16 @@
             }
         }
 
+        public Result PutCardFaceUp(Player player, Card cardToPutFaceUp, Card faceUpCardToSwap = null)
+        {
+            return player.PutCardFaceUp(cardToPutFaceUp, faceUpCardToSwap);
+        }
+
+        public void PlayerReady(Player player)
+        {
+            player.Ready();
+        }
+
         public Game StartGame(Player startingPlayer = null)
         {
             if (!this._canStartGame.IsReady(_players))

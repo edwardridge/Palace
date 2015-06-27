@@ -14,8 +14,6 @@ namespace Palace
 
     public class Result
     {
-        private readonly ResultOutcome resultOutcome;
-
         private List<string> _errorMessages;
 
         public Result()

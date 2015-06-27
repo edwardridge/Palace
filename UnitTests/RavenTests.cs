@@ -87,24 +87,6 @@ namespace UnitTests
             var gameFromRepository = gameRepository.Open(game.Id.ToString());
             gameFromRepository.Should().Be(game);
         }
-
-        [Test]
-        public void Save_Player()
-        {
-            var playerRepository = new PlayerRepository(new TestPalaceDocumentSession().GetDocumentSession());
-            var player = new Player("Ed", new[]{Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs});
-            player.PutCardFaceUp(Card.AceOfClubs);
-            player.Ready();
-            playerRepository.Save(player);
-        }
-
-        [Test]
-        public void Load_Player()
-        {
-            Player player = new PlayerRepository(new TestPalaceDocumentSession().GetDocumentSession()).Load(97);
-            var test = 1;
-        }
-
     }
 
 }
