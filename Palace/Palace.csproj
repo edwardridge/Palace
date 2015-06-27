@@ -83,6 +83,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Card\EnumerableCardExtensions.cs" />
     <Compile Include="Deck\PredeterminedDeck.cs" />
     <Compile Include="Deck\StandardDeck.cs" />
     <Compile Include="Game\Dealer.cs" />

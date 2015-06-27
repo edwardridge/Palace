@@ -32,18 +32,12 @@
         {
             players = this.GetPlayersFromTable(table);
             ruleForCardsByValue = new Dictionary<CardValue, RuleForCard>();
-            //dealer = DealerHelper.TestDealer(players);
-            //game = dealer.StartGame();
-            //ScenarioContext.Current.Set(game);
         }
 
         [Given(@"it is '(.*)' turn")]
         public void GivenItIsTurn(string playerName)
         {
             playerToStart = players.First(f => f.Name.Equals(playerName));
-            //dealer = DealerHelper.TestDealer(players);
-            //game = dealer.StartGame(playerToStart);
-            //ScenarioContext.Current.Set(game);
         }
 
         [Given(@"the following cards have rules")]
@@ -57,10 +51,6 @@
                 row.TryGetValue("Rule", out ruleForCardAsString);
                 ruleForCardsByValue.Add(GetCardValueFromStringValue(cardValueAsString), GetRuleForCardFromStringValue(ruleForCardAsString));
             }
-
-            //sdealer = DealerHelper.TestDealerWithRules(players, ruleForCardsByValue);
-            //game = dealer.StartGame();
-            //ScenarioContext.Current.Set(game);
         }
 
         [Given(@"the deck has no more cards")]
@@ -69,19 +59,20 @@
             //var remainingCards = new List<Card>();
             //dealer = new Dealer(players, new PredeterminedDeck(remainingCards), new DummyCanStartGame(), ruleForCardsByValue);
             //game = dealer.StartGame();
-            //ScenarioContext.Current.Set(game);
         }
 
         [AfterScenarioBlock]
         public void StartGame()
         {
+            // This sets up the game if it hasn't already. The bool check is due to a limitation
+            // of spec flow IMO. Ideally this block would only run after the Given block,
+            // but it runs after the When block as well, so we need to check if it's already been set up.
             if (!gameHasBeenSetUp)
             {
                 dealer = DealerHelper.TestDealerWithRules(players, ruleForCardsByValue);
                 game = dealer.StartGame(playerToStart);
             }
             gameHasBeenSetUp = true;
-            //ScenarioContext.Current.Set(game, "game");
         }
 
         [When(@"The game starts")]

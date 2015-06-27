@@ -82,18 +82,10 @@
             if (ruleForPlayersCard != RuleForCard.SkipPlayer)
                 return nextPlayer;
 
-            var numSkipCards = 0;
-            foreach (var cardToCheck in playPile)
-            {
-                if (GetRuleForCardFromCardValue(cardToCheck.Value) == RuleForCard.SkipPlayer)
-                    numSkipCards++;
-                else
-                {
-                    break;
-                }
-            }
+            var skipCardValue = this.RulesForCardsByValue.First(w => w.Value == RuleForCard.SkipPlayer).Key;
+            var topCardsInPlayPileWithSkipValue = playPile.GetTopCardsWithSameValue(skipCardValue);
 
-            for(int i = 0; i < numSkipCards; i++)
+            foreach (var card in topCardsInPlayPileWithSkipValue)
                 nextPlayer = this.ChoosePlayerFromOrderOfPlay(orderOfPlay, players, nextPlayer);
             
             return nextPlayer;
@@ -102,9 +94,11 @@
         private bool ShouldBurn(IEnumerable<Card> cardsToCheck)
         {
             cardsToCheck = cardsToCheck as IList<Card> ?? cardsToCheck.ToList();
-            var lastFourCardsAreSameValue = cardsToCheck.Count() >= 4 && cardsToCheck.Take(4).Select(s => s.Value).Distinct().Count() == 1;
+            if(!cardsToCheck.Any()) return false;
+            
+            var lastFourCardsAreSameValue = cardsToCheck.GetTopCardsWithSameValue(cardsToCheck.First().Value).Count() >= 4;
+            var isBurnCard = this.GetRuleForCardFromCardValue(cardsToCheck.First().Value) == RuleForCard.Burn;
 
-            var isBurnCard = cardsToCheck.Any() && this.GetRuleForCardFromCardValue(cardsToCheck.First().Value) == RuleForCard.Burn;
             return isBurnCard || lastFourCardsAreSameValue;
         }
 
