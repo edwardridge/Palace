@@ -23,12 +23,14 @@
         internal bool CardCanBePlayed(Card cardToPlay, IEnumerable<Card> playPile)
         {
             var playPileAsList = playPile as IList<Card> ?? playPile.ToList();
-            var lastCardPlayed = playPileAsList.Any() ? playPileAsList.First() : null;
-            if (lastCardPlayed == null)
+
+            if (!playPileAsList.Any())
                 return true;
 
-            var rulesForPlayersCard = this.getRuleForCardFromCardValue(cardToPlay.Value);
-            var ruleForLastCardPlayed = this.getRuleForCardFromCardValue(lastCardPlayed.Value);
+            var lastCardPlayed = playPileAsList.First();
+
+            var rulesForPlayersCard = this.GetRuleForCardFromCardValue(cardToPlay.Value);
+            var ruleForLastCardPlayed = this.GetRuleForCardFromCardValue(lastCardPlayed.Value);
 
             if (ruleForLastCardPlayed == RuleForCard.SeeThrough)
             {
@@ -48,7 +50,7 @@
 
         internal OrderOfPlay ChooseOrderOfPlay(OrderOfPlay currentOrder, Card cardToPlay)
         {
-            var rulesForPlayersCard = this.getRuleForCardFromCardValue(cardToPlay.Value);
+            var rulesForPlayersCard = this.GetRuleForCardFromCardValue(cardToPlay.Value);
             if (rulesForPlayersCard == RuleForCard.ReverseOrderOfPlay)
                 return currentOrder == OrderOfPlay.Forward ? OrderOfPlay.Backward : OrderOfPlay.Forward;
 
@@ -66,31 +68,32 @@
             LinkedListNode<Player> currentPlayer, 
             OrderOfPlay orderOfPlay)
         {
-            var cardsList = playPile as IList<Card> ?? playPile.ToList();
+            playPile = playPile as IList<Card> ?? playPile.ToList();
 
-            if (!cardsList.Any())
+            if (!playPile.Any())
                 return ChoosePlayerFromOrderOfPlay(orderOfPlay, players, currentPlayer);
 
-            if (ShouldBurn(cardsList))
+            if (ShouldBurn(playPile))
                 return currentPlayer;
 
-            var ruleForPlayersCard = getRuleForCardFromCardValue(cardsList.First().Value);
-            var nextPlayer = ChoosePlayerFromOrderOfPlay(orderOfPlay, players, currentPlayer);
+            var ruleForPlayersCard = this.GetRuleForCardFromCardValue(playPile.First().Value);
+            var nextPlayer = this.ChoosePlayerFromOrderOfPlay(orderOfPlay, players, currentPlayer);
+
             if (ruleForPlayersCard != RuleForCard.SkipPlayer)
                 return nextPlayer;
 
-            foreach (var card in cardsList)
-                nextPlayer = ChoosePlayerFromOrderOfPlay(orderOfPlay, players, nextPlayer);
+            foreach (var card in playPile)
+                nextPlayer = this.ChoosePlayerFromOrderOfPlay(orderOfPlay, players, nextPlayer);
             
             return nextPlayer;
         }
 
         private bool ShouldBurn(IEnumerable<Card> cardsToCheck)
         {
-            var cardsToCheckAsList = cardsToCheck as IList<Card> ?? cardsToCheck.ToList();
-            var lastFourCardsAreSameValue = cardsToCheckAsList.Count() >= 4 && cardsToCheckAsList.Take(4).Select(s => s.Value).Distinct().Count() == 1;
+            cardsToCheck = cardsToCheck as IList<Card> ?? cardsToCheck.ToList();
+            var lastFourCardsAreSameValue = cardsToCheck.Count() >= 4 && cardsToCheck.Take(4).Select(s => s.Value).Distinct().Count() == 1;
 
-            var isBurnCard = this.getRuleForCardFromCardValue(cardsToCheckAsList.First().Value) == RuleForCard.Burn;
+            var isBurnCard = cardsToCheck.Any() && this.GetRuleForCardFromCardValue(cardsToCheck.First().Value) == RuleForCard.Burn;
             return isBurnCard || lastFourCardsAreSameValue;
         }
 
@@ -102,7 +105,7 @@
             return currentPlayer.Previous ?? players.Last;
         }
 
-        private RuleForCard getRuleForCardFromCardValue(CardValue cardValue)
+        private RuleForCard GetRuleForCardFromCardValue(CardValue cardValue)
         {
             RuleForCard ruleForCard;
             this.RulesForCardsByValue.TryGetValue(cardValue, out ruleForCard);
