@@ -15,6 +15,8 @@
     {
         private ICollection<Player> players;
 
+        private Player playerToStart;
+
         private Player currentPlayer;
 
         private Dealer dealer;
@@ -23,23 +25,25 @@
 
         private Dictionary<CardValue, RuleForCard> ruleForCardsByValue;
 
+        private bool gameHasBeenSetUp = false;
+
         [Given(@"I have the following players and cards")]
         public void GivenIHaveTheFollowingPlayersAndCards(Table table)
         {
             players = this.GetPlayersFromTable(table);
             ruleForCardsByValue = new Dictionary<CardValue, RuleForCard>();
-            dealer = DealerHelper.TestDealer(players);
-            game = dealer.StartGame();
-            ScenarioContext.Current.Set(game);
+            //dealer = DealerHelper.TestDealer(players);
+            //game = dealer.StartGame();
+            //ScenarioContext.Current.Set(game);
         }
 
         [Given(@"it is '(.*)' turn")]
         public void GivenItIsTurn(string playerName)
         {
-            var playerToStart = players.First(f => f.Name.Equals(playerName));
-            dealer = DealerHelper.TestDealer(players);
-            game = dealer.StartGame(playerToStart);
-            ScenarioContext.Current.Set(game);
+            playerToStart = players.First(f => f.Name.Equals(playerName));
+            //dealer = DealerHelper.TestDealer(players);
+            //game = dealer.StartGame(playerToStart);
+            //ScenarioContext.Current.Set(game);
         }
 
         [Given(@"the following cards have rules")]
@@ -54,33 +58,46 @@
                 ruleForCardsByValue.Add(GetCardValueFromStringValue(cardValueAsString), GetRuleForCardFromStringValue(ruleForCardAsString));
             }
 
-            dealer = DealerHelper.TestDealerWithRules(players, ruleForCardsByValue);
-            game = dealer.StartGame();
-            ScenarioContext.Current.Set(game);
+            //sdealer = DealerHelper.TestDealerWithRules(players, ruleForCardsByValue);
+            //game = dealer.StartGame();
+            //ScenarioContext.Current.Set(game);
         }
 
         [Given(@"the deck has no more cards")]
         public void GivenTheDeckHasNoMoreCards()
         {
-            var remainingCards = new List<Card>();
-            dealer = new Dealer(players, new PredeterminedDeck(remainingCards), new DummyCanStartGame(), ruleForCardsByValue);
-            game = dealer.StartGame();
-            ScenarioContext.Current.Set(game);
+            //var remainingCards = new List<Card>();
+            //dealer = new Dealer(players, new PredeterminedDeck(remainingCards), new DummyCanStartGame(), ruleForCardsByValue);
+            //game = dealer.StartGame();
+            //ScenarioContext.Current.Set(game);
+        }
+
+        [AfterScenarioBlock]
+        public void StartGame()
+        {
+            if (!gameHasBeenSetUp)
+            {
+                dealer = DealerHelper.TestDealerWithRules(players, ruleForCardsByValue);
+                game = dealer.StartGame(playerToStart);
+            }
+            gameHasBeenSetUp = true;
+            //ScenarioContext.Current.Set(game, "game");
         }
 
         [When(@"The game starts")]
         public void WhenTheGameStarts()
         {
             // dealer = ScenarioContext.Current.Get<Dealer>();
-            game = dealer.StartGame();
-            ScenarioContext.Current.Set(game);
+            //game = dealer.StartGame();
+            //ScenarioContext.Current.Set(game);
         }
 
         [When(@"'(.*)' plays the '(.*)'")]
-        public void WhenPlaysThe(string playerName, string card)
+        public void WhenPlaysThe(string playerName, string cards)
         {
             currentPlayer = game.Players.First(p => p.Name.Equals(playerName));
-            var result = game.PlayInHandCards(currentPlayer, GetCardFromStringValue(card));
+            var cardsToPlay = GetCardsFromCsvString(cards);
+            var result = game.PlayInHandCards(currentPlayer, cardsToPlay);
             ScenarioContext.Current.Set(result);
         }
 
@@ -98,6 +115,12 @@
             currentPlayer = players.First(p => p.Name.Equals(playerName));
             var result = game.PlayFaceUpCards(currentPlayer, GetCardFromStringValue(card));
             ScenarioContext.Current.Set(result);
+        }
+
+        [AfterStep]
+        public void AfterStep()
+        {
+            ScenarioContext.Current.Set(game);
         }
 
         private List<Player> GetPlayersFromTable(Table table)
@@ -177,7 +200,7 @@
                 case "AceOfClubs":
                     return Card.AceOfClubs;
                 default:
-                    throw new Exception("Card in test does not map");
+                    throw new Exception(card + "Card in test does not map");
             }
         }
 
@@ -212,7 +235,7 @@
                 case "AceOfClubs":
                     return CardValue.Ace;
                 default:
-                    throw new Exception("Card in test does not map");
+                    throw new Exception(cardValue + " card in test does not map");
             }
         }
 
@@ -222,8 +245,10 @@
             {
                 case "Reset":
                     return RuleForCard.Reset;
+                case "SkipPlayer":
+                    return RuleForCard.SkipPlayer;
                 default:
-                    throw new Exception("Rule for card in test not found");
+                    throw new Exception(ruleForCard + "Rule for card in test not found");
             }
         }
     }

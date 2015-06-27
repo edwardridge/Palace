@@ -128,8 +128,6 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.And("\'Liam\' plays the \'TwoOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 25
  testRunner.And("\'Ed\' plays the face down card \'FiveOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 26
- testRunner.Then("this should be allowed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

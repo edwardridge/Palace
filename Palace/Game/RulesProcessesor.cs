@@ -82,7 +82,18 @@
             if (ruleForPlayersCard != RuleForCard.SkipPlayer)
                 return nextPlayer;
 
-            foreach (var card in playPile)
+            var numSkipCards = 0;
+            foreach (var cardToCheck in playPile)
+            {
+                if (GetRuleForCardFromCardValue(cardToCheck.Value) == RuleForCard.SkipPlayer)
+                    numSkipCards++;
+                else
+                {
+                    break;
+                }
+            }
+
+            for(int i = 0; i < numSkipCards; i++)
                 nextPlayer = this.ChoosePlayerFromOrderOfPlay(orderOfPlay, players, nextPlayer);
             
             return nextPlayer;

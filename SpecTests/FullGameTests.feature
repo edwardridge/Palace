@@ -23,4 +23,4 @@ Scenario: Full game test
 	And 'Ed' plays the face up card 'JackOfClubs'
 	And 'Liam' plays the 'TwoOfClubs'
 	And 'Ed' plays the face down card 'FiveOfClubs'
-	Then this should be allowed
+	
