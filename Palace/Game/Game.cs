@@ -81,7 +81,7 @@ namespace Palace
         {
             player.AddCardsToInHandPile(_playPile);
             _playPile.Clear();
-            _currentPlayer = _rulesProcessesor.ChooseNextPlayer(_playPile, _players, _currentPlayer, _orderOfPlay);
+            _currentPlayer = _rulesProcessesor.ChooseNextPlayer(null, _playPile, _players, _currentPlayer, _orderOfPlay);
         }
 
         internal void Start(Player startingPlayer)
@@ -122,7 +122,7 @@ namespace Palace
             foreach (Card card in cards)
                 _playPile.Push(card);
 
-            this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(_playPile, _players, this._currentPlayer, _orderOfPlay);
+            this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(cards, _playPile, _players, this._currentPlayer, _orderOfPlay);
 
             if (this._rulesProcessesor.PlayPileShouldBeCleared(_playPile))
                 this._playPile.Clear();

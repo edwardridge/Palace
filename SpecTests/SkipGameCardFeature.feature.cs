@@ -159,6 +159,51 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("PLaying one skip card after a previous player plays a skip card should only skip " +
+            "one player")]
+        public virtual void PLayingOneSkipCardAfterAPreviousPlayerPlaysASkipCardShouldOnlySkipOnePlayer()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("PLaying one skip card after a previous player plays a skip card should only skip " +
+                    "one player", ((string[])(null)));
+#line 36
+this.ScenarioSetup(scenarioInfo);
+#line hidden
+            TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Player",
+                        "CardsInHand"});
+            table5.AddRow(new string[] {
+                        "Ed",
+                        "FiveOfClubs"});
+            table5.AddRow(new string[] {
+                        "Liam",
+                        "FourOfClubs"});
+            table5.AddRow(new string[] {
+                        "Dave",
+                        "FiveOfClubs"});
+#line 37
+testRunner.Given("I have the following players and cards", ((string)(null)), table5, "Given ");
+#line hidden
+            TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                        "CardValue",
+                        "Rule"});
+            table6.AddRow(new string[] {
+                        "Five",
+                        "SkipPlayer"});
+#line 42
+ testRunner.And("the following cards have rules", ((string)(null)), table6, "And ");
+#line 45
+ testRunner.And("it is \'Ed\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 46
+ testRunner.When("\'Ed\' plays the \'FiveOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 47
+ testRunner.And("\'Dave\' plays the \'FiveOfClubs\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 48
+ testRunner.Then("it should be \'Liam\' turn", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore
