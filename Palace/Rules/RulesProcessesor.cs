@@ -48,18 +48,16 @@
             return true;
         }
 
-        internal OrderOfPlay SetOrderOfPlay(GameState state, Card cardToPlay)
+        internal void SetOrderOfPlay(GameState state, Card cardToPlay)
         {
             var rulesForPlayersCard = this.GetRuleForCardFromCardValue(cardToPlay.Value);
             if (rulesForPlayersCard == RuleForCard.ReverseOrderOfPlay)
-                return state.OrderOfPlay == OrderOfPlay.Forward ? OrderOfPlay.Backward : OrderOfPlay.Forward;
-            else
-                return state.OrderOfPlay;
+                state.OrderOfPlay =  state.OrderOfPlay == OrderOfPlay.Forward ? OrderOfPlay.Backward : OrderOfPlay.Forward;
         }
 
-        internal bool PlayPileShouldBeCleared(IEnumerable<Card> playPile)
+        internal bool PlayPileShouldBeCleared(GameState state)
         {
-            return this.ShouldBurn(playPile);
+            return this.ShouldBurn(state.PlayPile);
         }
 
         internal void SetNextPlayer(
