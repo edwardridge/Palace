@@ -48,11 +48,9 @@ namespace Palace
 			return cards.Count;
 		}
 
-		private Card GetNextCard(){
-			var cardToReturn = cards.First();
-			//cardToReturn.CardOrientation = cardOrientation;
-
-			return cardToReturn;
+		private Card GetNextCard()
+        {
+            return cards.First();
 		}
 
 		private void RemoveCard(Card card){

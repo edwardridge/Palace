@@ -5,28 +5,26 @@
 
     public class StandardDeck : Deck
     {
-        public StandardDeck() : base(new Pack().Cards)
+        public StandardDeck()
+            : base(new Pack().Cards)
         {
-            var shuffledCards = new List<Card>(this.cards);
-            shuffledCards.Shuffle();
-            this.cards = new List<Card>(shuffledCards); //this.cards.Shuffle();
+            var shuffledCards = Shuffle(new List<Card>(this.cards));
+            this.cards = new List<Card>(shuffledCards);
         }
-    
-    }
 
-    public static class ListExtension
-    {
-        public static void Shuffle<T>(this IList<T> list)  
-        {  
-            Random rng = new Random();  
-            int n = list.Count;  
-            while (n > 1) {  
-                n--;  
-                int k = rng.Next(n + 1);  
-                T value = list[k];  
-                list[k] = list[n];  
-                list[n] = value;  
-        }  
+        private IList<Card> Shuffle(IList<Card> cardsToShuffle)
+        {
+            Random rng = new Random();
+            int n = cardsToShuffle.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                Card value = cardsToShuffle[k];
+                cardsToShuffle[k] = cardsToShuffle[n];
+                cardsToShuffle[n] = value;
+            }
+            return cardsToShuffle;
+        }
     }
-}
 }

@@ -8,6 +8,7 @@
 
     using Palace;
     using Palace.Repository;
+    using Palace.Rules;
 
     class Program
     {

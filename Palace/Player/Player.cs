@@ -4,8 +4,6 @@ using System.Linq;
 
 namespace Palace
 {
-    using System.Runtime.InteropServices.ComTypes;
-
     public class Player
     {
         internal Player()

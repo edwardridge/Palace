@@ -161,15 +161,15 @@ namespace Palace
             }
         }
 
-        public Stack<Card> PlayPile
+        public IReadOnlyCollection<Card> PlayPile
         {
             get
             {
-                return _playPile;
+                return _playPile.ToList().AsReadOnly();
             }
-            internal set
+            private set
             {
-                _playPile = value;
+                _playPile = new Stack<Card>(value);
             }
         }
 
@@ -179,7 +179,19 @@ namespace Palace
             {
                 return _players.ToList().AsReadOnly();
             }
-        } 
+        }
+
+        public Player CurrentPlayer
+        {
+            get
+            {
+                return this._currentPlayer != null ? this._currentPlayer.Value : null;
+            }
+            private set
+            {
+                this._currentPlayer = _players.Find(value);
+            }
+        }
 
         internal LinkedList<Player> PlayersLinkedList
         {
@@ -226,18 +238,6 @@ namespace Palace
             }
         }
 
-        public Player CurrentPlayer
-        {
-            get
-            {
-                return this._currentPlayer != null ? this._currentPlayer.Value : null;
-            }
-            internal set
-            {
-                this._currentPlayer = _players.Find(value);
-            }
-        }
-
         private LinkedListNode<Player> _currentPlayer;
 
         private LinkedList<Player> _players;
@@ -253,20 +253,5 @@ namespace Palace
         private bool _gameOver;
     }
 
-    public class GameOverResult : Result
-    {
-        private readonly Player winner;
-
-        public GameOverResult(Player winner)
-        {
-            this.winner = winner;
-        }
-
-        public override ResultOutcome ResultOutcome
-        {
-            get { return ResultOutcome.GameOver; }
-        }
-
-        public Player Winner { get { return winner;  }  }
-    }
+    
 }

@@ -10,6 +10,7 @@
     using NUnit.Framework;
 
     using Palace;
+    using Palace.Rules;
 
     using TestHelpers;
 
