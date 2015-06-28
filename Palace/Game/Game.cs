@@ -14,6 +14,76 @@ namespace Palace
     public class GameState
     {
         internal bool GameOver { get; set; }
+
+        internal OrderOfPlay OrderOfPlay
+        {
+            get
+            {
+                return _orderOfPlay;
+            }
+            set
+            {
+                _orderOfPlay = value;
+            }
+
+
+        }
+
+        public Stack<Card> PlayPile
+        {
+            get
+            {
+                return _playPile;
+            }
+            internal set
+            {
+                _playPile = new Stack<Card>(value);
+            }
+        }
+
+        public LinkedList<Player> Players
+        {
+            get
+            {
+                return _players;
+            }
+            internal set
+            {
+                this._players = value;
+            }
+        }
+
+        public Player CurrentPlayer
+        {
+            get
+            {
+                return this._currentPlayer != null ? this._currentPlayer.Value : null;
+            }
+            internal set
+            {
+                this._currentPlayer = _players.Find(value);
+            }
+        }
+
+        internal LinkedListNode<Player> CurrentPlayerLinkedListNode
+        {
+            get
+            {
+                return this._currentPlayer;
+            }
+            set
+            {
+                this._currentPlayer = value;
+            }
+        } 
+
+        private LinkedListNode<Player> _currentPlayer;
+
+        private OrderOfPlay _orderOfPlay;
+
+        private Stack<Card> _playPile;
+
+        private LinkedList<Player> _players;
     }
     
     public class Game
@@ -34,13 +104,17 @@ namespace Palace
         {
             this.Id = id;
             this._rulesProcessesor = rulesProcessesor;
-            this._players = new LinkedList<Player>(players);
-            this._playPile = new Stack<Card>(cardsInPile);
+            //this._players = new LinkedList<Player>(players);
+            //this._playPile = new Stack<Card>(cardsInPile);
             this._cardDealer = cardDealer;
-            this._orderOfPlay = OrderOfPlay.Forward;
-            this.GameState = new GameState { GameOver = false };
 
-            this._currentPlayer = _players.First;
+            this.State = new GameState
+                             {
+                                 GameOver = false, OrderOfPlay = OrderOfPlay.Forward, PlayPile = new Stack<Card>(cardsInPile),
+                                Players = new LinkedList<Player>(players)
+                             };
+
+            State.CurrentPlayer = State.Players.First.Value;
         }
 
         public Result PlayInHandCards(Player player, ICollection<Card> cards)
@@ -78,14 +152,14 @@ namespace Palace
 
         public void PlayerCannotPlayCards(Player player)
         {
-            player.AddCardsToInHandPile(_playPile);
-            _playPile.Clear();
-            _currentPlayer = _rulesProcessesor.ChooseNextPlayer(null, _playPile, _players, _currentPlayer, _orderOfPlay);
+            player.AddCardsToInHandPile(State.PlayPile);
+            State.PlayPile.Clear();
+            State.CurrentPlayerLinkedListNode = _rulesProcessesor.ChooseNextPlayer(null, State.PlayPile, State.Players, State.CurrentPlayerLinkedListNode, this.State.OrderOfPlay);
         }
 
         internal void Start(Player startingPlayer)
         {
-            this._currentPlayer = _players.Find(startingPlayer);
+            State.CurrentPlayerLinkedListNode = State.Players.Find(startingPlayer);
         }
 
         private void IfArgumentsAreInvalidThenThrow(Player player, ICollection<Card> cards, IEnumerable<Card> cardsToCheck)
@@ -99,32 +173,32 @@ namespace Palace
 
         private Result PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardType)
         {
-            if(this.GameState.GameOver) return new GameOverResult(_currentPlayer.Value);
-            if(_currentPlayer.Value.Equals(player) == false) return new Result("It isn't your turn!");
+            if (this.State.GameOver) return new GameOverResult(State.CurrentPlayerLinkedListNode.Value);
+            if (State.CurrentPlayerLinkedListNode.Value.Equals(player) == false) return new Result("It isn't your turn!");
             
             var cardToPlay = cards.First();
 
-            if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, _playPile))
+            if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, State.PlayPile))
                 return new Result("This card is invalid to play");
 
-            _orderOfPlay = this._rulesProcessesor.ChooseOrderOfPlay(_orderOfPlay, cardToPlay);
+            this.State.OrderOfPlay = this._rulesProcessesor.ChooseOrderOfPlay(this.State.OrderOfPlay, cardToPlay);
             
 
             this.RemoveCardsFromPlayer(player, cards, playerCardType);
 
             if (player.CardsFaceDown.Count == 0 && player.CardsFaceUp.Count == 0 & player.CardsInHand.Count == 0)
             {
-                this.GameState.GameOver = true;
+                this.State.GameOver = true;
                 return new GameOverResult(player);
             }
 
             foreach (Card card in cards)
-                _playPile.Push(card);
+                State.PlayPile.Push(card);
 
-            this._currentPlayer = this._rulesProcessesor.ChooseNextPlayer(cards, _playPile, _players, this._currentPlayer, _orderOfPlay);
+            this.State.CurrentPlayerLinkedListNode = this._rulesProcessesor.ChooseNextPlayer(cards, State.PlayPile, State.Players, this.State.CurrentPlayerLinkedListNode, this.State.OrderOfPlay);
 
-            if (this._rulesProcessesor.PlayPileShouldBeCleared(_playPile))
-                this._playPile.Clear();
+            if (this._rulesProcessesor.PlayPileShouldBeCleared(State.PlayPile))
+                this.State.PlayPile.Clear();
             
             return new Result();
         }
@@ -146,61 +220,7 @@ namespace Palace
                 player.RemoveCardsFromFaceUp(cards);
         }
 
-        public Card LastCardPlayed
-        {
-            get
-            {
-                if (_playPile == null)
-                    return null;
-                return _playPile.Count == 0 ? null : _playPile.Peek();
-            }
-            internal set
-            {
-                var p = value;
-            }
-        }
-
-        public IReadOnlyCollection<Card> PlayPile
-        {
-            get
-            {
-                return _playPile.ToList().AsReadOnly();
-            }
-            private set
-            {
-                _playPile = new Stack<Card>(value);
-            }
-        }
-
-        public IReadOnlyCollection<Player> Players
-        {
-            get
-            {
-                return _players.ToList().AsReadOnly();
-            }
-        }
-
-        public Player CurrentPlayer
-        {
-            get
-            {
-                return this._currentPlayer != null ? this._currentPlayer.Value : null;
-            }
-            private set
-            {
-                this._currentPlayer = _players.Find(value);
-            }
-        }
-
-        internal LinkedList<Player> PlayersLinkedList
-        {
-            get { return _players; }
-            set
-            {
-                this._players = value;
-            }
-        }
-
+        
         internal RulesProcessesor RulesProcessesor
         {
             get
@@ -225,31 +245,11 @@ namespace Palace
             }
         }
 
-        internal OrderOfPlay OrderOfPlay
-        {
-            get
-            {
-                return _orderOfPlay;
-            }
-            set
-            {
-                _orderOfPlay = value;
-            }
-        }
-
-        public GameState GameState { get; internal set; }
-
-        private LinkedListNode<Player> _currentPlayer;
-
-        private LinkedList<Player> _players;
-
-        private Stack<Card> _playPile;
+        public GameState State { get; internal set; }
 
         private RulesProcessesor _rulesProcessesor;
 
         private ICardDealer _cardDealer;
-
-        private OrderOfPlay _orderOfPlay;
     }
 
     

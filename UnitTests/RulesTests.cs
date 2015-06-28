@@ -243,7 +243,7 @@ namespace UnitTests
             var game = dealer.StartGame(player2);
             game.PlayInHandCards(player2, Card.JackOfClubs);
 
-            game.CurrentPlayer.Should().Be(player1);
+            game.State.CurrentPlayer.Should().Be(player1);
         }
 
         [Test]
@@ -257,7 +257,7 @@ namespace UnitTests
             game.PlayInHandCards(player2, Card.JackOfClubs);
             game.PlayInHandCards(player1, Card.AceOfClubs);
 
-            game.CurrentPlayer.Should().Be(player3);
+            game.State.CurrentPlayer.Should().Be(player3);
         }
 
     }
@@ -286,7 +286,7 @@ namespace UnitTests
             var game = dealer.StartGame(player2);
             game.PlayInHandCards(player2, Card.EightOfClubs);
 
-            game.CurrentPlayer.Should().Be(player1);
+            game.State.CurrentPlayer.Should().Be(player1);
         }
     }
 
@@ -312,7 +312,7 @@ namespace UnitTests
 
             game.PlayInHandCards(player1, Card.TenOfClubs);
 
-            game.PlayPile.Count.Should().Be(0);
+            game.State.PlayPile.Count.Should().Be(0);
         }
 
         [Test]
@@ -338,7 +338,7 @@ namespace UnitTests
 
             game.PlayInHandCards(player1, Card.TenOfClubs);
 
-            game.CurrentPlayer.Should().Be(player1);
+            game.State.CurrentPlayer.Should().Be(player1);
         }
     }
 
@@ -365,7 +365,7 @@ namespace UnitTests
 
             game.PlayInHandCards(player1, Card.EightOfClubs);
 
-            game.CurrentPlayer.Should().Be(player3);
+            game.State.CurrentPlayer.Should().Be(player3);
         }
 
         [Test]
@@ -379,7 +379,7 @@ namespace UnitTests
 
             game.PlayInHandCards(player2, Card.EightOfClubs);
 
-            game.CurrentPlayer.Should().Be(player1);
+            game.State.CurrentPlayer.Should().Be(player1);
         }
 
         [Test]
@@ -395,7 +395,7 @@ namespace UnitTests
 
             game.PlayInHandCards(player1, cardsToPlay);
 
-            game.CurrentPlayer.Should().Be(player4);
+            game.State.CurrentPlayer.Should().Be(player4);
         }
     }
 
@@ -469,7 +469,7 @@ namespace UnitTests
 
             var outcome = game.PlayInHandCards(player1, cardsToPlay);
 
-            game.PlayPile.Count.Should().Be(0);
+            game.State.PlayPile.Count.Should().Be(0);
 
         }
 
@@ -484,7 +484,7 @@ namespace UnitTests
 
             var outcome = game.PlayInHandCards(player1, cardsToPlay);
 
-            game.CurrentPlayer.Should().Be(player1);
+            game.State.CurrentPlayer.Should().Be(player1);
         }
     }
 
@@ -501,7 +501,7 @@ namespace UnitTests
             game.PlayInHandCards(player1, new[] { Card.AceOfClubs, Card.AceOfClubs });
             game.PlayInHandCards(player2, new[] { Card.AceOfClubs, Card.AceOfClubs });
 
-            game.PlayPile.Count.Should().Be(0);
+            game.State.PlayPile.Count.Should().Be(0);
         }
     }
 
@@ -520,7 +520,7 @@ namespace UnitTests
             game.PlayInHandCards(player2, Card.AceOfClubs);
             game.PlayInHandCards(player1, Card.AceOfClubs);
 
-            game.PlayPile.Count.Should().Be(0);
+            game.State.PlayPile.Count.Should().Be(0);
         }
     }
 
@@ -548,7 +548,7 @@ namespace UnitTests
 
             game.PlayerCannotPlayCards(player1);
 
-            game.PlayPile.Count.Should().Be(0);
+            game.State.PlayPile.Count.Should().Be(0);
         }
 
         [Test]
@@ -561,7 +561,7 @@ namespace UnitTests
 
             game.PlayerCannotPlayCards(player1);
 
-            game.CurrentPlayer.Should().Be(player2);
+            game.State.CurrentPlayer.Should().Be(player2);
         }
     }
 

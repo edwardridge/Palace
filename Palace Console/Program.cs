@@ -39,14 +39,14 @@
 
 
             game = dealer.StartGame();
-            currentPlayer = game.CurrentPlayer;
+            currentPlayer = game.State.CurrentPlayer;
 
             Console.WriteLine("It's " + currentPlayer.Name + " turn");
             Console.WriteLine(PrintPlayersCards(currentPlayer));
             
             while (true)
             {
-                var lastCardAsString = game.LastCardPlayed == null ? "None" : game.LastCardPlayed.Value + " of " + game.LastCardPlayed.Suit;
+                var lastCardAsString = game.State.PlayPile.First() == null ? "None" : game.State.PlayPile.First().Value + " of " + game.State.PlayPile.First().Suit;
                 Console.WriteLine("Last card played: " + lastCardAsString);
                 var line = Console.ReadLine();
                 if (line.Equals("e"))
@@ -75,8 +75,8 @@
                         Console.WriteLine("Error reading input, please try again.");
                     }
                 }
-                
-                currentPlayer = game.CurrentPlayer;
+
+                currentPlayer = game.State.CurrentPlayer;
                 Console.WriteLine("It's " + currentPlayer.Name + " turn");
                 Console.WriteLine(PrintPlayersCards(currentPlayer));
             }

@@ -22,7 +22,7 @@
             var game = dealer.StartGame(player1);
             game.PlayInHandCards(player1, cardToPlay);
 
-            game.PlayPile.Count.Should().Be(1);
+            game.State.PlayPile.Count.Should().Be(1);
         }
 
         [Test]
@@ -35,7 +35,7 @@
             var game = dealer.StartGame(player1);
             game.PlayInHandCards(player1, cardToPlay);
 
-            game.CurrentPlayer.Should().Be(player2);
+            game.State.CurrentPlayer.Should().Be(player2);
         }
     }
 

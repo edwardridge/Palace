@@ -50,7 +50,7 @@
         [Test]
         public void Setup_With_Two_Players_Two_Players_Are_In_Game()
         {
-            var playerCount = game.Players.Count;
+            var playerCount = game.State.Players.Count;
 
             playerCount.Should().Be(2);
         }
@@ -281,7 +281,7 @@
             var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
             game = dealer.StartGame();
 
-            game.CurrentPlayer.Should().Be(player1);
+            game.State.CurrentPlayer.Should().Be(player1);
         }
 
         [Test]
@@ -293,7 +293,7 @@
 
             game = dealer.StartGame();
 
-            game.CurrentPlayer.Should().Be(player2);
+            game.State.CurrentPlayer.Should().Be(player2);
         }
 
         [Test]
@@ -306,7 +306,7 @@
 
             game = dealer.StartGame();
 
-            game.CurrentPlayer.Should().Be(player3);
+            game.State.CurrentPlayer.Should().Be(player3);
         }
     }
 }

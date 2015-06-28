@@ -86,7 +86,7 @@
         [When(@"'(.*)' plays the '(.*)'")]
         public void WhenPlaysThe(string playerName, string cards)
         {
-            currentPlayer = game.Players.First(p => p.Name.Equals(playerName));
+            currentPlayer = game.State.Players.First(p => p.Name.Equals(playerName));
             var cardsToPlay = GetCardsFromCsvString(cards);
             var result = game.PlayInHandCards(currentPlayer, cardsToPlay);
             ScenarioContext.Current.Set(result);

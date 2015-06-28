@@ -53,9 +53,9 @@ namespace UnitTests
         {
             var gameRepository = new GameRepository(new TestPalaceDocumentSession().GetDocumentSession());
             var game = gameRepository.Open("e23c8755-a935-4cda-a2b7-4cd027446958");
-            var currentPlayer = game.CurrentPlayer;
+            var currentPlayer = game.State.CurrentPlayer;
             game.PlayInHandCards(currentPlayer, currentPlayer.CardsInHand.First());
-            game.Players.Count.Should().Be(2);
+            game.State.Players.Count.Should().Be(2);
         }
 
         [Test]
