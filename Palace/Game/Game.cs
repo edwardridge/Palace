@@ -189,7 +189,7 @@ namespace Palace
             if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, State.PlayPileStack))
                 return new Result("This card is invalid to play");
 
-            this.State.OrderOfPlay = this._rulesProcessesor.ChooseOrderOfPlay(this.State.OrderOfPlay, cardToPlay);
+            this.State.OrderOfPlay = this._rulesProcessesor.ChooseOrderOfPlay(this.State, cardToPlay);
             
 
             this.RemoveCardsFromPlayer(player, cards, playerCardType);

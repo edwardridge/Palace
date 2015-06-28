@@ -48,13 +48,13 @@
             return true;
         }
 
-        internal OrderOfPlay ChooseOrderOfPlay(OrderOfPlay currentOrder, Card cardToPlay)
+        internal OrderOfPlay SetOrderOfPlay(GameState state, Card cardToPlay)
         {
             var rulesForPlayersCard = this.GetRuleForCardFromCardValue(cardToPlay.Value);
             if (rulesForPlayersCard == RuleForCard.ReverseOrderOfPlay)
-                return currentOrder == OrderOfPlay.Forward ? OrderOfPlay.Backward : OrderOfPlay.Forward;
-
-            return currentOrder;
+                return state.OrderOfPlay == OrderOfPlay.Forward ? OrderOfPlay.Backward : OrderOfPlay.Forward;
+            else
+                return state.OrderOfPlay;
         }
 
         internal bool PlayPileShouldBeCleared(IEnumerable<Card> playPile)
