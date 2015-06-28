@@ -4,12 +4,6 @@ namespace Palace
     using System.Collections.Generic;
     using System.Linq;
 
-    internal enum OrderOfPlay
-    {
-        Forward = 1,
-        Backward = 2
-    }
-
     internal enum PlayerCardTypes
     {
         InHand = 1,
