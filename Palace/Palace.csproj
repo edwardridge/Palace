@@ -86,6 +86,7 @@
     <Compile Include="Card\EnumerableCardExtensions.cs" />
     <Compile Include="Deck\StandardDeck.cs" />
     <Compile Include="Game\Dealer.cs" />
+    <Compile Include="Game\OrderOfPlay.cs" />
     <Compile Include="Rules\DefaultStartGameRules.cs" />
     <Compile Include="Rules\RulesProcessesor.cs" />
     <Compile Include="Deck\ICardDealer.cs" />
