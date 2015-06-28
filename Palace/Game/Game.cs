@@ -11,6 +11,11 @@ namespace Palace
         FaceDown = 3
     }
 
+    public class GameState
+    {
+        internal bool GameOver { get; set; }
+    }
+    
     public class Game
     {
         public Guid Id { get; internal set; }
@@ -33,7 +38,7 @@ namespace Palace
             this._playPile = new Stack<Card>(cardsInPile);
             this._cardDealer = cardDealer;
             this._orderOfPlay = OrderOfPlay.Forward;
-            this.GameOver = false;
+            this.GameState = new GameState { GameOver = false };
 
             this._currentPlayer = _players.First;
         }
@@ -94,7 +99,7 @@ namespace Palace
 
         private Result PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardType)
         {
-            if(this.GameOver) return new GameOverResult(_currentPlayer.Value);
+            if(this.GameState.GameOver) return new GameOverResult(_currentPlayer.Value);
             if(_currentPlayer.Value.Equals(player) == false) return new Result("It isn't your turn!");
             
             var cardToPlay = cards.First();
@@ -109,7 +114,7 @@ namespace Palace
 
             if (player.CardsFaceDown.Count == 0 && player.CardsFaceUp.Count == 0 & player.CardsInHand.Count == 0)
             {
-                this.GameOver = true;
+                this.GameState.GameOver = true;
                 return new GameOverResult(player);
             }
 
@@ -232,7 +237,7 @@ namespace Palace
             }
         }
 
-        private bool GameOver { get; set; }
+        public GameState GameState { get; internal set; }
 
         private LinkedListNode<Player> _currentPlayer;
 
