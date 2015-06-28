@@ -387,8 +387,8 @@ namespace UnitTests
         {
             var cardsToPlay = new[] { Card.EightOfClubs, Card.EightOfClubs };
             var player1 = PlayerHelper.CreatePlayer(cardsToPlay, "Ed");
-            var player2 = PlayerHelper.CreatePlayer();
-            var player3 = PlayerHelper.CreatePlayer();
+            var player2 = PlayerHelper.CreatePlayer("Dave");
+            var player3 = PlayerHelper.CreatePlayer("Soph");
             var player4 = PlayerHelper.CreatePlayer("Liam");
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2, player3, player4 }, ruleForCardsByValue);
             var game = dealer.StartGame();

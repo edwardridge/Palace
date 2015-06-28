@@ -67,7 +67,7 @@
             GameState gameState)
         {
             if (cardsPlayed == null)
-                return ChoosePlayerFromOrderOfPlay(gameState.OrderOfPlay, gameState.Players, gameState.CurrentPlayerLinkedListNode);
+                return ChoosePlayerFromOrderOfPlay(gameState, gameState.CurrentPlayerLinkedListNode);
 
             cardsPlayed = cardsPlayed as IList<Card> ?? cardsPlayed.ToList();
 
@@ -75,7 +75,7 @@
                 return gameState.CurrentPlayerLinkedListNode;
 
             var ruleForPlayersCard = this.GetRuleForCardFromCardValue(cardsPlayed.First().Value);
-            var nextPlayer = this.ChoosePlayerFromOrderOfPlay(gameState.OrderOfPlay, gameState.Players, gameState.CurrentPlayerLinkedListNode);
+            var nextPlayer = this.ChoosePlayerFromOrderOfPlay(gameState, gameState.CurrentPlayerLinkedListNode);
 
             if (ruleForPlayersCard != RuleForCard.SkipPlayer)
                 return nextPlayer;
@@ -84,7 +84,7 @@
             var topCardsInPlayPileWithSkipValue = cardsPlayed.GetTopCardsWithSameValue(skipCardValue);
 
             foreach (var card in topCardsInPlayPileWithSkipValue)
-                nextPlayer = this.ChoosePlayerFromOrderOfPlay(gameState.OrderOfPlay, gameState.Players, nextPlayer);
+                nextPlayer = this.ChoosePlayerFromOrderOfPlay(gameState, nextPlayer);
             
             return nextPlayer;
         }
@@ -100,8 +100,12 @@
             return isBurnCard || lastFourCardsAreSameValue;
         }
 
-        private LinkedListNode<Player> ChoosePlayerFromOrderOfPlay(OrderOfPlay orderOfPlay, LinkedList<Player> players, LinkedListNode<Player> currentPlayer)
+        private LinkedListNode<Player> ChoosePlayerFromOrderOfPlay(GameState state, LinkedListNode<Player> currentPlayer)
         {
+            OrderOfPlay orderOfPlay = state.OrderOfPlay;
+            LinkedList<Player> players = state.Players;
+            //LinkedListNode<Player> currentPlayer = state.CurrentPlayerLinkedListNode;
+            
             if (orderOfPlay == OrderOfPlay.Forward)
                 return currentPlayer.Next ?? players.First;
             
