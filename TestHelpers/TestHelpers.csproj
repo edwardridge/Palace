@@ -42,6 +42,7 @@
     <Compile Include="CardHelpers.cs" />
     <Compile Include="DealerHelper.cs" />
     <Compile Include="PlayerHelper.cs" />
+    <Compile Include="PredeterminedDeck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

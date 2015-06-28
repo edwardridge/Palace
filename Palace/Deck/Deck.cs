@@ -7,7 +7,7 @@ namespace Palace
 	{
 		protected ICollection<Card> cards;
 
-		internal Deck(IEnumerable<Card> cards)
+		protected Deck(IEnumerable<Card> cards)
 		{
 		    this.cards = new List<Card>(cards);
 		}
