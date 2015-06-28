@@ -29,15 +29,23 @@ namespace Palace
 
         }
 
-        public Stack<Card> PlayPile
+        public IReadOnlyCollection<Card> PlayPile
         {
             get
             {
-                return _playPile;
+                return playPileStack.ToList().AsReadOnly();
             }
-            internal set
+        } 
+
+        internal Stack<Card> PlayPileStack
+        {
+            get
             {
-                _playPile = new Stack<Card>(value);
+                return this.playPileStack;
+            }
+            set
+            {
+                this.playPileStack = new Stack<Card>(value);
             }
         }
 
@@ -81,7 +89,7 @@ namespace Palace
 
         private OrderOfPlay _orderOfPlay;
 
-        private Stack<Card> _playPile;
+        private Stack<Card> playPileStack;
 
         private LinkedList<Player> _players;
     }
@@ -110,7 +118,7 @@ namespace Palace
 
             this.State = new GameState
                              {
-                                 GameOver = false, OrderOfPlay = OrderOfPlay.Forward, PlayPile = new Stack<Card>(cardsInPile),
+                                 GameOver = false, OrderOfPlay = OrderOfPlay.Forward, PlayPileStack = new Stack<Card>(cardsInPile),
                                 Players = new LinkedList<Player>(players)
                              };
 
@@ -152,9 +160,9 @@ namespace Palace
 
         public void PlayerCannotPlayCards(Player player)
         {
-            player.AddCardsToInHandPile(State.PlayPile);
-            State.PlayPile.Clear();
-            State.CurrentPlayerLinkedListNode = _rulesProcessesor.ChooseNextPlayer(null, State.PlayPile, State.Players, State.CurrentPlayerLinkedListNode, this.State.OrderOfPlay);
+            player.AddCardsToInHandPile(State.PlayPileStack);
+            State.PlayPileStack.Clear();
+            State.CurrentPlayerLinkedListNode = _rulesProcessesor.ChooseNextPlayer(null, State);
         }
 
         internal void Start(Player startingPlayer)
@@ -173,12 +181,12 @@ namespace Palace
 
         private Result PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardType)
         {
-            if (this.State.GameOver) return new GameOverResult(State.CurrentPlayerLinkedListNode.Value);
-            if (State.CurrentPlayerLinkedListNode.Value.Equals(player) == false) return new Result("It isn't your turn!");
+            if (this.State.GameOver) return new GameOverResult(State.CurrentPlayer);
+            if (State.CurrentPlayer.Equals(player) == false) return new Result("It isn't your turn!");
             
             var cardToPlay = cards.First();
 
-            if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, State.PlayPile))
+            if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, State.PlayPileStack))
                 return new Result("This card is invalid to play");
 
             this.State.OrderOfPlay = this._rulesProcessesor.ChooseOrderOfPlay(this.State.OrderOfPlay, cardToPlay);
@@ -193,12 +201,12 @@ namespace Palace
             }
 
             foreach (Card card in cards)
-                State.PlayPile.Push(card);
+                State.PlayPileStack.Push(card);
 
-            this.State.CurrentPlayerLinkedListNode = this._rulesProcessesor.ChooseNextPlayer(cards, State.PlayPile, State.Players, this.State.CurrentPlayerLinkedListNode, this.State.OrderOfPlay);
+            this.State.CurrentPlayerLinkedListNode = this._rulesProcessesor.ChooseNextPlayer(cards, State);
 
-            if (this._rulesProcessesor.PlayPileShouldBeCleared(State.PlayPile))
-                this.State.PlayPile.Clear();
+            if (this._rulesProcessesor.PlayPileShouldBeCleared(State.PlayPileStack))
+                this.State.PlayPileStack.Clear();
             
             return new Result();
         }
@@ -220,7 +228,8 @@ namespace Palace
                 player.RemoveCardsFromFaceUp(cards);
         }
 
-        
+        public GameState State { get; internal set; }
+
         internal RulesProcessesor RulesProcessesor
         {
             get
@@ -244,8 +253,6 @@ namespace Palace
                 _cardDealer = value;
             }
         }
-
-        public GameState State { get; internal set; }
 
         private RulesProcessesor _rulesProcessesor;
 

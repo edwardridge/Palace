@@ -1,6 +1,7 @@
 ﻿namespace UnitTests
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using FluentAssertions;
 
@@ -22,7 +23,7 @@
             var game = dealer.StartGame(player1);
             game.PlayInHandCards(player1, cardToPlay);
 
-            game.State.PlayPile.Count.Should().Be(1);
+            game.State.PlayPile.Count().Should().Be(1);
         }
 
         [Test]

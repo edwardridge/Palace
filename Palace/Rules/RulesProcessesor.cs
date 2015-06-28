@@ -64,22 +64,18 @@
 
         internal LinkedListNode<Player> ChooseNextPlayer(
             IEnumerable<Card> cardsPlayed,
-            IEnumerable<Card> playPile, 
-            LinkedList<Player> players, 
-            LinkedListNode<Player> currentPlayer, 
-            OrderOfPlay orderOfPlay)
+            GameState gameState)
         {
             if (cardsPlayed == null)
-                return ChoosePlayerFromOrderOfPlay(orderOfPlay, players, currentPlayer);
+                return ChoosePlayerFromOrderOfPlay(gameState.OrderOfPlay, gameState.Players, gameState.CurrentPlayerLinkedListNode);
 
-            playPile = playPile as IList<Card> ?? playPile.ToList();
             cardsPlayed = cardsPlayed as IList<Card> ?? cardsPlayed.ToList();
 
-            if (ShouldBurn(playPile))
-                return currentPlayer;
+            if (ShouldBurn(gameState.PlayPileStack))
+                return gameState.CurrentPlayerLinkedListNode;
 
             var ruleForPlayersCard = this.GetRuleForCardFromCardValue(cardsPlayed.First().Value);
-            var nextPlayer = this.ChoosePlayerFromOrderOfPlay(orderOfPlay, players, currentPlayer);
+            var nextPlayer = this.ChoosePlayerFromOrderOfPlay(gameState.OrderOfPlay, gameState.Players, gameState.CurrentPlayerLinkedListNode);
 
             if (ruleForPlayersCard != RuleForCard.SkipPlayer)
                 return nextPlayer;
@@ -88,7 +84,7 @@
             var topCardsInPlayPileWithSkipValue = cardsPlayed.GetTopCardsWithSameValue(skipCardValue);
 
             foreach (var card in topCardsInPlayPileWithSkipValue)
-                nextPlayer = this.ChoosePlayerFromOrderOfPlay(orderOfPlay, players, nextPlayer);
+                nextPlayer = this.ChoosePlayerFromOrderOfPlay(gameState.OrderOfPlay, gameState.Players, nextPlayer);
             
             return nextPlayer;
         }

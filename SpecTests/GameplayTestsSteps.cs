@@ -22,7 +22,7 @@ namespace SpecTests
         [Then(@"the number of cards in the play pile should be '(.*)'")]
         public void ThenTheNumberOfCardsInThePlayPileShouldBe(int p0)
         {
-            game.State.PlayPile.Count.Should().Be(p0);
+            game.State.PlayPile.Count().Should().Be(p0);
         }
 
         [Then(@"'(.*)' should have '(.*)' cards in hand")]
