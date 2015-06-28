@@ -20,9 +20,9 @@
             }
         }
 
-        internal bool CardCanBePlayed(Card cardToPlay, IEnumerable<Card> playPile)
+        internal bool CardCanBePlayed(Card cardToPlay, GameState state)
         {
-            var playPileAsList = playPile as IList<Card> ?? playPile.ToList();
+            var playPileAsList = state.PlayPile as IList<Card> ?? state.PlayPile.ToList();
 
             if (!playPileAsList.Any())
                 return true;
@@ -35,7 +35,17 @@
             if (ruleForLastCardPlayed == RuleForCard.SeeThrough)
             {
                 var playPileExceptLastCard = playPileAsList.Except(new[]{lastCardPlayed});
-                return CardCanBePlayed(cardToPlay, playPileExceptLastCard);
+                GameState newState = new GameState()
+                                         {
+                                             Players = state.Players,
+                                             CurrentPlayer = state.CurrentPlayer,
+                                             CurrentPlayerLinkedListNode = state.CurrentPlayerLinkedListNode,
+                                             OrderOfPlay = state.OrderOfPlay,
+                                             
+                                             GameOver = state.GameOver,
+                                             PlayPileStack = new Stack<Card>(playPileExceptLastCard)
+                                         };
+                return CardCanBePlayed(cardToPlay, newState);
             }
             
             if (rulesForPlayersCard == RuleForCard.Reset || rulesForPlayersCard == RuleForCard.Burn || rulesForPlayersCard == RuleForCard.SeeThrough)
