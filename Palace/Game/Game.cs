@@ -39,7 +39,7 @@ namespace Palace
             this._playPile = new Stack<Card>(cardsInPile);
             this._cardDealer = cardDealer;
             this._orderOfPlay = OrderOfPlay.Forward;
-            this._gameOver = false;
+            this.GameOver = false;
 
             this._currentPlayer = _players.First;
         }
@@ -100,7 +100,7 @@ namespace Palace
 
         private Result PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardType)
         {
-            if(_gameOver) return new GameOverResult(_currentPlayer.Value);
+            if(this.GameOver) return new GameOverResult(_currentPlayer.Value);
             if(_currentPlayer.Value.Equals(player) == false) return new Result("It isn't your turn!");
             
             var cardToPlay = cards.First();
@@ -115,7 +115,7 @@ namespace Palace
 
             if (player.CardsFaceDown.Count == 0 && player.CardsFaceUp.Count == 0 & player.CardsInHand.Count == 0)
             {
-                this._gameOver = true;
+                this.GameOver = true;
                 return new GameOverResult(player);
             }
 
@@ -238,6 +238,8 @@ namespace Palace
             }
         }
 
+        private bool GameOver { get; set; }
+
         private LinkedListNode<Player> _currentPlayer;
 
         private LinkedList<Player> _players;
@@ -249,8 +251,6 @@ namespace Palace
         private ICardDealer _cardDealer;
 
         private OrderOfPlay _orderOfPlay;
-
-        private bool _gameOver;
     }
 
     
