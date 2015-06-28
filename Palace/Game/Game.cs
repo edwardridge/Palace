@@ -186,7 +186,7 @@ namespace Palace
             
             var cardToPlay = cards.First();
 
-            if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, State.PlayPileStack))
+            if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, State))
                 return new Result("This card is invalid to play");
 
             this._rulesProcessesor.SetOrderOfPlay(this.State, cardToPlay);

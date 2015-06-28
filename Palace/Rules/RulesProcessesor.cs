@@ -20,9 +20,9 @@
             }
         }
 
-        internal bool CardCanBePlayed(Card cardToPlay, IEnumerable<Card> playPile)
+        internal bool CardCanBePlayed(Card cardToPlay, GameState state)
         {
-            var playPileAsList = playPile as IList<Card> ?? playPile.ToList();
+            var playPileAsList = state.PlayPile as IList<Card> ?? state.PlayPile.ToList();
 
             if (!playPileAsList.Any())
                 return true;
@@ -35,7 +35,7 @@
             if (ruleForLastCardPlayed == RuleForCard.SeeThrough)
             {
                 var playPileExceptLastCard = playPileAsList.Except(new[]{lastCardPlayed});
-                return CardCanBePlayed(cardToPlay, playPileExceptLastCard);
+                return CardCanBePlayed(cardToPlay, state);
             }
             
             if (rulesForPlayersCard == RuleForCard.Reset || rulesForPlayersCard == RuleForCard.Burn || rulesForPlayersCard == RuleForCard.SeeThrough)
@@ -66,7 +66,7 @@
         {
             if (cardsPlayed == null)
             {
-                this.SetPlayerFromOrderOfPlay(gameState);
+                this.SetNextPlayer(gameState);
                 return;
             }
 
@@ -76,7 +76,7 @@
                 return;
             
             var ruleForPlayersCard = this.GetRuleForCardFromCardValue(cardsPlayed.First().Value);
-            this.SetPlayerFromOrderOfPlay(gameState);
+            this.SetNextPlayer(gameState);
 
             if (ruleForPlayersCard != RuleForCard.SkipPlayer)
                 return;
@@ -85,7 +85,7 @@
             var topCardsInPlayPileWithSkipValue = cardsPlayed.GetTopCardsWithSameValue(skipCardValue);
 
             foreach (var card in topCardsInPlayPileWithSkipValue)
-                this.SetPlayerFromOrderOfPlay(gameState);
+                this.SetNextPlayer(gameState);
         }
 
         private bool ShouldBurn(IEnumerable<Card> cardsToCheck)
@@ -99,7 +99,7 @@
             return isBurnCard || lastFourCardsAreSameValue;
         }
 
-        private void SetPlayerFromOrderOfPlay(GameState state)
+        private void SetNextPlayer(GameState state)
         {
             if (state.OrderOfPlay == OrderOfPlay.Forward)
                 state.CurrentPlayerLinkedListNode = state.CurrentPlayerLinkedListNode.Next ?? state.Players.First;
