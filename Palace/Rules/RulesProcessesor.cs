@@ -62,33 +62,32 @@
             return this.ShouldBurn(playPile);
         }
 
-        internal LinkedListNode<Player> SetNextPlayer(
+        internal void SetNextPlayer(
             IEnumerable<Card> cardsPlayed,
             GameState gameState)
         {
             if (cardsPlayed == null)
             {
                 this.SetPlayerFromOrderOfPlay(gameState);
-                return gameState.CurrentPlayerLinkedListNode;
+                return;
             }
+
             cardsPlayed = cardsPlayed as IList<Card> ?? cardsPlayed.ToList();
 
             if (ShouldBurn(gameState.PlayPileStack))
-                return gameState.CurrentPlayerLinkedListNode;
-
+                return;
+            
             var ruleForPlayersCard = this.GetRuleForCardFromCardValue(cardsPlayed.First().Value);
             this.SetPlayerFromOrderOfPlay(gameState);
 
             if (ruleForPlayersCard != RuleForCard.SkipPlayer)
-                return gameState.CurrentPlayerLinkedListNode;
+                return;
 
             var skipCardValue = this.RulesForCardsByValue.First(w => w.Value == RuleForCard.SkipPlayer).Key;
             var topCardsInPlayPileWithSkipValue = cardsPlayed.GetTopCardsWithSameValue(skipCardValue);
 
             foreach (var card in topCardsInPlayPileWithSkipValue)
                 this.SetPlayerFromOrderOfPlay(gameState);
-            
-            return gameState.CurrentPlayerLinkedListNode;
         }
 
         private bool ShouldBurn(IEnumerable<Card> cardsToCheck)

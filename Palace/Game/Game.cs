@@ -162,7 +162,7 @@ namespace Palace
         {
             player.AddCardsToInHandPile(State.PlayPileStack);
             State.PlayPileStack.Clear();
-            State.CurrentPlayerLinkedListNode = _rulesProcessesor.ChooseNextPlayer(null, State);
+            _rulesProcessesor.SetNextPlayer(null, State);
         }
 
         internal void Start(Player startingPlayer)
@@ -203,7 +203,7 @@ namespace Palace
             foreach (Card card in cards)
                 State.PlayPileStack.Push(card);
 
-            this.State.CurrentPlayerLinkedListNode = this._rulesProcessesor.ChooseNextPlayer(cards, State);
+            this._rulesProcessesor.SetNextPlayer(cards, State);
 
             if (this._rulesProcessesor.PlayPileShouldBeCleared(State.PlayPileStack))
                 this.State.PlayPileStack.Clear();
