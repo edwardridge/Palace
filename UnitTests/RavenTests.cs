@@ -3,6 +3,8 @@ using NUnit.Framework;
 
 namespace UnitTests
 {
+    using System.Linq;
+
     using FluentAssertions;
 
     using Palace;
@@ -52,7 +54,7 @@ namespace UnitTests
             var gameRepository = new GameRepository(new TestPalaceDocumentSession().GetDocumentSession());
             var game = gameRepository.Open("e23c8755-a935-4cda-a2b7-4cd027446958");
             var currentPlayer = game.CurrentPlayer;
-            game.PlayInHandCards(currentPlayer, currentPlayer.CardsInHand[0]);
+            game.PlayInHandCards(currentPlayer, currentPlayer.CardsInHand.First());
             game.Players.Count.Should().Be(2);
         }
 

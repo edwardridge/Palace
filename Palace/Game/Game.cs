@@ -89,7 +89,7 @@ namespace Palace
             this._currentPlayer = _players.Find(startingPlayer);
         }
 
-        private void IfArgumentsAreInvalidThenThrow(Player player, ICollection<Card> cards, ICollection<Card> cardsToCheck)
+        private void IfArgumentsAreInvalidThenThrow(Player player, ICollection<Card> cards, IEnumerable<Card> cardsToCheck)
         {
             if (cards.Except(cardsToCheck).Any())
                 throw new ArgumentException("You cannot play cards you don't have!");

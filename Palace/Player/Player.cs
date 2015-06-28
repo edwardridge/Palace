@@ -37,19 +37,19 @@ namespace Palace
             }
         }
 
-        public List<Card> CardsInHand
+        public IReadOnlyCollection<Card> CardsInHand
         {
             get
             {
-                return this._cardsInHand;
+                return this._cardsInHand.AsReadOnly();
             }
             internal set
             {
-                this._cardsInHand = value;
+                this._cardsInHand = new List<Card>(value);
             }
         }
 
-        public List<Card> CardsFaceUp
+        public IReadOnlyCollection<Card> CardsFaceUp
         {
             get
             {
@@ -57,11 +57,11 @@ namespace Palace
             }
             internal set
             {
-                this._cardsFaceUp = value;
+                this._cardsFaceUp = new List<Card>(value);
             }
         }
 
-        public List<Card> CardsFaceDown
+        public IReadOnlyCollection<Card> CardsFaceDown
         {
             get
             {
@@ -69,7 +69,7 @@ namespace Palace
             }
             internal set
             {
-                this._cardsFaceDown = value;
+                this._cardsFaceDown = new List<Card>(value);
             }
         }
 
@@ -134,13 +134,13 @@ namespace Palace
         internal void RemoveCardsFromFaceDown(ICollection<Card> cards)
         {
             foreach (var card in cards)
-                this.CardsFaceDown.Remove(card);
+                this._cardsFaceDown.Remove(card);
         }
 
         internal void RemoveCardsFromFaceUp(ICollection<Card> cards)
         {
             foreach (var card in cards)
-                this.CardsFaceUp.Remove(card);
+                this._cardsFaceUp.Remove(card);
 
         }
 
@@ -157,16 +157,6 @@ namespace Palace
             _state = PlayerState.Ready;
 
             //return ResultOutcome.Success;
-        }
-
-        internal Card LowestCardInValue
-        {
-            get
-            {
-                if (_cardsFaceUp == null && _cardsInHand == null)
-                    return null;
-                return this._cardsFaceUp.Union(_cardsInHand).ToList().OrderBy(o => o.Value).FirstOrDefault();
-            }
         }
 
         private void MoveCardToNewPile(Card cardToMove, ICollection<Card> pileToAddTo, ICollection<Card> pileToRemoveFrom)
