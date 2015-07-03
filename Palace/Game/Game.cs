@@ -83,7 +83,19 @@ namespace Palace
             {
                 return _players.Find(_currentPlayer);
             }
-        } 
+        }
+
+        internal ICardDealer CardDealer
+        {
+            get
+            {
+                return _cardDealer;
+            }
+            set
+            {
+                _cardDealer = value;
+            }
+        }
 
         private Player _currentPlayer;
 
@@ -92,6 +104,8 @@ namespace Palace
         private Stack<Card> playPileStack;
 
         private LinkedList<Player> _players;
+
+        private ICardDealer _cardDealer;
     }
     
     public class Game
@@ -112,12 +126,11 @@ namespace Palace
         {
             this.Id = id;
             this._rulesProcessesor = rulesProcessesor;
-            this._cardDealer = cardDealer;
-            var playersLL = new LinkedList<Player>(players);
             this.State = new GameState
                              {
                                  GameOver = false, OrderOfPlay = OrderOfPlay.Forward, PlayPileStack = new Stack<Card>(cardsInPile),
-                                 Players = playersLL, CurrentPlayer= playersLL.First.Value
+                                 Players = new LinkedList<Player>(players), CurrentPlayer = players.First(),
+                                 CardDealer = cardDealer
                              };
         }
 
@@ -211,9 +224,9 @@ namespace Palace
             {
                 player.RemoveCardsFromInHand(cards);
 
-                while (player.CardsInHand.Count < 3 && this._cardDealer.CardsRemaining)
+                while (player.CardsInHand.Count < 3 && this.State.CardDealer.CardsRemaining)
                 {
-                    player.AddCardsToInHandPile(this._cardDealer.DealCards(1));
+                    player.AddCardsToInHandPile(this.State.CardDealer.DealCards(1));
                 }
             }
             if (playerCardTypes == PlayerCardTypes.FaceDown)
@@ -236,21 +249,11 @@ namespace Palace
             }
         }
 
-        internal ICardDealer CardDealer
-        {
-            get
-            {
-                return _cardDealer;
-            }
-            set
-            {
-                _cardDealer = value;
-            }
-        }
+        
 
         private RulesProcessesor _rulesProcessesor;
 
-        private ICardDealer _cardDealer;
+       
     }
 
     
