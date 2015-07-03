@@ -160,9 +160,10 @@ namespace Palace
 
         public void PlayerCannotPlayCards(Player player)
         {
+            var ruleChecker = _rulesProcessesor.GetRuleChecker(State, null);
             player.AddCardsToInHandPile(State.PlayPileStack);
             State.PlayPileStack.Clear();
-            _rulesProcessesor.SetNextPlayer(null, State);
+            State.CurrentPlayerLinkedListNode = ruleChecker.SetNextPlayer();
         }
 
         internal void Start(Player startingPlayer)
@@ -183,13 +184,15 @@ namespace Palace
         {
             if (this.State.GameOver) return new GameOverResult(State.CurrentPlayer);
             if (State.CurrentPlayer.Equals(player) == false) return new Result("It isn't your turn!");
-            
+
+            var ruleChecker = _rulesProcessesor.GetRuleChecker(State, cards);
+
             var cardToPlay = cards.First();
 
-            if (!this._rulesProcessesor.CardCanBePlayed(cardToPlay, State))
+            if (!ruleChecker.CardCanBePlayed())
                 return new Result("This card is invalid to play");
 
-            this._rulesProcessesor.SetOrderOfPlay(this.State, cardToPlay);
+             State.OrderOfPlay = ruleChecker.GetOrderOfPlay();
             
             this.RemoveCardsFromPlayer(player, cards, playerCardType);
 
@@ -202,9 +205,9 @@ namespace Palace
             foreach (Card card in cards)
                 State.PlayPileStack.Push(card);
 
-            this._rulesProcessesor.SetNextPlayer(cards, State);
+            State.CurrentPlayerLinkedListNode = ruleChecker.SetNextPlayer();
 
-            if (this._rulesProcessesor.PlayPileShouldBeCleared(State))
+            if (ruleChecker.PlayPileShouldBeCleared())
                 this.State.PlayPileStack.Clear();
             
             return new Result();
