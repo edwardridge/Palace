@@ -4,6 +4,8 @@ namespace Palace
     using System.Collections.Generic;
     using System.Linq;
 
+    using Raven.Imports.Newtonsoft.Json;
+
     internal enum PlayerCardTypes
     {
         InHand = 1,
@@ -29,6 +31,7 @@ namespace Palace
 
         }
 
+        [JsonIgnore]
         public IReadOnlyCollection<Card> PlayPile
         {
             get
@@ -65,27 +68,24 @@ namespace Palace
         {
             get
             {
-                return this._currentPlayer != null ? this._currentPlayer.Value : null;
-            }
-            internal set
-            {
-                this._currentPlayer = _players.Find(value);
-            }
-        }
-
-        internal LinkedListNode<Player> CurrentPlayerLinkedListNode
-        {
-            get
-            {
                 return this._currentPlayer;
             }
             set
             {
                 this._currentPlayer = value;
             }
+        }
+
+        [JsonIgnore]
+        internal LinkedListNode<Player> CurrentPlayerLinkedListNode
+        {
+            get
+            {
+                return _players.Find(_currentPlayer);
+            }
         } 
 
-        private LinkedListNode<Player> _currentPlayer;
+        private Player _currentPlayer;
 
         private OrderOfPlay _orderOfPlay;
 
@@ -112,17 +112,13 @@ namespace Palace
         {
             this.Id = id;
             this._rulesProcessesor = rulesProcessesor;
-            //this._players = new LinkedList<Player>(players);
-            //this._playPile = new Stack<Card>(cardsInPile);
             this._cardDealer = cardDealer;
-
+            var playersLL = new LinkedList<Player>(players);
             this.State = new GameState
                              {
                                  GameOver = false, OrderOfPlay = OrderOfPlay.Forward, PlayPileStack = new Stack<Card>(cardsInPile),
-                                Players = new LinkedList<Player>(players)
+                                 Players = playersLL, CurrentPlayer= playersLL.First.Value
                              };
-
-            State.CurrentPlayer = State.Players.First.Value;
         }
 
         public Result PlayInHandCards(Player player, ICollection<Card> cards)
@@ -163,12 +159,12 @@ namespace Palace
             var ruleChecker = _rulesProcessesor.GetRuleChecker(State, null);
             player.AddCardsToInHandPile(State.PlayPileStack);
             State.PlayPileStack.Clear();
-            State.CurrentPlayerLinkedListNode = ruleChecker.SetNextPlayer();
+            State.CurrentPlayer = ruleChecker.SetNextPlayer().Value;
         }
 
         internal void Start(Player startingPlayer)
         {
-            State.CurrentPlayerLinkedListNode = State.Players.Find(startingPlayer);
+            State.CurrentPlayer= State.Players.Find(startingPlayer).Value;
         }
 
         private void IfArgumentsAreInvalidThenThrow(Player player, ICollection<Card> cards, IEnumerable<Card> cardsToCheck)
@@ -187,25 +183,21 @@ namespace Palace
 
             var ruleChecker = _rulesProcessesor.GetRuleChecker(State, cards);
 
-            var cardToPlay = cards.First();
-
             if (!ruleChecker.CardCanBePlayed())
                 return new Result("This card is invalid to play");
-
-             State.OrderOfPlay = ruleChecker.GetOrderOfPlay();
-            
             this.RemoveCardsFromPlayer(player, cards, playerCardType);
-
+            
             if (player.CardsFaceDown.Count == 0 && player.CardsFaceUp.Count == 0 & player.CardsInHand.Count == 0)
             {
                 this.State.GameOver = true;
                 return new GameOverResult(player);
             }
-
+            
             foreach (Card card in cards)
                 State.PlayPileStack.Push(card);
 
-            State.CurrentPlayerLinkedListNode = ruleChecker.SetNextPlayer();
+            State.OrderOfPlay = ruleChecker.GetOrderOfPlay();
+            State.CurrentPlayer = ruleChecker.SetNextPlayer().Value;
 
             if (ruleChecker.PlayPileShouldBeCleared())
                 this.State.PlayPileStack.Clear();
