@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace Palace
 {
-	public abstract class Deck : ICardDealer
+	public abstract class Deck
 	{
-		protected ICollection<Card> cards;
+	    private ICollection<Card> cards;
 
 		protected Deck(IEnumerable<Card> cards)
 		{
@@ -14,13 +14,11 @@ namespace Palace
 
         public IEnumerable<Card> DealCards(int count)
 		{
-			var returnCards = new List<Card>() ;
-
-			for(int i = 0 ;(i < count) && (cards.Count > 0); i++){
-				var card = GetNextCard ();
-				returnCards.Add(card);
-				RemoveCard (card);
-			}
+			var returnCards = this.Cards.Take(count).ToList();
+            foreach (var card in returnCards)
+            {
+                this.cards.Remove(card);
+            }
 		
 			return returnCards;
 		}
@@ -29,32 +27,35 @@ namespace Palace
 	    {
 	        get
 	        {
-	            return cards.Any();
+	            return this.cards.Any();
+	        }
+	    }
+
+	    internal ICollection<Card> Cards
+	    {
+	        get
+	        {
+	            return cards;
+	        }
+	        set
+	        {
+	            cards = value;
 	        }
 	    }
 
 	    public int CardsOfSuite (Suit suit)
 		{
-			return cards.Count (card => card.Suit == suit);
+			return this.cards.Count (card => card.Suit == suit);
 		}
 
 		public int CardsOfType (CardValue type)
 		{
-			return cards.Count (card => card.Value == type);
+			return this.cards.Count (card => card.Value == type);
 		}
 			
 		public int CardCount ()
 		{
-			return cards.Count;
-		}
-
-		private Card GetNextCard()
-        {
-            return cards.First();
-		}
-
-		private void RemoveCard(Card card){
-			cards.Remove (card);
+			return this.cards.Count;
 		}
 	}
 

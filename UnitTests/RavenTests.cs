@@ -30,10 +30,10 @@ namespace UnitTests
       
     }
 
-    [TestFixture, Ignore]
+    [TestFixture]
     public class RavenTests
     {
-        [Test]
+        [Test, Ignore]
         public void Can_Save_Game()
         {
             var player1 = PlayerHelper.CreatePlayer("Ed");
@@ -51,8 +51,8 @@ namespace UnitTests
         [Test, Ignore]
         public void Can_Open_Game()
         {
-            var gameRepository = new GameRepository(new TestPalaceDocumentSession().GetDocumentSession());
-            var game = gameRepository.Open("e23c8755-a935-4cda-a2b7-4cd027446958");
+            var gameRepository = new GameRepository(new PalaceDocumentSession().GetDocumentSession());
+            var game = gameRepository.Open("6b200db4-594f-480a-b9ff-2b3a6eaafd5a");
             var currentPlayer = game.State.CurrentPlayer;
             game.PlayInHandCards(currentPlayer, currentPlayer.CardsInHand.First());
             game.State.Players.Count.Should().Be(2);
@@ -72,22 +72,8 @@ namespace UnitTests
             var gameRepository = new GameRepository(new TestPalaceDocumentSession().GetDocumentSession());
             gameRepository.Save(game);
 
-            var gameFromRepository = gameRepository.Open(game.Id.ToString());
-            gameFromRepository.Should().Be(game);
-        }
-
-        [Test]
-        public void Game_Over_State_Is_Saved()
-        {
-            var player1 = PlayerHelper.CreatePlayer(Card.AceOfClubs);
-            var dealer = new Dealer(new[] { player1 }, new PredeterminedDeck(new List<Card>()), new TestHelpers.DummyCanStartGame());
-            var game = dealer.StartGame();
-            var result = game.PlayInHandCards(player1, Card.AceOfClubs);
-            var gameRepository = new GameRepository(new TestPalaceDocumentSession().GetDocumentSession());
-            gameRepository.Save(game);
-
-            var gameFromRepository = gameRepository.Open(game.Id.ToString());
-            gameFromRepository.Should().Be(game);
+            var gameFromRepository = gameRepository.Open(game.State.GameId.ToString());
+            gameFromRepository.State.GameId.Should().Be(game.State.GameId);
         }
     }
 

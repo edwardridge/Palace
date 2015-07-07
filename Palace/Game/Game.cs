@@ -15,6 +15,10 @@ namespace Palace
 
     public class GameState
     {
+        public Guid GameId { get; set; }
+
+        public DateTime DateSaved { get; set; }
+
         internal bool GameOver { get; set; }
 
         internal OrderOfPlay OrderOfPlay
@@ -85,15 +89,15 @@ namespace Palace
             }
         }
 
-        internal ICardDealer CardDealer
+        internal Deck Deck
         {
             get
             {
-                return _cardDealer;
+                return this._deck;
             }
             set
             {
-                _cardDealer = value;
+                this._deck = value;
             }
         }
 
@@ -105,32 +109,31 @@ namespace Palace
 
         private LinkedList<Player> _players;
 
-        private ICardDealer _cardDealer;
+        private Deck _deck;
     }
     
     public class Game
     {
-        public Guid Id { get; internal set; }
+        //public Guid Id { get; internal set; }
 
         internal Game()
         {
             //Used for Rhino only
         }
 
-        internal Game(IEnumerable<Player> players, RulesProcessesor rulesProcessesor, ICardDealer cardDealer, Guid id)
-            : this(players, rulesProcessesor, cardDealer, new List<Card>(), id)
+        internal Game(IEnumerable<Player> players, RulesProcessesor rulesProcessesor, Deck deck, Guid id)
+            : this(players, rulesProcessesor, deck, new List<Card>(), id)
         {
         }
 
-        internal Game(IEnumerable<Player> players, RulesProcessesor rulesProcessesor, ICardDealer cardDealer, IEnumerable<Card> cardsInPile, Guid id)
+        internal Game(IEnumerable<Player> players, RulesProcessesor rulesProcessesor, Deck deck, IEnumerable<Card> cardsInPile, Guid id)
         {
-            this.Id = id;
             this._rulesProcessesor = rulesProcessesor;
             this.State = new GameState
                              {
-                                 GameOver = false, OrderOfPlay = OrderOfPlay.Forward, PlayPileStack = new Stack<Card>(cardsInPile),
+                                 GameId = id, GameOver = false, OrderOfPlay = OrderOfPlay.Forward, PlayPileStack = new Stack<Card>(cardsInPile),
                                  Players = new LinkedList<Player>(players), CurrentPlayer = players.First(),
-                                 CardDealer = cardDealer
+                                 Deck = deck
                              };
         }
 
@@ -224,9 +227,9 @@ namespace Palace
             {
                 player.RemoveCardsFromInHand(cards);
 
-                while (player.CardsInHand.Count < 3 && this.State.CardDealer.CardsRemaining)
+                while (player.CardsInHand.Count < 3 && this.State.Deck.CardsRemaining)
                 {
-                    player.AddCardsToInHandPile(this.State.CardDealer.DealCards(1));
+                    player.AddCardsToInHandPile(this.State.Deck.DealCards(1));
                 }
             }
             if (playerCardTypes == PlayerCardTypes.FaceDown)
@@ -253,7 +256,11 @@ namespace Palace
 
         private RulesProcessesor _rulesProcessesor;
 
-       
+        public Game(GameState gameState, RulesProcessesor rulesProcessesor)
+        {
+            this.State = gameState;
+            this.RulesProcessesor = rulesProcessesor;
+        }
     }
 
     

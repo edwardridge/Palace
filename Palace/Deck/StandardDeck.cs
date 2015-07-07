@@ -8,8 +8,8 @@
         public StandardDeck()
             : base(new Pack().Cards)
         {
-            var shuffledCards = Shuffle(new List<Card>(this.cards));
-            this.cards = new List<Card>(shuffledCards);
+            var shuffledCards = Shuffle(new List<Card>(this.Cards));
+            this.Cards = new List<Card>(shuffledCards);
         }
 
         private IList<Card> Shuffle(IList<Card> cardsToShuffle)

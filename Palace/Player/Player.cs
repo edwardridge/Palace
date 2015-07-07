@@ -39,7 +39,7 @@ namespace Palace
         {
             get
             {
-                return this._cardsInHand.AsReadOnly();
+                return this._cardsInHand == null ? new List<Card>().AsReadOnly() : this._cardsInHand.AsReadOnly();
             }
             internal set
             {

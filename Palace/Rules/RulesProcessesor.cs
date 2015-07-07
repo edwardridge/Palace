@@ -1,20 +1,48 @@
 ﻿namespace Palace
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     public class RulesProcessesor
     {
+        private Guid gameId;
+
         private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
 
-        public RulesProcessesor(Dictionary<CardValue, RuleForCard> rulesForCardsByValue)
+        public RulesProcessesor(Guid gameId, Dictionary<CardValue, RuleForCard> rulesForCardsByValue)
         {
-            this._rulesForCardsByValue = rulesForCardsByValue;
+            this.GameId = gameId;
+            this.RulesForCardsByValue = rulesForCardsByValue;
+        }
+
+        public Guid GameId
+        {
+            get
+            {
+                return this.gameId;
+            }
+            set
+            {
+                this.gameId = value;
+            }
+        }
+
+        internal Dictionary<CardValue, RuleForCard> RulesForCardsByValue
+        {
+            get
+            {
+                return this._rulesForCardsByValue;
+            }
+            set
+            {
+                this._rulesForCardsByValue = value;
+            }
         }
 
         internal RuleChecker GetRuleChecker(GameState state, IEnumerable<Card> cardsPlayed)
         {
-            return new RuleChecker(_rulesForCardsByValue, state, cardsPlayed);
+            return new RuleChecker(this.RulesForCardsByValue, state, cardsPlayed);
         }
     }
 
