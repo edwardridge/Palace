@@ -110,6 +110,21 @@ namespace Palace
         private LinkedList<Player> _players;
 
         private Deck _deck;
+
+        public static GameState SetUpInitialState(IEnumerable<Player> players, Deck deck, Guid id, Player startingPlayer = null, IEnumerable<Card> cardsInPile = null)
+        {
+            players = players.ToList();
+            return new GameState()
+            {
+                OrderOfPlay = OrderOfPlay.Forward,
+                CurrentPlayer = startingPlayer ?? players.First(),
+                Players = new LinkedList<Player>(players),
+                GameId = id,
+                GameOver = false,
+                PlayPileStack = new Stack<Card>(cardsInPile ?? new List<Card>()),
+                Deck = deck
+            };
+        }
     }
     
     public class Game
@@ -121,20 +136,10 @@ namespace Palace
             //Used for Rhino only
         }
 
-        internal Game(IEnumerable<Player> players, RulesProcessesor rulesProcessesor, Deck deck, Guid id)
-            : this(players, rulesProcessesor, deck, new List<Card>(), id)
+        public Game(GameState gameState, RulesProcessesor rulesProcessesor)
         {
-        }
-
-        internal Game(IEnumerable<Player> players, RulesProcessesor rulesProcessesor, Deck deck, IEnumerable<Card> cardsInPile, Guid id)
-        {
-            this._rulesProcessesor = rulesProcessesor;
-            this.State = new GameState
-                             {
-                                 GameId = id, GameOver = false, OrderOfPlay = OrderOfPlay.Forward, PlayPileStack = new Stack<Card>(cardsInPile),
-                                 Players = new LinkedList<Player>(players), CurrentPlayer = players.First(),
-                                 Deck = deck
-                             };
+            this.State = gameState;
+            this.RulesProcessesor = rulesProcessesor;
         }
 
         public Result PlayInHandCards(Player player, ICollection<Card> cards)
@@ -255,12 +260,6 @@ namespace Palace
         
 
         private RulesProcessesor _rulesProcessesor;
-
-        public Game(GameState gameState, RulesProcessesor rulesProcessesor)
-        {
-            this.State = gameState;
-            this.RulesProcessesor = rulesProcessesor;
-        }
     }
 
     

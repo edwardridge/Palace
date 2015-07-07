@@ -43,7 +43,10 @@
             if (!this._canStartGame.IsReady(_players))
                 throw new InvalidOperationException("The game is not ready to start");
             var id = Guid.NewGuid();
-            var game = new Game(_players, new RulesProcessesor(id, _rulesForCardsByValue), _deck, id);
+
+            var gameState = GameState.SetUpInitialState(_players, _deck, id);
+
+            var game = new Game(gameState, new RulesProcessesor(id, _rulesForCardsByValue));
             if (startingPlayer == null)
             {
                 startingPlayer = _players.First();
@@ -68,7 +71,10 @@
         public Game StartGameWithPlayPile(Player startingPlayer, IEnumerable<Card> cardsInPile)
         {
             var id = Guid.NewGuid();
-            var game = new Game(_players, new RulesProcessesor(id, _rulesForCardsByValue), _deck, cardsInPile, id);
+
+            var gameState = GameState.SetUpInitialState(_players, _deck, id, startingPlayer, cardsInPile);
+
+            var game = new Game(gameState, new RulesProcessesor(id, _rulesForCardsByValue));
             game.Start(startingPlayer);
             return game;
         }
