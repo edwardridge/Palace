@@ -55,11 +55,14 @@
 
         private readonly IEnumerable<Card> cardsPlayed;
 
+        private readonly IEnumerable<Card> playPile; 
+
         public RuleChecker(Dictionary<CardValue, RuleForCard> rulesForCardsByValue, GameState state, IEnumerable<Card> cardsPlayed)
         {
             this._rulesForCardsByValue = rulesForCardsByValue;
             this.state = state;
             this.cardsPlayed = cardsPlayed;
+            this.playPile = state.PlayPile;
         }
 
         internal bool CardCanBePlayed()
@@ -72,22 +75,22 @@
             return this.ShouldBurn(state.PlayPile);
         }
 
-        internal LinkedListNode<Player> SetNextPlayer()
+        internal Player SetNextPlayer()
         {
             if (cardsPlayed == null)
             {
                 this.GetNextPlayerFromOrderOfPlay(state.OrderOfPlay, state.CurrentPlayerLinkedListNode);
-                return state.CurrentPlayerLinkedListNode;
+                return state.CurrentPlayerLinkedListNode.Value;
             }
 
             if (ShouldBurn(state.PlayPileStack))
-                return state.CurrentPlayerLinkedListNode;
+                return state.CurrentPlayerLinkedListNode.Value;
 
             var ruleForPlayersCard = this.GetRuleForCardFromCardValue(cardsPlayed.First().Value);
             var nextPayer = this.GetNextPlayerFromOrderOfPlay(state.OrderOfPlay, state.CurrentPlayerLinkedListNode);
 
             if (ruleForPlayersCard != RuleForCard.SkipPlayer)
-                return nextPayer;
+                return nextPayer.Value;
 
             var skipCardValue = this._rulesForCardsByValue.First(w => w.Value == RuleForCard.SkipPlayer).Key;
             var topCardsInPlayPileWithSkipValue = cardsPlayed.GetTopCardsWithSameValue(skipCardValue);
@@ -95,7 +98,7 @@
             foreach (var card in topCardsInPlayPileWithSkipValue)
                 nextPayer = this.GetNextPlayerFromOrderOfPlay(state.OrderOfPlay, nextPayer);
 
-            return nextPayer;
+            return nextPayer.Value;
         }
 
         internal OrderOfPlay GetOrderOfPlay()

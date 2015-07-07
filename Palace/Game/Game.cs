@@ -129,7 +129,30 @@ namespace Palace
     
     public class Game
     {
-        //public Guid Id { get; internal set; }
+        protected bool Equals(Game other)
+        {
+            return Equals(this._rulesProcessesor, other._rulesProcessesor) && Equals(this.State, other.State);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((this._rulesProcessesor != null ? this._rulesProcessesor.GetHashCode() : 0) * 397) ^ (this.State != null ? this.State.GetHashCode() : 0);
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+                return false;
+            if (ReferenceEquals(this, obj))
+                return true;
+            if (obj.GetType() != this.GetType())
+                return false;
+            return Equals((Game)obj);
+        }
+
 
         internal Game()
         {
@@ -180,7 +203,7 @@ namespace Palace
             var ruleChecker = _rulesProcessesor.GetRuleChecker(State, null);
             player.AddCardsToInHandPile(State.PlayPileStack);
             State.PlayPileStack.Clear();
-            State.CurrentPlayer = ruleChecker.SetNextPlayer().Value;
+            State.CurrentPlayer = ruleChecker.SetNextPlayer();
         }
 
         internal void Start(Player startingPlayer)
@@ -206,23 +229,27 @@ namespace Palace
 
             if (!ruleChecker.CardCanBePlayed())
                 return new Result("This card is invalid to play");
-            this.RemoveCardsFromPlayer(player, cards, playerCardType);
-            
-            if (player.CardsFaceDown.Count == 0 && player.CardsFaceUp.Count == 0 & player.CardsInHand.Count == 0)
-            {
-                this.State.GameOver = true;
-                return new GameOverResult(player);
-            }
-            
+
+            this.RemoveCardsFromPlayer(State.CurrentPlayer, cards, playerCardType);
+
             foreach (Card card in cards)
                 State.PlayPileStack.Push(card);
 
             State.OrderOfPlay = ruleChecker.GetOrderOfPlay();
-            State.CurrentPlayer = ruleChecker.SetNextPlayer().Value;
 
-            if (ruleChecker.PlayPileShouldBeCleared())
-                this.State.PlayPileStack.Clear();
-            
+            if (!State.CurrentPlayer.HasNoMoreCards())
+            {
+                State.CurrentPlayer = ruleChecker.SetNextPlayer();
+
+                if (ruleChecker.PlayPileShouldBeCleared())
+                    this.State.PlayPileStack.Clear();
+                
+            }
+            else
+            {
+                this.State.GameOver = true;
+                return new GameOverResult(State.CurrentPlayer);
+            }
             return new Result();
         }
 
@@ -243,7 +270,17 @@ namespace Palace
                 player.RemoveCardsFromFaceUp(cards);
         }
 
-        public GameState State { get; internal set; }
+        public GameState State
+        {
+            get
+            {
+                return this._state;
+            }
+            private set
+            {
+                this._state = value;
+            }
+        }
 
         internal RulesProcessesor RulesProcessesor
         {
@@ -251,15 +288,14 @@ namespace Palace
             {
                 return _rulesProcessesor;
             }
-            set
+            private set
             {
                 _rulesProcessesor = value;
             }
         }
-
-        
-
         private RulesProcessesor _rulesProcessesor;
+
+        private GameState _state;
     }
 
     

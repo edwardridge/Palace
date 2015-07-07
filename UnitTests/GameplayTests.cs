@@ -39,5 +39,4 @@
             game.State.CurrentPlayer.Should().Be(player2);
         }
     }
-
 }

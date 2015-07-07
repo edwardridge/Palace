@@ -157,6 +157,11 @@ namespace Palace
             //return ResultOutcome.Success;
         }
 
+        internal bool HasNoMoreCards()
+        {
+            return this.CardsFaceDown.Count == 0 && this.CardsFaceUp.Count == 0 && this.CardsInHand.Count == 0;
+        }
+
         private void MoveCardToNewPile(Card cardToMove, ICollection<Card> pileToAddTo, ICollection<Card> pileToRemoveFrom)
         {
             var cardIsInPileToRemoveFrom = pileToRemoveFrom.Any(card => card.Equals(cardToMove));

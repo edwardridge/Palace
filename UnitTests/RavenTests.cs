@@ -73,7 +73,7 @@ namespace UnitTests
             gameRepository.Save(game);
 
             var gameFromRepository = gameRepository.Open(game.State.GameId.ToString());
-            gameFromRepository.State.GameId.Should().Be(game.State.GameId);
+            gameFromRepository.Should().Be(game);
         }
     }
 
