@@ -6,7 +6,7 @@ namespace Palace
 
     using Raven.Imports.Newtonsoft.Json;
 
-    internal enum PlayerCardTypes
+    public enum PlayerCardType
     {
         InHand = 1,
         FaceUp = 2,
@@ -131,14 +131,14 @@ namespace Palace
     {
         protected bool Equals(Game other)
         {
-            return Equals(this._rulesProcessesor, other._rulesProcessesor) && Equals(this.State, other.State);
+            return Equals(this.rulesProcessorGenerator, other.rulesProcessorGenerator) && Equals(this._state, other._state);
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                return ((this._rulesProcessesor != null ? this._rulesProcessesor.GetHashCode() : 0) * 397) ^ (this.State != null ? this.State.GetHashCode() : 0);
+                return ((this.rulesProcessorGenerator != null ? this.rulesProcessorGenerator.GetHashCode() : 0) * 397) ^ (this.State != null ? this.State.GetHashCode() : 0);
             }
         }
 
@@ -159,17 +159,17 @@ namespace Palace
             //Used for Rhino only
         }
 
-        public Game(GameState gameState, RulesProcessesor rulesProcessesor)
+        public Game(GameState gameState, RulesProcessorGenerator rulesProcessorGenerator)
         {
-            this.State = gameState;
-            this.RulesProcessesor = rulesProcessesor;
+            this._state = gameState;
+            this.RulesProcessorGenerator = rulesProcessorGenerator;
         }
 
         public Result PlayInHandCards(Player player, ICollection<Card> cards)
         {
             IfArgumentsAreInvalidThenThrow(player, cards, player.CardsInHand);
 
-            return PlayCardAndChooseNextPlayer(player, cards, PlayerCardTypes.InHand);
+            return PlayCardAndChooseNextPlayer(player, cards, PlayerCardType.InHand);
         }
 
         public Result PlayInHandCards(Player player, Card card)
@@ -187,7 +187,7 @@ namespace Palace
             IfArgumentsAreInvalidThenThrow(player, cards, player.CardsFaceUp);
 
             if (player.CardsInHand.Count >= 3) return new Result("Cannot play face up card when you have cards in hand");
-            return PlayCardAndChooseNextPlayer(player, cards, PlayerCardTypes.FaceUp);
+            return PlayCardAndChooseNextPlayer(player, cards, PlayerCardType.FaceUp);
         }
 
         public Result PlayFaceDownCards(Player player, Card card)
@@ -195,20 +195,18 @@ namespace Palace
             if (player.CardsInHand.Count != 0) return new Result("Cannot play face down card when you have cards in hand");
             if (player.CardsFaceUp.Count != 0) return new Result("Cannot play face down card when you have face up cards");
             IfArgumentsAreInvalidThenThrow(player, new[]{card}, player.CardsFaceDown);
-            return PlayCardAndChooseNextPlayer(player, new[] { card }, PlayerCardTypes.FaceDown);
+            return PlayCardAndChooseNextPlayer(player, new[] { card }, PlayerCardType.FaceDown);
         }
 
         public void PlayerCannotPlayCards(Player player)
         {
-            var ruleChecker = _rulesProcessesor.GetRuleChecker(State, null);
-            player.AddCardsToInHandPile(State.PlayPileStack);
-            State.PlayPileStack.Clear();
-            State.CurrentPlayer = ruleChecker.SetNextPlayer();
+            var ruleProcessor = this.rulesProcessorGenerator.GetRuleProcessor(_state, null);
+            this._state = ruleProcessor.GetNextStateWhenCardCannotBePlayed(player);
         }
 
         internal void Start(Player startingPlayer)
         {
-            State.CurrentPlayer= State.Players.Find(startingPlayer).Value;
+            _state.CurrentPlayer = _state.Players.Find(startingPlayer).Value;
         }
 
         private void IfArgumentsAreInvalidThenThrow(Player player, ICollection<Card> cards, IEnumerable<Card> cardsToCheck)
@@ -220,54 +218,20 @@ namespace Palace
                 throw new ArgumentException("You cannot play more than one type of card");
         }
 
-        private Result PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardType)
+        private Result PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardType playerCardType)
         {
-            if (this.State.GameOver) return new GameOverResult(State.CurrentPlayer);
-            if (State.CurrentPlayer.Equals(player) == false) return new Result("It isn't your turn!");
+            if (this._state.GameOver) return new GameOverResult(_state.CurrentPlayer);
+            if (_state.CurrentPlayer.Equals(player) == false) return new Result("It isn't your turn!");
 
-            var ruleChecker = _rulesProcessesor.GetRuleChecker(State, cards);
+            var ruleProcessor = this.rulesProcessorGenerator.GetRuleProcessor(_state, cards);
 
-            if (!ruleChecker.CardCanBePlayed())
+            if (!ruleProcessor.CardCanBePlayed())
                 return new Result("This card is invalid to play");
 
-            this.RemoveCardsFromPlayer(State.CurrentPlayer, cards, playerCardType);
-
-            foreach (Card card in cards)
-                State.PlayPileStack.Push(card);
-
-            State.OrderOfPlay = ruleChecker.GetOrderOfPlay();
-
-            if (!State.CurrentPlayer.HasNoMoreCards())
-            {
-                State.CurrentPlayer = ruleChecker.SetNextPlayer();
-
-                if (ruleChecker.PlayPileShouldBeCleared())
-                    this.State.PlayPileStack.Clear();
-                
-            }
-            else
-            {
-                this.State.GameOver = true;
-                return new GameOverResult(State.CurrentPlayer);
-            }
+            this._state = ruleProcessor.GetNextState(playerCardType);
+            if (this._state.GameOver)
+                return new GameOverResult(_state.CurrentPlayer);
             return new Result();
-        }
-
-        private void RemoveCardsFromPlayer(Player player, ICollection<Card> cards, PlayerCardTypes playerCardTypes)
-        {
-            if (playerCardTypes == PlayerCardTypes.InHand)
-            {
-                player.RemoveCardsFromInHand(cards);
-
-                while (player.CardsInHand.Count < 3 && this.State.Deck.CardsRemaining)
-                {
-                    player.AddCardsToInHandPile(this.State.Deck.DealCards(1));
-                }
-            }
-            if (playerCardTypes == PlayerCardTypes.FaceDown)
-                player.RemoveCardsFromFaceDown(cards);
-            if (playerCardTypes == PlayerCardTypes.FaceUp)
-                player.RemoveCardsFromFaceUp(cards);
         }
 
         public GameState State
@@ -282,18 +246,18 @@ namespace Palace
             }
         }
 
-        internal RulesProcessesor RulesProcessesor
+        internal RulesProcessorGenerator RulesProcessorGenerator
         {
             get
             {
-                return _rulesProcessesor;
+                return this.rulesProcessorGenerator;
             }
             private set
             {
-                _rulesProcessesor = value;
+                this.rulesProcessorGenerator = value;
             }
         }
-        private RulesProcessesor _rulesProcessesor;
+        private RulesProcessorGenerator rulesProcessorGenerator;
 
         private GameState _state;
     }

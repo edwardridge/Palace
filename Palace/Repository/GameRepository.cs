@@ -19,7 +19,7 @@ namespace Palace.Repository
         {
             game.State.DateSaved = DateTime.Now;
             documentSession.Store(game.State);
-            documentSession.Store(game.RulesProcessesor);
+            documentSession.Store(game.RulesProcessorGenerator);
             documentSession.SaveChanges();
         }
 
@@ -29,7 +29,7 @@ namespace Palace.Repository
             var gameStateList = documentSession.Query<GameState>().ToList();
             var gameState = documentSession.Query<GameState>().Where(state => state.GameId == gameId).OrderByDescending(o => o.DateSaved).First();
 
-            var rules = documentSession.Query<RulesProcessesor>().First(rp => rp.GameId == gameId);
+            var rules = documentSession.Query<RulesProcessorGenerator>().First(rp => rp.GameId == gameId);
 
             return new Game(gameState, rules);
         }

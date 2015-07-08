@@ -46,7 +46,7 @@
 
             var gameState = GameState.SetUpInitialState(_players, _deck, id);
 
-            var game = new Game(gameState, new RulesProcessesor(id, _rulesForCardsByValue));
+            var game = new Game(gameState, new RulesProcessorGenerator(id, _rulesForCardsByValue));
             if (startingPlayer == null)
             {
                 startingPlayer = _players.First();
@@ -74,7 +74,7 @@
 
             var gameState = GameState.SetUpInitialState(_players, _deck, id, startingPlayer, cardsInPile);
 
-            var game = new Game(gameState, new RulesProcessesor(id, _rulesForCardsByValue));
+            var game = new Game(gameState, new RulesProcessorGenerator(id, _rulesForCardsByValue));
             game.Start(startingPlayer);
             return game;
         }

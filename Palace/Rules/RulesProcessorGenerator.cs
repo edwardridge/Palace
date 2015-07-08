@@ -4,14 +4,17 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class RulesProcessesor
+    public class RulesProcessorGenerator
     {
+        private readonly PlayerCardType playerCardType;
+
         private Guid gameId;
 
         private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
 
-        public RulesProcessesor(Guid gameId, Dictionary<CardValue, RuleForCard> rulesForCardsByValue)
+        public RulesProcessorGenerator(Guid gameId, Dictionary<CardValue, RuleForCard> rulesForCardsByValue)
         {
+            this.playerCardType = this.playerCardType;
             this.GameId = gameId;
             this.RulesForCardsByValue = rulesForCardsByValue;
         }
@@ -40,14 +43,14 @@
             }
         }
 
-        internal RuleChecker GetRuleChecker(GameState state, IEnumerable<Card> cardsPlayed)
+        internal RuleProcessor GetRuleProcessor(GameState state, IEnumerable<Card> cardsPlayed)
         {
-            return new RuleChecker(this.RulesForCardsByValue, state, cardsPlayed);
+            return new RuleProcessor(this.RulesForCardsByValue, state, cardsPlayed);
         }
     }
 
     //Todo: Rename!
-    internal class RuleChecker
+    internal class RuleProcessor
     {
         private readonly Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
 
@@ -55,14 +58,42 @@
 
         private readonly IEnumerable<Card> cardsPlayed;
 
-        private readonly IEnumerable<Card> playPile; 
-
-        public RuleChecker(Dictionary<CardValue, RuleForCard> rulesForCardsByValue, GameState state, IEnumerable<Card> cardsPlayed)
+        public RuleProcessor(Dictionary<CardValue, RuleForCard> rulesForCardsByValue, GameState state, IEnumerable<Card> cardsPlayed)
         {
             this._rulesForCardsByValue = rulesForCardsByValue;
             this.state = state;
             this.cardsPlayed = cardsPlayed;
-            this.playPile = state.PlayPile;
+        }
+
+        internal GameState GetNextState(PlayerCardType playerCardType)
+        {
+
+            this.RemoveCardsFromPlayer(state.CurrentPlayer, this.cardsPlayed.ToList(), playerCardType);
+
+            foreach (Card card in this.cardsPlayed)
+                state.PlayPileStack.Push(card);
+
+            state.OrderOfPlay = this.GetOrderOfPlay();
+
+            if (!state.CurrentPlayer.HasNoMoreCards())
+            {
+                state.CurrentPlayer = this.SetNextPlayer();
+
+                if (this.PlayPileShouldBeCleared())
+                    state.PlayPileStack.Clear();
+            }
+            else
+                state.GameOver = true;
+                
+            return state;
+        }
+
+        internal GameState GetNextStateWhenCardCannotBePlayed(Player player)
+        {
+            player.AddCardsToInHandPile(state.PlayPileStack);
+            state.PlayPileStack.Clear();
+            state.CurrentPlayer = this.SetNextPlayer();
+            return state;
         }
 
         internal bool CardCanBePlayed()
@@ -70,12 +101,7 @@
             return this.CheckCardCanBePlayed(cardsPlayed.First(), state.PlayPile);
         }
 
-        internal bool PlayPileShouldBeCleared()
-        {
-            return this.ShouldBurn(state.PlayPile);
-        }
-
-        internal Player SetNextPlayer()
+        private Player SetNextPlayer()
         {
             if (cardsPlayed == null)
             {
@@ -101,7 +127,29 @@
             return nextPayer.Value;
         }
 
-        internal OrderOfPlay GetOrderOfPlay()
+        private void RemoveCardsFromPlayer(Player player, ICollection<Card> cards, PlayerCardType playerCardType)
+        {
+            if (playerCardType == PlayerCardType.InHand)
+            {
+                player.RemoveCardsFromInHand(cards);
+
+                while (player.CardsInHand.Count < 3 && state.Deck.CardsRemaining)
+                {
+                    player.AddCardsToInHandPile(state.Deck.DealCards(1));
+                }
+            }
+            if (playerCardType == PlayerCardType.FaceDown)
+                player.RemoveCardsFromFaceDown(cards);
+            if (playerCardType == PlayerCardType.FaceUp)
+                player.RemoveCardsFromFaceUp(cards);
+        }
+        
+        private bool PlayPileShouldBeCleared()
+        {
+            return this.ShouldBurn(state.PlayPile);
+        }
+
+        private OrderOfPlay GetOrderOfPlay()
         {
             var cardToPlay = cardsPlayed.First();
             var rulesForPlayersCard = this.GetRuleForCardFromCardValue(cardToPlay.Value);
