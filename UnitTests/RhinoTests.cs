@@ -33,7 +33,7 @@ namespace UnitTests
     }
 
     [TestFixture]
-    public class RavenTests
+    public class RhinoTests
     {
         [Test, Ignore]
         public void Can_Save_Game()

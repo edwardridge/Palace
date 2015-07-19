@@ -105,7 +105,7 @@
     <Compile Include="GameInitialiseTests.cs" />
     <Compile Include="GameplayTests.cs" />
     <Compile Include="DeckTests.cs" />
-    <Compile Include="RavenTests.cs" />
+    <Compile Include="RhinoTests.cs" />
     <Compile Include="RulesTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
