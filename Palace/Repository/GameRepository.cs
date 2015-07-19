@@ -8,30 +8,34 @@ namespace Palace.Repository
 
     public class GameRepository
     {
-        private IDocumentSession documentSession;
+        private PalaceDocumentSession palaceSession;
 
-        public GameRepository(IDocumentSession documentSession)
+        public GameRepository(PalaceDocumentSession palaceSession)
         {
-            this.documentSession = documentSession;
+            this.palaceSession = palaceSession;
         }
 
         public void Save(Game game)
         {
             game.State.DateSaved = DateTime.Now;
-            documentSession.Store(game.State);
-            documentSession.Store(game.RulesProcessorGenerator);
-            documentSession.SaveChanges();
+            using(var documentSession = palaceSession.GetDocumentSession())
+            {
+                documentSession.Store(game.State);
+                documentSession.Store(game.RulesProcessorGenerator);
+                documentSession.SaveChanges();
+            }
         }
 
         public Game Open(string p)
         {
             var gameId = Guid.Parse(p);
-            var gameStateList = documentSession.Query<GameState>().ToList();
-            var gameState = documentSession.Query<GameState>().Where(state => state.GameId == gameId).OrderByDescending(o => o.DateSaved).First();
+            using (var documentSession = palaceSession.GetDocumentSession())
+            {
+                var gameState = documentSession.Query<GameState>().Where(state => state.GameId == gameId).OrderByDescending(o => o.DateSaved).First();
 
-            var rules = documentSession.Query<RulesProcessorGenerator>().First(rp => rp.GameId == gameId);
-
-            return new Game(gameState, rules);
+                var rules = documentSession.Query<RulesProcessorGenerator>().First(rp => rp.GameId == gameId);
+                return new Game(gameState, rules);
+            }
         }
     }
 }

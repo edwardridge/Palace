@@ -31,8 +31,6 @@ namespace Palace
             {
                 _orderOfPlay = value;
             }
-
-
         }
 
         [JsonIgnore]

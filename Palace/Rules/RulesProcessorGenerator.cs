@@ -6,7 +6,6 @@
 
     public class RulesProcessorGenerator
     {
-        private readonly PlayerCardType playerCardType;
 
         private Guid gameId;
 
@@ -14,7 +13,6 @@
 
         public RulesProcessorGenerator(Guid gameId, Dictionary<CardValue, RuleForCard> rulesForCardsByValue)
         {
-            this.playerCardType = this.playerCardType;
             this.GameId = gameId;
             this.RulesForCardsByValue = rulesForCardsByValue;
         }

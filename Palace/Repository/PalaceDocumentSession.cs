@@ -13,13 +13,17 @@ namespace Palace.Repository
 
     public class PalaceDocumentSession
     {
-        public IDocumentSession GetDocumentSession()
+        DocumentStore documentStore;
+        public PalaceDocumentSession()
         {
-            var documentStore = new DocumentStore()
+            documentStore = new DocumentStore()
             {
                 Url = "http://localhost:8080"
             };
             documentStore.Initialize();
+        }
+        public virtual IDocumentSession GetDocumentSession()
+        {
             return documentStore.OpenSession("Palace");
         }
     }
