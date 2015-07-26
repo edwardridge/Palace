@@ -29,6 +29,8 @@
     public class SetupGame
     {
         private Dealer dealer;
+
+        private GameInitialisation gameInitialisation;
         
         private Game game;
 
@@ -43,8 +45,10 @@
             player2 = PlayerHelper.CreatePlayer();
             var deck = new StandardDeck();
             dealer = new Dealer(new []{player1, player2}, deck, new DummyCanStartGame());
-            dealer.DealIntialCards();
-            game = dealer.StartGame();
+            gameInitialisation = dealer.CreateGameInitialisation();
+            gameInitialisation.DealInitialCards();
+            
+            game = gameInitialisation.StartGame();
         }
 
         [Test]
@@ -84,9 +88,9 @@
             var player2 = PlayerHelper.CreatePlayer();
             
             var dealer = new Dealer(new[] { player1, player2 }, new StandardDeck(), new DefaultStartGameRules());
-
-            dealer.PlayerReady(player2);
-            Action outcome = () => dealer.StartGame();
+            var gameInit = dealer.CreateGameInitialisation();
+            gameInit.PlayerReady(player2);
+            Action outcome = () => gameInit.StartGame();
 
             outcome.ShouldThrow<InvalidOperationException>();
         }
@@ -96,8 +100,8 @@
         {
             var player1 = PlayerHelper.CreatePlayer();
             var player2 = PlayerHelper.CreatePlayer();
-
-            Action outcome = () => DealerHelper.TestDealer(new[]{player1, player2} ).StartGame();
+            var gameInit = DealerHelper.TestDealer(new[] { player1, player2 }).CreateGameInitialisation();
+            Action outcome = () => gameInit.StartGame();
 
             outcome.ShouldNotThrow();
         }
@@ -122,7 +126,7 @@
         {
             var player = PlayerHelper.CreatePlayer();
             var dealer = new Dealer(new[] { player }, new StandardDeck(), new DefaultStartGameRules());
-            Action outcome = () => dealer.StartGame();
+            Action outcome = () => dealer.CreateGameInitialisation().StartGame();
 
             outcome.ShouldThrow<InvalidOperationException>();
         }
@@ -132,10 +136,11 @@
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs });
             var dealerForThisTest = new Dealer(new[] { player }, new StandardDeck(), new DefaultStartGameRules());
-            dealerForThisTest.PutCardFaceUp(player, Card.AceOfClubs);
-            dealerForThisTest.PutCardFaceUp(player, Card.EightOfClubs);
+            var gameInit = dealerForThisTest.CreateGameInitialisation();
+            gameInit.PutCardFaceUp(player, Card.AceOfClubs);
+            gameInit.PutCardFaceUp(player, Card.EightOfClubs);
 
-            Action outcome = () => dealerForThisTest.StartGame();
+            Action outcome = () => gameInit.StartGame();
 
             outcome.ShouldThrow<InvalidOperationException>();
         }
@@ -145,11 +150,12 @@
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs });
             var dealerForThisTest = new Dealer(new[] { player }, new StandardDeck(), new DefaultStartGameRules());
-            dealerForThisTest.PutCardFaceUp(player, Card.AceOfClubs);
-            dealerForThisTest.PutCardFaceUp(player, Card.EightOfClubs);
-            dealerForThisTest.PutCardFaceUp(player, Card.FiveOfClubs);
+            var gameInit = dealerForThisTest.CreateGameInitialisation();
+            gameInit.PutCardFaceUp(player, Card.AceOfClubs);
+            gameInit.PutCardFaceUp(player, Card.EightOfClubs);
+            gameInit.PutCardFaceUp(player, Card.FiveOfClubs);
 
-            Action outcome = () => dealerForThisTest.StartGame();
+            Action outcome = () => gameInit.StartGame();
 
             outcome.ShouldNotThrow();
         }
@@ -159,11 +165,12 @@
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs,Card.JackOfClubs });
             var dealer = DealerHelper.TestDealer(new[] { player });
-            dealer.PutCardFaceUp(player, Card.AceOfClubs);
-            dealer.PutCardFaceUp(player, Card.EightOfClubs);
-            dealer.PutCardFaceUp(player, Card.FiveOfClubs);
+            var gameInit = dealer.CreateGameInitialisation();
+            gameInit.PutCardFaceUp(player, Card.AceOfClubs);
+            gameInit.PutCardFaceUp(player, Card.EightOfClubs);
+            gameInit.PutCardFaceUp(player, Card.FiveOfClubs);
 
-            var outcome = dealer.PutCardFaceUp(player, Card.JackOfClubs).ResultOutcome;
+            var outcome = gameInit.PutCardFaceUp(player, Card.JackOfClubs).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Fail);
         }
@@ -173,7 +180,8 @@
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs });
             var dealer = DealerHelper.TestDealer(new[] { player });
-            Action outcome = () => dealer.PutCardFaceUp(player, Card.EightOfClubs);
+            var gameInit = dealer.CreateGameInitialisation();
+            Action outcome = () => gameInit.PutCardFaceUp(player, Card.EightOfClubs);
 
             outcome.ShouldThrow<ArgumentException>();
         }
@@ -183,9 +191,10 @@
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs });
             var dealer = DealerHelper.TestDealer(new[] { player });
-            
-            dealer.PutCardFaceUp(player, Card.AceOfClubs);
-            dealer.PutCardFaceUp(player, Card.EightOfClubs, Card.AceOfClubs);
+            var gameInit = dealer.CreateGameInitialisation();
+
+            gameInit.PutCardFaceUp(player, Card.AceOfClubs);
+            gameInit.PutCardFaceUp(player, Card.EightOfClubs, Card.AceOfClubs);
 
             player.CardsFaceUp.Should().Contain(Card.EightOfClubs);
             player.CardsFaceUp.Should().NotContain(Card.AceOfClubs);
@@ -196,8 +205,9 @@
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs });
             var dealer = DealerHelper.TestDealer(new[] { player });
-            dealer.PutCardFaceUp(player, Card.AceOfClubs);
-            dealer.PutCardFaceUp(player, Card.EightOfClubs, Card.AceOfClubs);
+            var gameInit = dealer.CreateGameInitialisation();
+            gameInit.PutCardFaceUp(player, Card.AceOfClubs);
+            gameInit.PutCardFaceUp(player, Card.EightOfClubs, Card.AceOfClubs);
 
             player.CardsInHand.Should().Contain(Card.AceOfClubs);
         }
@@ -207,7 +217,8 @@
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs });
             var dealer = DealerHelper.TestDealer(new[] { player });
-            Action action = () => dealer.PutCardFaceUp(player, Card.AceOfClubs, Card.SevenOfClubs);
+            var gameInit = dealer.CreateGameInitialisation();
+            Action action = () => gameInit.PutCardFaceUp(player, Card.AceOfClubs, Card.SevenOfClubs);
 
             action.ShouldThrow<ArgumentException>();
         }
@@ -217,11 +228,12 @@
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs, Card.FourOfClubs });
             var dealer = DealerHelper.TestDealer(new[] { player });
-            dealer.PutCardFaceUp(player, Card.AceOfClubs);
-            dealer.PutCardFaceUp(player, Card.EightOfClubs);
-            dealer.PutCardFaceUp(player, Card.FiveOfClubs);
+            var gameInit = dealer.CreateGameInitialisation();
+            gameInit.PutCardFaceUp(player, Card.AceOfClubs);
+            gameInit.PutCardFaceUp(player, Card.EightOfClubs);
+            gameInit.PutCardFaceUp(player, Card.FiveOfClubs);
 
-            var result = dealer.PutCardFaceUp(player, Card.FourOfClubs, Card.AceOfClubs).ResultOutcome;
+            var result = gameInit.PutCardFaceUp(player, Card.FourOfClubs, Card.AceOfClubs).ResultOutcome;
 
             result.Should().Be(ResultOutcome.Success);
         }
@@ -231,9 +243,10 @@
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.EightOfClubs });
             var dealer = DealerHelper.TestDealer(new[] { player });
-            dealer.PlayerReady(player);
+            var gameInit = dealer.CreateGameInitialisation();
+            gameInit.PlayerReady(player);
 
-            var result = dealer.PutCardFaceUp(player, Card.EightOfClubs).ResultOutcome;
+            var result = gameInit.PutCardFaceUp(player, Card.EightOfClubs).ResultOutcome;
 
             result.Should().Be(ResultOutcome.Fail);
         }
@@ -243,7 +256,8 @@
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.AceOfClubs });
             var dealer = DealerHelper.TestDealer(new[] { player });
-            dealer.PutCardFaceUp(player, Card.AceOfClubs);
+            var gameInit = dealer.CreateGameInitialisation();
+            gameInit.PutCardFaceUp(player, Card.AceOfClubs);
 
             player.CardsFaceUp.Count.Should().Be(1);
             player.CardsInHand.Count.Should().Be(1);
@@ -279,7 +293,7 @@
             var player1 = PlayerHelper.CreatePlayer(Card.TwoOfClubs);
             var player2 = PlayerHelper.CreatePlayer(Card.ThreeOfClubs);
             var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
-            game = dealer.StartGame();
+            game = dealer.CreateGameInitialisation().StartGame();
 
             game.State.CurrentPlayer.Should().Be(player1);
         }
@@ -291,7 +305,7 @@
             var player2 = PlayerHelper.CreatePlayer(Card.TwoOfClubs);
             var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
 
-            game = dealer.StartGame();
+            game = dealer.CreateGameInitialisation().StartGame();
 
             game.State.CurrentPlayer.Should().Be(player2);
         }
@@ -304,7 +318,7 @@
             var player3 = PlayerHelper.CreatePlayer(Card.TwoOfClubs);
             var dealer = DealerHelper.TestDealer(new[] { player1, player2, player3 });
 
-            game = dealer.StartGame();
+            game = dealer.CreateGameInitialisation().StartGame();
 
             game.State.CurrentPlayer.Should().Be(player3);
         }

@@ -18,7 +18,8 @@
             var rules = InitialiseRules();
             var players = InitialisePlayers();
             var dealer = new Dealer(players, new StandardDeck(), new DefaultStartGameRules(), rules);
-            dealer.DealIntialCards();
+            var gameInit = dealer.CreateGameInitialisation();
+            gameInit.DealInitialCards();
 
             var output = "Press \"e\" to exit at any point\n";
             foreach (var player in players)
@@ -38,7 +39,7 @@
             }
 
 
-            game = dealer.StartGame();
+            game = dealer.CreateGameInitialisation().StartGame();
             currentPlayer = game.State.CurrentPlayer;
 
             Console.WriteLine("It's " + currentPlayer.Name + " turn");

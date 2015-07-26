@@ -44,8 +44,9 @@ namespace UnitTests
             var rulesForCardByValue = new Dictionary<CardValue, RuleForCard>();
             rulesForCardByValue.Add(CardValue.Ten, RuleForCard.Burn);
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, rulesForCardByValue);
-            dealer.DealIntialCards();
-            var game = dealer.StartGame();
+            var gameInit = dealer.CreateGameInitialisation();
+            gameInit.DealInitialCards();
+            var game = gameInit.StartGame();
             var gameRepository = new GameRepository(new PalaceDocumentSession());
             gameRepository.Save(game);
         }
@@ -69,8 +70,9 @@ namespace UnitTests
             var rulesForCardByValue = new Dictionary<CardValue, RuleForCard>();
             rulesForCardByValue.Add(CardValue.Ten, RuleForCard.Burn);
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, rulesForCardByValue);
-            dealer.DealIntialCards();
-            var game = dealer.StartGame();
+            var gameInit = dealer.CreateGameInitialisation();
+            gameInit.DealInitialCards();
+            var game = gameInit.StartGame();
             var gameRepository = new GameRepository(new PalaceDocumentSession());
             gameRepository.Save(game);
 

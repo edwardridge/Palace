@@ -33,7 +33,8 @@ namespace UnitTests
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var cardInPile = new Stack<Card>();
             cardInPile.Push(Card.TwoOfClubs);
-            var game = dealer.StartGameWithPlayPile(player1, cardInPile);
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, cardInPile);
             var outcome = game.PlayInHandCards(player1, cardToPlay).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
@@ -46,7 +47,8 @@ namespace UnitTests
             var player1 = PlayerHelper.CreatePlayer(cardToPlay);
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var cardInPile = Card.FiveOfClubs;
-            var game = dealer.StartGameWithPlayPile(player1, new[] { cardInPile });
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, new[] { cardInPile });
             var outcome = game.PlayInHandCards(player1, cardToPlay).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Fail);
@@ -59,7 +61,8 @@ namespace UnitTests
             var player1 = PlayerHelper.CreatePlayer(cardToPlay);
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var cardInPile = new List<Card>(new[] { Card.FourOfClubs });
-            var game = dealer.StartGameWithPlayPile(player1, cardInPile);
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, cardInPile);
             var outcome = game.PlayInHandCards(player1, cardToPlay).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
@@ -88,7 +91,8 @@ namespace UnitTests
             var player1 = PlayerHelper.CreatePlayer(cardToPlay);
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, cardTypes);
             var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
-            var game = dealer.StartGameWithPlayPile(player1, cardInPile);
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, cardInPile);
             var outcome = game.PlayInHandCards(player1, cardToPlay).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Fail);
@@ -101,7 +105,8 @@ namespace UnitTests
             var player1 = PlayerHelper.CreatePlayer(cardToPlay);
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, cardTypes);
             var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
-            var game = dealer.StartGameWithPlayPile(player1, cardInPile);
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, cardInPile);
             var outcome = game.PlayInHandCards(player1, cardToPlay).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
@@ -114,7 +119,8 @@ namespace UnitTests
             var player1 = PlayerHelper.CreatePlayer(cardToPlay);
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, cardTypes);
             var cardInPile = new List<Card>(new[] { Card.SevenOfClubs });
-            var game = dealer.StartGameWithPlayPile(player1, cardInPile);
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, cardInPile);
             var outcome = game.PlayInHandCards(player1, cardToPlay).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
@@ -143,7 +149,8 @@ namespace UnitTests
             var player1 = PlayerHelper.CreatePlayer(cardToPlay);
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, rulesForCardsByValue);
             var cardInPile = new List<Card>(new[] { Card.TwoOfClubs });
-            var game = dealer.StartGameWithPlayPile(player1, cardInPile);
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, cardInPile);
             var outcome = game.PlayInHandCards(player1, cardToPlay).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
@@ -155,7 +162,7 @@ namespace UnitTests
             var player1 = PlayerHelper.CreatePlayer(new List<Card>() { Card.SixOfClubs, Card.SevenOfClubs });
             var player2 = PlayerHelper.CreatePlayer(Card.TwoOfClubs);
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, rulesForCardsByValue);
-            var game = dealer.StartGame(player1);
+            var game = dealer.CreateGameInitialisation().StartGame(player1);
             game.PlayInHandCards(player1, Card.SevenOfClubs);
             game.PlayInHandCards(player2, Card.TwoOfClubs);
 
@@ -170,7 +177,8 @@ namespace UnitTests
         {
             var player1 = PlayerHelper.CreatePlayer(Card.TwoOfClubs);
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, rulesForCardsByValue);
-            var game = dealer.StartGameWithPlayPile(player1, new List<Card>() { Card.EightOfClubs });
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, new List<Card>() { Card.EightOfClubs });
             var outcome = game.PlayInHandCards(player1, Card.TwoOfClubs).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Success);
@@ -198,8 +206,9 @@ namespace UnitTests
             var player = PlayerHelper.CreatePlayer(new[]{cardToPlay});
             
             var dealer = DealerHelper.TestDealerWithRules(new[]{player}, rulesForCardsByValue);
-            dealer.PutCardFaceUp(player, cardToPlay);
-            var game = dealer.StartGameWithPlayPile(player, new[] { Card.SevenOfClubs });
+            var gameInit = dealer.CreateGameInitialisation();
+            gameInit.PutCardFaceUp(player, cardToPlay);
+            var game = gameInit.StartGameWithPlayPile(player, new[] { Card.SevenOfClubs });
             
             var outcome = game.PlayFaceUpCards(player, cardToPlay).ResultOutcome;
             
@@ -212,7 +221,8 @@ namespace UnitTests
             var cardToPlay = Card.SixOfClubs;
             var player = PlayerHelper.CreatePlayer(cardToPlay);
             var dealer = DealerHelper.TestDealerWithRules(new[]{player}, rulesForCardsByValue);
-            var game = dealer.StartGameWithPlayPile(player, new[] { Card.SevenOfClubs });
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player, new[] { Card.SevenOfClubs });
             
             var outcome = game.PlayInHandCards(player, cardToPlay).ResultOutcome;
 
@@ -240,7 +250,7 @@ namespace UnitTests
             var player2 = PlayerHelper.CreatePlayer(Card.JackOfClubs);
             var player3 = PlayerHelper.CreatePlayer("Liam");
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2, player3 }, rulesForCardByValue);
-            var game = dealer.StartGame(player2);
+            var game = dealer.CreateGameInitialisation().StartGame(player2);
             game.PlayInHandCards(player2, Card.JackOfClubs);
 
             game.State.CurrentPlayer.Should().Be(player1);
@@ -253,7 +263,7 @@ namespace UnitTests
             var player2 = PlayerHelper.CreatePlayer(Card.JackOfClubs);
             var player3 = PlayerHelper.CreatePlayer("Liam");
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2, player3 }, rulesForCardByValue);
-            var game = dealer.StartGame(player2);
+            var game = dealer.CreateGameInitialisation().StartGame(player2);
             game.PlayInHandCards(player2, Card.JackOfClubs);
             game.PlayInHandCards(player1, Card.AceOfClubs);
 
@@ -283,7 +293,7 @@ namespace UnitTests
             var player2 = PlayerHelper.CreatePlayer(Card.EightOfClubs);
             var player3 = PlayerHelper.CreatePlayer("Liam");
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2, player3 }, rulesForCardsByValue);
-            var game = dealer.StartGame(player2);
+            var game = dealer.CreateGameInitialisation().StartGame(player2);
             game.PlayInHandCards(player2, Card.EightOfClubs);
 
             game.State.CurrentPlayer.Should().Be(player1);
@@ -308,7 +318,8 @@ namespace UnitTests
             var player1 = PlayerHelper.CreatePlayer(Card.TenOfClubs);
             var cardsInPile = new List<Card>() { Card.TwoOfClubs, Card.ThreeOfClubs };
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, rulesForCardsByValue);
-            var game = dealer.StartGameWithPlayPile(player1, cardsInPile);
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, cardsInPile);
 
             game.PlayInHandCards(player1, Card.TenOfClubs);
 
@@ -321,7 +332,8 @@ namespace UnitTests
             var player1 = PlayerHelper.CreatePlayer(Card.TenOfClubs);
             var cardInPile = new List<Card>() { Card.JackOfClubs };
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1 }, rulesForCardsByValue);
-            var game = dealer.StartGameWithPlayPile(player1, cardInPile);
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, cardInPile);
 
             var outcome = game.PlayInHandCards(player1, Card.TenOfClubs).ResultOutcome;
 
@@ -334,7 +346,7 @@ namespace UnitTests
             var player1 = PlayerHelper.CreatePlayer(Card.TenOfClubs);
             var player2 = PlayerHelper.CreatePlayer();
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, rulesForCardsByValue);
-            var game = dealer.StartGame(player1);
+            var game = dealer.CreateGameInitialisation().StartGame(player1);
 
             game.PlayInHandCards(player1, Card.TenOfClubs);
 
@@ -361,7 +373,7 @@ namespace UnitTests
             var player2 = PlayerHelper.CreatePlayer();
             var player3 = PlayerHelper.CreatePlayer();
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2, player3 }, ruleForCardsByValue);
-            var game = dealer.StartGame();
+            var game = dealer.CreateGameInitialisation().StartGame();
 
             game.PlayInHandCards(player1, Card.EightOfClubs);
 
@@ -375,7 +387,7 @@ namespace UnitTests
             var player2 = PlayerHelper.CreatePlayer(Card.EightOfClubs);
             var player3 = PlayerHelper.CreatePlayer();
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2, player3 }, ruleForCardsByValue);
-            var game = dealer.StartGame(player2);
+            var game = dealer.CreateGameInitialisation().StartGame(player2);
 
             game.PlayInHandCards(player2, Card.EightOfClubs);
 
@@ -391,7 +403,7 @@ namespace UnitTests
             var player3 = PlayerHelper.CreatePlayer("Soph");
             var player4 = PlayerHelper.CreatePlayer("Liam");
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2, player3, player4 }, ruleForCardsByValue);
-            var game = dealer.StartGame();
+            var game = dealer.CreateGameInitialisation().StartGame();
 
             game.PlayInHandCards(player1, cardsToPlay);
 
@@ -417,7 +429,8 @@ namespace UnitTests
             var player1 = PlayerHelper.CreatePlayer(Card.FiveOfClubs);
             var player2 = PlayerHelper.CreatePlayer();
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, ruleForCardsByValue);
-            var game = dealer.StartGameWithPlayPile(player1, new[] { Card.SevenOfClubs });
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, new[] { Card.SevenOfClubs });
 
             var outcome = game.PlayInHandCards(player1, Card.FiveOfClubs).ResultOutcome;
 
@@ -430,7 +443,8 @@ namespace UnitTests
             var player1 = PlayerHelper.CreatePlayer(Card.FiveOfClubs);
             var player2 = PlayerHelper.CreatePlayer(Card.SixOfClubs);
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, ruleForCardsByValue);
-            var game = dealer.StartGameWithPlayPile(player1, new[] { Card.SevenOfClubs });
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, new[] { Card.SevenOfClubs });
 
             game.PlayInHandCards(player1, Card.FiveOfClubs);
             var outcome = game.PlayInHandCards(player2, Card.SixOfClubs).ResultOutcome;
@@ -446,7 +460,8 @@ namespace UnitTests
             var player2 = PlayerHelper.CreatePlayer(Card.FiveOfClubs);
             var player3 = PlayerHelper.CreatePlayer(Card.SixOfClubs);
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2, player3 }, ruleForCardsByValue);
-            var game = dealer.StartGameWithPlayPile(player1, new[] { Card.SevenOfClubs });
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, new[] { Card.SevenOfClubs });
             game.PlayInHandCards(player1, Card.FiveOfClubs);
             game.PlayInHandCards(player2, Card.FiveOfClubs);
 
@@ -465,7 +480,8 @@ namespace UnitTests
             var cardsToPlay = new[] { Card.FiveOfClubs, Card.FiveOfClubs, Card.FiveOfClubs, Card.FiveOfClubs };
             var player1 = PlayerHelper.CreatePlayer(cardsToPlay);
             var dealer = DealerHelper.TestDealer(new[] { player1 });
-            var game = dealer.StartGameWithPlayPile(player1, new[] { Card.TwoOfClubs, Card.ThreeOfClubs });
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, new[] { Card.TwoOfClubs, Card.ThreeOfClubs });
 
             var outcome = game.PlayInHandCards(player1, cardsToPlay);
 
@@ -480,7 +496,8 @@ namespace UnitTests
             var player1 = PlayerHelper.CreatePlayer(cardsToPlay);
             var player2 = PlayerHelper.CreatePlayer();
             var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
-            var game = dealer.StartGameWithPlayPile(player1, new[] { Card.TwoOfClubs, Card.ThreeOfClubs });
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, new[] { Card.TwoOfClubs, Card.ThreeOfClubs });
 
             var outcome = game.PlayInHandCards(player1, cardsToPlay);
 
@@ -497,7 +514,7 @@ namespace UnitTests
             var player1 = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.AceOfClubs });
             var player2 = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.AceOfClubs });
             var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
-            var game = dealer.StartGame();
+            var game = dealer.CreateGameInitialisation().StartGame();
             game.PlayInHandCards(player1, new[] { Card.AceOfClubs, Card.AceOfClubs });
             game.PlayInHandCards(player2, new[] { Card.AceOfClubs, Card.AceOfClubs });
 
@@ -514,7 +531,7 @@ namespace UnitTests
             var player1 = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.AceOfClubs, Card.AceOfClubs });
             var player2 = PlayerHelper.CreatePlayer(Card.AceOfClubs);
             var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
-            var game = dealer.StartGame();
+            var game = dealer.CreateGameInitialisation().StartGame();
 
             game.PlayInHandCards(player1, new[] { Card.AceOfClubs, Card.AceOfClubs });
             game.PlayInHandCards(player2, Card.AceOfClubs);
@@ -532,7 +549,8 @@ namespace UnitTests
         {
             var player1 = PlayerHelper.CreatePlayer();
             var dealer = DealerHelper.TestDealer(new[] { player1 });
-            var game = dealer.StartGameWithPlayPile(player1, new[] { Card.FiveOfClubs, Card.FourOfClubs });
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, new[] { Card.FiveOfClubs, Card.FourOfClubs });
 
             game.PlayerCannotPlayCards(player1);
 
@@ -544,7 +562,8 @@ namespace UnitTests
         {
             var player1 = PlayerHelper.CreatePlayer();
             var dealer = DealerHelper.TestDealer(new[] { player1 });
-            var game = dealer.StartGameWithPlayPile(player1, new[] { Card.EightOfClubs, Card.FourOfSpades, Card.SixOfClubs });
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, new[] { Card.EightOfClubs, Card.FourOfSpades, Card.SixOfClubs });
 
             game.PlayerCannotPlayCards(player1);
 
@@ -557,7 +576,8 @@ namespace UnitTests
             var player1 = PlayerHelper.CreatePlayer();
             var player2 = PlayerHelper.CreatePlayer();
             var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
-            var game = dealer.StartGameWithPlayPile(player1, new[] { Card.AceOfClubs, Card.FiveOfClubs });
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, new[] { Card.AceOfClubs, Card.FiveOfClubs });
 
             game.PlayerCannotPlayCards(player1);
 

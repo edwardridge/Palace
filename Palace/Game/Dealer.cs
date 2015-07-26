@@ -19,7 +19,36 @@
             this._canStartGame = canStartGame;
         }
 
-        public void DealIntialCards()
+        public GameInitialisation CreateGameInitialisation()
+        {
+            return new GameInitialisation(_players, _deck, _canStartGame, _rulesForCardsByValue);
+        }
+
+        private readonly ICollection<Player> _players;
+
+        private Deck _deck;
+
+        private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
+
+        private ICanStartGame _canStartGame;
+    }
+
+    public class GameInitialisation
+    {
+        private ICanStartGame _canStartGame;
+        private Deck _deck;
+        private ICollection<Player> _players;
+        private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
+
+        public GameInitialisation(ICollection<Player> _players, Deck _deck, ICanStartGame _canStartGame, Dictionary<CardValue, RuleForCard> _rulesForCardsByValue)
+        {
+            this._players = _players;
+            this._canStartGame = _canStartGame;
+            this._deck = _deck;
+            this._rulesForCardsByValue = _rulesForCardsByValue;
+        }
+
+        public void DealInitialCards()
         {
             foreach (var player in _players)
             {
@@ -30,12 +59,14 @@
 
         public Result PutCardFaceUp(Player player, Card cardToPutFaceUp, Card faceUpCardToSwap = null)
         {
-            return player.PutCardFaceUp(cardToPutFaceUp, faceUpCardToSwap);
+            var playerInternal = _players.First(p => p.Name.Equals(player.Name));
+            return playerInternal.PutCardFaceUp(cardToPutFaceUp, faceUpCardToSwap);
         }
 
         public void PlayerReady(Player player)
         {
-            player.Ready();
+            var playerInternal = _players.First(p => p.Name.Equals(player.Name));
+            playerInternal.Ready();
         }
 
         public Game StartGame(Player startingPlayer = null)
@@ -84,13 +115,5 @@
             var lowestNonResetCardValue = player.CardsInHand.Where(card => card.Value != resetCardValue).OrderBy(o => o.Value).First().Value;
             return lowestNonResetCardValue;
         }
-
-        private readonly ICollection<Player> _players;
-
-        private Deck _deck;
-
-        private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
-
-        private ICanStartGame _canStartGame;
     }
 }

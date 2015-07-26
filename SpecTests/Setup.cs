@@ -70,7 +70,7 @@
             if (!gameHasBeenSetUp)
             {
                 dealer = DealerHelper.TestDealerWithRules(players, ruleForCardsByValue);
-                game = dealer.StartGame(playerToStart);
+                game = dealer.CreateGameInitialisation().StartGame(playerToStart);
             }
             gameHasBeenSetUp = true;
         }
