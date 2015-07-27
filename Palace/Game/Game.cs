@@ -150,8 +150,7 @@ namespace Palace
                 return false;
             return Equals((Game)obj);
         }
-
-
+        
         internal Game()
         {
             //Used for Rhino only
@@ -165,7 +164,7 @@ namespace Palace
 
         public Result PlayInHandCards(string playerName, ICollection<Card> cards)
         {
-            var player = _state.Players.First(f => f.Name == playerName);
+            var player = this.FindPlayer(playerName);
             IfArgumentsAreInvalidThenThrow(player, cards, player.CardsInHand);
 
             return PlayCardAndChooseNextPlayer(player, cards, PlayerCardType.InHand);
@@ -183,7 +182,7 @@ namespace Palace
 
         public Result PlayFaceUpCards(string playerName, ICollection<Card> cards)
         {
-            var player = _state.Players.First(f => f.Name == playerName);
+            var player = this.FindPlayer(playerName);
             IfArgumentsAreInvalidThenThrow(player, cards, player.CardsFaceUp);
 
             if (player.CardsInHand.Count >= 3) return new Result("Cannot play face up card when you have cards in hand");
@@ -192,7 +191,7 @@ namespace Palace
 
         public Result PlayFaceDownCards(string playerName, Card card)
         {
-            var player = _state.Players.First(f => f.Name == playerName);
+            var player = this.FindPlayer(playerName);
 
             if (player.CardsInHand.Count != 0) return new Result("Cannot play face down card when you have cards in hand");
             if (player.CardsFaceUp.Count != 0) return new Result("Cannot play face down card when you have face up cards");
@@ -202,9 +201,14 @@ namespace Palace
 
         public void PlayerCannotPlayCards(string playerName)
         {
-            var player = _state.Players.First(f => f.Name == playerName);
+            var player = FindPlayer(playerName);
             var ruleProcessor = this.rulesProcessorGenerator.GetRuleProcessor(_state, null);
             this._state = ruleProcessor.GetNextStateWhenCardCannotBePlayed(player);
+        }
+
+        private Player FindPlayer(string playerName)
+        {
+            return _state.Players.First(f => f.Name == playerName);
         }
 
         internal void Start(Player startingPlayer)
