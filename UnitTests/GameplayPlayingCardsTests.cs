@@ -19,7 +19,7 @@
         public void Cannot_Play_Card_Player_Doesnt_Have()
         {
             var cardsPlayerHas = new List<Card>() { Card.FourOfClubs };
-            var player1 = PlayerHelper.CreatePlayer(cardsPlayerHas);
+            var player1 = PlayerHelper.CreatePlayer(cardsPlayerHas, "Ed");
 
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var cardsPlayerPlays = Card.AceOfClubs;
@@ -34,7 +34,7 @@
         public void Cannot_Play_Face_Up_Card_Player_Doesnt_Have()
         {
             var cardToPlay = Card.AceOfClubs;
-            var player = PlayerHelper.CreatePlayer(cardToPlay);
+            var player = PlayerHelper.CreatePlayer(cardToPlay, "Ed");
             //player.PutCardFaceUp(cardToPlay);
             var dealer = DealerHelper.TestDealer(new[] { player });
             var gameInit = dealer.CreateGameInitialisation();
@@ -49,7 +49,7 @@
         public void Can_Play_Multiple_Face_Up_Cards_Of_Same_Value()
         {
             var cardsToPlay = new[] { Card.AceOfClubs, Card.AceOfClubs };
-            var player = PlayerHelper.CreatePlayer(cardsToPlay.Concat(new[]{ Card.FiveOfClubs }));
+            var player = PlayerHelper.CreatePlayer(cardsToPlay.Concat(new[]{ Card.FiveOfClubs }), "Ed");
             
             var dealer = DealerHelper.TestDealer(new[] { player });
             var gameInit = dealer.CreateGameInitialisation();
@@ -66,7 +66,7 @@
         public void Cannot_Play_Multiple_Face_Up_Cards_Of_Different_Value()
         {
             var cardsToPlay = new[] { Card.AceOfClubs, Card.EightOfClubs };
-            var player = PlayerHelper.CreatePlayer(cardsToPlay);
+            var player = PlayerHelper.CreatePlayer(cardsToPlay, "Ed");
             
             var dealer = DealerHelper.TestDealer(new[] { player });
             var gameInit = dealer.CreateGameInitialisation();
@@ -83,7 +83,7 @@
         public void Can_Play_Card_Player_Has()
         {
             var cardsPlayerHas = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
-            var player1 = PlayerHelper.CreatePlayer(cardsPlayerHas);
+            var player1 = PlayerHelper.CreatePlayer(cardsPlayerHas, "Ed");
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.CreateGameInitialisation().StartGame();
             var playingCardsPlayerHasOutcome = game.PlayInHandCards(player1, cardsPlayerHas[0]).ResultOutcome;
@@ -95,7 +95,7 @@
         public void When_Playing_Multiple_Cards_Player_Cannot_Play_Card_They_Dont_Have()
         {
             var cardsPlayerHas = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
-            var player1 = PlayerHelper.CreatePlayer(cardsPlayerHas);
+            var player1 = PlayerHelper.CreatePlayer(cardsPlayerHas, "Ed");
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var cardsPlayerPlays = new[] { Card.FourOfClubs, Card.FourOfSpades };
             var game = dealer.CreateGameInitialisation().StartGame(player1);
@@ -108,7 +108,7 @@
         public void Cannot_Play_Multiple_Cards_Of_Different_Value()
         {
             var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.AceOfClubs };
-            var player1 = PlayerHelper.CreatePlayer(cardsToPlay);
+            var player1 = PlayerHelper.CreatePlayer(cardsToPlay, "Ed");
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             dealer.AddPlayer(player1);
             var game = dealer.CreateGameInitialisation().StartGame(player1);
@@ -121,7 +121,7 @@
         public void Can_Play_Multiple_Cards_Of_Same_Value_And_Same_Suit()
         {
             var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
-            var player1 = PlayerHelper.CreatePlayer(cardsToPlay);
+            var player1 = PlayerHelper.CreatePlayer(cardsToPlay, "Ed");
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.CreateGameInitialisation().StartGame(player1);
 
@@ -134,7 +134,7 @@
         public void Can_Play_Multiple_Cards_Of_Same_Value_And_Different_Suit()
         {
             var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.FourOfSpades };
-            var player1 = PlayerHelper.CreatePlayer(cardsToPlay);
+            var player1 = PlayerHelper.CreatePlayer(cardsToPlay, "Ed");
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.CreateGameInitialisation().StartGame();
 
@@ -147,7 +147,7 @@
         public void Cannot_Play_Face_Up_Card_With_Three_In_Hand_Cards()
         {
             var player1 =
-                PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs, Card.FiveOfClubs, Card.JackOfClubs, Card.JackOfClubs });
+                PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs, Card.FiveOfClubs, Card.JackOfClubs, Card.JackOfClubs }, "Ed");
             
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var gameInit = dealer.CreateGameInitialisation();

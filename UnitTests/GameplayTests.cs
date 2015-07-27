@@ -18,7 +18,7 @@
         public void When_Player_Plays_Card_Card_Is_Added_To_PlayPile()
         {
             var cardToPlay = Card.FourOfClubs;
-            var player1 = PlayerHelper.CreatePlayer(cardToPlay);
+            var player1 = PlayerHelper.CreatePlayer(cardToPlay, "Ed");
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.CreateGameInitialisation().StartGame(player1);
             game.PlayInHandCards(player1, cardToPlay);

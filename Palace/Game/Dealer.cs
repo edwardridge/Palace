@@ -27,6 +27,8 @@
 
         public bool AddPlayer(Player player)
         {
+            if (_players.Select(s => s.Name).Contains(player.Name))
+                return false;
             this._players.Add(player);
             return true;
         }

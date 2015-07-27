@@ -103,8 +103,8 @@
         {
             if (cardsPlayed == null)
             {
-                this.GetNextPlayerFromOrderOfPlay(state.OrderOfPlay, state.CurrentPlayerLinkedListNode);
-                return state.CurrentPlayerLinkedListNode.Value;
+                var nextPlayer = this.GetNextPlayerFromOrderOfPlay(state.OrderOfPlay, state.CurrentPlayerLinkedListNode);
+                return nextPlayer.Value;
             }
 
             if (ShouldBurn(state.PlayPileStack))
