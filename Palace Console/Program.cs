@@ -59,7 +59,7 @@
 
                 if (line.Equals("c"))
                 {
-                    game.PlayerCannotPlayCards(currentPlayer);
+                    game.PlayerCannotPlayCards(currentPlayer.Name);
                 }
                 else if (line.Equals("s"))
                 {
@@ -73,7 +73,7 @@
                     {
                         var indexes = line.Split(',').Select(int.Parse);
                         var cardToPlay = currentPlayer.CardsInHand.ToArray().Where((w, i) => indexes.Contains(i));
-                        game.PlayInHandCards(currentPlayer, cardToPlay.ToList());
+                        game.PlayInHandCards(currentPlayer.Name, cardToPlay.ToList());
                     }
                     catch (Exception)
                     {

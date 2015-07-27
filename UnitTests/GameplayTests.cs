@@ -21,7 +21,7 @@
             var player1 = PlayerHelper.CreatePlayer(cardToPlay, "Ed");
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.CreateGameInitialisation().StartGame(player1);
-            game.PlayInHandCards(player1, cardToPlay);
+            game.PlayInHandCards(player1.Name, cardToPlay);
 
             game.State.PlayPile.Count().Should().Be(1);
         }
@@ -34,7 +34,7 @@
             var player2 = PlayerHelper.CreatePlayer("Liam");
             var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
             var game = dealer.CreateGameInitialisation().StartGame(player1);
-            game.PlayInHandCards(player1, cardToPlay);
+            game.PlayInHandCards(player1.Name, cardToPlay);
 
             game.State.CurrentPlayer.Should().Be(player2);
         }

@@ -57,7 +57,7 @@ namespace UnitTests
             var gameRepository = new GameRepository(new PalaceDocumentSession());
             var game = gameRepository.Open("6b200db4-594f-480a-b9ff-2b3a6eaafd5a");
             var currentPlayer = game.State.CurrentPlayer;
-            game.PlayInHandCards(currentPlayer, currentPlayer.CardsInHand.First());
+            game.PlayInHandCards(currentPlayer.Name, currentPlayer.CardsInHand.First());
             game.State.Players.Count.Should().Be(2);
         }
 

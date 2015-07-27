@@ -163,41 +163,46 @@ namespace Palace
             this.RulesProcessorGenerator = rulesProcessorGenerator;
         }
 
-        public Result PlayInHandCards(Player player, ICollection<Card> cards)
+        public Result PlayInHandCards(string playerName, ICollection<Card> cards)
         {
+            var player = _state.Players.First(f => f.Name == playerName);
             IfArgumentsAreInvalidThenThrow(player, cards, player.CardsInHand);
 
             return PlayCardAndChooseNextPlayer(player, cards, PlayerCardType.InHand);
         }
 
-        public Result PlayInHandCards(Player player, Card card)
+        public Result PlayInHandCards(string playerName, Card card)
         {
-            return this.PlayInHandCards(player, new[] { card });
+            return this.PlayInHandCards(playerName, new[] { card });
         }
 
-        public Result PlayFaceUpCards(Player player, Card card)
+        public Result PlayFaceUpCards(string playerName, Card card)
         {
-            return PlayFaceUpCards(player, new[] { card });
+            return PlayFaceUpCards(playerName, new[] { card });
         }
 
-        public Result PlayFaceUpCards(Player player, ICollection<Card> cards)
+        public Result PlayFaceUpCards(string playerName, ICollection<Card> cards)
         {
+            var player = _state.Players.First(f => f.Name == playerName);
             IfArgumentsAreInvalidThenThrow(player, cards, player.CardsFaceUp);
 
             if (player.CardsInHand.Count >= 3) return new Result("Cannot play face up card when you have cards in hand");
             return PlayCardAndChooseNextPlayer(player, cards, PlayerCardType.FaceUp);
         }
 
-        public Result PlayFaceDownCards(Player player, Card card)
+        public Result PlayFaceDownCards(string playerName, Card card)
         {
+            var player = _state.Players.First(f => f.Name == playerName);
+
             if (player.CardsInHand.Count != 0) return new Result("Cannot play face down card when you have cards in hand");
             if (player.CardsFaceUp.Count != 0) return new Result("Cannot play face down card when you have face up cards");
             IfArgumentsAreInvalidThenThrow(player, new[]{card}, player.CardsFaceDown);
             return PlayCardAndChooseNextPlayer(player, new[] { card }, PlayerCardType.FaceDown);
         }
 
-        public void PlayerCannotPlayCards(Player player)
+        public void PlayerCannotPlayCards(string playerName)
         {
+            var player = _state.Players.First(f => f.Name == playerName);
             var ruleProcessor = this.rulesProcessorGenerator.GetRuleProcessor(_state, null);
             this._state = ruleProcessor.GetNextStateWhenCardCannotBePlayed(player);
         }

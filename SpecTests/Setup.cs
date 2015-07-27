@@ -88,7 +88,7 @@
         {
             currentPlayer = game.State.Players.First(p => p.Name.Equals(playerName));
             var cardsToPlay = GetCardsFromCsvString(cards);
-            var result = game.PlayInHandCards(currentPlayer, cardsToPlay);
+            var result = game.PlayInHandCards(currentPlayer.Name, cardsToPlay);
             ScenarioContext.Current.Set(result);
         }
 
@@ -96,7 +96,7 @@
         public void WhenPlaysTheFaceDownCard(string playerName, string card)
         {
             currentPlayer = players.First(p => p.Name.Equals(playerName));
-            var result = game.PlayFaceDownCards(currentPlayer, GetCardFromStringValue(card));
+            var result = game.PlayFaceDownCards(currentPlayer.Name, GetCardFromStringValue(card));
             ScenarioContext.Current.Set(result);
         }
 
@@ -104,7 +104,7 @@
         public void WhenPlaysTheFaceUpCard(string playerName, string card)
         {
             currentPlayer = players.First(p => p.Name.Equals(playerName));
-            var result = game.PlayFaceUpCards(currentPlayer, GetCardFromStringValue(card));
+            var result = game.PlayFaceUpCards(currentPlayer.Name, GetCardFromStringValue(card));
             ScenarioContext.Current.Set(result);
         }
 

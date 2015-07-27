@@ -22,7 +22,7 @@
             var player1 = PlayerHelper.CreatePlayer(cardToPlay, "Ed");
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.CreateGameInitialisation().StartGame(player1);
-            game.PlayInHandCards(player1, cardToPlay);
+            game.PlayInHandCards(player1.Name, cardToPlay);
 
             player1.CardsFaceUp.Should().NotContain(Card.FourOfClubs);
         }
@@ -37,7 +37,7 @@
             var dealer = new Dealer(deck, new DummyCanStartGame());
             dealer.AddPlayer(player1);
             var game = dealer.CreateGameInitialisation().StartGame();
-            game.PlayInHandCards(player1, cardsToPlay);
+            game.PlayInHandCards(player1.Name, cardsToPlay);
 
             player1.CardsFaceUp.Should().NotContain(cardsToPlay);
         }
@@ -49,7 +49,7 @@
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             dealer.AddPlayer(player1);
             var game = dealer.CreateGameInitialisation().StartGame();
-            game.PlayInHandCards(player1, Card.AceOfClubs);
+            game.PlayInHandCards(player1.Name, Card.AceOfClubs);
 
             player1.CardsInHand.Count.Should().Be(3);
         }
@@ -62,7 +62,7 @@
             var player1 = PlayerHelper.CreatePlayer(cardsToPlay.Union(otherCard), "Ed");
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.CreateGameInitialisation().StartGame();
-            game.PlayInHandCards(player1, cardsToPlay);
+            game.PlayInHandCards(player1.Name, cardsToPlay);
 
             player1.CardsInHand.Count.Should().Be(3);
         }
@@ -75,7 +75,7 @@
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.CreateGameInitialisation().StartGame();
 
-            game.PlayInHandCards(player1, Card.AceOfClubs);
+            game.PlayInHandCards(player1.Name, Card.AceOfClubs);
 
             player1.CardsInHand.Count.Should().Be(3);
         }
@@ -88,7 +88,7 @@
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.CreateGameInitialisation().StartGame();
 
-            game.PlayInHandCards(player1, cards);
+            game.PlayInHandCards(player1.Name, cards);
 
             player1.CardsInHand.Count.Should().Be(3);
         }
@@ -100,7 +100,7 @@
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.CreateGameInitialisation().StartGame();
 
-            game.PlayInHandCards(player1, Card.AceOfClubs);
+            game.PlayInHandCards(player1.Name, Card.AceOfClubs);
 
             player1.CardsInHand.Count.Should().Be(4);
         }
