@@ -109,7 +109,8 @@
         {
             var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.AceOfClubs };
             var player1 = PlayerHelper.CreatePlayer(cardsToPlay);
-            var dealer = new Dealer(new[] { player1 }, new StandardDeck(), new DummyCanStartGame());
+            var dealer = DealerHelper.TestDealer(new[] { player1 });
+            dealer.AddPlayer(player1);
             var game = dealer.CreateGameInitialisation().StartGame(player1);
             Action playerPlaysMultipleCardsOfDifferentValueOutcome = () => game.PlayInHandCards(player1, cardsToPlay);
 

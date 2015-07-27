@@ -34,7 +34,8 @@
 
             var cardsToPlay = new List<Card>() { Card.FourOfClubs, Card.FourOfClubs };
             var player1 = PlayerHelper.CreatePlayer(cardsToPlay);
-            var dealer = new Dealer(new[] { player1 }, deck, new DummyCanStartGame());
+            var dealer = new Dealer(deck, new DummyCanStartGame());
+            dealer.AddPlayer(player1);
             var game = dealer.CreateGameInitialisation().StartGame();
             game.PlayInHandCards(player1, cardsToPlay);
 
@@ -45,7 +46,8 @@
         public void When_Player_Plays_One_Card_They_Receive_One_Card()
         {
             var player1 = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs, Card.FourOfClubs });
-            var dealer = new Dealer(new[] { player1 }, new StandardDeck(), new DummyCanStartGame());
+            var dealer = DealerHelper.TestDealer(new[] { player1 });
+            dealer.AddPlayer(player1);
             var game = dealer.CreateGameInitialisation().StartGame();
             game.PlayInHandCards(player1, Card.AceOfClubs);
 

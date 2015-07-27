@@ -17,7 +17,11 @@
         {
             var rules = InitialiseRules();
             var players = InitialisePlayers();
-            var dealer = new Dealer(players, new StandardDeck(), new DefaultStartGameRules(), rules);
+            var dealer = new Dealer(new StandardDeck(), new DefaultStartGameRules(), rules);
+            foreach(var player in players)
+            {
+                dealer.AddPlayer(player);
+            }
             var gameInit = dealer.CreateGameInitialisation();
             gameInit.DealInitialCards();
 

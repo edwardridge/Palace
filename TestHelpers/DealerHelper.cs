@@ -8,12 +8,20 @@
     {
         public static Dealer TestDealer(IEnumerable<Player> players)
         {
-            return new Dealer(players, new StandardDeck(), new DummyCanStartGame());
+            var dealer = new Dealer(new StandardDeck(), new DummyCanStartGame());
+            foreach(var player in players)
+                dealer.AddPlayer(player);
+            
+            return dealer;
         }
 
         public static Dealer TestDealerWithRules(IEnumerable<Player> players, Dictionary<CardValue, RuleForCard> rulesForCardByValue)
         {
-            return new Dealer(players, new StandardDeck(), new DummyCanStartGame(), rulesForCardByValue);
+            var dealer = new Dealer( new StandardDeck(), new DummyCanStartGame(), rulesForCardByValue);
+            foreach (var player in players)
+                dealer.AddPlayer(player);
+
+            return dealer;
         }
     }
 

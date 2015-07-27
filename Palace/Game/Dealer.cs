@@ -6,14 +6,14 @@
 
     public class Dealer
     {
-        public Dealer(IEnumerable<Player> players, Deck deck, ICanStartGame canStartGame)
-            : this(players, deck, canStartGame, new Dictionary<CardValue, RuleForCard>())
+        public Dealer(Deck deck, ICanStartGame canStartGame)
+            : this(deck, canStartGame, new Dictionary<CardValue, RuleForCard>())
         {
         }
 
-        public Dealer(IEnumerable<Player> players, Deck deck, ICanStartGame canStartGame, Dictionary<CardValue, RuleForCard> rulesForCardsByValue)
+        public Dealer(Deck deck, ICanStartGame canStartGame, Dictionary<CardValue, RuleForCard> rulesForCardsByValue)
         {
-            this._players = players.ToList();
+            this._players = new List<Player>();
             this._deck = deck;
             this._rulesForCardsByValue = rulesForCardsByValue;
             this._canStartGame = canStartGame;
@@ -23,6 +23,12 @@
         {
             var id = Guid.NewGuid();
             return new GameInitialisation(_players, _deck, _canStartGame, _rulesForCardsByValue, id);
+        }
+
+        public bool AddPlayer(Player player)
+        {
+            this._players.Add(player);
+            return true;
         }
 
         private readonly ICollection<Player> _players;

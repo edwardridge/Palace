@@ -19,7 +19,7 @@
         {
             var cardToPlay = Card.FourOfClubs;
             var player1 = PlayerHelper.CreatePlayer(cardToPlay);
-            var dealer = new Dealer(new[] { player1 }, new StandardDeck(), new DummyCanStartGame());
+            var dealer = DealerHelper.TestDealer(new[] { player1 });
             var game = dealer.CreateGameInitialisation().StartGame(player1);
             game.PlayInHandCards(player1, cardToPlay);
 
@@ -32,7 +32,7 @@
             var cardToPlay = Card.AceOfClubs;
             var player1 = PlayerHelper.CreatePlayer(cardToPlay, "Ed");
             var player2 = PlayerHelper.CreatePlayer("Liam");
-            var dealer = new Dealer(new[] { player1, player2 }, new StandardDeck(), new DummyCanStartGame());
+            var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
             var game = dealer.CreateGameInitialisation().StartGame(player1);
             game.PlayInHandCards(player1, cardToPlay);
 
