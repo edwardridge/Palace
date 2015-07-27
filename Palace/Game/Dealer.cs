@@ -21,7 +21,8 @@
 
         public GameInitialisation CreateGameInitialisation()
         {
-            return new GameInitialisation(_players, _deck, _canStartGame, _rulesForCardsByValue);
+            var id = Guid.NewGuid();
+            return new GameInitialisation(_players, _deck, _canStartGame, _rulesForCardsByValue, id);
         }
 
         private readonly ICollection<Player> _players;
@@ -39,13 +40,70 @@
         private Deck _deck;
         private ICollection<Player> _players;
         private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
+        private Guid _id;
 
-        public GameInitialisation(ICollection<Player> _players, Deck _deck, ICanStartGame _canStartGame, Dictionary<CardValue, RuleForCard> _rulesForCardsByValue)
+        internal Guid Id
+        {
+            get
+            {
+                return _id;
+            }
+        }
+
+        internal Deck Deck
+        {
+            get
+            {
+                return _deck;
+            }
+            private set
+            {
+                this._deck = value;
+            }
+        }
+
+        internal ICollection<Player> Players
+        {
+            get
+            {
+                return _players;
+            }
+            private set
+            {
+                this._players = value;
+            }
+        }
+
+        internal Dictionary<CardValue, RuleForCard> RuleForCardsByValue {
+            get
+            {
+                return _rulesForCardsByValue;
+            }
+            private set
+            {
+                this._rulesForCardsByValue = value;
+            }
+        }
+
+        internal ICanStartGame CanStartGame
+        {
+            get
+            {
+                return _canStartGame;
+            }
+            private set
+            {
+                this._canStartGame = value;
+            }
+        }
+
+        public GameInitialisation(ICollection<Player> _players, Deck _deck, ICanStartGame _canStartGame, Dictionary<CardValue, RuleForCard> _rulesForCardsByValue, Guid id)
         {
             this._players = _players;
             this._canStartGame = _canStartGame;
             this._deck = _deck;
             this._rulesForCardsByValue = _rulesForCardsByValue;
+            this._id = id;
         }
 
         public void DealInitialCards()
@@ -73,11 +131,10 @@
         {
             if (!this._canStartGame.IsReady(_players))
                 throw new InvalidOperationException("The game is not ready to start");
-            var id = Guid.NewGuid();
 
-            var gameState = GameState.SetUpInitialState(_players, _deck, id);
+            var gameState = GameState.SetUpInitialState(_players, _deck, _id);
 
-            var game = new Game(gameState, new RulesProcessorGenerator(id, _rulesForCardsByValue));
+            var game = new Game(gameState, new RulesProcessorGenerator(_id, _rulesForCardsByValue));
             if (startingPlayer == null)
             {
                 startingPlayer = _players.First();
@@ -101,11 +158,9 @@
 
         public Game StartGameWithPlayPile(Player startingPlayer, IEnumerable<Card> cardsInPile)
         {
-            var id = Guid.NewGuid();
+            var gameState = GameState.SetUpInitialState(_players, _deck, _id, startingPlayer, cardsInPile);
 
-            var gameState = GameState.SetUpInitialState(_players, _deck, id, startingPlayer, cardsInPile);
-
-            var game = new Game(gameState, new RulesProcessorGenerator(id, _rulesForCardsByValue));
+            var game = new Game(gameState, new RulesProcessorGenerator(_id, _rulesForCardsByValue));
             game.Start(startingPlayer);
             return game;
         }

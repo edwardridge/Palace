@@ -87,6 +87,7 @@
     <Compile Include="Deck\StandardDeck.cs" />
     <Compile Include="Game\Dealer.cs" />
     <Compile Include="Game\OrderOfPlay.cs" />
+    <Compile Include="Repository\GameInitialisationRepository.cs" />
     <Compile Include="Rules\DefaultStartGameRules.cs" />
     <Compile Include="Rules\RulesProcessorGenerator.cs" />
     <Compile Include="Deck\ICardDealer.cs" />
