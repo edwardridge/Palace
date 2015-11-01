@@ -10,7 +10,7 @@ namespace Palace
     {
         private readonly Player winner;
 
-        public GameOverResult(Player winner)
+        public GameOverResult(Player player, Player winner) : base(player, new GameState())
         {
             this.winner = winner;
         }

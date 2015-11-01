@@ -10,14 +10,44 @@ namespace Palace
     {
         private List<string> _errorMessages;
 
-        public Result()
+        public GameStatusForPlayer GameStatusForPlayer { get; }
+
+        public Result(Player player, GameState gameState) : this(player, gameState, new List<string>())
         {
-            this._errorMessages = new List<string>();
         }
 
-        public Result(string error)
+        public Result(Player player, GameState gameState, string error) : this (player, gameState, new List<string>(new[] { error }))
         {
-            this._errorMessages = new List<string>(new[] { error });
+        }
+
+        private Result(Player player, GameState gameState, List<string> errorList)
+        {
+            this._errorMessages = errorList;
+            this.GameStatusForPlayer = SetupGameStatusForPlayer(player, gameState);
+        }
+
+        private GameStatusForPlayer SetupGameStatusForPlayer(Player player, GameState gameState)
+        {
+            var otherPlayers = gameState
+                                            .Players?
+                                            .Where(w => w.Name != player.Name)
+                                            .Select(s => new GameStatusForOpponent
+                                            {
+                                                Name = s.Name,
+                                                CardsInHandNum = s.CardsInHand.Count(),
+                                                CardsFaceDownNum = s.CardsFaceDown.Count(),
+                                                CardsFaceUp = s.CardsFaceUp
+                                            });
+
+            return new GameStatusForPlayer
+            {
+                Name = player.Name,
+                CardsInHand = player.CardsInHand,
+                CardsFaceDownNum = player.CardsFaceDown.Count(),
+                CardsFaceUp = player.CardsFaceUp,
+                CardsInDeck = gameState?.Deck?.Cards?.Count() ?? 0,
+                GameStatusForOpponents = otherPlayers
+            };
         }
 
         public void AddErrorMessage(string message)
@@ -32,5 +62,23 @@ namespace Palace
                 return this._errorMessages.Any() ? ResultOutcome.Fail : ResultOutcome.Success;
             }
         }
+    }
+
+    public class GameStatusForPlayer
+    {
+        public int CardsFaceDownNum { get; set; }
+        public int CardsInDeck { get; set; }
+        public IEnumerable<Card> CardsInHand { get; set; }
+        public IEnumerable<Card> CardsFaceUp { get; set; }
+        public string Name { get; set; }
+        public IEnumerable<GameStatusForOpponent> GameStatusForOpponents { get; set; }
+    }
+
+    public class GameStatusForOpponent
+    {
+        public string Name { get; set; }
+        public int CardsInHandNum { get; set; }
+        public int CardsFaceDownNum { get; set; }
+        public IEnumerable<Card> CardsFaceUp { get; set; }
     }
 }

@@ -100,17 +100,18 @@ namespace Palace
         internal Result PutCardFaceUp(Card cardToPutFaceUp, Card faceUpCardToSwap = null)
         {
             if (_state != PlayerState.Setup)
-                return new Result("Cannot put card face up");
+                return new Result(this, new GameState(), "Cannot put card face up");
 
             if (faceUpCardToSwap != null)
                 this.MoveCardToNewPile(faceUpCardToSwap, _cardsInHand, _cardsFaceUp);
 
             if (this.CardsFaceUp.Count >= 3)
-                return new Result("Cannot put more than 3 cards face up");
+                return new Result(this, new GameState(), "Cannot put more than 3 cards face up");
 
             this.MoveCardToNewPile(cardToPutFaceUp, _cardsFaceUp, _cardsInHand);
 
-            return new Result();
+            //Todo: Fix, eugh
+            return new Result(this, new GameState());
         }
 
         internal void AddCardsToInHandPile(IEnumerable<Card> cardsToBeAdded)

@@ -185,7 +185,7 @@ namespace Palace
             var player = this.FindPlayer(playerName);
             IfArgumentsAreInvalidThenThrow(player, cards, player.CardsFaceUp);
 
-            if (player.CardsInHand.Count >= 3) return new Result("Cannot play face up card when you have cards in hand");
+            if (player.CardsInHand.Count >= 3) return new Result(player, this.State, "Cannot play face up card when you have cards in hand");
             return PlayCardAndChooseNextPlayer(player, cards, PlayerCardType.FaceUp);
         }
 
@@ -193,8 +193,8 @@ namespace Palace
         {
             var player = this.FindPlayer(playerName);
 
-            if (player.CardsInHand.Count != 0) return new Result("Cannot play face down card when you have cards in hand");
-            if (player.CardsFaceUp.Count != 0) return new Result("Cannot play face down card when you have face up cards");
+            if (player.CardsInHand.Count != 0) return new Result(player, this.State, "Cannot play face down card when you have cards in hand");
+            if (player.CardsFaceUp.Count != 0) return new Result(player, this.State, "Cannot play face down card when you have face up cards");
             IfArgumentsAreInvalidThenThrow(player, new[]{card}, player.CardsFaceDown);
             return PlayCardAndChooseNextPlayer(player, new[] { card }, PlayerCardType.FaceDown);
         }
@@ -227,18 +227,18 @@ namespace Palace
 
         private Result PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardType playerCardType)
         {
-            if (this._state.GameOver) return new GameOverResult(_state.CurrentPlayer);
-            if (_state.CurrentPlayer.Equals(player) == false) return new Result("It isn't your turn!");
+            if (this._state.GameOver) return new GameOverResult(player, _state.CurrentPlayer);
+            if (_state.CurrentPlayer.Equals(player) == false) return new Result(player, this.State, "It isn't your turn!");
 
             var ruleProcessor = this.rulesProcessorGenerator.GetRuleProcessor(_state, cards);
 
             if (!ruleProcessor.CardCanBePlayed())
-                return new Result("This card is invalid to play");
+                return new Result(player, this.State, "This card is invalid to play");
 
             this._state = ruleProcessor.GetNextState(playerCardType);
             if (this._state.GameOver)
-                return new GameOverResult(_state.CurrentPlayer);
-            return new Result();
+                return new GameOverResult(player, _state.CurrentPlayer);
+            return new Result(player, this.State);
         }
 
         public GameState State
