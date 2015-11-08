@@ -23,7 +23,7 @@ namespace UnitTests
         {
             var documentStore = new EmbeddableDocumentStore()
             {
-                RunInMemory = true,
+                RunInMemory = true
                 
             };
             documentStore.Initialize();
@@ -76,7 +76,7 @@ namespace UnitTests
             var gameRepository = new GameRepository(new PalaceDocumentSession());
             gameRepository.Save(game);
 
-            var gameFromRepository = gameRepository.Open(game.State.GameId.ToString());
+            var gameFromRepository = gameRepository.Open(game.Id.ToString());
             gameFromRepository.Should().Be(game);
         }
     }

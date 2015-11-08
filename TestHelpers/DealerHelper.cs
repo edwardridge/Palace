@@ -8,7 +8,7 @@
     {
         public static Dealer TestDealer(IEnumerable<Player> players)
         {
-            var dealer = new Dealer(new StandardDeck(), new DummyCanStartGame());
+            var dealer = new Dealer(StandardDeck.CreateDeck(), new DummyCanStartGame());
             foreach(var player in players)
                 dealer.AddPlayer(player);
             
@@ -17,7 +17,7 @@
 
         public static Dealer TestDealerWithRules(IEnumerable<Player> players, Dictionary<CardValue, RuleForCard> rulesForCardByValue)
         {
-            var dealer = new Dealer( new StandardDeck(), new DummyCanStartGame(), rulesForCardByValue);
+            var dealer = new Dealer(StandardDeck.CreateDeck(), new DummyCanStartGame(), rulesForCardByValue);
             foreach (var player in players)
                 dealer.AddPlayer(player);
 

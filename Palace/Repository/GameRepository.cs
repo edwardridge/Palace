@@ -20,8 +20,11 @@ namespace Palace.Repository
             game.State.DateSaved = DateTime.Now;
             using(var documentSession = palaceSession.GetDocumentSession())
             {
-                documentSession.Store(game.State);
-                documentSession.Store(game.RulesProcessorGenerator);
+                //documentSession.Store(game.State);
+                //documentSession.Store(game.RulesProcessorGenerator);
+
+                documentSession.Store(game);
+                //documentSession.Store(game.RulesProcessorGenerator);
                 documentSession.SaveChanges();
             }
         }
@@ -31,10 +34,13 @@ namespace Palace.Repository
             var gameId = Guid.Parse(p);
             using (var documentSession = palaceSession.GetDocumentSession())
             {
-                var gameState = documentSession.Query<GameState>().Where(state => state.GameId == gameId).OrderByDescending(o => o.DateSaved).First();
+                //var gameState = documentSession.Query<GameState>().Where(state => state.GameId == gameId)
+                //  .Customize(c => c.WaitForNonStaleResults())
+                //.OrderByDescending(o => o.DateSaved).First();
 
-                var rules = documentSession.Query<RulesProcessorGenerator>().First(rp => rp.GameId == gameId);
-                return new Game(gameState, rules);
+                //var rules = documentSession.Query<RulesProcessorGenerator>().First(rp => rp.GameId == gameId);
+                var game = documentSession.Load<Game>(gameId);
+                return game;
             }
         }
     }

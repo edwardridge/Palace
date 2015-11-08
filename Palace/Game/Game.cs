@@ -15,8 +15,12 @@ namespace Palace
 
     public class GameState
     {
-        public Guid GameId { get; set; }
-
+        public GameState()
+        {
+            this._playPileStack = new Stack<Card>();
+            this._players = new LinkedList<Player>();
+            this._deck = new Deck();
+        }
         public DateTime DateSaved { get; set; }
 
         internal bool GameOver { get; set; }
@@ -38,7 +42,7 @@ namespace Palace
         {
             get
             {
-                return playPileStack.ToList().AsReadOnly();
+                return _playPileStack.ToList().AsReadOnly();
             }
         } 
 
@@ -46,11 +50,11 @@ namespace Palace
         {
             get
             {
-                return this.playPileStack;
+                return this._playPileStack;
             }
             set
             {
-                this.playPileStack = new Stack<Card>(value);
+                this._playPileStack = new Stack<Card>(value);
             }
         }
 
@@ -66,7 +70,7 @@ namespace Palace
             }
         }
 
-        public Player CurrentPlayer
+        public string CurrentPlayerName
         {
             get
             {
@@ -78,16 +82,26 @@ namespace Palace
             }
         }
 
+        //Todo: Remove!
+        [JsonIgnore]
+        public Player CurrentPlayer
+        {
+            get
+            {
+                return this.Players.First(f => f.Name == _currentPlayer);
+            }
+        }
+
         [JsonIgnore]
         internal LinkedListNode<Player> CurrentPlayerLinkedListNode
         {
             get
             {
-                return _players.Find(_currentPlayer);
+                return _players.Find(this.CurrentPlayer);
             }
         }
 
-        internal Deck Deck
+        public Deck Deck
         {
             get
             {
@@ -99,11 +113,13 @@ namespace Palace
             }
         }
 
-        private Player _currentPlayer;
+        public int NumberOfValdMoves { get; internal set; }
+
+        private string _currentPlayer;
 
         private OrderOfPlay _orderOfPlay;
 
-        private Stack<Card> playPileStack;
+        private Stack<Card> _playPileStack;
 
         private LinkedList<Player> _players;
 
@@ -115,9 +131,9 @@ namespace Palace
             return new GameState()
             {
                 OrderOfPlay = OrderOfPlay.Forward,
-                CurrentPlayer = startingPlayer ?? players.First(),
+                CurrentPlayerName = startingPlayer?.Name ?? players.First()?.Name,
                 Players = new LinkedList<Player>(players),
-                GameId = id,
+                //Id = id,
                 GameOver = false,
                 PlayPileStack = new Stack<Card>(cardsInPile ?? new List<Card>()),
                 Deck = deck
@@ -127,6 +143,8 @@ namespace Palace
     
     public class Game
     {
+        public Guid Id { get; set; }
+
         protected bool Equals(Game other)
         {
             return Equals(this.rulesProcessorGenerator, other.rulesProcessorGenerator) && Equals(this._state, other._state);
@@ -199,11 +217,14 @@ namespace Palace
             return PlayCardAndChooseNextPlayer(player, new[] { card }, PlayerCardType.FaceDown);
         }
 
-        public void PlayerCannotPlayCards(string playerName)
+        public Result PlayerCannotPlayCards(string playerName)
         {
             var player = FindPlayer(playerName);
+            if (_state.CurrentPlayerName.Equals(playerName) == false) return new Result(player, this.State, "It isn't your turn!");
             var ruleProcessor = this.rulesProcessorGenerator.GetRuleProcessor(_state, null);
             this._state = ruleProcessor.GetNextStateWhenCardCannotBePlayed(player);
+
+            return new Result(player, this.State);
         }
 
         private Player FindPlayer(string playerName)
@@ -213,7 +234,7 @@ namespace Palace
 
         internal void Start(Player startingPlayer)
         {
-            _state.CurrentPlayer = _state.Players.Find(startingPlayer).Value;
+            _state.CurrentPlayerName = _state.Players.Find(startingPlayer).Value.Name;
         }
 
         private void IfArgumentsAreInvalidThenThrow(Player player, ICollection<Card> cards, IEnumerable<Card> cardsToCheck)

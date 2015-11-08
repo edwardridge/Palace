@@ -2,6 +2,8 @@
 using FluentAssertions;
 using NUnit.Framework;
 using Palace;
+using Palace.Repository;
+using Palace.Rules;
 using System.Collections.Generic;
 using System.Linq;
 using TestHelpers;
@@ -37,6 +39,22 @@ namespace UnitTests
 
             var result = game.PlayInHandCards("Ed", Card.EightOfClubs);
             result.GameStatusForPlayer.CardsInHand.Should().BeEquivalentTo(new[] { Card.AceOfClubs, Card.FiveOfClubs });
+        }
+
+        [Test]
+        public void In_Hand_Cards_Are_Ordered_By_Value()
+        {
+            var player1 = PlayerHelper.CreatePlayer(new[] { Card.EightOfClubs, Card.AceOfClubs, Card.FiveOfClubs }, "Ed");
+            var player2 = PlayerHelper.CreatePlayer("Liam");
+            var players = new List<Player>(new[] { player1, player2 });
+            var dealer = new Dealer(new PredeterminedDeck(new List<Card>()), new DummyCanStartGame());
+            dealer.AddPlayer(player1);
+            dealer.AddPlayer(player2);
+            var game = dealer.CreateGameInitialisation().StartGameWithPlayPile(player1, new List<Card>());
+
+            var result = game.PlayInHandCards("Ed", Card.EightOfClubs);
+            result.GameStatusForPlayer.CardsInHand.ToArray()[0].Should().Be(Card.FiveOfClubs);
+                //
         }
 
         [Test]
@@ -84,7 +102,72 @@ namespace UnitTests
             var game = dealer.CreateGameInitialisation().StartGameWithPlayPile(player1, new List<Card>());
 
             var result = game.PlayInHandCards("Ed", Card.EightOfClubs);
-            result.GameStatusForPlayer.CardsInDeck.Should().Be(2);
+            result.GameStatusForPlayer.CardsInDeckNum.Should().Be(2);
+        }
+
+        [Test]
+        public void Player_Can_See_Cards_In_Play_Pile()
+        {
+            var player1 = new Player("Ed", new[] { Card.EightOfClubs, Card.AceOfClubs, Card.FiveOfClubs });
+
+            var player2 = PlayerHelper.CreatePlayer(Card.AceOfClubs, "Liam");
+            var players = new List<Player>(new[] { player1, player2 });
+            var dealer = new Dealer(new PredeterminedDeck(new List<Card>(new[] { Card.FourOfClubs, Card.FiveOfClubs, Card.FourOfSpades })), new DummyCanStartGame());
+            dealer.AddPlayer(player1);
+            dealer.AddPlayer(player2);
+            var game = dealer.CreateGameInitialisation().StartGameWithPlayPile(player1, new List<Card>());
+
+            var result = game.PlayInHandCards("Ed", Card.EightOfClubs);
+            result.GameStatusForPlayer.CurrentPlayer.Should().Be("Liam");
+        }
+
+        [Test]
+        public void Player_Can_See_Current_Players_Name()
+        {
+            var player1 = new Player("Ed", new[] { Card.EightOfClubs, Card.AceOfClubs, Card.FiveOfClubs });
+
+            var player2 = PlayerHelper.CreatePlayer(Card.AceOfClubs, "Liam");
+            var players = new List<Player>(new[] { player1, player2 });
+            var dealer = new Dealer(new PredeterminedDeck(new List<Card>(new[] { Card.FourOfClubs, Card.FiveOfClubs, Card.FourOfSpades })), new DummyCanStartGame());
+            dealer.AddPlayer(player1);
+            dealer.AddPlayer(player2);
+            var game = dealer.CreateGameInitialisation().StartGameWithPlayPile(player1, new List<Card>());
+
+            var result = game.PlayInHandCards("Ed", Card.EightOfClubs);
+            result.GameStatusForPlayer.PlayPile.ShouldBeEquivalentTo(new[] { Card.EightOfClubs });
+        }
+
+        [Test]
+        public void After_First_Valid_Move_Number_Of_Valid_Moves_Is_One()
+        {
+            var player1 = PlayerHelper.CreatePlayer(Card.AceOfClubs, "Ed");
+            var game = DealerHelper.TestDealer(new[] { player1 }).CreateGameInitialisation().StartGame();
+            var result = game.PlayInHandCards("Ed", Card.AceOfClubs);
+
+            result.GameStatusForPlayer.NumberOfValidMoves.Should().Be(1);
+        }
+
+        [Test]
+        public void After_Second_Valid_Move_Number_Of_Valid_Moves_Is_Two()
+        {
+            var player1 = PlayerHelper.CreatePlayer(Card.EightOfClubs, "Ed");
+            var player2 = PlayerHelper.CreatePlayer(Card.AceOfClubs, "Liam");
+            var game = DealerHelper.TestDealer(new[] { player1, player2 }).CreateGameInitialisation().StartGame();
+            game.PlayInHandCards("Ed", Card.EightOfClubs);
+            var result = game.PlayInHandCards("Liam", Card.AceOfClubs);
+
+            result.GameStatusForPlayer.NumberOfValidMoves.Should().Be(2);
+        }
+
+        [Test]
+        public void When_Player_Cant_Go_Valid_Move_Number_Is_Increased()
+        {
+            var player1 = PlayerHelper.CreatePlayer(Card.EightOfClubs, "Ed");
+            var player2 = PlayerHelper.CreatePlayer(Card.AceOfClubs, "Liam");
+            var game = DealerHelper.TestDealer(new[] { player1, player2 }).CreateGameInitialisation().StartGame();
+            var result = game.PlayerCannotPlayCards("Ed");
+
+            result.GameStatusForPlayer.NumberOfValidMoves.Should().Be(1);
         }
     }
 
@@ -110,9 +193,9 @@ namespace UnitTests
         {
             var player1 = PlayerHelper.CreatePlayer(Card.EightOfClubs, "Ed");
             var player2 = PlayerHelper.CreatePlayer(new[] { Card.SevenOfClubs, Card.AceOfClubs, Card.FiveOfClubs }, "Liam");
-            
+
             var players = new List<Player>(new[] { player1, player2 });
-            var dealer = DealerHelper.TestDealer(new[]{ player1, player2});
+            var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
             var game = dealer.CreateGameInitialisation().StartGameWithPlayPile(player1, new List<Card>());
 
             game.PlayInHandCards("Ed", Card.EightOfClubs);
@@ -123,10 +206,10 @@ namespace UnitTests
         [Test]
         public void Player_Can_See_Number_Of_Cards_Face_Down()
         {
-            var player1 = PlayerHelper.CreatePlayer( new[] { Card.EightOfClubs }, "Ed");
+            var player1 = PlayerHelper.CreatePlayer(new[] { Card.EightOfClubs }, "Ed");
             var player2 = new Player("Liam", new[] { Card.SevenOfClubs }, new Card[0], new[] { Card.FiveOfClubs, Card.FourOfClubs });
 
-            
+
             var players = new List<Player>(new[] { player1, player2 });
             var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
             var game = dealer.CreateGameInitialisation().StartGameWithPlayPile(player1, new List<Card>());
@@ -141,7 +224,7 @@ namespace UnitTests
         {
             var player1 = PlayerHelper.CreatePlayer(new[] { Card.EightOfClubs }, "Ed");
             var player2 = new Player("Liam", new[] { Card.SevenOfClubs }, new[] { Card.FiveOfClubs, Card.FourOfClubs });
-            
+
             var players = new List<Player>(new[] { player1, player2 });
             var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
             var game = dealer.CreateGameInitialisation().StartGameWithPlayPile(player1, new List<Card>());
@@ -167,7 +250,7 @@ namespace UnitTests
             //One card will be removed by this valid move
             game.PlayInHandCards("Ed", Card.EightOfClubs);
             var result = game.PlayInHandCards("Liam", Card.SevenOfClubs);
-            result.GameStatusForPlayer.CardsInDeck.Should().Be(3);
+            result.GameStatusForPlayer.CardsInDeckNum.Should().Be(3);
         }
     }
 
@@ -215,7 +298,7 @@ namespace UnitTests
 
             var dealer = DealerHelper.TestDealer(new[] { player1, player2, player3 });
             var game = dealer.CreateGameInitialisation().StartGame(player1);
-                
+
             var result = game.PlayInHandCards("Ed", Card.TwoOfClubs);
 
             result.GameStatusForPlayer.GameStatusForOpponents.First(s => s.Name == "Liam").CardsFaceDownNum.Should().Be(2);
@@ -238,4 +321,6 @@ namespace UnitTests
             result.GameStatusForPlayer.GameStatusForOpponents.First(s => s.Name == "Dave").CardsFaceUp.ShouldBeEquivalentTo(new[] { Card.JackOfClubs });
         }
     }
+
+    
 }

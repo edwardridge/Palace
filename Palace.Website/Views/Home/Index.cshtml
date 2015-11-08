@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Game</h1>
+    
+</div>
+
+<div class="row">
+    <input type="text" value="Game id" id="gameId" />
+    <input type="text" value="Player Name" id="playerName" />
+    <button id="getGame" name="GetGame" value="Get game status" >Get game status</button>
+
+    <div id="gameStatus">Game status will go here</div>
+</div>
+<div id="reactContent"></div>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="https://fb.me/react-0.14.2.js"></script>
+<script src="https://fb.me/react-dom-0.14.2.js"></script>
+<script src="@Url.Content("~/Scripts/main.jsx")"></script>
+<script>
+    $().ready(function () {
+        $("#getGame").click(function () {
+            var id = $("#gameId").val();
+            var player = $("#playerName").val();
+            $.ajax({
+                url: "http://localhost:49311/api/game/get/" + id + "/" + player,
+                success: function (data) {
+                    $("#gameStatus").text(data.GameStatusForPlayer);
+                }
+            } )
+        })
+    });
+    
+</script>

@@ -18,7 +18,7 @@ namespace UnitTests
 
 			[SetUp]
 			public void Setup(){
-				deck = new StandardDeck();
+				deck = StandardDeck.CreateDeck();
 			}
 
 			[Test]

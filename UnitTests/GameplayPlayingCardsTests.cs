@@ -160,5 +160,15 @@
 
             outcome.Should().Be(ResultOutcome.Fail);
         }
+        
+        [Test]
+        public void Playing_In_Hand_Card_Doesnt_Remove_Card_from_Players_In_Hand_Array_In_Game()
+        {
+            var player1 = PlayerHelper.CreatePlayer(new[] { Card.EightOfClubs, Card.AceOfClubs }, "Ed");
+            var game = DealerHelper.TestDealer(new[] { player1 }).CreateGameInitialisation().StartGame();
+            game.PlayInHandCards("Ed", Card.EightOfClubs);
+
+            game.State.Players.First(w => w.Name == "Ed").CardsInHand.Should().NotContain(Card.EightOfClubs);
+        }
     }
 }

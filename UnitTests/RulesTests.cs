@@ -583,6 +583,21 @@ namespace UnitTests
 
             game.State.CurrentPlayer.Should().Be(player2);
         }
+
+        [Test]
+        public void If_It_Isnt_Players_Turn_Nothing_Happens()
+        {
+            var player1 = PlayerHelper.CreatePlayer(Card.EightOfClubs, "Ed");
+            var player2 = PlayerHelper.CreatePlayer("Liam");
+            var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGame(player1);
+
+            game.PlayInHandCards("Ed", Card.EightOfClubs);
+            game.PlayerCannotPlayCards(player1.Name);
+
+            game.State.CurrentPlayerName.Should().Be(player2.Name);
+        }
     }
 
     

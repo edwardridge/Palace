@@ -65,7 +65,6 @@
 
         internal GameState GetNextState(PlayerCardType playerCardType)
         {
-
             this.RemoveCardsFromPlayer(state.CurrentPlayer, this.cardsPlayed.ToList(), playerCardType);
 
             foreach (Card card in this.cardsPlayed)
@@ -75,14 +74,16 @@
 
             if (!state.CurrentPlayer.HasNoMoreCards())
             {
-                state.CurrentPlayer = this.SetNextPlayer();
+                state.CurrentPlayerName = this.SetNextPlayer();
 
                 if (this.PlayPileShouldBeCleared())
                     state.PlayPileStack.Clear();
             }
             else
                 state.GameOver = true;
-                
+
+            state.NumberOfValdMoves += 1;
+
             return state;
         }
 
@@ -90,7 +91,8 @@
         {
             player.AddCardsToInHandPile(state.PlayPileStack);
             state.PlayPileStack.Clear();
-            state.CurrentPlayer = this.SetNextPlayer();
+            state.CurrentPlayerName = this.SetNextPlayer();
+            state.NumberOfValdMoves += 1;
             return state;
         }
 
@@ -99,22 +101,22 @@
             return this.CheckCardCanBePlayed(cardsPlayed.First(), state.PlayPile);
         }
 
-        private Player SetNextPlayer()
+        private string SetNextPlayer()
         {
             if (cardsPlayed == null)
             {
                 var nextPlayer = this.GetNextPlayerFromOrderOfPlay(state.OrderOfPlay, state.CurrentPlayerLinkedListNode);
-                return nextPlayer.Value;
+                return nextPlayer.Value.Name;
             }
 
             if (ShouldBurn(state.PlayPileStack))
-                return state.CurrentPlayerLinkedListNode.Value;
+                return state.CurrentPlayerLinkedListNode.Value.Name;
 
             var ruleForPlayersCard = this.GetRuleForCardFromCardValue(cardsPlayed.First().Value);
             var nextPayer = this.GetNextPlayerFromOrderOfPlay(state.OrderOfPlay, state.CurrentPlayerLinkedListNode);
 
             if (ruleForPlayersCard != RuleForCard.SkipPlayer)
-                return nextPayer.Value;
+                return nextPayer.Value.Name;
 
             var skipCardValue = this._rulesForCardsByValue.First(w => w.Value == RuleForCard.SkipPlayer).Key;
             var topCardsInPlayPileWithSkipValue = cardsPlayed.GetTopCardsWithSameValue(skipCardValue);
@@ -122,9 +124,10 @@
             foreach (var card in topCardsInPlayPileWithSkipValue)
                 nextPayer = this.GetNextPlayerFromOrderOfPlay(state.OrderOfPlay, nextPayer);
 
-            return nextPayer.Value;
+            return nextPayer.Value.Name;
         }
 
+        //Todo: This removes cards from deck, should be explicit
         private void RemoveCardsFromPlayer(Player player, ICollection<Card> cards, PlayerCardType playerCardType)
         {
             if (playerCardType == PlayerCardType.InHand)

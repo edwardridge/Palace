@@ -5,11 +5,9 @@
 
     public class StandardDeck : Deck
     {
-        public StandardDeck()
-            : base(new Pack().Cards)
+        private StandardDeck()
         {
-            var shuffledCards = Shuffle(new List<Card>(this.Cards));
-            this.Cards = new List<Card>(shuffledCards);
+            
         }
 
         private IList<Card> Shuffle(IList<Card> cardsToShuffle)
@@ -25,6 +23,16 @@
                 cardsToShuffle[n] = value;
             }
             return cardsToShuffle;
+        }
+
+        public static StandardDeck CreateDeck()
+        {
+            StandardDeck standardDeck = new StandardDeck();
+            standardDeck.Cards = new Pack().Cards;
+            var shuffledCards = standardDeck.Shuffle(new List<Card>(standardDeck.Cards));
+            standardDeck.Cards = new List<Card>(shuffledCards);
+
+            return standardDeck;
         }
     }
 }
