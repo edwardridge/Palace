@@ -183,7 +183,8 @@ namespace Palace
         public Result PlayInHandCards(string playerName, ICollection<Card> cards)
         {
             var player = this.FindPlayer(playerName);
-            IfArgumentsAreInvalidThenThrow(player, cards, player.CardsInHand);
+            var preCheck = IfArgumentsAreInvalidThenThrow(player, cards, player.CardsInHand);
+            if (preCheck.Any()) return new Result(player, this.State, preCheck.ToArray()[0]);
 
             return PlayCardAndChooseNextPlayer(player, cards, PlayerCardType.InHand);
         }
@@ -201,7 +202,8 @@ namespace Palace
         public Result PlayFaceUpCards(string playerName, ICollection<Card> cards)
         {
             var player = this.FindPlayer(playerName);
-            IfArgumentsAreInvalidThenThrow(player, cards, player.CardsFaceUp);
+            var preCheck =IfArgumentsAreInvalidThenThrow(player, cards, player.CardsFaceUp);
+            if (preCheck.Any()) return new Result(player, this.State, preCheck.ToArray()[0]);
 
             if (player.CardsInHand.Count >= 3) return new Result(player, this.State, "Cannot play face up card when you have cards in hand");
             return PlayCardAndChooseNextPlayer(player, cards, PlayerCardType.FaceUp);
@@ -237,13 +239,14 @@ namespace Palace
             _state.CurrentPlayerName = _state.Players.Find(startingPlayer).Value.Name;
         }
 
-        private void IfArgumentsAreInvalidThenThrow(Player player, ICollection<Card> cards, IEnumerable<Card> cardsToCheck)
+        private IEnumerable<string> IfArgumentsAreInvalidThenThrow(Player player, ICollection<Card> cards, IEnumerable<Card> cardsToCheck)
         {
             if (cards.Except(cardsToCheck).Any())
-                throw new ArgumentException("You cannot play cards you don't have!");
+                return new[] { "You cannot play cards you don't have!" } ;
 
             if (cards.Select(card => card.Value).Distinct().Count() != 1)
-                throw new ArgumentException("You cannot play more than one type of card");
+                return new[] { "You cannot play more than one type of card" };
+            return new List<string>();
         }
 
         private Result PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardType playerCardType)

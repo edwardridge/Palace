@@ -2,9 +2,9 @@
 
  render: function(){
     return (
-    <a className="CannotPlay" onClick={this.props.cannotPlayCards}>
+    <button className="CannotPlay" onClick={this.props.cannotPlayCards}>
         I can't play a card!
-    </a>
+    </button>
 );
 }
 });
@@ -37,6 +37,21 @@ var Card = React.createClass({
 }
 });
 
+var FaceDownCards = React.createClass({
+    
+    render: function(){
+        var faceDown = [];
+        for(var i = 0; i < this.props.cardsCount; i++){
+            faceDown.push(<span key={i} ><img src='/Content/cards/card_back.png' width='100px' height='144px' /></span>)
+        }
+        return(
+            <div className='FaceDown'>
+            {faceDown}
+            </div>
+        );
+    }
+});
+
 var VisibleCardPile = React.createClass({
     render:function() {
      return (
@@ -59,23 +74,31 @@ var GameStatus = React.createClass({
     this.props.gameState.CardsInHand.forEach(function(card){
         if(card.selected) {noSelectedCards=false};
     });   
+
+    var noFaceUpSelectedCards = true;
+    this.props.gameState.CardsFaceUp.forEach(function(card){
+        if(card.selected) {noFaceUpSelectedCards=false};
+    });  
     
     return (
-      <div className="Test">
-          <div className='errors'>{this.props.error}</div>
-          <h3>Name: {this.props.gameState.Name} </h3> <br />
-          {this.props.gameState.CurrentPlayer === this.props.gameState.Name ? 'It is your go' : 'It is not your go'} <br />
-          Num face down cards: {this.props.gameState.CardsFaceDownNum} <br />
-          Cards in hand: <br />
-          <VisibleCardPile cards={this.props.gameState.CardsInHand} toggleCardSelected={this.props.toggleCardSelected} /> <br />
-          <button onClick={this.props.playCards} disabled={noSelectedCards}>Play cards</button> <br />
-          Face up cards: <br />
-          <VisibleCardPile cards={this.props.gameState.CardsFaceUp} toggleCardSelected={this.props.toggleCardSelected} /> <br />
-          Play pile: <br />
-          <VisibleCardPile cards={this.props.gameState.PlayPile} toggleCardSelected={this.props.toggleCardSelected} /> <br />
-
-          <CannotPlay cannotPlayCards={this.props.cannotPlayCards} />
-      </div>
+    <div>
+        <div className='errors'>{this.props.error}</div>
+        <h3>Name: {this.props.gameState.Name} </h3> <br />
+        {this.props.gameState.CurrentPlayer === this.props.gameState.Name ? 'It is your go' : 'It is not your go'} <br />
+    
+        Play pile: <br />
+        <VisibleCardPile cards={this.props.gameState.PlayPile} toggleCardSelected={this.props.toggleCardSelected} /> <br />
+     
+        Cards in hand: <br />
+        <VisibleCardPile cards={this.props.gameState.CardsInHand} toggleCardSelected={this.props.toggleCardSelected.bind(null, 'CardsInHand')} /> <br />
+        <button onClick={this.props.playCards.bind(null, 'CardsInHand')} disabled={noSelectedCards}>Play cards</button> <br /> <br/>
+        <CannotPlay cannotPlayCards={this.props.cannotPlayCards} /> <br/> <br/>
+        Face down cards <br/>
+        <FaceDownCards cardsCount={this.props.gameState.CardsFaceDownNum}/> <br/>
+        Face up cards: <br />
+        <VisibleCardPile cards={this.props.gameState.CardsFaceUp} toggleCardSelected={this.props.toggleCardSelected.bind(null, 'CardsFaceUp')} /> <br />
+        <button onClick={this.props.playCards.bind(null, 'CardsFaceUp' )} disabled={noFaceUpSelectedCards}>Play cards</button> <br /> <br />
+        </div>
     );
   }
 });
@@ -87,40 +110,33 @@ getInitialState: function() {
             errors: []
         };
       },
-    toggleSelectedOfFaceUpCard: function(index){
-        this.state.data.CardsInHand[index].selected = !this.state.data.CardsInHand[index].selected;
+    toggleSelectedOfFaceUpCard: function(cardPile, index){
+        this.state.data[cardPile][index].selected = !this.state.data[cardPile][index].selected;
         this.setState({data: this.state.data });
-
     },
-    playCards: function(){
+    playCards: function(cardPile){
         var game = this;
         var cardsToPlay = [];
-        this.state.data.CardsInHand.forEach(function(card){
+        this.state.data[cardPile].forEach(function(card){
             if(card.selected){
                 cardsToPlay.push(card);
             }
         });
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('post', window.playInHandCard, true);
-        xhr.onload = function() {
-            game.updateStateFromResult(game, xhr.responseText, true);
-        };
-        xhr.setRequestHeader("Content-type", "application/json");
-        xhr.send(JSON.stringify(cardsToPlay));
+        var methodToSend = cardPile === 'CardInHand' ? window.playInHandCard : window.playFaceUpCard ;
+        this.sendPostRequestAndUpdateState(game, methodToSend, JSON.stringify(cardsToPlay));
     },
     cannotPlayCards: function(event){
         var game = this;
         this.sendPostRequestAndUpdateState(game, window.cannotPlayCard);
     },
-    sendPostRequestAndUpdateState: function(game, url){
+    sendPostRequestAndUpdateState: function(game, url, postData){
         var xhr = new XMLHttpRequest();
         xhr.open('post', url,  true);
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.onload = function() {
             game.updateStateFromResult(game, xhr.responseText, true);
         };
-        xhr.send();
+        xhr.send(postData);
     },
     loadCommentsFromServer: function() {
         var game = this;
@@ -149,8 +165,7 @@ getInitialState: function() {
                     toggleCardSelected={this.toggleSelectedOfFaceUpCard} 
                     playCards={this.playCards} 
                     error = {error}
-                    cannotPlayCards={this.cannotPlayCards} 
-         />
+                    cannotPlayCards={this.cannotPlayCards} />
     )
     }
 });

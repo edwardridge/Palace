@@ -227,6 +227,7 @@
     <Content Include="Content\cards\ace_of_spades.png" />
     <Content Include="Content\cards\ace_of_spades2.png" />
     <Content Include="Content\cards\black_joker.png" />
+    <Content Include="Content\cards\card_back.png" />
     <Content Include="Content\cards\jack_of_clubs.png" />
     <Content Include="Content\cards\jack_of_clubs2.png" />
     <Content Include="Content\cards\jack_of_diamonds.png" />

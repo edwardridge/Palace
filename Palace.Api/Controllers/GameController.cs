@@ -66,10 +66,18 @@ namespace Palace.Api.Controllers
         {
             var gameRepo = new GameRepository(new PalaceDocumentSession());
             var game = gameRepo.Open(gameId);
-           // var cardToPlay = GetCard(card);
             var result = game.PlayInHandCards(playerName, card.ToArray());
             gameRepo.Save(game);
-            //memoryCache.Set(new CacheItem(gameId + "/" + playerName, result), new CacheItemPolicy());
+            return result;
+        }
+
+        [Route("playfaceupcard/{gameid}/{playername}"), HttpPost]
+        public Result PlayFaceUpCard(string gameId, string playerName, IEnumerable<Card> card)
+        {
+            var gameRepo = new GameRepository(new PalaceDocumentSession());
+            var game = gameRepo.Open(gameId);
+            var result = game.PlayFaceUpCards(playerName, card.ToArray());
+            gameRepo.Save(game);
             return result;
         }
 
@@ -82,33 +90,6 @@ namespace Palace.Api.Controllers
             var result = game.PlayerCannotPlayCards(playerName);
             gameRepo.Save(game);
             return result;
-        }
-
-        private static Card GetCard(string card)
-        {
-            Suit suit;
-            string suitString = card.Substring(0, 1);
-            switch (card.Substring(0, 1))
-            {
-                case "S":
-                    suit = Suit.Spade;
-                    break;
-                case "C":
-                    suit = Suit.Club;
-                    break;
-                case "D":
-                    suit = Suit.Diamond;
-                    break;
-                case "H":
-                    suit = Suit.Heart;
-                    break;
-                default: throw new Exception();
-            }
-
-            int cardValueInt = int.Parse(card.Substring(1));
-            CardValue cardValue = (CardValue)cardValueInt;
-            var cardToPlay = new Card(cardValue, suit);
-            return cardToPlay;
         }
     }
 }

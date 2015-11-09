@@ -7,6 +7,7 @@
     window.playerName = @Html.Raw(Json.Encode(Model.PlayerName));
     window.getUrl = 'http://localhost:49311/api/game/get/' + window.gameId + '/' + window.playerName;
     window.playInHandCard = 'http://localhost:49311/api/game/playinhandcard/' + window.gameId + '/' + window.playerName;
+    window.playFaceUpCard = 'http://localhost:49311/api/game/playfaceupcard/' + window.gameId + '/' + window.playerName;
     window.cannotPlayCard = 'http://localhost:49311/api/game/cannotplaycard/' + window.gameId + '/' + window.playerName;
 </script>
 <div class="jumbotron">
