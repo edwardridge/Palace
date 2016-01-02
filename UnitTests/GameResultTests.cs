@@ -11,7 +11,7 @@ using TestHelpers;
 namespace UnitTests
 {
     [TestFixture]
-    public class GameResultTestsWhenValidCardPlayed
+    public class GameResultWhenValidCardPlayedTests
     {
         [Test]
         public void Player_Name_Should_Be_Last_Player()
@@ -168,6 +168,22 @@ namespace UnitTests
             var result = game.PlayerCannotPlayCards("Ed");
 
             result.GameStatusForPlayer.NumberOfValidMoves.Should().Be(1);
+        }
+
+        [Test]
+        public void When_Game_Is_Over_Flag_Is_Set()
+        {
+            Card[] deck = new Card[0];
+            var player1 = PlayerHelper.CreatePlayer(Card.EightOfClubs, "Ed");
+            var player2 = PlayerHelper.CreatePlayer("Liam");
+            var dealer = new Dealer(new Deck(new Card[0]), new DummyCanStartGame());
+            dealer.AddPlayer(player1);
+            dealer.AddPlayer(player2);
+            var game = dealer.CreateGameInitialisation().StartGameWithPlayPile(player1, new Card[0]);
+            //var game = DealerHelper.TestDealer(new[] { player1, player2 }).CreateGameInitialisation().StartGame();
+            var result = game.PlayInHandCards("Ed", Card.EightOfClubs);
+
+            result.GameOver.Should().Be(true);
         }
     }
 

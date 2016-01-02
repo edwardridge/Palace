@@ -164,8 +164,11 @@
         [Test]
         public void Playing_In_Hand_Card_Doesnt_Remove_Card_from_Players_In_Hand_Array_In_Game()
         {
+            var deck = new PredeterminedDeck(new List<Card>() { Card.AceOfClubs, Card.AceOfClubs, Card.AceOfClubs });
             var player1 = PlayerHelper.CreatePlayer(new[] { Card.EightOfClubs, Card.AceOfClubs }, "Ed");
-            var game = DealerHelper.TestDealer(new[] { player1 }).CreateGameInitialisation().StartGame();
+            var dealer = new Dealer(deck, new DummyCanStartGame());
+            dealer.AddPlayer(player1);
+            var game = dealer.CreateGameInitialisation().StartGame();
             game.PlayInHandCards("Ed", Card.EightOfClubs);
 
             game.State.Players.First(w => w.Name == "Ed").CardsInHand.Should().NotContain(Card.EightOfClubs);

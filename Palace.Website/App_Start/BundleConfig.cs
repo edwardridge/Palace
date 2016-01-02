@@ -26,6 +26,18 @@ namespace Palace.Website
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/game").Include(
+                "~/Scripts/Game/Card.jsx",
+                "~/Scripts/Game/VisibleCardPile.jsx",
+                "~/Scripts/Game/FaceDownCards.jsx",
+                "~/Scripts/Game/GameStatus.jsx",
+                "~/Scripts/Game/CannotPlay.jsx",
+                "~/Scripts/Game/GameRules.jsx",
+                "~/Scripts/Game/GameStatusForOpponents.jsx",
+                "~/Scripts/Game/GameStatusForOpponent.jsx",
+                "~/Scripts/Game/main.jsx"
+                ));
         }
     }
 }

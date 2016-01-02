@@ -5,6 +5,7 @@ namespace Palace
     using System.Linq;
 
     using Raven.Imports.Newtonsoft.Json;
+    using Rules;
 
     public enum PlayerCardType
     {
@@ -83,13 +84,10 @@ namespace Palace
         }
 
         //Todo: Remove!
-        [JsonIgnore]
-        public Player CurrentPlayer
+        //[JsonIgnore]
+        public Player GetCurrentPlayer()
         {
-            get
-            {
-                return this.Players.First(f => f.Name == _currentPlayer);
-            }
+           return this.Players.First(f => f.Name == _currentPlayer); 
         }
 
         [JsonIgnore]
@@ -97,9 +95,11 @@ namespace Palace
         {
             get
             {
-                return _players.Find(this.CurrentPlayer);
+                return _players.Find(this.Players.First(f => f.Name == this.CurrentPlayerName));
             }
         }
+
+        //public Card LastCardPlayed
 
         public Deck Deck
         {
@@ -216,7 +216,15 @@ namespace Palace
             if (player.CardsInHand.Count != 0) return new Result(player, this.State, "Cannot play face down card when you have cards in hand");
             if (player.CardsFaceUp.Count != 0) return new Result(player, this.State, "Cannot play face down card when you have face up cards");
             IfArgumentsAreInvalidThenThrow(player, new[]{card}, player.CardsFaceDown);
-            return PlayCardAndChooseNextPlayer(player, new[] { card }, PlayerCardType.FaceDown);
+
+            var ruleProcessor = RulesProcessorGenerator.GetRuleProcessor(_state, new[] { card });
+            if (!ruleProcessor.CardCanBePlayed())
+            {
+                ruleProcessor.GetNextStateWhenPlayingFaceDownCard();
+                return new Result(player, _state, "That face down card is invalid!");
+            }
+
+            return PlayCardAndChooseNextPlayer(player, new[] { card }, PlayerCardType.FaceDown); ;
         }
 
         public Result PlayerCannotPlayCards(string playerName)
@@ -251,8 +259,8 @@ namespace Palace
 
         private Result PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardType playerCardType)
         {
-            if (this._state.GameOver) return new GameOverResult(player, _state.CurrentPlayer);
-            if (_state.CurrentPlayer.Equals(player) == false) return new Result(player, this.State, "It isn't your turn!");
+            if (this._state.GameOver) return new GameOverResult(player, _state.GetCurrentPlayer(), _state);
+            if (_state.GetCurrentPlayer().Equals(player) == false) return new Result(player, this.State, "It isn't your turn!");
 
             var ruleProcessor = this.rulesProcessorGenerator.GetRuleProcessor(_state, cards);
 
@@ -261,7 +269,7 @@ namespace Palace
 
             this._state = ruleProcessor.GetNextState(playerCardType);
             if (this._state.GameOver)
-                return new GameOverResult(player, _state.CurrentPlayer);
+                return new GameOverResult(player, _state.GetCurrentPlayer(), _state);
             return new Result(player, this.State);
         }
 
@@ -274,6 +282,15 @@ namespace Palace
             private set
             {
                 this._state = value;
+            }
+        }
+
+        public RulesForGame Rules
+        {
+            get
+            {
+                RulesProcessorGenerator rulesGenerator = RulesProcessorGenerator == null ? new RulesProcessorGenerator(this.Id, new RulesForGame()) : RulesProcessorGenerator;
+                return rulesGenerator.RulesForCardsByValue;
             }
         }
 

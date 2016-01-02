@@ -15,16 +15,16 @@ namespace Palace.Api.Controllers
         public GameController()
         {
         }
-        [Route("create"), HttpGet]
-        public Guid CreateGame()
+        [Route("createstandardgame"), HttpGet]
+        public Guid CreateStandardGame()
         {
             var player1 = new Player("Ed");
             var player2 = new Player("Liam");
 
-            var rules = new Dictionary<CardValue, RuleForCard>();
-            rules.Add(CardValue.Ten, RuleForCard.Burn);
-            rules.Add(CardValue.Two, RuleForCard.Reset);
-            rules.Add(CardValue.Seven, RuleForCard.LowerThan);
+            var rules = new RulesForGame();
+            rules.Add(new Rule(CardValue.Ten, RuleForCard.Burn));
+            rules.Add(new Rule(CardValue.Two, RuleForCard.Reset));
+            rules.Add(new Rule(CardValue.Seven, RuleForCard.LowerThan));
             var dealer = new Dealer(StandardDeck.CreateDeck(), new DefaultStartGameRules(), rules);
 
             dealer.AddPlayer(player1);
@@ -52,13 +52,16 @@ namespace Palace.Api.Controllers
         [Route("get/{id}/{player}")]
         public Result GetGameState(string id, string player)
         {
-            //Result resultFromCache = (Result) memoryCache.Get(id + "/" + player);
-            //if (resultFromCache != null) return resultFromCache;
-
             var state = new GameRepository(new PalaceDocumentSession()).Open(id).State;
             var result = new Result(state.Players.First(f => f.Name == player), state);
-            //memoryCache.Set(new CacheItem(id + "/" + player, result), new CacheItemPolicy());
-            return result;
+            return result;  
+        }
+
+        [Route("getrules/{id}")]
+        public RulesForGame GetGameRules(string id)
+        {
+            var rules = new GameRepository(new PalaceDocumentSession()).Open(id).Rules;
+            return rules;
         }
 
         [Route("playinhandcard/{gameid}/{playername}"), HttpPost]
@@ -77,6 +80,16 @@ namespace Palace.Api.Controllers
             var gameRepo = new GameRepository(new PalaceDocumentSession());
             var game = gameRepo.Open(gameId);
             var result = game.PlayFaceUpCards(playerName, card.ToArray());
+            gameRepo.Save(game);
+            return result;
+        }
+
+        [Route("playfacedowncard/{gameid}/{playername}"), HttpPost]
+        public Result PlayFaceDownCard(string gameId, string playerName)
+        {
+            var gameRepo = new GameRepository(new PalaceDocumentSession());
+            var game = gameRepo.Open(gameId);
+            var result = game.PlayFaceDownCards(playerName, game.State.Players.First(f=>f.Name == playerName).CardsFaceDown.ToArray()[0]);
             gameRepo.Save(game);
             return result;
         }

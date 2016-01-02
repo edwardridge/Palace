@@ -1,20 +1,20 @@
 ﻿namespace Palace
 {
+    using Rules;
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
     public class RulesProcessorGenerator
     {
-
         private Guid gameId;
 
-        private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
+        private RulesForGame _rulesForCardsByValue;
 
-        public RulesProcessorGenerator(Guid gameId, Dictionary<CardValue, RuleForCard> rulesForCardsByValue)
+        public RulesProcessorGenerator(Guid gameId, RulesForGame rules)
         {
             this.GameId = gameId;
-            this.RulesForCardsByValue = rulesForCardsByValue;
+            this.RulesForCardsByValue = rules;
         }
 
         public Guid GameId
@@ -29,7 +29,7 @@
             }
         }
 
-        internal Dictionary<CardValue, RuleForCard> RulesForCardsByValue
+        internal RulesForGame RulesForCardsByValue
         {
             get
             {
@@ -50,13 +50,13 @@
     //Todo: Rename!
     internal class RuleProcessor
     {
-        private readonly Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
+        private readonly RulesForGame _rulesForCardsByValue;
 
         private readonly GameState state;
 
         private readonly IEnumerable<Card> cardsPlayed;
 
-        public RuleProcessor(Dictionary<CardValue, RuleForCard> rulesForCardsByValue, GameState state, IEnumerable<Card> cardsPlayed)
+        public RuleProcessor(RulesForGame rulesForCardsByValue, GameState state, IEnumerable<Card> cardsPlayed)
         {
             this._rulesForCardsByValue = rulesForCardsByValue;
             this.state = state;
@@ -65,14 +65,14 @@
 
         internal GameState GetNextState(PlayerCardType playerCardType)
         {
-            this.RemoveCardsFromPlayer(state.CurrentPlayer, this.cardsPlayed.ToList(), playerCardType);
+            this.RemoveCardsFromPlayer(state.GetCurrentPlayer(), this.cardsPlayed.ToList(), playerCardType);
 
             foreach (Card card in this.cardsPlayed)
                 state.PlayPileStack.Push(card);
 
             state.OrderOfPlay = this.GetOrderOfPlay();
 
-            if (!state.CurrentPlayer.HasNoMoreCards())
+            if (!state.GetCurrentPlayer().HasNoMoreCards())
             {
                 state.CurrentPlayerName = this.SetNextPlayer();
 
@@ -82,6 +82,19 @@
             else
                 state.GameOver = true;
 
+            state.NumberOfValdMoves += 1;
+
+            return state;
+        }
+
+        internal GameState GetNextStateWhenPlayingFaceDownCard()
+        {
+            var player = state.Players.First(f => f.Name == state.CurrentPlayerName);
+            state.CurrentPlayerName = SetNextPlayer();
+            player.AddCardsToInHandPile(state.PlayPile);
+            player.AddCardsToInHandPile(cardsPlayed);
+            player.RemoveCardsFromFaceDown(cardsPlayed.ToList());
+            state.PlayPileStack.Clear();
             state.NumberOfValdMoves += 1;
 
             return state;
@@ -101,7 +114,7 @@
             return this.CheckCardCanBePlayed(cardsPlayed.First(), state.PlayPile);
         }
 
-        private string SetNextPlayer()
+        public string SetNextPlayer()
         {
             if (cardsPlayed == null)
             {
@@ -118,7 +131,7 @@
             if (ruleForPlayersCard != RuleForCard.SkipPlayer)
                 return nextPayer.Value.Name;
 
-            var skipCardValue = this._rulesForCardsByValue.First(w => w.Value == RuleForCard.SkipPlayer).Key;
+            var skipCardValue = this._rulesForCardsByValue.GetCardValueFromRule(RuleForCard.SkipPlayer);
             var topCardsInPlayPileWithSkipValue = cardsPlayed.GetTopCardsWithSameValue(skipCardValue);
 
             foreach (var card in topCardsInPlayPileWithSkipValue)
@@ -208,9 +221,9 @@
 
         private RuleForCard GetRuleForCardFromCardValue(CardValue cardValue)
         {
-            RuleForCard ruleForCard;
-            this._rulesForCardsByValue.TryGetValue(cardValue, out ruleForCard);
-            return ruleForCard == 0 ? RuleForCard.Standard : ruleForCard;
+            return this._rulesForCardsByValue.GetRuleFromCard(cardValue);
+            //this._rulesForCardsByValue.TryGetValue(cardValue, out ruleForCard);
+            //return ruleForCard == 0 ? RuleForCard.Standard : ruleForCard;
         }
     }
 }

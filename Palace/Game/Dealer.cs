@@ -1,5 +1,6 @@
 ﻿namespace Palace
 {
+    using Rules;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -7,11 +8,11 @@
     public class Dealer
     {
         public Dealer(Deck deck, ICanStartGame canStartGame)
-            : this(deck, canStartGame, new Dictionary<CardValue, RuleForCard>())
+            : this(deck, canStartGame, new RulesForGame())
         {
         }
 
-        public Dealer(Deck deck, ICanStartGame canStartGame, Dictionary<CardValue, RuleForCard> rulesForCardsByValue)
+        public Dealer(Deck deck, ICanStartGame canStartGame, RulesForGame rulesForCardsByValue)
         {
             this._players = new List<Player>();
             this._deck = deck;
@@ -37,7 +38,7 @@
 
         private Deck _deck;
 
-        private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
+        private RulesForGame _rulesForCardsByValue;
 
         private ICanStartGame _canStartGame;
     }
@@ -47,7 +48,7 @@
         private ICanStartGame _canStartGame;
         private Deck _deck;
         private ICollection<Player> _players;
-        private Dictionary<CardValue, RuleForCard> _rulesForCardsByValue;
+        private RulesForGame _rulesForCardsByValue;
         private Guid _id;
 
         internal Guid Id
@@ -82,7 +83,7 @@
             }
         }
 
-        internal Dictionary<CardValue, RuleForCard> RuleForCardsByValue {
+        internal RulesForGame RuleForCardsByValue {
             get
             {
                 return _rulesForCardsByValue;
@@ -105,7 +106,7 @@
             }
         }
 
-        public GameInitialisation(ICollection<Player> _players, Deck _deck, ICanStartGame _canStartGame, Dictionary<CardValue, RuleForCard> _rulesForCardsByValue, Guid id)
+        public GameInitialisation(ICollection<Player> _players, Deck _deck, ICanStartGame _canStartGame, RulesForGame _rulesForCardsByValue, Guid id)
         {
             this._players = _players;
             this._canStartGame = _canStartGame;
@@ -151,7 +152,9 @@
                 {
                     if (player.CardsInHand == null || player.CardsInHand.Count == 0)
                         continue;
-                    var resetCardValue = _rulesForCardsByValue.FirstOrDefault(rule => rule.Value == RuleForCard.Reset).Key;
+
+                    var resetCardValue = _rulesForCardsByValue.GetCardValueFromRule(RuleForCard.Reset);
+
                     var lowestCardValueForCurrentPlayer = GetLowestNonResetCardValueForPlayer(player, resetCardValue);
                     var lowestCardValueForStartingPlayer = GetLowestNonResetCardValueForPlayer(startingPlayer, resetCardValue);
 
@@ -173,7 +176,7 @@
             return game;
         }
 
-        private static CardValue GetLowestNonResetCardValueForPlayer(Player player, CardValue resetCardValue)
+        private static CardValue GetLowestNonResetCardValueForPlayer(Player player, CardValue? resetCardValue)
         {
             var lowestNonResetCardValue = player.CardsInHand.Where(card => card.Value != resetCardValue).OrderBy(o => o.Value).First().Value;
             return lowestNonResetCardValue;

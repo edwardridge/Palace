@@ -25,7 +25,9 @@ namespace Palace
         private Result(Player player, GameState gameState, List<string> errorList)
         {
             this._errorMessages = errorList;
+            this.GameOver = gameState.GameOver;
             this.GameStatusForPlayer = SetupGameStatusForPlayer(player, gameState);
+            
         }
 
         private GameStatusForPlayer SetupGameStatusForPlayer(Player player, GameState gameState)
@@ -67,6 +69,10 @@ namespace Palace
                 return this._errorMessages.Any() ? ResultOutcome.Fail : ResultOutcome.Success;
             }
         }
+
+        public bool GameOver { get; set; }
+
+        public IEnumerable<KeyValuePair<CardValue, RuleForCard>> Rules { get; set; }
     }
 
     public class GameStatusForPlayer

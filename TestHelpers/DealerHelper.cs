@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using Palace;
+    using Palace.Rules;
 
     public static class DealerHelper
     {
@@ -15,7 +16,7 @@
             return dealer;
         }
 
-        public static Dealer TestDealerWithRules(IEnumerable<Player> players, Dictionary<CardValue, RuleForCard> rulesForCardByValue)
+        public static Dealer TestDealerWithRules(IEnumerable<Player> players, RulesForGame rulesForCardByValue)
         {
             var dealer = new Dealer(StandardDeck.CreateDeck(), new DummyCanStartGame(), rulesForCardByValue);
             foreach (var player in players)

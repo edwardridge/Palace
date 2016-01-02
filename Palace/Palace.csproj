@@ -90,6 +90,7 @@
     <Compile Include="Game\OrderOfPlay.cs" />
     <Compile Include="Repository\GameInitialisationRepository.cs" />
     <Compile Include="Rules\DefaultStartGameRules.cs" />
+    <Compile Include="Rules\Rule.cs" />
     <Compile Include="Rules\RulesProcessorGenerator.cs" />
     <Compile Include="Deck\ICardDealer.cs" />
     <Compile Include="Program.cs" />

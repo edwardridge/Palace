@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Palace.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,8 +9,40 @@ namespace Palace.Website.Controllers
 {
     public class HomeController : Controller
     {
+        PalaceDocumentSession palaceSession;
+
+        public HomeController(PalaceDocumentSession palaceSession)
+        {
+            this.palaceSession = palaceSession;
+        }
+
         public ActionResult Index()
         {
+            using (var session = palaceSession.GetDocumentSession())
+            {
+                var games = session
+                    .Query<Game>()
+                    .OrderByDescending(o => o.State.DateSaved)
+                    //.Take(10)
+                    ;
+
+                List<GameInfoModel> gameInfos = new List<GameInfoModel>();
+
+                foreach(var game in games)
+                {
+                    foreach(var player in game.State.Players)
+                    {
+                        gameInfos.Add(new GameInfoModel()
+                        {
+                            GameId = game.Id.ToString(),
+                            PlayerName = player.Name,
+                            ValidMoves = game.State.NumberOfValdMoves
+                        });
+                    }
+                }
+
+                return View(gameInfos);
+            }
             return View();
         }
 
@@ -44,5 +77,7 @@ namespace Palace.Website.Controllers
         public string PlayerName { get; set; }
 
         public string GameId { get; set; }
+
+        public int ValidMoves { get; set; }
     }
 }

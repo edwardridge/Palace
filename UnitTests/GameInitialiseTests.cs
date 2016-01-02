@@ -311,7 +311,7 @@
             var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
             game = dealer.CreateGameInitialisation().StartGame();
 
-            game.State.CurrentPlayer.Should().Be(player1);
+            game.State.GetCurrentPlayer().Should().Be(player1);
         }
 
         [Test]
@@ -323,7 +323,7 @@
 
             game = dealer.CreateGameInitialisation().StartGame();
 
-            game.State.CurrentPlayer.Should().Be(player2);
+            game.State.GetCurrentPlayer().Should().Be(player2);
         }
 
         [Test]
@@ -336,7 +336,7 @@
 
             game = dealer.CreateGameInitialisation().StartGame();
 
-            game.State.CurrentPlayer.Should().Be(player3);
+            game.State.GetCurrentPlayer().Should().Be(player3);
         }
     }
 }

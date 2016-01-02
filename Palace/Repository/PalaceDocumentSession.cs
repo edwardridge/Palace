@@ -14,6 +14,13 @@ namespace Palace.Repository
     public class PalaceDocumentSession
     {
         DocumentStore documentStore;
+        public PalaceDocumentSession(DocumentStore documentStore)
+        {
+            documentStore.ConnectionStringName = "Server";
+            this.documentStore = documentStore;
+            documentStore.Initialize();
+        }
+
         public PalaceDocumentSession()
         {
             documentStore = new DocumentStore()

@@ -6,8 +6,10 @@
     window.gameId = @Html.Raw(Json.Encode(Model.GameId));
     window.playerName = @Html.Raw(Json.Encode(Model.PlayerName));
     window.getUrl = 'http://localhost:49311/api/game/get/' + window.gameId + '/' + window.playerName;
+    window.getRulesUrl = 'http://localhost:49311/api/game/getrules/' + window.gameId;
     window.playInHandCard = 'http://localhost:49311/api/game/playinhandcard/' + window.gameId + '/' + window.playerName;
     window.playFaceUpCard = 'http://localhost:49311/api/game/playfaceupcard/' + window.gameId + '/' + window.playerName;
+    window.playFaceDownCard = 'http://localhost:49311/api/game/playfacedowncard/' + window.gameId + '/' + window.playerName;
     window.cannotPlayCard = 'http://localhost:49311/api/game/cannotplaycard/' + window.gameId + '/' + window.playerName;
 </script>
 <div class="jumbotron">
@@ -15,22 +17,10 @@
 </div>
 
 <div id="reactContent"></div>
+
+@section Scripts{
 <script src="~/Scripts/jquery-1.10.2.js"></script>
 <script src="https://fb.me/react-0.14.2.js"></script>
 <script src="https://fb.me/react-dom-0.14.2.js"></script>
-<script src="@Url.Content("~/Scripts/main.jsx")"></script>
-@*<script>
-    $().ready(function () {
-        $("#getGame").click(function () {
-            var id = $("#gameId").val();
-            var player = $("#playerName").val();
-            $.ajax({
-                url: "http://localhost:49311/api/game/get/" + id + "/" + player,
-                success: function (data) {
-                    $("#gameStatus").text(data.GameStatusForPlayer);
-                }
-            } )
-        })
-    });
-
-</script>*@
+@Scripts.Render("~/game")
+    }
