@@ -1,8 +1,14 @@
-﻿using System;
+﻿using Palace.Api.DependencyInjection;
+using StructureMap;
+using StructureMap.Graph;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Dispatcher;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -25,6 +31,13 @@ namespace Palace.Api
 
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add
                 (new Newtonsoft.Json.Converters.StringEnumConverter());
+
+            IContainer container = new Container(c => c.AddRegistry<DefaultRegistry>());
+            GlobalConfiguration.Configuration.Services
+            .Replace(typeof(IHttpControllerActivator),
+                new StructureMapWebApiControllerActivator(container));
         }
     }
+
+    
 }

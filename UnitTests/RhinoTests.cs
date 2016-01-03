@@ -18,9 +18,9 @@ namespace UnitTests
     using System.Diagnostics;
     using Palace.Rules;
 
-    public class TestPalaceDocumentSession : PalaceDocumentSession
+    public class TestPalaceDocumentSession : IPalaceDocumentSessionFactory
     {
-        public override IDocumentSession GetDocumentSession()
+        public IDocumentSession GetDocumentSession()
         {
             var documentStore = new EmbeddableDocumentStore()
             {
@@ -50,14 +50,14 @@ namespace UnitTests
             var gameInit = dealer.CreateGameInitialisation();
             gameInit.DealInitialCards();
             var game = gameInit.StartGame();
-            var gameRepository = new GameRepository(new PalaceDocumentSession());
+            var gameRepository = new GameRepository(new TestPalaceDocumentSession());
             gameRepository.Save(game);
         }
 
         [Test, Ignore]
         public void Can_Open_Game()
         {
-            var gameRepository = new GameRepository(new PalaceDocumentSession());
+            var gameRepository = new GameRepository(new TestPalaceDocumentSession());
             var game = gameRepository.Open("6b200db4-594f-480a-b9ff-2b3a6eaafd5a");
             var currentPlayer = game.State.GetCurrentPlayer();
             game.PlayInHandCards(currentPlayer.Name, currentPlayer.CardsInHand.First());
@@ -76,7 +76,7 @@ namespace UnitTests
             var gameInit = dealer.CreateGameInitialisation();
             gameInit.DealInitialCards();
             var game = gameInit.StartGame();
-            var gameRepository = new GameRepository(new PalaceDocumentSession());
+            var gameRepository = new GameRepository(new TestPalaceDocumentSession());
             gameRepository.Save(game);
 
             var gameFromRepository = gameRepository.Open(game.Id.ToString());

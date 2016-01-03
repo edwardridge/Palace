@@ -16,6 +16,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Palace.Website.DependencyResolution {
+    using Repository;
     using Raven.Client;
     using Raven.Client.Document;
     using StructureMap.Configuration.DSL;
@@ -31,17 +32,17 @@ namespace Palace.Website.DependencyResolution {
                     scan.WithDefaultConventions();
 					scan.With(new ControllerConvention());
                 });
-            //For<IDocumentSession>().Use(con =>
-            //{
-            //    var docStore = new DocumentStore()
-            //    {
-            //        Url = "http://locahost:8080"
-            //    };
-            //    return docStore.OpenSession("Palace");
-            //});
-            //For<IExample>().Use<Example>();
+
+            For<IDocumentStore>().Use(CreateDocumentStore()).Singleton();
+            For<IPalaceDocumentSessionFactory>().Use<PalaceDocumentSession>();
         }
 
+        private DocumentStore CreateDocumentStore()
+        {
+            var documentStore = new DocumentStore();
+            documentStore.ConnectionStringName = "Server";
+            return documentStore;
+        }
         #endregion
-    }
+        }
 }
