@@ -18,7 +18,7 @@ namespace Palace.Api.DependencyInjection
                     scan.WithDefaultConventions();
                 });
             For<IDocumentStore>().Use(CreateDocumentStore()).Singleton();
-            For<IPalaceDocumentSessionFactory>().Use<PalaceDocumentSession>();
+            For<IPalaceDocumentSessionFactory>().Use<PalaceDocumentSessionFactory>().Ctor<string>("database").Is("Palace");
         }
 
         private DocumentStore CreateDocumentStore()

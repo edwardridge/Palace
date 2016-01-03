@@ -9,9 +9,9 @@ namespace Palace.Website.Controllers
 {
     public class HomeController : Controller
     {
-        PalaceDocumentSession palaceSession;
+        IPalaceDocumentSessionFactory palaceSession;
 
-        public HomeController(PalaceDocumentSession palaceSession)
+        public HomeController(IPalaceDocumentSessionFactory palaceSession)
         {
             this.palaceSession = palaceSession;
         }

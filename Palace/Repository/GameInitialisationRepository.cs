@@ -2,9 +2,9 @@
 {
     public class GameInitialisationRepository
     {
-        PalaceDocumentSession documentSession;
+        IPalaceDocumentSessionFactory documentSession;
 
-        public GameInitialisationRepository(PalaceDocumentSession documentSession)
+        public GameInitialisationRepository(IPalaceDocumentSessionFactory documentSession)
         {
             this.documentSession = documentSession;
         }

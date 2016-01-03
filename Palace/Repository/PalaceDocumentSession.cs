@@ -16,18 +16,21 @@ namespace Palace.Repository
         IDocumentSession GetDocumentSession();
     }
 
-    public class PalaceDocumentSession : IPalaceDocumentSessionFactory
+    public class PalaceDocumentSessionFactory : IPalaceDocumentSessionFactory
     {
-        IDocumentStore documentStore;
-        public PalaceDocumentSession(IDocumentStore documentStore)
+        private IDocumentStore documentStore;
+        private string database;
+
+        public PalaceDocumentSessionFactory(IDocumentStore documentStore, string database)
         {
             this.documentStore = documentStore;
+            this.database = database;
             documentStore.Initialize();
         }
 
         public IDocumentSession GetDocumentSession()
         {
-            return documentStore.OpenSession("Palace");
+            return documentStore.OpenSession(database);
         }
     }
 }

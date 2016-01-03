@@ -34,7 +34,7 @@ namespace Palace.Website.DependencyResolution {
                 });
 
             For<IDocumentStore>().Use(CreateDocumentStore()).Singleton();
-            For<IPalaceDocumentSessionFactory>().Use<PalaceDocumentSession>();
+            For<IPalaceDocumentSessionFactory>().Use<PalaceDocumentSessionFactory>().Ctor<string>("database").Is("Palace");
         }
 
         private DocumentStore CreateDocumentStore()
