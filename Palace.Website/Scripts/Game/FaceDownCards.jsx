@@ -6,7 +6,7 @@
         for(var i = 0; i < this.props.cardsCount; i++){
             faceDown.push(
                 <span key={i} 
-                onClick={this.props.playCards ? this.props.playCards.bind(null, 'CardsFaceDown') : emptyFunction}>
+                onClick={this.props.playCards ? this.props.playCards : emptyFunction}>
                     <img src='/Content/cards/card_back.png' width='75px' height='110px' />
                 </span>
                 )

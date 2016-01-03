@@ -22,7 +22,7 @@
         return (
         <div>
             <div>{gameOverMessage}</div>
-            <div className='errors'>{this.props.error}</div>
+            <div className='errors'>{this.props.errors}</div>
             <h3>Name: {this.props.gameState.Name} </h3> <br />
             <span>{playersTurn}</span>
     
@@ -34,7 +34,7 @@
             <button onClick={this.props.playCards.bind(null, 'CardsInHand')} disabled={noSelectedCards || !isPlayersTurn || gameOver}>Play cards</button> <br /> <br/>
             <CannotPlay cannotPlayCards={this.props.cannotPlayCards} allowed={!isPlayersTurn || gameOver}/> <br/> <br/>
             Face down cards <br/>
-            <FaceDownCards cardsCount={this.props.gameState.CardsFaceDownNum} playCards={this.props.playCards}/> <br/>
+            <FaceDownCards cardsCount={this.props.gameState.CardsFaceDownNum} playCards={(isPlayersTurn && !gameOver) ? this.props.playCards.bind(null, 'CardsFaceDown') : emptyFunction}/> <br/>
             Face up cards: <br />
             <VisibleCardPile cards={this.props.gameState.CardsFaceUp} toggleCardSelected={this.props.toggleCardSelected.bind(null, 'CardsFaceUp')} /> <br />
             <button onClick={this.props.playCards.bind(null, 'CardsFaceUp' )} disabled={noFaceUpSelectedCards || !isPlayersTurn || gameOver}>Play cards</button> <br /> <br />

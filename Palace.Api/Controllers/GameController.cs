@@ -15,6 +15,7 @@ namespace Palace.Api.Controllers
         public GameController()
         {
         }
+
         [Route("createstandardgame"), HttpGet]
         public Guid CreateStandardGame()
         {
@@ -22,15 +23,20 @@ namespace Palace.Api.Controllers
             var player2 = new Player("Liam");
 
             var rules = new RulesForGame();
+
             rules.Add(new Rule(CardValue.Ten, RuleForCard.Burn));
             rules.Add(new Rule(CardValue.Two, RuleForCard.Reset));
             rules.Add(new Rule(CardValue.Seven, RuleForCard.LowerThan));
+            rules.Add(new Rule(CardValue.Ace, RuleForCard.ReverseOrderOfPlay));
+            rules.Add(new Rule(CardValue.Eight, RuleForCard.SeeThrough));
+            rules.Add(new Rule(CardValue.Jack, RuleForCard.SkipPlayer));
+
             var dealer = new Dealer(StandardDeck.CreateDeck(), new DefaultStartGameRules(), rules);
 
             dealer.AddPlayer(player1);
             dealer.AddPlayer(player2);
 
-            var gameInit =  dealer.CreateGameInitialisation();
+            var gameInit = dealer.CreateGameInitialisation();
             
             gameInit.DealInitialCards();
 

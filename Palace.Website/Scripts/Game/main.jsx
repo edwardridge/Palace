@@ -58,11 +58,11 @@ getInitialState: function() {
         
         var methodToSend = '';
         switch(cardPile){
-            case 'CardsInHand': methodToSend = window.playInHandCard; 
+            case 'CardsInHand': methodToSend = Palace.playInHandCard;
                 break;
-            case 'CardsFaceUp': methodToSend = window.playFaceUpCard;
+            case 'CardsFaceUp': methodToSend = Palace.playFaceUpCard;
                 break;
-            case 'CardsFaceDown': methodToSend = window.playFaceDownCard;
+            case 'CardsFaceDown': methodToSend = Palace.playFaceDownCard;
                 break;
             default: throw new Error();
         }
@@ -70,7 +70,7 @@ getInitialState: function() {
     },
     cannotPlayCards: function(event){
         var game = this;
-        this.sendPostRequestAndUpdateState(game, window.cannotPlayCard);
+        this.sendPostRequestAndUpdateState(game, Palace.cannotPlayCard);
     },
     sendPostRequestAndUpdateState: function(game, url, postData){
         var xhr = new XMLHttpRequest();
@@ -103,8 +103,24 @@ getInitialState: function() {
     updateStateFromResult: function(game, responseText, forceUpdate){
         var data = JSON.parse(responseText);
         if(forceUpdate || game.state.gameStatusForPlayer.length === 0 || data.GameStatusForPlayer.NumberOfValidMoves > game.state.gameStatusForPlayer.NumberOfValidMoves){
-            game.setState({ gameStatusForPlayer: data.GameStatusForPlayer, gameStatusForOpponents: data.GameStatusForPlayer.GameStatusForOpponents,  errors: data.Errors, gameOver: data.GameOver});
+            var newGameStatusForPlayer = game.preserveSelectedCards(data.GameStatusForPlayer, game.state.gameStatusForPlayer);
+            game.setState({ gameStatusForPlayer: newGameStatusForPlayer, gameStatusForOpponents: data.GameStatusForPlayer.GameStatusForOpponents, errors: data.Errors, gameOver: data.GameOver });
         }
+    },
+    preserveSelectedCards: function (newGameStatusForPlayer, oldGameStatusForPlayer) {
+        //If we have just played, don't preserve selected cards
+        if (oldGameStatusForPlayer.Name === oldGameStatusForPlayer.CurrentPlayer) {
+            return newGameStatusForPlayer;
+        }
+        oldGameStatusForPlayer.CardsInHand.forEach(function (card, index) {
+            newGameStatusForPlayer.CardsInHand[index].selected = card.selected;
+        });
+
+        oldGameStatusForPlayer.CardsFaceUp.forEach(function (card, index) {
+            newGameStatusForPlayer.CardsFaceUp[index].selected = card.selected;
+        });
+
+        return newGameStatusForPlayer;
     },
     componentDidMount: function() {
         this.loadRulesFromServer();
@@ -112,7 +128,7 @@ getInitialState: function() {
         window.setInterval(this.loadCommentsFromServer, this.props.pollInterval);
     },
    render: function(){
-       var error = this.state.errors[0];
+       var errors = this.state.errors;
         return (
             <div>
                 <GameStatusForPlayer 
@@ -120,7 +136,7 @@ getInitialState: function() {
                             gameOver = {this.state.gameOver}
                             toggleCardSelected={this.toggleSelectedVisibleCard} 
                             playCards={this.playCards} 
-                            error = {error}
+                            errors = {errors}
                             cannotPlayCards={this.cannotPlayCards} />
                             
                 <GameStatusForOpponents
@@ -135,6 +151,6 @@ getInitialState: function() {
 
 ReactDOM.render(
 
-  <Game url={window.getUrl} rulesUrl={window.getRulesUrl} pollInterval={2000} />,
+  <Game url={Palace.getUrl} rulesUrl={Palace.getRulesUrl} pollInterval={2000} />,
   document.getElementById('reactContent')
 );

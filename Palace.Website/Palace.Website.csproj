@@ -202,6 +202,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".bowerrc" />
+    <Content Include="bower.json" />
     <None Include="ClearScript.V8\ClearScriptV8-32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -214,8 +216,6 @@
     <None Include="ClearScript.V8\v8-x64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\cards\10_of_clubs.png" />
     <Content Include="Content\cards\10_of_diamonds.png" />
     <Content Include="Content\cards\10_of_hearts.png" />
@@ -284,12 +284,13 @@
     <Content Include="Content\cards\queen_of_spades.png" />
     <Content Include="Content\cards\queen_of_spades2.png" />
     <Content Include="Content\cards\red_joker.png" />
+    <Content Include="Content\Libraries\bootstrap.css" />
+    <Content Include="Content\Site\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Content\SASS\Site.scss" />
+    <Content Include="gulpfile.js" />
     <Content Include="Scripts\Game\Card.jsx" />
     <Content Include="Scripts\Game\FaceDownCards.jsx" />
     <Content Include="Scripts\Game\VisibleCardPile.jsx" />
@@ -298,19 +299,12 @@
     <Content Include="Scripts\Game\GameRules.jsx" />
     <Content Include="Scripts\Game\GameStatusForOpponents.jsx" />
     <Content Include="Scripts\Game\GameStatusForOpponent.jsx" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="package.json" />
     <None Include="Scripts\Game\main.jsx" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\respond.js" />
-    <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\_references.js" />
+    <Content Include="Scripts\Libraries\bootstrap.js" />
+    <Content Include="Scripts\Libraries\jquery.js" />
+    <Content Include="Scripts\Libraries\react-dom.js" />
+    <Content Include="Scripts\Libraries\react.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -337,7 +331,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Palace\Palace.csproj">
