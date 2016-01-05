@@ -13,8 +13,9 @@
     Palace.playFaceDownCard = 'http://localhost:49311/api/game/playfacedowncard/' + Palace.gameId + '/' + Palace.playerName;
     Palace.cannotPlayCard = 'http://localhost:49311/api/game/cannotplaycard/' + Palace.gameId + '/' + Palace.playerName;
 </script>
-<div class="jumbotron">
-    <h1>Game</h1>
-</div>
 
 <div id="reactContent"></div>
+
+@section scripts{ 
+    @Scripts.Render("~/game")
+}

@@ -12,9 +12,9 @@
                 )
     }
         return(
-            <div className='FaceDown'>
+            <span className='FaceDown'>
             {faceDown}
-            </div>
+            </span>
         );
 }
 });

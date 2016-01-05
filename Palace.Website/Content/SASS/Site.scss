@@ -34,3 +34,25 @@ textarea {
 .errors {
     color: red;
 }
+
+.playersTurn{
+    background-color: deepskyblue;
+    color: black;
+    display: block;
+}
+
+.opponentsTurn{
+    background-color: orangered;
+    color: white;
+    display: block;
+    
+    button{
+        color: black;
+    }
+}
+
+.playPile{
+    background-color: green;
+    display: block;
+}
+

@@ -57,6 +57,11 @@ namespace Palace.Website.Controllers
             return View(gameInfoForModel);
         }
 
+        public ActionResult CreateGame()
+        {
+            return View();
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

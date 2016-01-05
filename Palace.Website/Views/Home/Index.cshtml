@@ -5,6 +5,8 @@
 
 <div class="jumbotron">
     <h1>Game</h1>
+
+    <a href="@Url.Action("CreateGame","Home")">Create game</a>
     @foreach(var game in Model)
     {
         <a href="@Url.Action("Game","Home", new {playerName=game.PlayerName, gameId = game.GameId })">

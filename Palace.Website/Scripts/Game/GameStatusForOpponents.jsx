@@ -2,6 +2,7 @@ var GameStatusForOpponents = React.createClass({
     
     render: function(){
         var opponents = [];
+        var gameStatusForOpponents = this;
         this.props.gameState.forEach(function(opponent, index){
             opponents.push(
                 <div key={index}>
@@ -10,6 +11,7 @@ var GameStatusForOpponents = React.createClass({
                         cardsFaceDownNum={opponent.CardsFaceDownNum}
                         cardsInHandNum={opponent.CardsInHandNum}
                         name = {opponent.Name}
+                        currentPlayer = {gameStatusForOpponents.props.currentPlayer}
                     />
                 </div>
                 );

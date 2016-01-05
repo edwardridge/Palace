@@ -10,6 +10,7 @@ namespace Palace.Website
         {
             bundles.Add(new ScriptBundle("~/bundles/libraries").Include(
                       "~/Scripts/Libraries/jquery.js",
+                      "~/Scripts/Libraries/underscore.js",
                       "~/Scripts/Libraries/react.js",
                       "~/Scripts/Libraries/react-dom.js",
                       "~/Scripts/Libraries/bootstrap.js"
@@ -18,6 +19,10 @@ namespace Palace.Website
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/Libraries/*.css",
                       "~/Content/Site/*.css"));
+
+            bundles.Add(new ScriptBundle("~/creategame").Include(
+                "~/Scripts/CreateGame/CreateGame.jsx"
+                ));
 
             bundles.Add(new ScriptBundle("~/game").Include(
                 "~/Scripts/Game/Card.jsx",

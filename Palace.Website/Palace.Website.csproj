@@ -300,11 +300,13 @@
     <Content Include="Scripts\Game\GameStatusForOpponents.jsx" />
     <Content Include="Scripts\Game\GameStatusForOpponent.jsx" />
     <Content Include="package.json" />
+    <Content Include="Scripts\CreateGame\CreateGame.jsx" />
     <None Include="Scripts\Game\main.jsx" />
     <Content Include="Scripts\Libraries\bootstrap.js" />
     <Content Include="Scripts\Libraries\jquery.js" />
     <Content Include="Scripts\Libraries\react-dom.js" />
     <Content Include="Scripts\Libraries\react.js" />
+    <Content Include="Scripts\Libraries\underscore.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -320,6 +322,7 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Game.cshtml" />
+    <Content Include="Views\Home\CreateGame.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

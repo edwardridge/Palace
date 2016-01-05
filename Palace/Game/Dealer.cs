@@ -71,7 +71,7 @@
             }
         }
 
-        internal ICollection<Player> Players
+        public ICollection<Player> Players
         {
             get
             {

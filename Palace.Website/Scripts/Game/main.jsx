@@ -141,6 +141,7 @@ getInitialState: function() {
                             
                 <GameStatusForOpponents
                             gameState={this.state.gameStatusForOpponents}
+                            currentPlayer={this.state.gameStatusForPlayer.CurrentPlayer}
                             />
                             
                 <GameRules rules={this.state.rules} />   

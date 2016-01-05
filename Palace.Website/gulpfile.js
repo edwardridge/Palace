@@ -13,7 +13,8 @@ var jslibraries = [
     './wwwroot/lib/react/react.js',
     './wwwroot/lib/react/react-dom.js',
     './wwwroot/lib/jquery/dist/jquery.js',
-    './wwwroot/lib/bootstrap/dist/js/bootstrap.js'
+    './wwwroot/lib/bootstrap/dist/js/bootstrap.js',
+    './wwwroot/lib/underscore/underscore.js',
 ]
 
 var csslibraries = [
@@ -44,8 +45,8 @@ gulp.task('sass', function () {
 });
 
 gulp.task('watch-sass', function () {
-    plugins.livereload.listen();
-    gulp.watch('./Content/*.scss', ['sass']);
+    //plugins.livereload.listen();
+    //gulp.watch('./Content/*.scss', ['sass']);
 });
 
 gulp.task('default', ['watch-sass']);

@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "CreateGame";
+}
+<script>
+    var Palace = {};
+    Palace.createGameUrl = 'http://localhost:49311/api/game/creategame';
+</script>
+<h2>Create Game</h2>
+
+<div id="reactContent"></div>
+
+
+@section scripts{
+    @Scripts.Render("~/creategame")
+}

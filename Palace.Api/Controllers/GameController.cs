@@ -3,10 +3,18 @@ using Palace.Rules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web.Http;
 using System.Web.Http.Cors;
 namespace Palace.Api.Controllers
 {
+    public class CreateGameCommand
+    {
+        public IEnumerable<string> Players { get; set; }
+
+        public IEnumerable<Rule> Rules { get; set; }
+    }
+
     //Todo: Replace!
     [EnableCors("*", "*", "*")]
     [RoutePrefix("api/game")]
@@ -18,13 +26,21 @@ namespace Palace.Api.Controllers
             this.gameRepository = gameRepository;
         }
 
+        [Route("creategame"), HttpPost]
+        public HttpStatusCode CreateGame(CreateGameCommand createGameCommand)
+        {
+            var players = createGameCommand.Players.Select(s => new Player(s));
+            var id = CreateGame(players, createGameCommand.Rules);
+            return HttpStatusCode.OK;
+        }
+
         [Route("createstandardgame"), HttpGet]
         public Guid CreateStandardGame()
         {
             var player1 = new Player("Ed");
             var player2 = new Player("Liam");
 
-            var rules = new RulesForGame();
+            var rules = new List<Rule>();
 
             rules.Add(new Rule(CardValue.Ten, RuleForCard.Burn));
             rules.Add(new Rule(CardValue.Two, RuleForCard.Reset));
@@ -33,28 +49,43 @@ namespace Palace.Api.Controllers
             rules.Add(new Rule(CardValue.Eight, RuleForCard.SeeThrough));
             rules.Add(new Rule(CardValue.Jack, RuleForCard.SkipPlayer));
 
-            var dealer = new Dealer(StandardDeck.CreateDeck(), new DefaultStartGameRules(), rules);
+            var id = CreateGame(new List<Player>() { player1, player2 }, rules);
+            
+            return id;
+        }
 
-            dealer.AddPlayer(player1);
-            dealer.AddPlayer(player2);
+        public Guid CreateGame(IEnumerable<Player> players, IEnumerable<Rule> rules)
+        {
+            var rulesForGame = new RulesForGame();
+            foreach (var rule in rules)
+            {
+                rulesForGame.Add(rule);
+            }
+
+            var dealer = new Dealer(StandardDeck.CreateDeck(), new DefaultStartGameRules(), rulesForGame);
+
+            foreach (var player in players)
+            {
+                dealer.AddPlayer(player);
+            }
 
             var gameInit = dealer.CreateGameInitialisation();
-            
+
             gameInit.DealInitialCards();
 
-            gameInit.PutCardFaceUp(player1, player1.CardsInHand.ToArray()[0]);
-            gameInit.PutCardFaceUp(player1, player1.CardsInHand.ToArray()[1]);
-            gameInit.PutCardFaceUp(player1, player1.CardsInHand.ToArray()[2]);
-
-            gameInit.PutCardFaceUp(player2, player2.CardsInHand.ToArray()[0]);
-            gameInit.PutCardFaceUp(player2, player2.CardsInHand.ToArray()[1]);
-            gameInit.PutCardFaceUp(player2, player2.CardsInHand.ToArray()[2]);
-
+            foreach (var player in players)
+            {
+                var playerFromGameInit = gameInit.Players.First(f => f.Name == player.Name);
+                gameInit.PutCardFaceUp(playerFromGameInit, playerFromGameInit.CardsInHand.ToArray()[0]);
+                gameInit.PutCardFaceUp(playerFromGameInit, playerFromGameInit.CardsInHand.ToArray()[1]);
+                gameInit.PutCardFaceUp(playerFromGameInit, playerFromGameInit.CardsInHand.ToArray()[2]);
+            }
+            
             var game = gameInit.StartGame();
             gameRepository.Save(game);
-            
+
             return game.Id;
-        }
+        } 
         
         [Route("get/{id}/{player}")]
         public Result GetGameState(string id, string player)
