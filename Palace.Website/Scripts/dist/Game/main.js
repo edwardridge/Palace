@@ -86,6 +86,27 @@ var Game = function (_React$Component) {
             _this.sendPostRequestAndUpdateState(game, game.props.palaceConfig.cannotPlayCard);
         };
 
+        _this.loadCardsFromServer = function (forceUpdate) {
+            var game = _this;
+            var xhr = new XMLHttpRequest();
+            xhr.open('get', game.props.palaceConfig.getUrl, true);
+            xhr.onload = function () {
+                game.updateStateFromResult(game, xhr.responseText, forceUpdate);
+            };
+            xhr.send();
+        };
+
+        _this.loadRulesFromServer = function () {
+            var game = _this;
+            var xhr = new XMLHttpRequest();
+            xhr.open('get', game.props.palaceConfig.getRulesUrl, true);
+            xhr.onload = function () {
+                var data = JSON.parse(xhr.responseText);
+                game.setState({ rules: data.RuleList });
+            };
+            xhr.send();
+        };
+
         _this.state = {
             gameStatusForPlayer: { CardsInHand: [], CardsFaceUp: [], PlayPile: [] },
             gameStatusForOpponents: [{ CardsFaceUp: [] }],
@@ -106,29 +127,6 @@ var Game = function (_React$Component) {
                 game.updateStateFromResult(game, xhr.responseText, true);
             };
             xhr.send(postData);
-        }
-    }, {
-        key: 'loadCardsFromServer',
-        value: function loadCardsFromServer(forceUpdate) {
-            var game = this;
-            var xhr = new XMLHttpRequest();
-            xhr.open('get', game.props.palaceConfig.getUrl, true);
-            xhr.onload = function () {
-                game.updateStateFromResult(game, xhr.responseText, forceUpdate);
-            };
-            xhr.send();
-        }
-    }, {
-        key: 'loadRulesFromServer',
-        value: function loadRulesFromServer() {
-            var game = this;
-            var xhr = new XMLHttpRequest();
-            xhr.open('get', game.props.palaceConfig.getRulesUrl, true);
-            xhr.onload = function () {
-                var data = JSON.parse(xhr.responseText);
-                game.setState({ rules: data.RuleList });
-            };
-            xhr.send();
         }
     }, {
         key: 'updateStateFromResult',
@@ -161,7 +159,7 @@ var Game = function (_React$Component) {
         value: function componentDidMount() {
             this.loadRulesFromServer();
             this.loadCardsFromServer(true);
-            window.setInterval(this.loadCardsFromServer.bind(this), this.props.pollInterval);
+            window.setInterval(this.loadCardsFromServer, this.props.pollInterval);
         }
     }, {
         key: 'render',
@@ -190,5 +188,7 @@ var Game = function (_React$Component) {
 }(React.Component);
 
 ;
+
+//export default Game;
 
 ReactDOM.render(React.createElement(Game, { palaceConfig: PalaceConfig, pollInterval: 2000 }), document.getElementById('reactContent'));

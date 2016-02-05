@@ -4,15 +4,13 @@
         let gameOverMessage = this.props.gameOver ? <h2>GAME OVER! The winner is {this.props.gameState.CurrentPlayer}</h2> : null;
         let isPlayersTurn = this.props.gameState.CurrentPlayer === this.props.gameState.Name;
         
-        let noSelectedCards = true;
-        this.props.gameState.CardsInHand.forEach(function(card){
-            if(card.selected) {noSelectedCards=false};
-        });   
+        let cardIsNotSelected = function(card){
+            return !card.selected;
+        };
+        
+        let noSelectedCards = this.props.gameState.CardsInHand.every(cardIsNotSelected);   
 
-        let noFaceUpSelectedCards = true;
-        this.props.gameState.CardsFaceUp.forEach(function(card){
-            if(card.selected) {noFaceUpSelectedCards=false};
-        });
+        let noFaceUpSelectedCards = this.props.gameState.CardsFaceUp.every(cardIsNotSelected);
         
         let fewerThanThreeCardsInHand = this.props.gameState.CardsInHand.length < 3;
         
@@ -38,8 +36,8 @@
                 <span className='col-xs-12 col-sm-6 col-md-6'>
                     Cards in hand <br />
                     <VisibleCardPile cards={this.props.gameState.CardsInHand} toggleCardSelected={this.props.toggleCardSelected.bind(null, 'CardsInHand')} /> <br />
-                    <button onClick={this.props.playCards.bind(null, 'CardsInHand')} disabled={noSelectedCards || !isPlayersTurn || gameOver}>Play cards</button> <br /> <br/>
-                    <CannotPlay cannotPlayCards={this.props.cannotPlayCards} allowed={!isPlayersTurn || gameOver}/> <br/> <br/>
+                    <button onClick={this.props.playCards.bind(null, 'CardsInHand')} disabled={noSelectedCards || !isPlayersTurn || gameOver}>Play cards</button> <br /> 
+                    <CannotPlay cannotPlayCards={this.props.cannotPlayCards} allowed={!isPlayersTurn || gameOver}/> <br/> 
                 </span>
                 <span className='col-xs-12 col-sm-6 col-md-6'>
                     <span className='col-xs-6 col-sm-6 col-md-6'>
@@ -58,7 +56,6 @@
             <h2>Play pile</h2>
             <span className='row playPile'>
                 <span className='col-xs-12 col-sm-12 col-md-12'>
-                    
                     <VisibleCardPile cards={this.props.gameState.PlayPile} /> 
                 </span>
             </span>

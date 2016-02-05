@@ -29,19 +29,13 @@ var GameStatusForPlayer = function (_React$Component) {
             ) : null;
             var isPlayersTurn = this.props.gameState.CurrentPlayer === this.props.gameState.Name;
 
-            var noSelectedCards = true;
-            this.props.gameState.CardsInHand.forEach(function (card) {
-                if (card.selected) {
-                    noSelectedCards = false;
-                };
-            });
+            var cardIsNotSelected = function cardIsNotSelected(card) {
+                return !card.selected;
+            };
 
-            var noFaceUpSelectedCards = true;
-            this.props.gameState.CardsFaceUp.forEach(function (card) {
-                if (card.selected) {
-                    noFaceUpSelectedCards = false;
-                };
-            });
+            var noSelectedCards = this.props.gameState.CardsInHand.every(cardIsNotSelected);
+
+            var noFaceUpSelectedCards = this.props.gameState.CardsFaceUp.every(cardIsNotSelected);
 
             var fewerThanThreeCardsInHand = this.props.gameState.CardsInHand.length < 3;
 
@@ -107,11 +101,7 @@ var GameStatusForPlayer = function (_React$Component) {
                         ),
                         ' ',
                         React.createElement('br', null),
-                        ' ',
-                        React.createElement('br', null),
                         React.createElement(CannotPlay, { cannotPlayCards: this.props.cannotPlayCards, allowed: !isPlayersTurn || gameOver }),
-                        ' ',
-                        React.createElement('br', null),
                         ' ',
                         React.createElement('br', null)
                     ),

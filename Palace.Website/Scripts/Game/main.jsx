@@ -87,7 +87,7 @@
         xhr.send(postData);
     }
     
-    loadCardsFromServer(forceUpdate) {
+    loadCardsFromServer = (forceUpdate) => {
         let game = this;
         let xhr = new XMLHttpRequest();
         xhr.open('get', game.props.palaceConfig.getUrl, true);
@@ -95,9 +95,9 @@
             game.updateStateFromResult(game, xhr.responseText, forceUpdate);
         };
         xhr.send();
-   }
+   };
    
-   loadRulesFromServer(){
+   loadRulesFromServer = () => {
        let game = this;
        let xhr = new XMLHttpRequest();
        xhr.open('get', game.props.palaceConfig.getRulesUrl, true);
@@ -106,7 +106,7 @@
            game.setState({ rules: data.RuleList });
        };
        xhr.send();
-    }
+    };
    
     updateStateFromResult(game, responseText, forceUpdate){
         let data = JSON.parse(responseText);
@@ -135,7 +135,7 @@
     componentDidMount() {
         this.loadRulesFromServer();
         this.loadCardsFromServer(true);
-        window.setInterval(this.loadCardsFromServer.bind(this), this.props.pollInterval);
+        window.setInterval(this.loadCardsFromServer, this.props.pollInterval);
     }
     
     render(){
@@ -161,8 +161,9 @@
     }
 };
 
-ReactDOM.render(
+//export default Game;
 
+ReactDOM.render(
   <Game palaceConfig={PalaceConfig} pollInterval={2000} />,
   document.getElementById('reactContent')
 );
