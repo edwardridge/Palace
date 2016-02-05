@@ -1,6 +1,6 @@
 ﻿class Card extends React.Component{
     render(){
-        var textToNumber = function(text){
+        let textToNumber = function(text){
             switch(text){
                 case 'one': return 1;
                 case 'two': return 2;
@@ -16,9 +16,9 @@
                 default: return text;
             }
         }
-        var imageName = '/Content/cards/' + textToNumber(this.props.cardVal.Value.toLowerCase()) + '_of_' + this.props.cardVal.Suit.toLowerCase() + 's.png';
+        let imageName = '/Content/cards/' + textToNumber(this.props.cardVal.Value.toLowerCase()) + '_of_' + this.props.cardVal.Suit.toLowerCase() + 's.png';
         
-        var imageClass = 'cardImage ';
+        let imageClass = 'cardImage ';
         if(this.props.cardVal.selected){
             imageClass = imageClass + 'selected';
         }else{

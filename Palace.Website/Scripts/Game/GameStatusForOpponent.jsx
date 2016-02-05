@@ -1,7 +1,7 @@
 class GameStatusForOpponent extends React.Component{
     render(){
-        var isPlayersTurn = this.props.name === this.props.currentPlayer;
-        var isPlayersTurnClass = isPlayersTurn ? 'playersTurn row' : 'opponentsTurn row';
+        let isPlayersTurn = this.props.name === this.props.currentPlayer;
+        let isPlayersTurnClass = isPlayersTurn ? 'playersTurn row' : 'opponentsTurn row';
         return(
             <span>
                 <h2>{this.props.name}</h2>

@@ -1,7 +1,7 @@
 class GameStatusForOpponents extends React.Component{
     render(){
-        var opponents = [];
-        var gameStatusForOpponents = this;
+        let opponents = [];
+        let gameStatusForOpponents = this;
         this.props.gameState.forEach(function(opponent, index){
             opponents.push(
                 <div key={index}>

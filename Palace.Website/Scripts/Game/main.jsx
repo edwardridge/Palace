@@ -11,14 +11,14 @@
     }
     
     toggleSelectedVisibleCard(cardPile, index) {
-        var deselectCards = function(cards) {
+        let deselectCards = function(cards) {
             cards.forEach(function (card) {
                 card.selected = false;
             });
         };
         
-        var selectedCardsInPile = function(cards){
-            var selectedCards = [];
+        let selectedCardsInPile = function(cards){
+            let selectedCards = [];
             cards.forEach(function (cardInPile) {
                 if (cardInPile.selected) {
                     selectedCards.push(cardInPile);
@@ -28,17 +28,17 @@
             return selectedCards;
         }
         
-        var cardToToggle = this.state.gameStatusForPlayer[cardPile][index];
-        var newSelectedValue = !cardToToggle.selected;
+        let cardToToggle = this.state.gameStatusForPlayer[cardPile][index];
+        let newSelectedValue = !cardToToggle.selected;
         
-        var selectedCards = selectedCardsInPile(this.state.gameStatusForPlayer[cardPile]);
+        let selectedCards = selectedCardsInPile(this.state.gameStatusForPlayer[cardPile]);
         if (selectedCards.length > 0 && selectedCards[0].Value !== cardToToggle.Value && newSelectedValue) {
             deselectCards(selectedCards);
         }
 
-        var otherPile = cardPile === 'CardsFaceUp' ? 'CardsInHand' : 'CardsFaceUp';
+        let otherPile = cardPile === 'CardsFaceUp' ? 'CardsInHand' : 'CardsFaceUp';
 
-        var selectedCardsForOtherPile = selectedCardsInPile(this.state.gameStatusForPlayer[otherPile]);
+        let selectedCardsForOtherPile = selectedCardsInPile(this.state.gameStatusForPlayer[otherPile]);
         if (selectedCardsForOtherPile.length > 0  && newSelectedValue) {
             deselectCards(selectedCardsForOtherPile);
         }
@@ -48,8 +48,8 @@
     }
     
     playCards(cardPile){
-        var game = this;
-        var cardsToPlay = [];
+        let game = this;
+        let cardsToPlay = [];
         if(this.state.gameStatusForPlayer[cardPile])
         {
             this.state.gameStatusForPlayer[cardPile].forEach(function(card){
@@ -59,7 +59,7 @@
         });
         }
         
-        var methodToSend = '';
+        let methodToSend = '';
         switch(cardPile){
             case 'CardsInHand': methodToSend = game.props.palaceConfig.playInHandCard;
                 break;
@@ -73,12 +73,12 @@
     }
     
     cannotPlayCards(event){
-        var game = this;
+        let game = this;
         this.sendPostRequestAndUpdateState(game, game.props.palaceConfig.cannotPlayCard);
     }
     
     sendPostRequestAndUpdateState(game, url, postData){
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.open('post', url,  true);
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.onload = function() {
@@ -88,8 +88,8 @@
     }
     
     loadCardsFromServer(forceUpdate) {
-        var game = this;
-        var xhr = new XMLHttpRequest();
+        let game = this;
+        let xhr = new XMLHttpRequest();
         xhr.open('get', game.props.palaceConfig.getUrl, true);
         xhr.onload = function() {
             game.updateStateFromResult(game, xhr.responseText, forceUpdate);
@@ -98,20 +98,20 @@
    }
    
    loadRulesFromServer(){
-       var game = this;
-       var xhr = new XMLHttpRequest();
+       let game = this;
+       let xhr = new XMLHttpRequest();
        xhr.open('get', game.props.palaceConfig.getRulesUrl, true);
        xhr.onload = function() {
-           var data = JSON.parse(xhr.responseText);
+           let data = JSON.parse(xhr.responseText);
            game.setState({ rules: data.RuleList });
        };
        xhr.send();
     }
    
     updateStateFromResult(game, responseText, forceUpdate){
-        var data = JSON.parse(responseText);
+        let data = JSON.parse(responseText);
         if(forceUpdate || game.state.gameStatusForPlayer.length === 0 || data.GameStatusForPlayer.NumberOfValidMoves > game.state.gameStatusForPlayer.NumberOfValidMoves){
-            var newGameStatusForPlayer = game.preserveSelectedCards(data.GameStatusForPlayer, game.state.gameStatusForPlayer);
+            let newGameStatusForPlayer = game.preserveSelectedCards(data.GameStatusForPlayer, game.state.gameStatusForPlayer);
             game.setState({ gameStatusForPlayer: newGameStatusForPlayer, gameStatusForOpponents: data.GameStatusForPlayer.GameStatusForOpponents, errors: data.Errors, gameOver: data.GameOver });
         }
     }
@@ -139,7 +139,7 @@
     }
     
     render(){
-       var errors = this.state.errors;
+       let errors = this.state.errors;
         return (
             <div>
                 <GameStatusForPlayer 

@@ -1,32 +1,32 @@
 ﻿class GameStatusForPlayer extends React.Component{
     render() {
-        var gameOver = this.props.gameOver;
-        var gameOverMessage = this.props.gameOver ? <h2>GAME OVER! The winner is {this.props.gameState.CurrentPlayer}</h2> : null;
-        var isPlayersTurn = this.props.gameState.CurrentPlayer === this.props.gameState.Name;
+        let gameOver = this.props.gameOver;
+        let gameOverMessage = this.props.gameOver ? <h2>GAME OVER! The winner is {this.props.gameState.CurrentPlayer}</h2> : null;
+        let isPlayersTurn = this.props.gameState.CurrentPlayer === this.props.gameState.Name;
         
-        var noSelectedCards = true;
+        let noSelectedCards = true;
         this.props.gameState.CardsInHand.forEach(function(card){
             if(card.selected) {noSelectedCards=false};
         });   
 
-        var noFaceUpSelectedCards = true;
+        let noFaceUpSelectedCards = true;
         this.props.gameState.CardsFaceUp.forEach(function(card){
             if(card.selected) {noFaceUpSelectedCards=false};
         });
         
-        var fewerThanThreeCardsInHand = this.props.gameState.CardsInHand.length < 3;
+        let fewerThanThreeCardsInHand = this.props.gameState.CardsInHand.length < 3;
         
-        var otherPlayerText = 'It is ' + this.props.gameState.CurrentPlayer + '\'s go';
-        var playersTurn = <div>{isPlayersTurn ? 'It is your go' : otherPlayerText}</div>
+        let otherPlayerText = 'It is ' + this.props.gameState.CurrentPlayer + '\'s go';
+        let playersTurn = <div>{isPlayersTurn ? 'It is your go' : otherPlayerText}</div>
         
-        var emptyFunction = function () { };
+        let emptyFunction = function () { };
         
-        var faceUpCardButton = null;
+        let faceUpCardButton = null;
         if(fewerThanThreeCardsInHand){
             faceUpCardButton = <button onClick={this.props.playCards.bind(null, 'CardsFaceUp' )} disabled={noFaceUpSelectedCards || !isPlayersTurn || gameOver}>Play cards</button>;
         } 
         
-        var isPlayersTurnClass = isPlayersTurn ? 'playersTurn row' : 'opponentsTurn row';
+        let isPlayersTurnClass = isPlayersTurn ? 'playersTurn row' : 'opponentsTurn row';
         
         return (
         <div>

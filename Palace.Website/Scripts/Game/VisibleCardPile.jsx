@@ -1,6 +1,6 @@
 ﻿class VisibleCardPile extends React.Component{
     render() {
-        var emptyFunction = function () { };
+        let emptyFunction = function () { };
 
         return (
             <span>
