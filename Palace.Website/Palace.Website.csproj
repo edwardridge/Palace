@@ -291,6 +291,16 @@
     <Content Include="Global.asax" />
     <None Include="Content\SASS\Site.scss" />
     <Content Include="gulpfile.js" />
+    <Content Include="Scripts\dist\CreateGame\CreateGame.js" />
+    <Content Include="Scripts\dist\Game\CannotPlay.js" />
+    <Content Include="Scripts\dist\Game\Card.js" />
+    <Content Include="Scripts\dist\Game\FaceDownCards.js" />
+    <Content Include="Scripts\dist\Game\GameRules.js" />
+    <Content Include="Scripts\dist\Game\GameStatus.js" />
+    <Content Include="Scripts\dist\Game\GameStatusForOpponent.js" />
+    <Content Include="Scripts\dist\Game\GameStatusForOpponents.js" />
+    <Content Include="Scripts\dist\Game\main.js" />
+    <Content Include="Scripts\dist\Game\VisibleCardPile.js" />
     <Content Include="Scripts\Game\Card.jsx" />
     <Content Include="Scripts\Game\FaceDownCards.jsx" />
     <Content Include="Scripts\Game\VisibleCardPile.jsx" />
@@ -301,6 +311,7 @@
     <Content Include="Scripts\Game\GameStatusForOpponent.jsx" />
     <Content Include="package.json" />
     <Content Include="Scripts\CreateGame\CreateGame.jsx" />
+    <Content Include="jsconfig.json" />
     <None Include="Scripts\Game\main.jsx" />
     <Content Include="Scripts\Libraries\bootstrap.js" />
     <Content Include="Scripts\Libraries\jquery.js" />

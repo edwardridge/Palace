@@ -24,7 +24,7 @@ textarea {
 }
 
 .selected{
-    border: 1px solid red;
+    border: 2px solid black;
 }
 
 .not-selected{
@@ -39,12 +39,16 @@ textarea {
     background-color: deepskyblue;
     color: black;
     display: block;
+    padding: 5px 0px;
+    border: 1px solid black;
 }
 
 .opponentsTurn{
-    background-color: orangered;
+    background-color: red;
     color: white;
     display: block;
+    padding: 5px 0px;
+    border: 1px solid black;
     
     button{
         color: black;
@@ -54,5 +58,13 @@ textarea {
 .playPile{
     background-color: green;
     display: block;
+    padding: 5px 0px;
+    border: 1px solid black;
+}
+
+.cardImage{
+    width: 75px;
+    height: 110px;
+    margin: 2px 3px;
 }
 

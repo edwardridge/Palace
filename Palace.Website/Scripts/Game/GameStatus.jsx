@@ -1,5 +1,5 @@
-﻿var GameStatusForPlayer = React.createClass({
-    render: function() {
+﻿class GameStatusForPlayer extends React.Component{
+    render() {
         var gameOver = this.props.gameOver;
         var gameOverMessage = this.props.gameOver ? <h2>GAME OVER! The winner is {this.props.gameState.CurrentPlayer}</h2> : null;
         var isPlayersTurn = this.props.gameState.CurrentPlayer === this.props.gameState.Name;
@@ -36,14 +36,14 @@
             <h2>{this.props.gameState.Name} (you)</h2>
             <span className={isPlayersTurnClass}>
                 <span className='col-xs-12 col-sm-6 col-md-6'>
-                    Cards in hand: <br />
+                    Cards in hand <br />
                     <VisibleCardPile cards={this.props.gameState.CardsInHand} toggleCardSelected={this.props.toggleCardSelected.bind(null, 'CardsInHand')} /> <br />
                     <button onClick={this.props.playCards.bind(null, 'CardsInHand')} disabled={noSelectedCards || !isPlayersTurn || gameOver}>Play cards</button> <br /> <br/>
                     <CannotPlay cannotPlayCards={this.props.cannotPlayCards} allowed={!isPlayersTurn || gameOver}/> <br/> <br/>
                 </span>
                 <span className='col-xs-12 col-sm-6 col-md-6'>
                     <span className='col-xs-6 col-sm-6 col-md-6'>
-                        Face up cards: <br />
+                        Face up cards <br />
                         <VisibleCardPile 
                             cards={this.props.gameState.CardsFaceUp} 
                             toggleCardSelected={this.props.toggleCardSelected.bind(null, 'CardsFaceUp')} />
@@ -65,4 +65,4 @@
         </div>
       );
     }
-});
+};

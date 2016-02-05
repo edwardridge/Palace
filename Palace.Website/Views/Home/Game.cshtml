@@ -3,15 +3,15 @@
 }
 @model Palace.Website.Controllers.GameInfoModel
 <script>
-    var Palace = {};
-    Palace.gameId = @Html.Raw(Json.Encode(Model.GameId));
-    Palace.playerName = @Html.Raw(Json.Encode(Model.PlayerName));
-    Palace.getUrl = 'http://localhost:49311/api/game/get/' + Palace.gameId + '/' + Palace.playerName;
-    Palace.getRulesUrl = 'http://localhost:49311/api/game/getrules/' + Palace.gameId;
-    Palace.playInHandCard = 'http://localhost:49311/api/game/playinhandcard/' + Palace.gameId + '/' + Palace.playerName;
-    Palace.playFaceUpCard = 'http://localhost:49311/api/game/playfaceupcard/' + Palace.gameId + '/' + Palace.playerName;
-    Palace.playFaceDownCard = 'http://localhost:49311/api/game/playfacedowncard/' + Palace.gameId + '/' + Palace.playerName;
-    Palace.cannotPlayCard = 'http://localhost:49311/api/game/cannotplaycard/' + Palace.gameId + '/' + Palace.playerName;
+    var PalaceConfig = {};
+    PalaceConfig.gameId = @Html.Raw(Json.Encode(Model.GameId));
+    PalaceConfig.playerName = @Html.Raw(Json.Encode(Model.PlayerName));
+    PalaceConfig.getUrl = 'http://localhost:49311/api/game/get/' + PalaceConfig.gameId + '/' + PalaceConfig.playerName;
+    PalaceConfig.getRulesUrl = 'http://localhost:49311/api/game/getrules/' + PalaceConfig.gameId;
+    PalaceConfig.playInHandCard = 'http://localhost:49311/api/game/playinhandcard/' + PalaceConfig.gameId + '/' + PalaceConfig.playerName;
+    PalaceConfig.playFaceUpCard = 'http://localhost:49311/api/game/playfaceupcard/' + PalaceConfig.gameId + '/' + PalaceConfig.playerName;
+    PalaceConfig.playFaceDownCard = 'http://localhost:49311/api/game/playfacedowncard/' + PalaceConfig.gameId + '/' + PalaceConfig.playerName;
+    PalaceConfig.cannotPlayCard = 'http://localhost:49311/api/game/cannotplaycard/' + PalaceConfig.gameId + '/' + PalaceConfig.playerName;
 </script>
 
 <div id="reactContent"></div>

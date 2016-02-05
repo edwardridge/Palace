@@ -1,15 +1,17 @@
-﻿var Game = React.createClass({
-getInitialState: function() {
-        return {
-            gameStatusForPlayer: {CardsInHand: [],CardsFaceUp: [], PlayPile: [], NumberOfValidMoves: -1},
+﻿class Game extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            gameStatusForPlayer: { CardsInHand: [], CardsFaceUp: [], PlayPile: []},
             gameStatusForOpponents: [ { CardsFaceUp: [] } ],
             errors: [],
             gameOver: false,
             rules: []
-        };
-      },
-      toggleSelectedVisibleCard: function (cardPile, index) {
-        var deselectCards = function(cards){
+        }
+    }
+    
+    toggleSelectedVisibleCard(cardPile, index) {
+        var deselectCards = function(cards) {
             cards.forEach(function (card) {
                 card.selected = false;
             });
@@ -42,9 +44,10 @@ getInitialState: function() {
         }
         
         cardToToggle.selected = newSelectedValue;
-        this.setState({gameStatusForPlayer: this.state.gameStatusForPlayer });
-    },
-    playCards: function(cardPile){
+        this.setState({ gameStatusForPlayer: this.state.gameStatusForPlayer });
+    }
+    
+    playCards(cardPile){
         var game = this;
         var cardsToPlay = [];
         if(this.state.gameStatusForPlayer[cardPile])
@@ -58,21 +61,23 @@ getInitialState: function() {
         
         var methodToSend = '';
         switch(cardPile){
-            case 'CardsInHand': methodToSend = Palace.playInHandCard;
+            case 'CardsInHand': methodToSend = game.props.palaceConfig.playInHandCard;
                 break;
-            case 'CardsFaceUp': methodToSend = Palace.playFaceUpCard;
+            case 'CardsFaceUp': methodToSend = game.props.palaceConfig.playFaceUpCard;
                 break;
-            case 'CardsFaceDown': methodToSend = Palace.playFaceDownCard;
+            case 'CardsFaceDown': methodToSend = game.props.palaceConfig.playFaceDownCard;
                 break;
             default: throw new Error();
         }
         this.sendPostRequestAndUpdateState(game, methodToSend, JSON.stringify(cardsToPlay));
-    },
-    cannotPlayCards: function(event){
+    }
+    
+    cannotPlayCards(event){
         var game = this;
-        this.sendPostRequestAndUpdateState(game, Palace.cannotPlayCard);
-    },
-    sendPostRequestAndUpdateState: function(game, url, postData){
+        this.sendPostRequestAndUpdateState(game, game.props.palaceConfig.cannotPlayCard);
+    }
+    
+    sendPostRequestAndUpdateState(game, url, postData){
         var xhr = new XMLHttpRequest();
         xhr.open('post', url,  true);
         xhr.setRequestHeader("Content-type", "application/json");
@@ -80,34 +85,38 @@ getInitialState: function() {
             game.updateStateFromResult(game, xhr.responseText, true);
         };
         xhr.send(postData);
-    },
-    loadCommentsFromServer: function() {
+    }
+    
+    loadCardsFromServer(forceUpdate) {
         var game = this;
         var xhr = new XMLHttpRequest();
-        xhr.open('get', game.props.url, true);
+        xhr.open('get', game.props.palaceConfig.getUrl, true);
         xhr.onload = function() {
-            game.updateStateFromResult(game, xhr.responseText, false);
+            game.updateStateFromResult(game, xhr.responseText, forceUpdate);
         };
         xhr.send();
-   },
-   loadRulesFromServer: function(){
+   }
+   
+   loadRulesFromServer(){
        var game = this;
        var xhr = new XMLHttpRequest();
-       xhr.open('get', game.props.rulesUrl, true);
+       xhr.open('get', game.props.palaceConfig.getRulesUrl, true);
        xhr.onload = function() {
            var data = JSON.parse(xhr.responseText);
            game.setState({ rules: data.RuleList });
        };
        xhr.send();
-   },
-    updateStateFromResult: function(game, responseText, forceUpdate){
+    }
+   
+    updateStateFromResult(game, responseText, forceUpdate){
         var data = JSON.parse(responseText);
         if(forceUpdate || game.state.gameStatusForPlayer.length === 0 || data.GameStatusForPlayer.NumberOfValidMoves > game.state.gameStatusForPlayer.NumberOfValidMoves){
             var newGameStatusForPlayer = game.preserveSelectedCards(data.GameStatusForPlayer, game.state.gameStatusForPlayer);
             game.setState({ gameStatusForPlayer: newGameStatusForPlayer, gameStatusForOpponents: data.GameStatusForPlayer.GameStatusForOpponents, errors: data.Errors, gameOver: data.GameOver });
         }
-    },
-    preserveSelectedCards: function (newGameStatusForPlayer, oldGameStatusForPlayer) {
+    }
+    
+    preserveSelectedCards(newGameStatusForPlayer, oldGameStatusForPlayer) {
         //If we have just played, don't preserve selected cards
         if (oldGameStatusForPlayer.Name === oldGameStatusForPlayer.CurrentPlayer) {
             return newGameStatusForPlayer;
@@ -121,23 +130,25 @@ getInitialState: function() {
         });
 
         return newGameStatusForPlayer;
-    },
-    componentDidMount: function() {
+    }
+    
+    componentDidMount() {
         this.loadRulesFromServer();
-        this.loadCommentsFromServer();
-        window.setInterval(this.loadCommentsFromServer, this.props.pollInterval);
-    },
-   render: function(){
+        this.loadCardsFromServer(true);
+        window.setInterval(this.loadCardsFromServer.bind(this), this.props.pollInterval);
+    }
+    
+    render(){
        var errors = this.state.errors;
         return (
             <div>
                 <GameStatusForPlayer 
                             gameState={this.state.gameStatusForPlayer} 
                             gameOver = {this.state.gameOver}
-                            toggleCardSelected={this.toggleSelectedVisibleCard} 
-                            playCards={this.playCards} 
+                            toggleCardSelected={this.toggleSelectedVisibleCard.bind(this)} 
+                            playCards={this.playCards.bind(this)} 
                             errors = {errors}
-                            cannotPlayCards={this.cannotPlayCards} />
+                            cannotPlayCards={this.cannotPlayCards.bind(this)} />
                             
                 <GameStatusForOpponents
                             gameState={this.state.gameStatusForOpponents}
@@ -148,10 +159,10 @@ getInitialState: function() {
             </div> 
         )
     }
-});
+};
 
 ReactDOM.render(
 
-  <Game url={Palace.getUrl} rulesUrl={Palace.getRulesUrl} pollInterval={2000} />,
+  <Game palaceConfig={PalaceConfig} pollInterval={2000} />,
   document.getElementById('reactContent')
 );

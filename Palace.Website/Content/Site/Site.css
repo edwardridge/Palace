@@ -20,7 +20,7 @@ textarea {
   max-width: 280px; }
 
 .selected {
-  border: 1px solid red; }
+  border: 2px solid black; }
 
 .not-selected {
   border: none; }
@@ -31,17 +31,28 @@ textarea {
 .playersTurn {
   background-color: deepskyblue;
   color: black;
-  display: block; }
+  display: block;
+  padding: 5px 0px;
+  border: 1px solid black; }
 
 .opponentsTurn {
-  background-color: orangered;
+  background-color: red;
   color: white;
-  display: block; }
+  display: block;
+  padding: 5px 0px;
+  border: 1px solid black; }
   .opponentsTurn button {
     color: black; }
 
 .playPile {
   background-color: green;
-  display: block; }
+  display: block;
+  padding: 5px 0px;
+  border: 1px solid black; }
 
-/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3N0ZGluIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksa0JBQWtCO0VBQ2xCLHFCQUFxQixFQUN4Qjs7QUFFRCx3REFBd0Q7QUFDeEQ7RUFDSSxtQkFBbUI7RUFDbkIsb0JBQW9CLEVBQ3ZCOztBQUVEOztFQUVFO0FBQ0Y7RUFDSSxvQkFBb0IsRUFDdkI7O0FBRUQsNkVBQTZFO0FBQzdFOzs7RUFHSSxpQkFBaUIsRUFDcEI7O0FBRUQ7RUFDSSxzQkFBc0IsRUFDekI7O0FBRUQ7RUFDSSxhQUFhLEVBQ2hCOztBQUVEO0VBQ0ksV0FBVyxFQUNkOztBQUVEO0VBQ0ksOEJBQThCO0VBQzlCLGFBQWE7RUFDYixlQUFlLEVBQ2xCOztBQUVEO0VBQ0ksNEJBQTRCO0VBQzVCLGFBQWE7RUFDYixlQUFlLEVBS2xCO0VBUkQ7SUFNUSxhQUFhLEVBQ2hCOztBQUdMO0VBQ0ksd0JBQXdCO0VBQ3hCLGVBQWUsRUFDbEIiLCJmaWxlIjoiU2l0ZS5jc3MiLCJzb3VyY2VzQ29udGVudCI6W251bGxdLCJzb3VyY2VSb290IjoiL3NvdXJjZS8ifQ== */
+.cardImage {
+  width: 75px;
+  height: 110px;
+  margin: 2px 3px; }
+
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3N0ZGluIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksa0JBQWtCO0VBQ2xCLHFCQUFxQixFQUN4Qjs7QUFFRCx3REFBd0Q7QUFDeEQ7RUFDSSxtQkFBbUI7RUFDbkIsb0JBQW9CLEVBQ3ZCOztBQUVEOztFQUVFO0FBQ0Y7RUFDSSxvQkFBb0IsRUFDdkI7O0FBRUQsNkVBQTZFO0FBQzdFOzs7RUFHSSxpQkFBaUIsRUFDcEI7O0FBRUQ7RUFDSSx3QkFBd0IsRUFDM0I7O0FBRUQ7RUFDSSxhQUFhLEVBQ2hCOztBQUVEO0VBQ0ksV0FBVyxFQUNkOztBQUVEO0VBQ0ksOEJBQThCO0VBQzlCLGFBQWE7RUFDYixlQUFlO0VBQ2YsaUJBQWlCO0VBQ2pCLHdCQUF3QixFQUMzQjs7QUFFRDtFQUNJLHNCQUFzQjtFQUN0QixhQUFhO0VBQ2IsZUFBZTtFQUNmLGlCQUFpQjtFQUNqQix3QkFBd0IsRUFLM0I7RUFWRDtJQVFRLGFBQWEsRUFDaEI7O0FBR0w7RUFDSSx3QkFBd0I7RUFDeEIsZUFBZTtFQUNmLGlCQUFpQjtFQUNqQix3QkFBd0IsRUFDM0I7O0FBRUQ7RUFDSSxZQUFZO0VBQ1osY0FBYztFQUNkLGdCQUFnQixFQUNuQiIsImZpbGUiOiJTaXRlLmNzcyIsInNvdXJjZXNDb250ZW50IjpbbnVsbF0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9 */

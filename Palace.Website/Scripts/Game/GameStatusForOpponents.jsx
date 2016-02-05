@@ -1,6 +1,5 @@
-var GameStatusForOpponents = React.createClass({
-    
-    render: function(){
+class GameStatusForOpponents extends React.Component{
+    render(){
         var opponents = [];
         var gameStatusForOpponents = this;
         this.props.gameState.forEach(function(opponent, index){
@@ -19,5 +18,5 @@ var GameStatusForOpponents = React.createClass({
         return(
             <div> {opponents} </div>
         );
-}
-});
+    }   
+};

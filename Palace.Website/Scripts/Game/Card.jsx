@@ -1,5 +1,5 @@
-﻿var Card = React.createClass({
-    render: function(){
+﻿class Card extends React.Component{
+    render(){
         var textToNumber = function(text){
             switch(text){
                 case 'one': return 1;
@@ -17,11 +17,18 @@
             }
         }
         var imageName = '/Content/cards/' + textToNumber(this.props.cardVal.Value.toLowerCase()) + '_of_' + this.props.cardVal.Suit.toLowerCase() + 's.png';
+        
+        var imageClass = 'cardImage ';
+        if(this.props.cardVal.selected){
+            imageClass = imageClass + 'selected';
+        }else{
+            imageClass = imageClass + 'not-selected';
+        }
+        
         return (
             <span className='card'>
-            <img src={imageName} width='75px' height='110px' className={this.props.cardVal.selected ? 'selected' :
-             'not-selected' } />
+                <img src={imageName} className={imageClass} />
             </span>
-);
+        );
+    }
 }
-});

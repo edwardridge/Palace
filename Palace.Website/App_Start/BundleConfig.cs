@@ -21,19 +21,19 @@ namespace Palace.Website
                       "~/Content/Site/*.css"));
 
             bundles.Add(new ScriptBundle("~/creategame").Include(
-                "~/Scripts/CreateGame/CreateGame.jsx"
+                "~/Scripts/dist/CreateGame/CreateGame.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/game").Include(
-                "~/Scripts/Game/Card.jsx",
-                "~/Scripts/Game/VisibleCardPile.jsx",
-                "~/Scripts/Game/FaceDownCards.jsx",
-                "~/Scripts/Game/GameStatus.jsx",
-                "~/Scripts/Game/CannotPlay.jsx",
-                "~/Scripts/Game/GameRules.jsx",
-                "~/Scripts/Game/GameStatusForOpponents.jsx",
-                "~/Scripts/Game/GameStatusForOpponent.jsx",
-                "~/Scripts/Game/main.jsx"
+                "~/Scripts/dist/Game/Card.js",
+                "~/Scripts/dist/Game/VisibleCardPile.js",
+                "~/Scripts/dist/Game/FaceDownCards.js",
+                "~/Scripts/dist/Game/GameStatus.js",
+                "~/Scripts/dist/Game/CannotPlay.js",
+                "~/Scripts/dist/Game/GameRules.js",
+                "~/Scripts/dist/Game/GameStatusForOpponents.js",
+                "~/Scripts/dist/Game/GameStatusForOpponent.js",
+                "~/Scripts/dist/Game/main.js"
                 ));
         }
     }

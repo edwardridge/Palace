@@ -1,5 +1,5 @@
-var GameRules = React.createClass({
-   render: function(){
+class GameRules extends React.Component{
+   render(){
        var ruleList = []; 
        this.props.rules.forEach(function(rule, index){
            ruleList.push(
@@ -12,8 +12,6 @@ var GameRules = React.createClass({
            <h2>RULES</h2>
            <span>{ ruleList } </span>
            </div>
-           
-           
        );
    } 
-});
+};

@@ -1,13 +1,7 @@
-﻿/// <binding AfterBuild='moveScripts' ProjectOpened='watch-sass' />
-/*
-This file in the main entry point for defining Gulp tasks and using Gulp plugins.
-Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
-*/
-
-var gulp = require('gulp');
-var del = require('del');
-var cpy = require('cpy');
-var plugins = require('gulp-load-plugins')();
+﻿const gulp = require('gulp');
+const del = require('del');
+const cpy = require('cpy');
+const plugins = require('gulp-load-plugins')();
 
 var jslibraries = [
     './wwwroot/lib/react/react.js',
@@ -21,9 +15,7 @@ var csslibraries = [
     './wwwroot/lib/bootstrap/dist/css/bootstrap.css'
 ];
 
-gulp.task('moveScripts', ['sass'], function () {
-    //del('./Scripts/Libraries');
-    //del('./Scripts/Libraries');
+gulp.task('moveScripts', ['sass'], () => {
     cpy(jslibraries, './Scripts/Libraries', function (err) {
         if (err) { console.log(err) };
     });
@@ -33,7 +25,7 @@ gulp.task('moveScripts', ['sass'], function () {
     });
 });
 
-gulp.task('sass', function () {
+gulp.task('sass', () => {
     return gulp.src('./Content/SASS/*.scss')
         .pipe(plugins.sourcemaps.init())
         .pipe(plugins.sass())
@@ -44,9 +36,17 @@ gulp.task('sass', function () {
     ;
 });
 
-gulp.task('watch-sass', function () {
+gulp.task('watch-sass', () => {
     //plugins.livereload.listen();
-    //gulp.watch('./Content/*.scss', ['sass']);
+    gulp.watch('./Content/*.scss', ['sass']);
 });
 
-gulp.task('default', ['watch-sass']);
+gulp.task('transpile', () => {
+    	return gulp.src('Scripts/**/*.jsx')
+                .pipe(plugins.babel({
+                    presets: ['es2015','react']
+                }))
+                .pipe(gulp.dest('Scripts/dist'));
+});
+
+gulp.task('default', ['sass', 'transpile']);
