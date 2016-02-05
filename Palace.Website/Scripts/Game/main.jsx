@@ -19,13 +19,9 @@
         
         let selectedCardsInPile = function(cards){
             let selectedCards = [];
-            cards.forEach(function (cardInPile) {
-                if (cardInPile.selected) {
-                    selectedCards.push(cardInPile);
-                }
+            return cards.filter(function (cardInPile) {
+                return cardInPile.selected
             });
-            
-            return selectedCards;
         }
         
         let cardToToggle = this.state.gameStatusForPlayer[cardPile][index];
@@ -50,13 +46,11 @@
     playCards = (cardPile) => {
         let game = this;
         let cardsToPlay = [];
-        if(this.state.gameStatusForPlayer[cardPile])
+        if(game.state.gameStatusForPlayer[cardPile])
         {
-            this.state.gameStatusForPlayer[cardPile].forEach(function(card){
-            if(card.selected){
-                cardsToPlay.push(card);
-            }
-        });
+            cardsToPlay = game.state.gameStatusForPlayer[cardPile].filter(function(card){
+                return card.selected;
+            });
         }
         
         let methodToSend = '';
@@ -69,7 +63,7 @@
                 break;
             default: throw new Error();
         }
-        this.sendPostRequestAndUpdateState(game, methodToSend, JSON.stringify(cardsToPlay));
+        game.sendPostRequestAndUpdateState(game, methodToSend, cardsToPlay);
     };
     
     cannotPlayCards = (event) => {
@@ -78,38 +72,31 @@
     };
     
     sendPostRequestAndUpdateState(game, url, postData){
-        let xhr = new XMLHttpRequest();
-        xhr.open('post', url,  true);
-        xhr.setRequestHeader("Content-type", "application/json");
-        xhr.onload = function() {
-            game.updateStateFromResult(game, xhr.responseText, true);
-        };
-        xhr.send(postData);
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: JSON.stringify(postData),
+            success: function(result) { game.updateStateFromResult(game, result, true); },
+            contentType: "application/json",
+            dataType: 'json'
+        });
     }
     
     loadCardsFromServer = (forceUpdate) => {
         let game = this;
-        let xhr = new XMLHttpRequest();
-        xhr.open('get', game.props.palaceConfig.getUrl, true);
-        xhr.onload = function() {
-            game.updateStateFromResult(game, xhr.responseText, forceUpdate);
-        };
-        xhr.send();
+        $.get(game.props.palaceConfig.getUrl, function(result){
+            game.updateStateFromResult(game, result, forceUpdate);
+        });
    };
    
    loadRulesFromServer = () => {
        let game = this;
-       let xhr = new XMLHttpRequest();
-       xhr.open('get', game.props.palaceConfig.getRulesUrl, true);
-       xhr.onload = function() {
-           let data = JSON.parse(xhr.responseText);
-           game.setState({ rules: data.RuleList });
-       };
-       xhr.send();
+        $.get(game.props.palaceConfig.getRulesUrl, function(result){
+            game.setState({ rules: result.RuleList });
+        });
     };
    
-    updateStateFromResult(game, responseText, forceUpdate){
-        let data = JSON.parse(responseText);
+    updateStateFromResult(game, data, forceUpdate){
         if(forceUpdate || game.state.gameStatusForPlayer.length === 0 || data.GameStatusForPlayer.NumberOfValidMoves > game.state.gameStatusForPlayer.NumberOfValidMoves){
             let newGameStatusForPlayer = game.preserveSelectedCards(data.GameStatusForPlayer, game.state.gameStatusForPlayer);
             game.setState({ gameStatusForPlayer: newGameStatusForPlayer, gameStatusForOpponents: data.GameStatusForPlayer.GameStatusForOpponents, errors: data.Errors, gameOver: data.GameOver });
@@ -140,7 +127,7 @@
     
     render(){
        let errors = this.state.errors;
-        return (
+       return (
             <div>
                 <GameStatusForPlayer 
                             gameState={this.state.gameStatusForPlayer} 
@@ -160,8 +147,6 @@
         )
     }
 };
-
-//export default Game;
 
 ReactDOM.render(
   <Game palaceConfig={PalaceConfig} pollInterval={2000} />,

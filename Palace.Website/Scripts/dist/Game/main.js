@@ -25,13 +25,9 @@ var Game = function (_React$Component) {
 
             var selectedCardsInPile = function selectedCardsInPile(cards) {
                 var selectedCards = [];
-                cards.forEach(function (cardInPile) {
-                    if (cardInPile.selected) {
-                        selectedCards.push(cardInPile);
-                    }
+                return cards.filter(function (cardInPile) {
+                    return cardInPile.selected;
                 });
-
-                return selectedCards;
             };
 
             var cardToToggle = _this.state.gameStatusForPlayer[cardPile][index];
@@ -56,11 +52,9 @@ var Game = function (_React$Component) {
         _this.playCards = function (cardPile) {
             var game = _this;
             var cardsToPlay = [];
-            if (_this.state.gameStatusForPlayer[cardPile]) {
-                _this.state.gameStatusForPlayer[cardPile].forEach(function (card) {
-                    if (card.selected) {
-                        cardsToPlay.push(card);
-                    }
+            if (game.state.gameStatusForPlayer[cardPile]) {
+                cardsToPlay = game.state.gameStatusForPlayer[cardPile].filter(function (card) {
+                    return card.selected;
                 });
             }
 
@@ -78,7 +72,7 @@ var Game = function (_React$Component) {
                 default:
                     throw new Error();
             }
-            _this.sendPostRequestAndUpdateState(game, methodToSend, JSON.stringify(cardsToPlay));
+            game.sendPostRequestAndUpdateState(game, methodToSend, cardsToPlay);
         };
 
         _this.cannotPlayCards = function (event) {
@@ -88,23 +82,24 @@ var Game = function (_React$Component) {
 
         _this.loadCardsFromServer = function (forceUpdate) {
             var game = _this;
-            var xhr = new XMLHttpRequest();
-            xhr.open('get', game.props.palaceConfig.getUrl, true);
-            xhr.onload = function () {
-                game.updateStateFromResult(game, xhr.responseText, forceUpdate);
-            };
-            xhr.send();
+            $.get(game.props.palaceConfig.getUrl, function (result) {
+                game.updateStateFromResult(game, result, forceUpdate);
+            });
         };
 
         _this.loadRulesFromServer = function () {
+            //    let game = this;
+            //    let xhr = new XMLHttpRequest();
+            //    xhr.open('get', game.props.palaceConfig.getRulesUrl, true);
+            //    xhr.onload = function() {
+            //        let data = JSON.parse(xhr.responseText);
+            //        game.setState({ rules: data.RuleList });
+            //    };
+            //    xhr.send();
             var game = _this;
-            var xhr = new XMLHttpRequest();
-            xhr.open('get', game.props.palaceConfig.getRulesUrl, true);
-            xhr.onload = function () {
-                var data = JSON.parse(xhr.responseText);
-                game.setState({ rules: data.RuleList });
-            };
-            xhr.send();
+            $.get(game.props.palaceConfig.getRulesUrl, function (result) {
+                game.setState({ rules: result.RuleList });
+            });
         };
 
         _this.state = {
@@ -120,18 +115,21 @@ var Game = function (_React$Component) {
     _createClass(Game, [{
         key: 'sendPostRequestAndUpdateState',
         value: function sendPostRequestAndUpdateState(game, url, postData) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('post', url, true);
-            xhr.setRequestHeader("Content-type", "application/json");
-            xhr.onload = function () {
-                game.updateStateFromResult(game, xhr.responseText, true);
-            };
-            xhr.send(postData);
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: JSON.stringify(postData),
+                success: function success(result) {
+                    game.updateStateFromResult(game, result, true);
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
         }
     }, {
         key: 'updateStateFromResult',
-        value: function updateStateFromResult(game, responseText, forceUpdate) {
-            var data = JSON.parse(responseText);
+        value: function updateStateFromResult(game, data, forceUpdate) {
+            //let data = JSON.parse(responseText);
             if (forceUpdate || game.state.gameStatusForPlayer.length === 0 || data.GameStatusForPlayer.NumberOfValidMoves > game.state.gameStatusForPlayer.NumberOfValidMoves) {
                 var newGameStatusForPlayer = game.preserveSelectedCards(data.GameStatusForPlayer, game.state.gameStatusForPlayer);
                 game.setState({ gameStatusForPlayer: newGameStatusForPlayer, gameStatusForOpponents: data.GameStatusForPlayer.GameStatusForOpponents, errors: data.Errors, gameOver: data.GameOver });
@@ -188,7 +186,5 @@ var Game = function (_React$Component) {
 }(React.Component);
 
 ;
-
-//export default Game;
 
 ReactDOM.render(React.createElement(Game, { palaceConfig: PalaceConfig, pollInterval: 2000 }), document.getElementById('reactContent'));
