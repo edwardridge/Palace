@@ -25,15 +25,7 @@ namespace Palace.Website
                 ));
 
             bundles.Add(new ScriptBundle("~/game").Include(
-                "~/Scripts/dist/Game/Card.js",
-                "~/Scripts/dist/Game/VisibleCardPile.js",
-                "~/Scripts/dist/Game/FaceDownCards.js",
-                "~/Scripts/dist/Game/GameStatus.js",
-                "~/Scripts/dist/Game/CannotPlay.js",
-                "~/Scripts/dist/Game/GameRules.js",
-                "~/Scripts/dist/Game/GameStatusForOpponents.js",
-                "~/Scripts/dist/Game/GameStatusForOpponent.js",
-                "~/Scripts/dist/Game/main.js"
+                "~/Scripts/webpack_bundle.js"
                 ));
         }
     }

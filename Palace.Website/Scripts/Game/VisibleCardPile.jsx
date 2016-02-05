@@ -1,4 +1,6 @@
-﻿class VisibleCardPile extends React.Component{
+﻿import Card from './Card.jsx';
+
+class VisibleCardPile extends React.Component{
     render() {
         let emptyFunction = function () { };
 
@@ -16,3 +18,5 @@
         );
     }
 };
+
+export default VisibleCardPile

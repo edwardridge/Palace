@@ -15,3 +15,5 @@ class GameRules extends React.Component{
        );
    } 
 };
+
+export default GameRules

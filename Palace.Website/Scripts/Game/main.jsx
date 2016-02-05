@@ -1,4 +1,10 @@
-﻿class Game extends React.Component{
+﻿
+import GameRules from './GameRules.jsx';
+import GameStatusForPlayer from './GameStatusForPlayer.jsx';
+import GameStatusForOpponents from './GameStatusForOpponents.jsx';
+
+
+class Game extends React.Component{
     constructor(props){
         super(props);
         this.state = {
@@ -18,7 +24,6 @@
         };
         
         let selectedCardsInPile = function(cards){
-            let selectedCards = [];
             return cards.filter(function (cardInPile) {
                 return cardInPile.selected
             });
@@ -126,7 +131,6 @@
     }
     
     render(){
-       let errors = this.state.errors;
        return (
             <div>
                 <GameStatusForPlayer 
@@ -134,7 +138,7 @@
                             gameOver = {this.state.gameOver}
                             toggleCardSelected={this.toggleSelectedVisibleCard} 
                             playCards={this.playCards} 
-                            errors = {errors}
+                            errors = {this.state.errors}
                             cannotPlayCards={this.cannotPlayCards} />
                             
                 <GameStatusForOpponents
@@ -147,6 +151,8 @@
         )
     }
 };
+
+export default Game;
 
 ReactDOM.render(
   <Game palaceConfig={PalaceConfig} pollInterval={2000} />,

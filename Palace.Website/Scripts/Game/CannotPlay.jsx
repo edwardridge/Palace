@@ -7,3 +7,5 @@
         );
     }
 }
+
+export default CannotPlay

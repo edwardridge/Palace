@@ -1,3 +1,6 @@
+import VisibleCardPile from './VisibleCardPile.jsx';
+import FaceDownCards from './FaceDownCards.jsx';
+
 class GameStatusForOpponent extends React.Component{
     render(){
         let isPlayersTurn = this.props.name === this.props.currentPlayer;
@@ -25,3 +28,5 @@ class GameStatusForOpponent extends React.Component{
         );
     }
 };
+
+export default GameStatusForOpponent

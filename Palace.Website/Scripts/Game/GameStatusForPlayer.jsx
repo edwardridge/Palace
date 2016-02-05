@@ -1,4 +1,8 @@
-﻿class GameStatusForPlayer extends React.Component{
+﻿import VisibleCardPile from './VisibleCardPile.jsx';
+import FaceDownCards from './FaceDownCards.jsx';
+import CannotPlay from './CannotPlay.jsx';
+
+class GameStatusForPlayer extends React.Component{
     render() {
         let gameOver = this.props.gameOver;
         let gameOverMessage = this.props.gameOver ? <h2>GAME OVER! The winner is {this.props.gameState.CurrentPlayer}</h2> : null;
@@ -63,3 +67,5 @@
       );
     }
 };
+
+export default GameStatusForPlayer

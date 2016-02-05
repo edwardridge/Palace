@@ -1,3 +1,5 @@
+import GameStatusForOpponent from './GameStatusForOpponent.jsx'
+
 class GameStatusForOpponents extends React.Component{
     render(){
         let opponents = [];
@@ -20,3 +22,5 @@ class GameStatusForOpponents extends React.Component{
         );
     }   
 };
+
+export default GameStatusForOpponents

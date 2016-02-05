@@ -2,6 +2,10 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -24,7 +28,6 @@ var Game = function (_React$Component) {
             };
 
             var selectedCardsInPile = function selectedCardsInPile(cards) {
-                var selectedCards = [];
                 return cards.filter(function (cardInPile) {
                     return cardInPile.selected;
                 });
@@ -88,14 +91,6 @@ var Game = function (_React$Component) {
         };
 
         _this.loadRulesFromServer = function () {
-            //    let game = this;
-            //    let xhr = new XMLHttpRequest();
-            //    xhr.open('get', game.props.palaceConfig.getRulesUrl, true);
-            //    xhr.onload = function() {
-            //        let data = JSON.parse(xhr.responseText);
-            //        game.setState({ rules: data.RuleList });
-            //    };
-            //    xhr.send();
             var game = _this;
             $.get(game.props.palaceConfig.getRulesUrl, function (result) {
                 game.setState({ rules: result.RuleList });
@@ -129,7 +124,6 @@ var Game = function (_React$Component) {
     }, {
         key: 'updateStateFromResult',
         value: function updateStateFromResult(game, data, forceUpdate) {
-            //let data = JSON.parse(responseText);
             if (forceUpdate || game.state.gameStatusForPlayer.length === 0 || data.GameStatusForPlayer.NumberOfValidMoves > game.state.gameStatusForPlayer.NumberOfValidMoves) {
                 var newGameStatusForPlayer = game.preserveSelectedCards(data.GameStatusForPlayer, game.state.gameStatusForPlayer);
                 game.setState({ gameStatusForPlayer: newGameStatusForPlayer, gameStatusForOpponents: data.GameStatusForPlayer.GameStatusForOpponents, errors: data.Errors, gameOver: data.GameOver });
@@ -162,7 +156,6 @@ var Game = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var errors = this.state.errors;
             return React.createElement(
                 'div',
                 null,
@@ -171,7 +164,7 @@ var Game = function (_React$Component) {
                     gameOver: this.state.gameOver,
                     toggleCardSelected: this.toggleSelectedVisibleCard,
                     playCards: this.playCards,
-                    errors: errors,
+                    errors: this.state.errors,
                     cannotPlayCards: this.cannotPlayCards }),
                 React.createElement(GameStatusForOpponents, {
                     gameState: this.state.gameStatusForOpponents,
@@ -186,5 +179,7 @@ var Game = function (_React$Component) {
 }(React.Component);
 
 ;
+
+exports.default = Game;
 
 ReactDOM.render(React.createElement(Game, { palaceConfig: PalaceConfig, pollInterval: 2000 }), document.getElementById('reactContent'));
