@@ -44,7 +44,7 @@ gulp.task('watch-sass', () => {
 gulp.task('transpile', () => {
     	return gulp.src('Scripts/**/*.jsx')
                 .pipe(plugins.babel({
-                    presets: ['es2015','react']
+                    presets: ['es2015','stage-1','react']
                 }))
                 .pipe(gulp.dest('Scripts/dist'));
 });

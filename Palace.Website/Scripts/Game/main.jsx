@@ -10,7 +10,7 @@
         }
     }
     
-    toggleSelectedVisibleCard(cardPile, index) {
+    toggleSelectedVisibleCard = (cardPile, index) => {
         let deselectCards = function(cards) {
             cards.forEach(function (card) {
                 card.selected = false;
@@ -45,9 +45,9 @@
         
         cardToToggle.selected = newSelectedValue;
         this.setState({ gameStatusForPlayer: this.state.gameStatusForPlayer });
-    }
+    };
     
-    playCards(cardPile){
+    playCards = (cardPile) => {
         let game = this;
         let cardsToPlay = [];
         if(this.state.gameStatusForPlayer[cardPile])
@@ -70,12 +70,12 @@
             default: throw new Error();
         }
         this.sendPostRequestAndUpdateState(game, methodToSend, JSON.stringify(cardsToPlay));
-    }
+    };
     
-    cannotPlayCards(event){
+    cannotPlayCards = (event) => {
         let game = this;
         this.sendPostRequestAndUpdateState(game, game.props.palaceConfig.cannotPlayCard);
-    }
+    };
     
     sendPostRequestAndUpdateState(game, url, postData){
         let xhr = new XMLHttpRequest();
@@ -145,10 +145,10 @@
                 <GameStatusForPlayer 
                             gameState={this.state.gameStatusForPlayer} 
                             gameOver = {this.state.gameOver}
-                            toggleCardSelected={this.toggleSelectedVisibleCard.bind(this)} 
-                            playCards={this.playCards.bind(this)} 
+                            toggleCardSelected={this.toggleSelectedVisibleCard} 
+                            playCards={this.playCards} 
                             errors = {errors}
-                            cannotPlayCards={this.cannotPlayCards.bind(this)} />
+                            cannotPlayCards={this.cannotPlayCards} />
                             
                 <GameStatusForOpponents
                             gameState={this.state.gameStatusForOpponents}

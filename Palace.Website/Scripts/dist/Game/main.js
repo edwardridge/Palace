@@ -16,19 +16,7 @@ var Game = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Game).call(this, props));
 
-        _this.state = {
-            gameStatusForPlayer: { CardsInHand: [], CardsFaceUp: [], PlayPile: [] },
-            gameStatusForOpponents: [{ CardsFaceUp: [] }],
-            errors: [],
-            gameOver: false,
-            rules: []
-        };
-        return _this;
-    }
-
-    _createClass(Game, [{
-        key: 'toggleSelectedVisibleCard',
-        value: function toggleSelectedVisibleCard(cardPile, index) {
+        _this.toggleSelectedVisibleCard = function (cardPile, index) {
             var deselectCards = function deselectCards(cards) {
                 cards.forEach(function (card) {
                     card.selected = false;
@@ -46,31 +34,30 @@ var Game = function (_React$Component) {
                 return selectedCards;
             };
 
-            var cardToToggle = this.state.gameStatusForPlayer[cardPile][index];
+            var cardToToggle = _this.state.gameStatusForPlayer[cardPile][index];
             var newSelectedValue = !cardToToggle.selected;
 
-            var selectedCards = selectedCardsInPile(this.state.gameStatusForPlayer[cardPile]);
+            var selectedCards = selectedCardsInPile(_this.state.gameStatusForPlayer[cardPile]);
             if (selectedCards.length > 0 && selectedCards[0].Value !== cardToToggle.Value && newSelectedValue) {
                 deselectCards(selectedCards);
             }
 
             var otherPile = cardPile === 'CardsFaceUp' ? 'CardsInHand' : 'CardsFaceUp';
 
-            var selectedCardsForOtherPile = selectedCardsInPile(this.state.gameStatusForPlayer[otherPile]);
+            var selectedCardsForOtherPile = selectedCardsInPile(_this.state.gameStatusForPlayer[otherPile]);
             if (selectedCardsForOtherPile.length > 0 && newSelectedValue) {
                 deselectCards(selectedCardsForOtherPile);
             }
 
             cardToToggle.selected = newSelectedValue;
-            this.setState({ gameStatusForPlayer: this.state.gameStatusForPlayer });
-        }
-    }, {
-        key: 'playCards',
-        value: function playCards(cardPile) {
-            var game = this;
+            _this.setState({ gameStatusForPlayer: _this.state.gameStatusForPlayer });
+        };
+
+        _this.playCards = function (cardPile) {
+            var game = _this;
             var cardsToPlay = [];
-            if (this.state.gameStatusForPlayer[cardPile]) {
-                this.state.gameStatusForPlayer[cardPile].forEach(function (card) {
+            if (_this.state.gameStatusForPlayer[cardPile]) {
+                _this.state.gameStatusForPlayer[cardPile].forEach(function (card) {
                     if (card.selected) {
                         cardsToPlay.push(card);
                     }
@@ -91,15 +78,25 @@ var Game = function (_React$Component) {
                 default:
                     throw new Error();
             }
-            this.sendPostRequestAndUpdateState(game, methodToSend, JSON.stringify(cardsToPlay));
-        }
-    }, {
-        key: 'cannotPlayCards',
-        value: function cannotPlayCards(event) {
-            var game = this;
-            this.sendPostRequestAndUpdateState(game, game.props.palaceConfig.cannotPlayCard);
-        }
-    }, {
+            _this.sendPostRequestAndUpdateState(game, methodToSend, JSON.stringify(cardsToPlay));
+        };
+
+        _this.cannotPlayCards = function (event) {
+            var game = _this;
+            _this.sendPostRequestAndUpdateState(game, game.props.palaceConfig.cannotPlayCard);
+        };
+
+        _this.state = {
+            gameStatusForPlayer: { CardsInHand: [], CardsFaceUp: [], PlayPile: [] },
+            gameStatusForOpponents: [{ CardsFaceUp: [] }],
+            errors: [],
+            gameOver: false,
+            rules: []
+        };
+        return _this;
+    }
+
+    _createClass(Game, [{
         key: 'sendPostRequestAndUpdateState',
         value: function sendPostRequestAndUpdateState(game, url, postData) {
             var xhr = new XMLHttpRequest();
@@ -176,10 +173,10 @@ var Game = function (_React$Component) {
                 React.createElement(GameStatusForPlayer, {
                     gameState: this.state.gameStatusForPlayer,
                     gameOver: this.state.gameOver,
-                    toggleCardSelected: this.toggleSelectedVisibleCard.bind(this),
-                    playCards: this.playCards.bind(this),
+                    toggleCardSelected: this.toggleSelectedVisibleCard,
+                    playCards: this.playCards,
                     errors: errors,
-                    cannotPlayCards: this.cannotPlayCards.bind(this) }),
+                    cannotPlayCards: this.cannotPlayCards }),
                 React.createElement(GameStatusForOpponents, {
                     gameState: this.state.gameStatusForOpponents,
                     currentPlayer: this.state.gameStatusForPlayer.CurrentPlayer

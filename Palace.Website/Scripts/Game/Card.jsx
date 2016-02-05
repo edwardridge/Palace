@@ -19,9 +19,9 @@
         let imageName = '/Content/cards/' + textToNumber(this.props.cardVal.Value.toLowerCase()) + '_of_' + this.props.cardVal.Suit.toLowerCase() + 's.png';
         
         let imageClass = 'cardImage ';
-        if(this.props.cardVal.selected){
+        if (this.props.cardVal.selected){
             imageClass = imageClass + 'selected';
-        }else{
+        } else{
             imageClass = imageClass + 'not-selected';
         }
         
