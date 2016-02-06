@@ -8,7 +8,7 @@
                 onClick={this.props.playCards ? this.props.playCards : emptyFunction}>
                     <img src='/Content/cards/card_back.png' className='cardImage' />
                 </span>
-            )
+            );
         }
         return(
             <span className='FaceDown'>
@@ -16,6 +16,6 @@
             </span>
         );
     }
-};
+}
 
-export default FaceDownCards
+export default FaceDownCards;

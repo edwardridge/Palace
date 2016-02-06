@@ -32,7 +32,7 @@ namespace UnitTests
         public void It_Is_Next_Players_Turn()
         {
             var result = game.PlayFaceDownCards("Ed", Card.ThreeOfClubs);
-            game.State.GetCurrentPlayer().Should().Be(player2);
+            game.State.CurrentPlayer.Should().Be(player2);
         }
         
         [Test]

@@ -36,7 +36,7 @@
             var game = dealer.CreateGameInitialisation().StartGame(player1);
             game.PlayInHandCards(player1.Name, cardToPlay);
 
-            game.State.GetCurrentPlayer().Should().Be(player2);
+            game.State.CurrentPlayer.Should().Be(player2);
         }
     }
 }

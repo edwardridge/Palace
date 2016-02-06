@@ -2,6 +2,20 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _VisibleCardPile = require('./VisibleCardPile.jsx');
+
+var _VisibleCardPile2 = _interopRequireDefault(_VisibleCardPile);
+
+var _FaceDownCards = require('./FaceDownCards.jsx');
+
+var _FaceDownCards2 = _interopRequireDefault(_FaceDownCards);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -38,7 +52,7 @@ var GameStatusForOpponent = function (_React$Component) {
                         { className: 'col-xs-12 col-sm-6 col-md-6' },
                         'In hand cards ',
                         React.createElement('br', null),
-                        React.createElement(FaceDownCards, { cardsCount: this.props.cardsInHandNum }),
+                        React.createElement(_FaceDownCards2.default, { cardsCount: this.props.cardsInHandNum }),
                         ' ',
                         React.createElement('br', null)
                     ),
@@ -50,7 +64,7 @@ var GameStatusForOpponent = function (_React$Component) {
                             { className: 'col-xs-6 col-sm-6 col-md-6' },
                             'Face up cards ',
                             React.createElement('br', null),
-                            React.createElement(VisibleCardPile, { cards: this.props.cardsFaceUp }),
+                            React.createElement(_VisibleCardPile2.default, { cards: this.props.cardsFaceUp }),
                             ' ',
                             React.createElement('br', null)
                         ),
@@ -59,7 +73,7 @@ var GameStatusForOpponent = function (_React$Component) {
                             { className: 'col-xs-6 col-sm-6 col-md-6' },
                             'Face down cards ',
                             React.createElement('br', null),
-                            React.createElement(FaceDownCards, { cardsCount: this.props.cardsFaceDownNum }),
+                            React.createElement(_FaceDownCards2.default, { cardsCount: this.props.cardsFaceDownNum }),
                             ' ',
                             React.createElement('br', null)
                         )
@@ -73,3 +87,5 @@ var GameStatusForOpponent = function (_React$Component) {
 }(React.Component);
 
 ;
+
+exports.default = GameStatusForOpponent;

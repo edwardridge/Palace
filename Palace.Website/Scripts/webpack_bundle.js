@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -101,7 +101,7 @@
 	                deselectCards(selectedCards);
 	            }
 
-	            var otherPile = cardPile === 'CardsFaceUp' ? 'CardsInHand' : 'CardsFaceUp';
+	            var otherPile = cardPile === "CardsFaceUp" ? "CardsInHand" : "CardsFaceUp";
 
 	            var selectedCardsForOtherPile = selectedCardsInPile(_this.state.gameStatusForPlayer[otherPile]);
 	            if (selectedCardsForOtherPile.length > 0 && newSelectedValue) {
@@ -121,15 +121,15 @@
 	                });
 	            }
 
-	            var methodToSend = '';
+	            var methodToSend = "";
 	            switch (cardPile) {
-	                case 'CardsInHand':
+	                case "CardsInHand":
 	                    methodToSend = game.props.palaceConfig.playInHandCard;
 	                    break;
-	                case 'CardsFaceUp':
+	                case "CardsFaceUp":
 	                    methodToSend = game.props.palaceConfig.playFaceUpCard;
 	                    break;
-	                case 'CardsFaceDown':
+	                case "CardsFaceDown":
 	                    methodToSend = game.props.palaceConfig.playFaceDownCard;
 	                    break;
 	                default:
@@ -138,7 +138,7 @@
 	            game.sendPostRequestAndUpdateState(game, methodToSend, cardsToPlay);
 	        };
 
-	        _this.cannotPlayCards = function (event) {
+	        _this.cannotPlayCards = function () {
 	            var game = _this;
 	            _this.sendPostRequestAndUpdateState(game, game.props.palaceConfig.cannotPlayCard);
 	        };
@@ -168,21 +168,21 @@
 	    }
 
 	    _createClass(Game, [{
-	        key: 'sendPostRequestAndUpdateState',
+	        key: "sendPostRequestAndUpdateState",
 	        value: function sendPostRequestAndUpdateState(game, url, postData) {
 	            $.ajax({
-	                type: 'POST',
+	                type: "POST",
 	                url: url,
 	                data: JSON.stringify(postData),
 	                success: function success(result) {
 	                    game.updateStateFromResult(game, result, true);
 	                },
 	                contentType: "application/json",
-	                dataType: 'json'
+	                dataType: "json"
 	            });
 	        }
 	    }, {
-	        key: 'updateStateFromResult',
+	        key: "updateStateFromResult",
 	        value: function updateStateFromResult(game, data, forceUpdate) {
 	            if (forceUpdate || game.state.gameStatusForPlayer.length === 0 || data.GameStatusForPlayer.NumberOfValidMoves > game.state.gameStatusForPlayer.NumberOfValidMoves) {
 	                var newGameStatusForPlayer = game.preserveSelectedCards(data.GameStatusForPlayer, game.state.gameStatusForPlayer);
@@ -190,9 +190,9 @@
 	            }
 	        }
 	    }, {
-	        key: 'preserveSelectedCards',
+	        key: "preserveSelectedCards",
 	        value: function preserveSelectedCards(newGameStatusForPlayer, oldGameStatusForPlayer) {
-	            //If we have just played, don't preserve selected cards
+	            //If we have just played, don"t preserve selected cards
 	            if (oldGameStatusForPlayer.Name === oldGameStatusForPlayer.CurrentPlayer) {
 	                return newGameStatusForPlayer;
 	            }
@@ -207,17 +207,17 @@
 	            return newGameStatusForPlayer;
 	        }
 	    }, {
-	        key: 'componentDidMount',
+	        key: "componentDidMount",
 	        value: function componentDidMount() {
 	            this.loadRulesFromServer();
 	            this.loadCardsFromServer(true);
 	            window.setInterval(this.loadCardsFromServer, this.props.pollInterval);
 	        }
 	    }, {
-	        key: 'render',
+	        key: "render",
 	        value: function render() {
 	            return React.createElement(
-	                'div',
+	                "div",
 	                null,
 	                React.createElement(_GameStatusForPlayer2.default, {
 	                    gameState: this.state.gameStatusForPlayer,
@@ -238,11 +238,9 @@
 	    return Game;
 	}(React.Component);
 
-	;
-
 	exports.default = Game;
 
-	ReactDOM.render(React.createElement(Game, { palaceConfig: PalaceConfig, pollInterval: 2000 }), document.getElementById('reactContent'));
+	ReactDOM.render(React.createElement(Game, { palaceConfig: PalaceConfig, pollInterval: 2000 }), document.getElementById("reactContent"));
 
 /***/ },
 /* 1 */
@@ -307,15 +305,13 @@
 	    return GameRules;
 	}(React.Component);
 
-	;
-
 	exports.default = GameRules;
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -353,13 +349,13 @@
 	    }
 
 	    _createClass(GameStatusForPlayer, [{
-	        key: 'render',
+	        key: "render",
 	        value: function render() {
 	            var gameOver = this.props.gameOver;
 	            var gameOverMessage = this.props.gameOver ? React.createElement(
-	                'h2',
+	                "h2",
 	                null,
-	                'GAME OVER! The winner is ',
+	                "GAME OVER! The winner is ",
 	                this.props.gameState.CurrentPlayer
 	            ) : null;
 	            var isPlayersTurn = this.props.gameState.CurrentPlayer === this.props.gameState.Name;
@@ -374,11 +370,11 @@
 
 	            var fewerThanThreeCardsInHand = this.props.gameState.CardsInHand.length < 3;
 
-	            var otherPlayerText = 'It is ' + this.props.gameState.CurrentPlayer + '\'s go';
+	            var otherPlayerText = "It is " + this.props.gameState.CurrentPlayer + "\"s go";
 	            var playersTurn = React.createElement(
-	                'div',
+	                "div",
 	                null,
-	                isPlayersTurn ? 'It is your go' : otherPlayerText
+	                isPlayersTurn ? "It is your go" : otherPlayerText
 	            );
 
 	            var emptyFunction = function emptyFunction() {};
@@ -386,95 +382,95 @@
 	            var faceUpCardButton = null;
 	            if (fewerThanThreeCardsInHand) {
 	                faceUpCardButton = React.createElement(
-	                    'button',
-	                    { onClick: this.props.playCards.bind(null, 'CardsFaceUp'), disabled: noFaceUpSelectedCards || !isPlayersTurn || gameOver },
-	                    'Play cards'
+	                    "button",
+	                    { onClick: this.props.playCards.bind(null, "CardsFaceUp"), disabled: noFaceUpSelectedCards || !isPlayersTurn || gameOver },
+	                    "Play cards"
 	                );
 	            }
 
-	            var isPlayersTurnClass = isPlayersTurn ? 'playersTurn row' : 'opponentsTurn row';
+	            var isPlayersTurnClass = isPlayersTurn ? "playersTurn row" : "opponentsTurn row";
 
 	            return React.createElement(
-	                'div',
+	                "div",
 	                null,
 	                React.createElement(
-	                    'div',
+	                    "div",
 	                    null,
 	                    gameOverMessage
 	                ),
 	                React.createElement(
-	                    'div',
-	                    { className: 'errors' },
+	                    "div",
+	                    { className: "errors" },
 	                    this.props.errors
 	                ),
 	                React.createElement(
-	                    'h2',
+	                    "h2",
 	                    null,
 	                    playersTurn
 	                ),
 	                React.createElement(
-	                    'h2',
+	                    "h2",
 	                    null,
 	                    this.props.gameState.Name,
-	                    ' (you)'
+	                    " (you)"
 	                ),
 	                React.createElement(
-	                    'span',
+	                    "span",
 	                    { className: isPlayersTurnClass },
 	                    React.createElement(
-	                        'span',
-	                        { className: 'col-xs-12 col-sm-6 col-md-6' },
-	                        'Cards in hand ',
-	                        React.createElement('br', null),
-	                        React.createElement(_VisibleCardPile2.default, { cards: this.props.gameState.CardsInHand, toggleCardSelected: this.props.toggleCardSelected.bind(null, 'CardsInHand') }),
-	                        ' ',
-	                        React.createElement('br', null),
+	                        "span",
+	                        { className: "col-xs-12 col-sm-6 col-md-6" },
+	                        "Cards in hand ",
+	                        React.createElement("br", null),
+	                        React.createElement(_VisibleCardPile2.default, { cards: this.props.gameState.CardsInHand, toggleCardSelected: this.props.toggleCardSelected.bind(null, "CardsInHand") }),
+	                        " ",
+	                        React.createElement("br", null),
 	                        React.createElement(
-	                            'button',
-	                            { onClick: this.props.playCards.bind(null, 'CardsInHand'), disabled: noSelectedCards || !isPlayersTurn || gameOver },
-	                            'Play cards'
+	                            "button",
+	                            { onClick: this.props.playCards.bind(null, "CardsInHand"), disabled: noSelectedCards || !isPlayersTurn || gameOver },
+	                            "Play cards"
 	                        ),
-	                        ' ',
-	                        React.createElement('br', null),
+	                        " ",
+	                        React.createElement("br", null),
 	                        React.createElement(_CannotPlay2.default, { cannotPlayCards: this.props.cannotPlayCards, allowed: !isPlayersTurn || gameOver }),
-	                        ' ',
-	                        React.createElement('br', null)
+	                        " ",
+	                        React.createElement("br", null)
 	                    ),
 	                    React.createElement(
-	                        'span',
-	                        { className: 'col-xs-12 col-sm-6 col-md-6' },
+	                        "span",
+	                        { className: "col-xs-12 col-sm-6 col-md-6" },
 	                        React.createElement(
-	                            'span',
-	                            { className: 'col-xs-6 col-sm-6 col-md-6' },
-	                            'Face up cards ',
-	                            React.createElement('br', null),
+	                            "span",
+	                            { className: "col-xs-6 col-sm-6 col-md-6" },
+	                            "Face up cards ",
+	                            React.createElement("br", null),
 	                            React.createElement(_VisibleCardPile2.default, {
 	                                cards: this.props.gameState.CardsFaceUp,
-	                                toggleCardSelected: this.props.toggleCardSelected.bind(null, 'CardsFaceUp') }),
+	                                toggleCardSelected: this.props.toggleCardSelected.bind(null, "CardsFaceUp") }),
 	                            faceUpCardButton
 	                        ),
 	                        React.createElement(
-	                            'span',
-	                            { className: 'col-xs-6 col-sm-6 col-md-6' },
-	                            'Face down cards ',
-	                            React.createElement('br', null),
-	                            React.createElement(_FaceDownCards2.default, { cardsCount: this.props.gameState.CardsFaceDownNum, playCards: isPlayersTurn && !gameOver ? this.props.playCards.bind(null, 'CardsFaceDown') : emptyFunction }),
-	                            ' ',
-	                            React.createElement('br', null)
+	                            "span",
+	                            { className: "col-xs-6 col-sm-6 col-md-6" },
+	                            "Face down cards ",
+	                            React.createElement("br", null),
+	                            React.createElement(_FaceDownCards2.default, { cardsCount: this.props.gameState.CardsFaceDownNum, playCards: isPlayersTurn && !gameOver ? this.props.playCards.bind(null, "CardsFaceDown") : emptyFunction }),
+	                            " ",
+	                            React.createElement("br", null)
 	                        )
 	                    )
 	                ),
 	                React.createElement(
-	                    'h2',
+	                    "h2",
 	                    null,
-	                    'Play pile'
+	                    "Play pile"
 	                ),
 	                React.createElement(
-	                    'span',
-	                    { className: 'row playPile' },
+	                    "span",
+	                    { className: "row playPile" },
 	                    React.createElement(
-	                        'span',
-	                        { className: 'col-xs-12 col-sm-12 col-md-12' },
+	                        "span",
+	                        { className: "col-xs-12 col-sm-12 col-md-12" },
 	                        React.createElement(_VisibleCardPile2.default, { cards: this.props.gameState.PlayPile })
 	                    )
 	                )
@@ -485,15 +481,13 @@
 	    return GameStatusForPlayer;
 	}(React.Component);
 
-	;
-
 	exports.default = GameStatusForPlayer;
 
 /***/ },
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -523,16 +517,16 @@
 	    }
 
 	    _createClass(VisibleCardPile, [{
-	        key: 'render',
+	        key: "render",
 	        value: function render() {
 	            var emptyFunction = function emptyFunction() {};
 
 	            return React.createElement(
-	                'span',
+	                "span",
 	                null,
 	                this.props.cards.map(function (card, index) {
 	                    return React.createElement(
-	                        'span',
+	                        "span",
 	                        { key: index, onClick: this.props.toggleCardSelected ? this.props.toggleCardSelected.bind(null, index) : emptyFunction },
 	                        React.createElement(_Card2.default, { cardVal: card, index: index })
 	                    );
@@ -544,15 +538,13 @@
 	    return VisibleCardPile;
 	}(React.Component);
 
-	;
-
 	exports.default = VisibleCardPile;
 
 /***/ },
 /* 4 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -576,48 +568,48 @@
 	    }
 
 	    _createClass(Card, [{
-	        key: 'render',
+	        key: "render",
 	        value: function render() {
 	            var textToNumber = function textToNumber(text) {
 	                switch (text) {
-	                    case 'one':
+	                    case "one":
 	                        return 1;
-	                    case 'two':
+	                    case "two":
 	                        return 2;
-	                    case 'three':
+	                    case "three":
 	                        return 3;
-	                    case 'four':
+	                    case "four":
 	                        return 4;
-	                    case 'five':
+	                    case "five":
 	                        return 5;
-	                    case 'six':
+	                    case "six":
 	                        return 6;
-	                    case 'seven':
+	                    case "seven":
 	                        return 7;
-	                    case 'eight':
+	                    case "eight":
 	                        return 8;
-	                    case 'nine':
+	                    case "nine":
 	                        return 9;
-	                    case 'ten':
+	                    case "ten":
 	                        return 10;
 
 	                    default:
 	                        return text;
 	                }
 	            };
-	            var imageName = '/Content/cards/' + textToNumber(this.props.cardVal.Value.toLowerCase()) + '_of_' + this.props.cardVal.Suit.toLowerCase() + 's.png';
+	            var imageName = "/Content/cards/" + textToNumber(this.props.cardVal.Value.toLowerCase()) + "_of_" + this.props.cardVal.Suit.toLowerCase() + "s.png";
 
-	            var imageClass = 'cardImage ';
+	            var imageClass = "cardImage ";
 	            if (this.props.cardVal.selected) {
-	                imageClass = imageClass + 'selected';
+	                imageClass = imageClass + "selected";
 	            } else {
-	                imageClass = imageClass + 'not-selected';
+	                imageClass = imageClass + "not-selected";
 	            }
 
 	            return React.createElement(
-	                'span',
-	                { className: 'card' },
-	                React.createElement('img', { src: imageName, className: imageClass })
+	                "span",
+	                { className: "card" },
+	                React.createElement("img", { src: imageName, className: imageClass })
 	            );
 	        }
 	    }]);
@@ -678,8 +670,6 @@
 	    return FaceDownCards;
 	}(React.Component);
 
-	;
-
 	exports.default = FaceDownCards;
 
 /***/ },
@@ -729,7 +719,7 @@
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -759,13 +749,13 @@
 	    }
 
 	    _createClass(GameStatusForOpponents, [{
-	        key: 'render',
+	        key: "render",
 	        value: function render() {
 	            var opponents = [];
 	            var gameStatusForOpponents = this;
 	            this.props.gameState.forEach(function (opponent, index) {
 	                opponents.push(React.createElement(
-	                    'div',
+	                    "div",
 	                    { key: index },
 	                    React.createElement(_GameStatusForOpponent2.default, {
 	                        cardsFaceUp: opponent.CardsFaceUp,
@@ -777,11 +767,11 @@
 	                ));
 	            });
 	            return React.createElement(
-	                'div',
+	                "div",
 	                null,
-	                ' ',
+	                " ",
 	                opponents,
-	                ' '
+	                " "
 	            );
 	        }
 	    }]);
@@ -789,15 +779,13 @@
 	    return GameStatusForOpponents;
 	}(React.Component);
 
-	;
-
 	exports.default = GameStatusForOpponents;
 
 /***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -831,50 +819,50 @@
 	    }
 
 	    _createClass(GameStatusForOpponent, [{
-	        key: 'render',
+	        key: "render",
 	        value: function render() {
 	            var isPlayersTurn = this.props.name === this.props.currentPlayer;
-	            var isPlayersTurnClass = isPlayersTurn ? 'playersTurn row' : 'opponentsTurn row';
+	            var isPlayersTurnClass = isPlayersTurn ? "playersTurn row" : "opponentsTurn row";
 	            return React.createElement(
-	                'span',
+	                "span",
 	                null,
 	                React.createElement(
-	                    'h2',
+	                    "h2",
 	                    null,
 	                    this.props.name
 	                ),
 	                React.createElement(
-	                    'span',
+	                    "span",
 	                    { className: isPlayersTurnClass },
 	                    React.createElement(
-	                        'span',
-	                        { className: 'col-xs-12 col-sm-6 col-md-6' },
-	                        'In hand cards ',
-	                        React.createElement('br', null),
+	                        "span",
+	                        { className: "col-xs-12 col-sm-6 col-md-6" },
+	                        "In hand cards ",
+	                        React.createElement("br", null),
 	                        React.createElement(_FaceDownCards2.default, { cardsCount: this.props.cardsInHandNum }),
-	                        ' ',
-	                        React.createElement('br', null)
+	                        " ",
+	                        React.createElement("br", null)
 	                    ),
 	                    React.createElement(
-	                        'span',
-	                        { className: 'col-xs-12 col-sm-6 col-md-6' },
+	                        "span",
+	                        { className: "col-xs-12 col-sm-6 col-md-6" },
 	                        React.createElement(
-	                            'span',
-	                            { className: 'col-xs-6 col-sm-6 col-md-6' },
-	                            'Face up cards ',
-	                            React.createElement('br', null),
+	                            "span",
+	                            { className: "col-xs-6 col-sm-6 col-md-6" },
+	                            "Face up cards ",
+	                            React.createElement("br", null),
 	                            React.createElement(_VisibleCardPile2.default, { cards: this.props.cardsFaceUp }),
-	                            ' ',
-	                            React.createElement('br', null)
+	                            " ",
+	                            React.createElement("br", null)
 	                        ),
 	                        React.createElement(
-	                            'span',
-	                            { className: 'col-xs-6 col-sm-6 col-md-6' },
-	                            'Face down cards ',
-	                            React.createElement('br', null),
+	                            "span",
+	                            { className: "col-xs-6 col-sm-6 col-md-6" },
+	                            "Face down cards ",
+	                            React.createElement("br", null),
 	                            React.createElement(_FaceDownCards2.default, { cardsCount: this.props.cardsFaceDownNum }),
-	                            ' ',
-	                            React.createElement('br', null)
+	                            " ",
+	                            React.createElement("br", null)
 	                        )
 	                    )
 	                )
@@ -884,8 +872,6 @@
 
 	    return GameStatusForOpponent;
 	}(React.Component);
-
-	;
 
 	exports.default = GameStatusForOpponent;
 

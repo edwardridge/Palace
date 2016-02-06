@@ -6,6 +6,20 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _GameRules = require('./GameRules.jsx');
+
+var _GameRules2 = _interopRequireDefault(_GameRules);
+
+var _GameStatusForPlayer = require('./GameStatusForPlayer.jsx');
+
+var _GameStatusForPlayer2 = _interopRequireDefault(_GameStatusForPlayer);
+
+var _GameStatusForOpponents = require('./GameStatusForOpponents.jsx');
+
+var _GameStatusForOpponents2 = _interopRequireDefault(_GameStatusForOpponents);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -159,18 +173,18 @@ var Game = function (_React$Component) {
             return React.createElement(
                 'div',
                 null,
-                React.createElement(GameStatusForPlayer, {
+                React.createElement(_GameStatusForPlayer2.default, {
                     gameState: this.state.gameStatusForPlayer,
                     gameOver: this.state.gameOver,
                     toggleCardSelected: this.toggleSelectedVisibleCard,
                     playCards: this.playCards,
                     errors: this.state.errors,
                     cannotPlayCards: this.cannotPlayCards }),
-                React.createElement(GameStatusForOpponents, {
+                React.createElement(_GameStatusForOpponents2.default, {
                     gameState: this.state.gameStatusForOpponents,
                     currentPlayer: this.state.gameStatusForPlayer.CurrentPlayer
                 }),
-                React.createElement(GameRules, { rules: this.state.rules })
+                React.createElement(_GameRules2.default, { rules: this.state.rules })
             );
         }
     }]);

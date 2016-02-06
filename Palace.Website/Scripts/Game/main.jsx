@@ -1,7 +1,7 @@
 ﻿
-import GameRules from './GameRules.jsx';
-import GameStatusForPlayer from './GameStatusForPlayer.jsx';
-import GameStatusForOpponents from './GameStatusForOpponents.jsx';
+import GameRules from "./GameRules.jsx";
+import GameStatusForPlayer from "./GameStatusForPlayer.jsx";
+import GameStatusForOpponents from "./GameStatusForOpponents.jsx";
 
 
 class Game extends React.Component{
@@ -13,7 +13,7 @@ class Game extends React.Component{
             errors: [],
             gameOver: false,
             rules: []
-        }
+        };
     }
     
     toggleSelectedVisibleCard = (cardPile, index) => {
@@ -25,9 +25,9 @@ class Game extends React.Component{
         
         let selectedCardsInPile = function(cards){
             return cards.filter(function (cardInPile) {
-                return cardInPile.selected
+                return cardInPile.selected;
             });
-        }
+        };
         
         let cardToToggle = this.state.gameStatusForPlayer[cardPile][index];
         let newSelectedValue = !cardToToggle.selected;
@@ -37,7 +37,7 @@ class Game extends React.Component{
             deselectCards(selectedCards);
         }
 
-        let otherPile = cardPile === 'CardsFaceUp' ? 'CardsInHand' : 'CardsFaceUp';
+        let otherPile = cardPile === "CardsFaceUp" ? "CardsInHand" : "CardsFaceUp";
 
         let selectedCardsForOtherPile = selectedCardsInPile(this.state.gameStatusForPlayer[otherPile]);
         if (selectedCardsForOtherPile.length > 0  && newSelectedValue) {
@@ -58,32 +58,32 @@ class Game extends React.Component{
             });
         }
         
-        let methodToSend = '';
+        let methodToSend = "";
         switch(cardPile){
-            case 'CardsInHand': methodToSend = game.props.palaceConfig.playInHandCard;
+            case "CardsInHand": methodToSend = game.props.palaceConfig.playInHandCard;
                 break;
-            case 'CardsFaceUp': methodToSend = game.props.palaceConfig.playFaceUpCard;
+            case "CardsFaceUp": methodToSend = game.props.palaceConfig.playFaceUpCard;
                 break;
-            case 'CardsFaceDown': methodToSend = game.props.palaceConfig.playFaceDownCard;
+            case "CardsFaceDown": methodToSend = game.props.palaceConfig.playFaceDownCard;
                 break;
             default: throw new Error();
         }
         game.sendPostRequestAndUpdateState(game, methodToSend, cardsToPlay);
     };
     
-    cannotPlayCards = (event) => {
+    cannotPlayCards = () => {
         let game = this;
         this.sendPostRequestAndUpdateState(game, game.props.palaceConfig.cannotPlayCard);
     };
     
     sendPostRequestAndUpdateState(game, url, postData){
         $.ajax({
-            type: 'POST',
+            type: "POST",
             url: url,
             data: JSON.stringify(postData),
             success: function(result) { game.updateStateFromResult(game, result, true); },
             contentType: "application/json",
-            dataType: 'json'
+            dataType: "json"
         });
     }
     
@@ -109,7 +109,7 @@ class Game extends React.Component{
     }
     
     preserveSelectedCards(newGameStatusForPlayer, oldGameStatusForPlayer) {
-        //If we have just played, don't preserve selected cards
+        //If we have just played, don"t preserve selected cards
         if (oldGameStatusForPlayer.Name === oldGameStatusForPlayer.CurrentPlayer) {
             return newGameStatusForPlayer;
         }
@@ -148,13 +148,13 @@ class Game extends React.Component{
                             
                 <GameRules rules={this.state.rules} />   
             </div> 
-        )
+        );
     }
-};
+}
 
 export default Game;
 
 ReactDOM.render(
   <Game palaceConfig={PalaceConfig} pollInterval={2000} />,
-  document.getElementById('reactContent')
+  document.getElementById("reactContent")
 );

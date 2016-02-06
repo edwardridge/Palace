@@ -98,7 +98,7 @@ namespace Palace.Api.Controllers
         [Route("getrules/{id}")]
         public RulesForGame GetGameRules(string id)
         {
-            var rules = gameRepository.Open(id).Rules;
+            var rules = gameRepository.Open(id).GetRules();
             return rules;
         }
 

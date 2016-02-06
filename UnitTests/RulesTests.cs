@@ -251,7 +251,7 @@ namespace UnitTests
             var game = dealer.CreateGameInitialisation().StartGame(player2);
             game.PlayInHandCards(player2.Name, Card.JackOfClubs);
 
-            game.State.GetCurrentPlayer().Should().Be(player1);
+            game.State.CurrentPlayer.Should().Be(player1);
         }
 
         [Test]
@@ -265,7 +265,7 @@ namespace UnitTests
             game.PlayInHandCards(player2.Name, Card.JackOfClubs);
             game.PlayInHandCards(player1.Name, Card.AceOfClubs);
 
-            game.State.GetCurrentPlayer().Should().Be(player3);
+            game.State.CurrentPlayer.Should().Be(player3);
         }
 
     }
@@ -291,7 +291,7 @@ namespace UnitTests
             var game = dealer.CreateGameInitialisation().StartGame(player2);
             game.PlayInHandCards(player2.Name, Card.EightOfClubs);
 
-            game.State.GetCurrentPlayer().Should().Be(player1);
+            game.State.CurrentPlayer.Should().Be(player1);
         }
     }
 
@@ -345,7 +345,7 @@ namespace UnitTests
 
             game.PlayInHandCards(player1.Name, Card.TenOfClubs);
 
-            game.State.GetCurrentPlayer().Should().Be(player1);
+            game.State.CurrentPlayer.Should().Be(player1);
         }
     }
 
@@ -372,7 +372,7 @@ namespace UnitTests
 
             game.PlayInHandCards(player1.Name, Card.EightOfClubs);
 
-            game.State.GetCurrentPlayer().Should().Be(player3);
+            game.State.CurrentPlayer.Should().Be(player3);
         }
 
         [Test]
@@ -386,7 +386,7 @@ namespace UnitTests
 
             game.PlayInHandCards(player2.Name, Card.EightOfClubs);
 
-            game.State.GetCurrentPlayer().Should().Be(player1);
+            game.State.CurrentPlayer.Should().Be(player1);
         }
 
         [Test]
@@ -402,7 +402,7 @@ namespace UnitTests
 
             game.PlayInHandCards(player1.Name, cardsToPlay);
 
-            game.State.GetCurrentPlayer().Should().Be(player4);
+            game.State.CurrentPlayer.Should().Be(player4);
         }
     }
 
@@ -496,7 +496,7 @@ namespace UnitTests
 
             var outcome = game.PlayInHandCards(player1.Name, cardsToPlay);
 
-            game.State.GetCurrentPlayer().Should().Be(player1);
+            game.State.CurrentPlayer.Should().Be(player1);
         }
     }
 
@@ -576,7 +576,7 @@ namespace UnitTests
 
             game.PlayerCannotPlayCards(player1.Name);
 
-            game.State.GetCurrentPlayer().Should().Be(player2);
+            game.State.CurrentPlayer.Should().Be(player2);
         }
 
         [Test]

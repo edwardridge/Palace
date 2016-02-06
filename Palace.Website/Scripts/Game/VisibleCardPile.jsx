@@ -1,4 +1,4 @@
-﻿import Card from './Card.jsx';
+﻿import Card from "./Card.jsx";
 
 class VisibleCardPile extends React.Component{
     render() {
@@ -17,6 +17,6 @@ class VisibleCardPile extends React.Component{
             </span>
         );
     }
-};
+}
 
-export default VisibleCardPile
+export default VisibleCardPile;

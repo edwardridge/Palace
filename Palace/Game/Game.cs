@@ -53,7 +53,7 @@ namespace Palace
             {
                 return this._playPileStack;
             }
-            set
+            private set
             {
                 this._playPileStack = new Stack<Card>(value);
             }
@@ -65,7 +65,7 @@ namespace Palace
             {
                 return _players;
             }
-            internal set
+            private set
             {
                 this._players = value;
             }
@@ -75,19 +75,23 @@ namespace Palace
         {
             get
             {
-                return this._currentPlayer;
+                return this._currentPlayerName;
             }
             set
             {
-                this._currentPlayer = value;
+                this._currentPlayerName = value;
             }
         }
 
-        //Todo: Remove!
-        //[JsonIgnore]
-        public Player GetCurrentPlayer()
+        [JsonIgnore]
+        public Player CurrentPlayer
         {
-           return this.Players.First(f => f.Name == _currentPlayer); 
+            get { return this.Players.First(f => f.Name == _currentPlayerName); }
+        }
+        
+        public Player FindPlayer(string playerName)
+        {
+            return this.Players.First(f => f.Name == playerName);
         }
 
         [JsonIgnore]
@@ -99,15 +103,13 @@ namespace Palace
             }
         }
 
-        //public Card LastCardPlayed
-
         public Deck Deck
         {
             get
             {
                 return this._deck;
             }
-            set
+            private set
             {
                 this._deck = value;
             }
@@ -115,7 +117,7 @@ namespace Palace
 
         public int NumberOfValdMoves { get; internal set; }
 
-        private string _currentPlayer;
+        private string _currentPlayerName;
 
         private OrderOfPlay _orderOfPlay;
 
@@ -145,31 +147,7 @@ namespace Palace
     {
         public Guid Id { get; set; }
 
-        protected bool Equals(Game other)
-        {
-            return Equals(this.rulesProcessorGenerator, other.rulesProcessorGenerator) && Equals(this._state, other._state);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return ((this.rulesProcessorGenerator != null ? this.rulesProcessorGenerator.GetHashCode() : 0) * 397) ^ (this.State != null ? this.State.GetHashCode() : 0);
-            }
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-                return false;
-            if (ReferenceEquals(this, obj))
-                return true;
-            if (obj.GetType() != this.GetType())
-                return false;
-            return Equals((Game)obj);
-        }
-        
-        internal Game()
+        private Game()
         {
             //Used for Rhino only
         }
@@ -182,11 +160,11 @@ namespace Palace
 
         public Result PlayInHandCards(string playerName, ICollection<Card> cards)
         {
-            var player = this.FindPlayer(playerName);
+            var player = _state.FindPlayer(playerName);
             var preCheck = IfArgumentsAreInvalidThenThrow(player, cards, player.CardsInHand);
             if (preCheck.Any()) return new Result(player, this.State, preCheck.ToArray()[0]);
 
-            return PlayCardAndChooseNextPlayer(player, cards, PlayerCardType.InHand);
+            return PlayCards(player, cards, PlayerCardType.InHand);
         }
 
         public Result PlayInHandCards(string playerName, Card card)
@@ -201,17 +179,17 @@ namespace Palace
 
         public Result PlayFaceUpCards(string playerName, ICollection<Card> cards)
         {
-            var player = this.FindPlayer(playerName);
+            var player = _state.FindPlayer(playerName);
             var preCheck =IfArgumentsAreInvalidThenThrow(player, cards, player.CardsFaceUp);
             if (preCheck.Any()) return new Result(player, this.State, preCheck.ToArray()[0]);
 
             if (player.CardsInHand.Count >= 3) return new Result(player, this.State, "Cannot play face up card when you have cards in hand");
-            return PlayCardAndChooseNextPlayer(player, cards, PlayerCardType.FaceUp);
+            return PlayCards(player, cards, PlayerCardType.FaceUp);
         }
 
         public Result PlayFaceDownCards(string playerName, Card card)
         {
-            var player = this.FindPlayer(playerName);
+            var player = _state.FindPlayer(playerName);
 
             if (player.CardsInHand.Count != 0) return new Result(player, this.State, "Cannot play face down card when you have cards in hand");
             if (player.CardsFaceUp.Count != 0) return new Result(player, this.State, "Cannot play face down card when you have face up cards");
@@ -224,22 +202,17 @@ namespace Palace
                 return new Result(player, _state, "That face down card is invalid!");
             }
 
-            return PlayCardAndChooseNextPlayer(player, new[] { card }, PlayerCardType.FaceDown); ;
+            return PlayCards(player, new[] { card }, PlayerCardType.FaceDown); ;
         }
 
         public Result PlayerCannotPlayCards(string playerName)
         {
-            var player = FindPlayer(playerName);
-            if (_state.CurrentPlayerName.Equals(playerName) == false) return new Result(player, this.State, "It isn't your turn!");
+            var player = _state.FindPlayer(playerName);
+            if (_state.CurrentPlayerName.Equals(playerName) == false) return new Result(player, _state, "It isn't your turn!");
             var ruleProcessor = this.rulesProcessorGenerator.GetRuleProcessor(_state, null);
-            this._state = ruleProcessor.GetNextStateWhenCardCannotBePlayed(player);
+            _state = ruleProcessor.GetNextStateWhenCardCannotBePlayed(player);
 
             return new Result(player, this.State);
-        }
-
-        private Player FindPlayer(string playerName)
-        {
-            return _state.Players.First(f => f.Name == playerName);
         }
 
         internal void Start(Player startingPlayer)
@@ -257,19 +230,19 @@ namespace Palace
             return new List<string>();
         }
 
-        private Result PlayCardAndChooseNextPlayer(Player player, ICollection<Card> cards, PlayerCardType playerCardType)
+        private Result PlayCards(Player player, ICollection<Card> cards, PlayerCardType playerCardType)
         {
-            if (this._state.GameOver) return new GameOverResult(player, _state.GetCurrentPlayer(), _state);
-            if (_state.GetCurrentPlayer().Equals(player) == false) return new Result(player, this.State, "It isn't your turn!");
+            if (_state.GameOver) return new GameOverResult(player, _state.CurrentPlayer, _state);
+            if (_state.CurrentPlayer.Equals(player) == false) return new Result(player, this.State, "It isn't your turn!");
 
             var ruleProcessor = this.rulesProcessorGenerator.GetRuleProcessor(_state, cards);
 
             if (!ruleProcessor.CardCanBePlayed())
                 return new Result(player, this.State, "This card is invalid to play");
 
-            this._state = ruleProcessor.GetNextState(playerCardType);
-            if (this._state.GameOver)
-                return new GameOverResult(player, _state.GetCurrentPlayer(), _state);
+            _state = ruleProcessor.GetNextState(playerCardType);
+            if (_state.GameOver)
+                return new GameOverResult(player, _state.CurrentPlayer, _state);
             return new Result(player, this.State);
         }
 
@@ -285,22 +258,19 @@ namespace Palace
             }
         }
 
-        public RulesForGame Rules
+        public RulesForGame GetRules()
         {
-            get
-            {
-                RulesProcessorGenerator rulesGenerator = RulesProcessorGenerator == null ? new RulesProcessorGenerator(this.Id, new RulesForGame()) : RulesProcessorGenerator;
-                return rulesGenerator.RulesForCardsByValue;
-            }
+            return RulesProcessorGenerator.RulesForCardsByValue;
+            
         }
 
-        internal RulesProcessorGenerator RulesProcessorGenerator
+        private RulesProcessorGenerator RulesProcessorGenerator
         {
             get
             {
                 return this.rulesProcessorGenerator;
             }
-            private set
+            set
             {
                 this.rulesProcessorGenerator = value;
             }

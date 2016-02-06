@@ -1,6 +1,16 @@
-"use strict";
+'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _Card = require('./Card.jsx');
+
+var _Card2 = _interopRequireDefault(_Card);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -18,18 +28,18 @@ var VisibleCardPile = function (_React$Component) {
     }
 
     _createClass(VisibleCardPile, [{
-        key: "render",
+        key: 'render',
         value: function render() {
             var emptyFunction = function emptyFunction() {};
 
             return React.createElement(
-                "span",
+                'span',
                 null,
                 this.props.cards.map(function (card, index) {
                     return React.createElement(
-                        "span",
+                        'span',
                         { key: index, onClick: this.props.toggleCardSelected ? this.props.toggleCardSelected.bind(null, index) : emptyFunction },
-                        React.createElement(Card, { cardVal: card, index: index })
+                        React.createElement(_Card2.default, { cardVal: card, index: index })
                     );
                 }, this)
             );
@@ -40,3 +50,5 @@ var VisibleCardPile = function (_React$Component) {
 }(React.Component);
 
 ;
+
+exports.default = VisibleCardPile;

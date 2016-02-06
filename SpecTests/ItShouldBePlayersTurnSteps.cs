@@ -20,7 +20,7 @@ namespace SpecTests
         [Then(@"it should be '(.*)' turn")]
         public void ThenItShouldBeTurn(string p0)
         {
-            game.State.GetCurrentPlayer().Name.Should().Be(p0);
+            game.State.CurrentPlayer.Name.Should().Be(p0);
         }
     }
 }

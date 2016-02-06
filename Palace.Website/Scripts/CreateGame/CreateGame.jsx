@@ -1,24 +1,24 @@
-﻿var CardTypes = ['Two',
-	'Three',
-	'Four',
-	'Five',
-	'Six',
-	'Seven',
-	'Eight',
-	'Nine',
-	'Ten',
-	'Jack',
-	'Queen',
-	'King',
-	'Ace'];
+﻿ var CardTypes = ["Two",
+	"Three",
+	"Four",
+	"Five",
+	"Six",
+	"Seven",
+	"Eight",
+	"Nine",
+	"Ten",
+	"Jack",
+	"Queen",
+	"King",
+	"Ace"];
     
  var RuleForCard = [
-      'LowerThan',
-      'Reset',
-      'ReverseOrderOfPlay',
-      'Burn',
-      'SkipPlayer',
-      'SeeThrough'];
+    "LowerThan",
+    "Reset",
+    "ReverseOrderOfPlay",
+    "Burn",
+    "SkipPlayer",
+    "SeeThrough"];
     
     var Player = React.createClass({
     render: function(){
@@ -27,19 +27,19 @@
                     Edit: <input type="text" value={this.props.player.name} onChange={this.props.handleChange} />
                     <button onClick={this.props.removePlayer}>Remove</button>
                 </div>
-        )
+        );
     } 
     });
 
     var CreateGame = React.createClass({
         getInitialState: function(){
             return {
-                players: [{name: 'Ed'}, {name: 'Sophie'}],
+                players: [{name: "Ed"}, {name: "Sophie"}],
                 rules: [
-                    {rule: 'Reset', card: 'Two'},
-                    {rule: 'Burn', card: 'Ten'}
+                    {rule: "Reset", card: "Two"},
+                    {rule: "Burn", card: "Ten"}
                     ]
-            }
+            };
         },
         convertStateToCommand: function(state){
             var players = [];
@@ -57,7 +57,7 @@
             return { 
                 Players: players,
                 Rules: rules
-                }
+            };
         },
         changePlayerName: function(playerIndex, event){
             this.state.players[playerIndex].name = event.target.value;
@@ -72,21 +72,21 @@
             var command = createGame.convertStateToCommand(createGame.state);
             var data = JSON.stringify(command);
             var xhr = new XMLHttpRequest();
-            xhr.open('post', url, true);
+            xhr.open("post", url, true);
             xhr.setRequestHeader("Content-type", "application/json");
             xhr.onload = function () {
-                window.alert('Game created!');
+                window.alert("Game created!");
             };
             xhr.send(data);
         },
         addPlayer: function(){
-           this.state.players.push({name: 'Player ' + (this.state.players.length + 1)});  
+           this.state.players.push({name: "Player " + (this.state.players.length + 1)});  
            this.setState({
                 players: this.state.players
             });
         },
         removePlayer: function(playerIndex){
-            //window.alert('Index: ' + playerIndex)
+            //window.alert("Index: " + playerIndex)
             this.state.players.splice(playerIndex, 1);
             this.setState({
                 players: this.state.players
@@ -116,7 +116,7 @@
             return RuleForCard;
         },
         addRule: function(){
-            this.state.rules.push({rule: 'Reset', card: 'Two'});
+            this.state.rules.push({rule: "Reset", card: "Two"});
             this.setState({
                 rules: this.state.rules
             });
@@ -138,25 +138,27 @@
                         handleChange={createGame.changePlayerName.bind(null, index)}
                         removePlayer = {createGame.removePlayer.bind(null, index)}   
                      />
-                    )
+                );
             });
             
             var rulesHtml = [];
             this.state.rules.forEach(function(ruleFromState, index){
-                var keyForRule = 'rule-' + index;
                 rulesHtml.push(
                     <span key={index}>
                         <select value={ruleFromState.card} onChange={createGame.updateCardForRule.bind(null, index)}>
                             {CardTypes.map(function(cardType, i){
-                                var keyForCard = 'card-' + i;
-                                return <option key={keyForCard} value={cardType}>{cardType}</option>
+                                var keyForCard = "card-" + i;
+                                return <option key={keyForCard} value={cardType}>{cardType}</option>;
                             })}
                         </select>
                         <select value={ruleFromState.rule}  onChange={createGame.updateRuleForRule.bind(null, index)}>
-                            {createGame.getRemainingRules().map(function(ruleType, j){
-                                var keyForCardRule = 'ruleCard-' + j;
-                                return <option key={keyForCardRule} value={ruleType}>{ruleType}</option>
-                            })}
+                            {createGame.getRemainingRules()
+                                .map(function(ruleType, j){
+                                        var keyForCardRule = "ruleCard-" + j;
+                                        return <option key={keyForCardRule} value={ruleType}>{ruleType}</option>;
+                                    }
+                                )
+                            }
                         </select>
                         <button onClick={createGame.removeRule.bind(null, index)}>Remove</button>
                         <br/>
@@ -175,12 +177,11 @@
                     <br/>
                     <button onClick={this.sendCommand}>Create game</button>
                 </div>
-                )
+                );
         }
-
-    })
+    });
 
     ReactDOM.render(
-    <CreateGame url={Palace.createGameUrl} />,
-    document.getElementById('reactContent')
+        <CreateGame url={PalaceConfig.createGameUrl} />,
+        document.getElementById("reactContent")
     );
