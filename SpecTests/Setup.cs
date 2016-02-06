@@ -9,6 +9,7 @@
     using TechTalk.SpecFlow;
 
     using TestHelpers;
+    using Palace.Rules;
 
     [Binding]
     public class Setup
@@ -23,7 +24,7 @@
 
         private Game game;
 
-        private Dictionary<CardValue, RuleForCard> ruleForCardsByValue;
+        private RulesForGame ruleForCardsByValue;
 
         private bool gameHasBeenSetUp = false;
 
@@ -31,7 +32,7 @@
         public void GivenIHaveTheFollowingPlayersAndCards(Table table)
         {
             players = this.GetPlayersFromTable(table);
-            ruleForCardsByValue = new Dictionary<CardValue, RuleForCard>();
+            ruleForCardsByValue = new RulesForGame();
         }
 
         [Given(@"it is '(.*)' turn")]
@@ -49,7 +50,8 @@
                 string ruleForCardAsString;
                 row.TryGetValue("CardValue", out cardValueAsString);
                 row.TryGetValue("Rule", out ruleForCardAsString);
-                ruleForCardsByValue.Add(GetCardValueFromStringValue(cardValueAsString), GetRuleForCardFromStringValue(ruleForCardAsString));
+                var rule = new Rule(GetCardValueFromStringValue(cardValueAsString), GetRuleForCardFromStringValue(ruleForCardAsString));
+                ruleForCardsByValue.Add(rule);
             }
         }
 

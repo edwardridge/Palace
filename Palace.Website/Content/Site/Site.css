@@ -1,0 +1,58 @@
+body {
+  padding-top: 50px;
+  padding-bottom: 20px; }
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+  padding-left: 15px;
+  padding-right: 15px; }
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+  white-space: normal; }
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+  max-width: 280px; }
+
+.selected {
+  border: 2px solid black; }
+
+.not-selected {
+  border: none; }
+
+.errors {
+  color: red; }
+
+.playersTurn {
+  background-color: deepskyblue;
+  color: black;
+  display: block;
+  padding: 5px 0px;
+  border: 1px solid black; }
+
+.opponentsTurn {
+  background-color: red;
+  color: white;
+  display: block;
+  padding: 5px 0px;
+  border: 1px solid black; }
+  .opponentsTurn button {
+    color: black; }
+
+.playPile {
+  background-color: green;
+  display: block;
+  padding: 5px 0px;
+  border: 1px solid black; }
+
+.cardImage {
+  width: 75px;
+  height: 110px;
+  margin: 2px 3px; }
+
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3N0ZGluIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksa0JBQWtCO0VBQ2xCLHFCQUFxQixFQUN4Qjs7QUFFRCx3REFBd0Q7QUFDeEQ7RUFDSSxtQkFBbUI7RUFDbkIsb0JBQW9CLEVBQ3ZCOztBQUVEOztFQUVFO0FBQ0Y7RUFDSSxvQkFBb0IsRUFDdkI7O0FBRUQsNkVBQTZFO0FBQzdFOzs7RUFHSSxpQkFBaUIsRUFDcEI7O0FBRUQ7RUFDSSx3QkFBd0IsRUFDM0I7O0FBRUQ7RUFDSSxhQUFhLEVBQ2hCOztBQUVEO0VBQ0ksV0FBVyxFQUNkOztBQUVEO0VBQ0ksOEJBQThCO0VBQzlCLGFBQWE7RUFDYixlQUFlO0VBQ2YsaUJBQWlCO0VBQ2pCLHdCQUF3QixFQUMzQjs7QUFFRDtFQUNJLHNCQUFzQjtFQUN0QixhQUFhO0VBQ2IsZUFBZTtFQUNmLGlCQUFpQjtFQUNqQix3QkFBd0IsRUFLM0I7RUFWRDtJQVFRLGFBQWEsRUFDaEI7O0FBR0w7RUFDSSx3QkFBd0I7RUFDeEIsZUFBZTtFQUNmLGlCQUFpQjtFQUNqQix3QkFBd0IsRUFDM0I7O0FBRUQ7RUFDSSxZQUFZO0VBQ1osY0FBYztFQUNkLGdCQUFnQixFQUNuQiIsImZpbGUiOiJTaXRlLmNzcyIsInNvdXJjZXNDb250ZW50IjpbbnVsbF0sInNvdXJjZVJvb3QiOiIvc291cmNlLyJ9 */

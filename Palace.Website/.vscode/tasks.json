@@ -1,0 +1,20 @@
+{
+    "version": "0.1.0",
+    "command": "npm",
+    "isShellCommand": true,
+    "args": [
+        "run"
+    ],
+    "tasks": [
+        {
+			"taskName": "testfromnpm",
+			"isBuildCommand": false,
+			"showOutput": "always"
+		},
+        {
+			"taskName": "gulpfromnpm",
+			"isBuildCommand": true,
+			"showOutput": "always"
+		}
+	]
+}

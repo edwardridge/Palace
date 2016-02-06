@@ -8,9 +8,10 @@ namespace Palace
 {
     public static class EnumerableCardExtensions
     {
-        public static IEnumerable<Card> GetTopCardsWithSameValue(this IEnumerable<Card> cards, CardValue cardValue)
+        public static IEnumerable<Card> GetTopCardsWithSameValue(this IEnumerable<Card> cards, CardValue? cardValue)
         {
             List<Card> cardsToReturn = new List<Card>();
+            if (!cardValue.HasValue) return cardsToReturn;
             foreach (var cardToCheck in cards)
             {
                 if (cardToCheck.Value == cardValue)

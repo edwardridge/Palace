@@ -25,9 +25,9 @@
             var cardsPlayerPlays = Card.AceOfClubs;
             var game = dealer.CreateGameInitialisation().StartGame(player1);
 
-            Action playingCardsPlayerHasOutcome = () => game.PlayInHandCards(player1.Name, cardsPlayerPlays);
+            var result = game.PlayInHandCards(player1.Name, cardsPlayerPlays);
 
-            playingCardsPlayerHasOutcome.ShouldThrow<ArgumentException>();
+            result.ResultOutcome.Should().Be(ResultOutcome.Fail);
         }
 
         [Test]
@@ -40,9 +40,9 @@
             var gameInit = dealer.CreateGameInitialisation();
             gameInit.PutCardFaceUp(player, cardToPlay);
             var game = gameInit.StartGame();
-            Action outcome = () => game.PlayFaceUpCards(player.Name, Card.EightOfClubs);
+            var result = game.PlayFaceUpCards(player.Name, Card.EightOfClubs);
 
-            outcome.ShouldThrow<ArgumentException>();
+            result.ResultOutcome.Should().Be(ResultOutcome.Fail);
         }
 
         [Test]
@@ -74,9 +74,9 @@
             gameInit.PutCardFaceUp(player, cardsToPlay[1]);
             var game = gameInit.StartGame();
 
-            Action outcome = () => game.PlayFaceUpCards(player.Name, cardsToPlay);
+            var result = game.PlayFaceUpCards(player.Name, cardsToPlay);
 
-            outcome.ShouldThrow<ArgumentException>();
+            result.ResultOutcome.Should().Be(ResultOutcome.Fail);
         }
 
         [Test]
@@ -99,9 +99,9 @@
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             var cardsPlayerPlays = new[] { Card.FourOfClubs, Card.FourOfSpades };
             var game = dealer.CreateGameInitialisation().StartGame(player1);
-            Action result = () => game.PlayInHandCards(player1.Name, cardsPlayerPlays);
+            var result = game.PlayInHandCards(player1.Name, cardsPlayerPlays);
 
-            result.ShouldThrow<ArgumentException>();
+            result.ResultOutcome.Should().Be(ResultOutcome.Fail);
         }
 
         [Test]
@@ -112,9 +112,9 @@
             var dealer = DealerHelper.TestDealer(new[] { player1 });
             dealer.AddPlayer(player1);
             var game = dealer.CreateGameInitialisation().StartGame(player1);
-            Action playerPlaysMultipleCardsOfDifferentValueOutcome = () => game.PlayInHandCards(player1.Name, cardsToPlay);
+            var result = game.PlayInHandCards(player1.Name, cardsToPlay);
 
-            playerPlaysMultipleCardsOfDifferentValueOutcome.ShouldThrow<ArgumentException>();
+            result.ResultOutcome.Should().Be(ResultOutcome.Fail);
         }
 
         [Test]
@@ -159,6 +159,19 @@
             var outcome = game.PlayFaceUpCards(player1.Name, Card.FiveOfClubs).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Fail);
+        }
+        
+        [Test]
+        public void Playing_In_Hand_Card_Doesnt_Remove_Card_from_Players_In_Hand_Array_In_Game()
+        {
+            var deck = new PredeterminedDeck(new List<Card>() { Card.AceOfClubs, Card.AceOfClubs, Card.AceOfClubs });
+            var player1 = PlayerHelper.CreatePlayer(new[] { Card.EightOfClubs, Card.AceOfClubs }, "Ed");
+            var dealer = new Dealer(deck, new DummyCanStartGame());
+            dealer.AddPlayer(player1);
+            var game = dealer.CreateGameInitialisation().StartGame();
+            game.PlayInHandCards("Ed", Card.EightOfClubs);
+
+            game.State.Players.First(w => w.Name == "Ed").CardsInHand.Should().NotContain(Card.EightOfClubs);
         }
     }
 }

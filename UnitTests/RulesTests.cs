@@ -11,7 +11,7 @@ namespace UnitTests
     using NUnit.Framework;
 
     using Palace;
-
+    using Palace.Rules;
     using TestHelpers;
 
     [TestFixture]
@@ -72,15 +72,15 @@ namespace UnitTests
     [TestFixture]
     public class WithSevenAsLowerThanCard
     {
-        private Dictionary<CardValue, RuleForCard> cardTypes;
+        private RulesForGame cardTypes;
 
         //private Dealer dealer;
 
         [SetUp]
         public void Setup()
         {
-            cardTypes = new Dictionary<CardValue, RuleForCard>();
-            cardTypes.Add(CardValue.Seven, RuleForCard.LowerThan);
+            cardTypes = new RulesForGame();
+            cardTypes.Add(new Rule(CardValue.Seven, RuleForCard.LowerThan));
 
         }
 
@@ -130,16 +130,15 @@ namespace UnitTests
     [TestFixture]
     public class WithTwoAsResetCard
     {
-        private Dictionary<CardValue, RuleForCard> rulesForCardsByValue;
+        private RulesForGame rulesForCardsByValue;
 
         //private Dealer dealer;
 
         [SetUp]
         public void Setup()
         {
-            rulesForCardsByValue = new Dictionary<CardValue, RuleForCard>();
-            rulesForCardsByValue.Add(CardValue.Two, RuleForCard.Reset);
-
+            rulesForCardsByValue = new RulesForGame();
+            rulesForCardsByValue.Add( new Rule(CardValue.Two, RuleForCard.Reset));
         }
 
         [Test]
@@ -188,15 +187,15 @@ namespace UnitTests
     [TestFixture]
     public class WithSevenAsLowerThanCardWhenPlayerPlaysFaceUpCard
     {
-        private Dictionary<CardValue, RuleForCard> rulesForCardsByValue;
+        private RulesForGame rulesForCardsByValue;
 
         //private Dealer dealer;
 
         [SetUp]
         public void Setup()
         {
-            rulesForCardsByValue = new Dictionary<CardValue, RuleForCard>();
-            rulesForCardsByValue.Add(CardValue.Seven, RuleForCard.LowerThan);
+            rulesForCardsByValue = new RulesForGame();
+            rulesForCardsByValue.Add(new Rule(CardValue.Seven, RuleForCard.LowerThan));
         }
 
         [Test]
@@ -233,13 +232,12 @@ namespace UnitTests
     [TestFixture]
     public class WithJackAsReverseOrderOfPlayCard
     {
-        //private Dealer dealer;
-        private Dictionary<CardValue, RuleForCard> rulesForCardByValue;
+        private RulesForGame rulesForCardByValue;
         [SetUp]
         public void Setup()
         {
-            rulesForCardByValue = new Dictionary<CardValue, RuleForCard>();
-            rulesForCardByValue.Add(CardValue.Jack, RuleForCard.ReverseOrderOfPlay);
+            rulesForCardByValue = new RulesForGame();
+            rulesForCardByValue.Add(new Rule(CardValue.Jack, RuleForCard.ReverseOrderOfPlay));
 
         }
 
@@ -253,7 +251,7 @@ namespace UnitTests
             var game = dealer.CreateGameInitialisation().StartGame(player2);
             game.PlayInHandCards(player2.Name, Card.JackOfClubs);
 
-            game.State.CurrentPlayer.Should().Be(player1);
+            game.State.GetCurrentPlayer().Should().Be(player1);
         }
 
         [Test]
@@ -267,7 +265,7 @@ namespace UnitTests
             game.PlayInHandCards(player2.Name, Card.JackOfClubs);
             game.PlayInHandCards(player1.Name, Card.AceOfClubs);
 
-            game.State.CurrentPlayer.Should().Be(player3);
+            game.State.GetCurrentPlayer().Should().Be(player3);
         }
 
     }
@@ -275,15 +273,12 @@ namespace UnitTests
     [TestFixture]
     public class WithEightAsReverseOrderOfPlayCard
     {
-        //private Dealer dealer;
-
-        private Dictionary<CardValue, RuleForCard> rulesForCardsByValue;
+        private RulesForGame rulesForCardsByValue;
         [SetUp]
         public void Setup()
         {
-            rulesForCardsByValue = new Dictionary<CardValue, RuleForCard>();
-            rulesForCardsByValue.Add(CardValue.Eight, RuleForCard.ReverseOrderOfPlay);
-            //dealer = DealerHelper.TestDealerWithRules(rulesForCardsByValue);
+            rulesForCardsByValue = new RulesForGame();
+            rulesForCardsByValue.Add(new Rule(CardValue.Eight, RuleForCard.ReverseOrderOfPlay));
         }
 
         [Test]
@@ -296,19 +291,19 @@ namespace UnitTests
             var game = dealer.CreateGameInitialisation().StartGame(player2);
             game.PlayInHandCards(player2.Name, Card.EightOfClubs);
 
-            game.State.CurrentPlayer.Should().Be(player1);
+            game.State.GetCurrentPlayer().Should().Be(player1);
         }
     }
 
     [TestFixture]
     public class WithTenAsBurnCard
     {
-        private Dictionary<CardValue, RuleForCard> rulesForCardsByValue;
+        private RulesForGame rulesForCardsByValue;
         [SetUp]
         public void Setup()
         {
-            rulesForCardsByValue = new Dictionary<CardValue, RuleForCard>();
-            rulesForCardsByValue.Add(CardValue.Ten, RuleForCard.Burn);
+            rulesForCardsByValue = new RulesForGame();
+            rulesForCardsByValue.Add(new Rule(CardValue.Ten, RuleForCard.Burn));
 
         }
 
@@ -350,20 +345,20 @@ namespace UnitTests
 
             game.PlayInHandCards(player1.Name, Card.TenOfClubs);
 
-            game.State.CurrentPlayer.Should().Be(player1);
+            game.State.GetCurrentPlayer().Should().Be(player1);
         }
     }
 
     [TestFixture]
     public class WithEightAsSkipPlayerCard
     {
-        private Dictionary<CardValue, RuleForCard> ruleForCardsByValue;
+        private RulesForGame ruleForCardsByValue;
 
         [SetUp]
         public void Setup()
         {
-            ruleForCardsByValue = new Dictionary<CardValue, RuleForCard>();
-            ruleForCardsByValue.Add(CardValue.Eight, RuleForCard.SkipPlayer);
+            ruleForCardsByValue = new RulesForGame();
+            ruleForCardsByValue.Add(new Rule(CardValue.Eight, RuleForCard.SkipPlayer));
         }
 
         [Test]
@@ -377,7 +372,7 @@ namespace UnitTests
 
             game.PlayInHandCards(player1.Name, Card.EightOfClubs);
 
-            game.State.CurrentPlayer.Should().Be(player3);
+            game.State.GetCurrentPlayer().Should().Be(player3);
         }
 
         [Test]
@@ -391,7 +386,7 @@ namespace UnitTests
 
             game.PlayInHandCards(player2.Name, Card.EightOfClubs);
 
-            game.State.CurrentPlayer.Should().Be(player1);
+            game.State.GetCurrentPlayer().Should().Be(player1);
         }
 
         [Test]
@@ -407,20 +402,20 @@ namespace UnitTests
 
             game.PlayInHandCards(player1.Name, cardsToPlay);
 
-            game.State.CurrentPlayer.Should().Be(player4);
+            game.State.GetCurrentPlayer().Should().Be(player4);
         }
     }
 
     [TestFixture]
     public class WithFiveAsSeeThroughCard
     {
-        private Dictionary<CardValue, RuleForCard> ruleForCardsByValue;
+        private RulesForGame ruleForCardsByValue;
 
         [SetUp]
         public void Setup()
         {
-            ruleForCardsByValue = new Dictionary<CardValue, RuleForCard>();
-            ruleForCardsByValue.Add(CardValue.Five, RuleForCard.SeeThrough);
+            ruleForCardsByValue = new RulesForGame();
+            ruleForCardsByValue.Add(new Rule(CardValue.Five, RuleForCard.SeeThrough));
         }
 
         [Test]
@@ -501,7 +496,7 @@ namespace UnitTests
 
             var outcome = game.PlayInHandCards(player1.Name, cardsToPlay);
 
-            game.State.CurrentPlayer.Should().Be(player1);
+            game.State.GetCurrentPlayer().Should().Be(player1);
         }
     }
 
@@ -581,7 +576,22 @@ namespace UnitTests
 
             game.PlayerCannotPlayCards(player1.Name);
 
-            game.State.CurrentPlayer.Should().Be(player2);
+            game.State.GetCurrentPlayer().Should().Be(player2);
+        }
+
+        [Test]
+        public void If_It_Isnt_Players_Turn_Nothing_Happens()
+        {
+            var player1 = PlayerHelper.CreatePlayer(Card.EightOfClubs, "Ed");
+            var player2 = PlayerHelper.CreatePlayer("Liam");
+            var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGame(player1);
+
+            game.PlayInHandCards("Ed", Card.EightOfClubs);
+            game.PlayerCannotPlayCards(player1.Name);
+
+            game.State.CurrentPlayerName.Should().Be(player2.Name);
         }
     }
 

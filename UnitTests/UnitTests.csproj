@@ -106,6 +106,7 @@
     <Compile Include="GameplayTests.cs" />
     <Compile Include="DeckTests.cs" />
     <Compile Include="GameResultTests.cs" />
+    <Compile Include="PlayingFaceDownCard.cs" />
     <Compile Include="RhinoTests.cs" />
     <Compile Include="RulesTests.cs" />
   </ItemGroup>

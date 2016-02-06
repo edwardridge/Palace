@@ -43,7 +43,7 @@
         {
             player1 = PlayerHelper.CreatePlayer("Ed");
             player2 = PlayerHelper.CreatePlayer("Liam");
-            var deck = new StandardDeck();
+            var deck = StandardDeck.CreateDeck();
             dealer = DealerHelper.TestDealer(new[] { player1, player2 });
             gameInitialisation = dealer.CreateGameInitialisation();
             gameInitialisation.DealInitialCards();
@@ -87,7 +87,7 @@
             var player1 = PlayerHelper.CreatePlayer("Ed");
             var player2 = PlayerHelper.CreatePlayer("Liam");
             
-            var dealer = new Dealer(new StandardDeck(), new DefaultStartGameRules());
+            var dealer = new Dealer(StandardDeck.CreateDeck(), new DefaultStartGameRules());
             dealer.AddPlayer(player1);
             dealer.AddPlayer(player2);
             var gameInit = dealer.CreateGameInitialisation();
@@ -102,7 +102,7 @@
         {
             var player1 = PlayerHelper.CreatePlayer("Ed");
             var player2 = PlayerHelper.CreatePlayer("Ed");
-            var dealer = new Dealer(new StandardDeck(), new DefaultStartGameRules());
+            var dealer = new Dealer(StandardDeck.CreateDeck(), new DefaultStartGameRules());
             dealer.AddPlayer(player1);
             var outcome = dealer.AddPlayer(player2);
             outcome.Should().Be(false);
@@ -138,7 +138,7 @@
         public void Player_Cannot_Be_Ready_With_No_Face_Up_Cards()
         {
             var player = PlayerHelper.CreatePlayer("Ed");
-            var dealer = new Dealer(new StandardDeck(), new DefaultStartGameRules());
+            var dealer = new Dealer(StandardDeck.CreateDeck(), new DefaultStartGameRules());
             dealer.AddPlayer(player);
             Action outcome = () => dealer.CreateGameInitialisation().StartGame();
 
@@ -149,7 +149,7 @@
         public void Player_Cannot_Be_Ready_With_Two_Face_Up_Cards()
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs }, "Ed");
-            var dealerForThisTest = new Dealer(new StandardDeck(), new DefaultStartGameRules());
+            var dealerForThisTest = new Dealer(StandardDeck.CreateDeck(), new DefaultStartGameRules());
             dealerForThisTest.AddPlayer(player);
             var gameInit = dealerForThisTest.CreateGameInitialisation();
             gameInit.PutCardFaceUp(player, Card.AceOfClubs);
@@ -164,7 +164,7 @@
         public void Player_Can_Be_Ready_When_Three_Cards_Are_Face_Up()
         {
             var player = PlayerHelper.CreatePlayer(new[] { Card.AceOfClubs, Card.EightOfClubs, Card.FiveOfClubs }, "Ed");
-            var dealerForThisTest = new Dealer(new StandardDeck(), new DefaultStartGameRules());
+            var dealerForThisTest = new Dealer(StandardDeck.CreateDeck(), new DefaultStartGameRules());
             dealerForThisTest.AddPlayer(player);
             var gameInit = dealerForThisTest.CreateGameInitialisation();
             gameInit.PutCardFaceUp(player, Card.AceOfClubs);
@@ -311,7 +311,7 @@
             var dealer = DealerHelper.TestDealer(new[] { player1, player2 });
             game = dealer.CreateGameInitialisation().StartGame();
 
-            game.State.CurrentPlayer.Should().Be(player1);
+            game.State.GetCurrentPlayer().Should().Be(player1);
         }
 
         [Test]
@@ -323,7 +323,7 @@
 
             game = dealer.CreateGameInitialisation().StartGame();
 
-            game.State.CurrentPlayer.Should().Be(player2);
+            game.State.GetCurrentPlayer().Should().Be(player2);
         }
 
         [Test]
@@ -336,7 +336,7 @@
 
             game = dealer.CreateGameInitialisation().StartGame();
 
-            game.State.CurrentPlayer.Should().Be(player3);
+            game.State.GetCurrentPlayer().Should().Be(player3);
         }
     }
 }

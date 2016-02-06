@@ -3,13 +3,18 @@ using System.Linq;
 
 namespace Palace
 {
-	public abstract class Deck
+	public class Deck
 	{
 	    private ICollection<Card> cards;
 
-		protected Deck(IEnumerable<Card> cards)
+        public Deck()
+        {
+            this.cards = new List<Card>();
+        }
+
+		public Deck(IEnumerable<Card> cards)
 		{
-		    this.cards = new List<Card>(cards);
+            this.cards = new List<Card>(cards);
 		}
 
         public IEnumerable<Card> DealCards(int count)
@@ -31,7 +36,7 @@ namespace Palace
 	        }
 	    }
 
-	    internal ICollection<Card> Cards
+	    internal virtual ICollection<Card> Cards
 	    {
 	        get
 	        {
@@ -39,7 +44,7 @@ namespace Palace
 	        }
 	        set
 	        {
-	            cards = value;
+                cards = value;
 	        }
 	    }
 

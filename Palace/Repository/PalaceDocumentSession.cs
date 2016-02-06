@@ -11,20 +11,26 @@ namespace Palace.Repository
     using Raven.Client;
     using Raven.Client.Document;
 
-    public class PalaceDocumentSession
+    public interface IPalaceDocumentSessionFactory
     {
-        DocumentStore documentStore;
-        public PalaceDocumentSession()
+        IDocumentSession GetDocumentSession();
+    }
+
+    public class PalaceDocumentSessionFactory : IPalaceDocumentSessionFactory
+    {
+        private IDocumentStore documentStore;
+        private string database;
+
+        public PalaceDocumentSessionFactory(IDocumentStore documentStore, string database)
         {
-            documentStore = new DocumentStore()
-            {
-                Url = "http://localhost:8080"
-            };
+            this.documentStore = documentStore;
+            this.database = database;
             documentStore.Initialize();
         }
-        public virtual IDocumentSession GetDocumentSession()
+
+        public IDocumentSession GetDocumentSession()
         {
-            return documentStore.OpenSession("Palace");
+            return documentStore.OpenSession(database);
         }
     }
 }

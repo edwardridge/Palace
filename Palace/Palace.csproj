@@ -41,9 +41,10 @@
     <OutputPath>bin\x64\Debug\</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -89,6 +90,7 @@
     <Compile Include="Game\OrderOfPlay.cs" />
     <Compile Include="Repository\GameInitialisationRepository.cs" />
     <Compile Include="Rules\DefaultStartGameRules.cs" />
+    <Compile Include="Rules\Rule.cs" />
     <Compile Include="Rules\RulesProcessorGenerator.cs" />
     <Compile Include="Deck\ICardDealer.cs" />
     <Compile Include="Program.cs" />

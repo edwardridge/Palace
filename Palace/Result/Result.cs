@@ -10,6 +10,8 @@ namespace Palace
     {
         private List<string> _errorMessages;
 
+        public List<string> Errors { get { return _errorMessages; } }
+
         public GameStatusForPlayer GameStatusForPlayer { get; }
 
         public Result(Player player, GameState gameState) : this(player, gameState, new List<string>())
@@ -23,7 +25,9 @@ namespace Palace
         private Result(Player player, GameState gameState, List<string> errorList)
         {
             this._errorMessages = errorList;
+            this.GameOver = gameState.GameOver;
             this.GameStatusForPlayer = SetupGameStatusForPlayer(player, gameState);
+            
         }
 
         private GameStatusForPlayer SetupGameStatusForPlayer(Player player, GameState gameState)
@@ -42,11 +46,14 @@ namespace Palace
             return new GameStatusForPlayer
             {
                 Name = player.Name,
-                CardsInHand = player.CardsInHand,
+                CardsInHand = player.CardsInHand.OrderBy(o => o.Value),
                 CardsFaceDownNum = player.CardsFaceDown.Count(),
                 CardsFaceUp = player.CardsFaceUp,
-                CardsInDeck = gameState?.Deck?.Cards?.Count() ?? 0,
-                GameStatusForOpponents = otherPlayers
+                CardsInDeckNum = gameState?.Deck?.Cards?.Count() ?? 0,
+                GameStatusForOpponents = otherPlayers,
+                PlayPile = gameState?.PlayPile?.ToArray(),
+                CurrentPlayer = gameState?.CurrentPlayerName,
+                NumberOfValidMoves = gameState?.NumberOfValdMoves ?? 0
             };
         }
 
@@ -62,16 +69,23 @@ namespace Palace
                 return this._errorMessages.Any() ? ResultOutcome.Fail : ResultOutcome.Success;
             }
         }
+
+        public bool GameOver { get; set; }
+
+        public IEnumerable<KeyValuePair<CardValue, RuleForCard>> Rules { get; set; }
     }
 
     public class GameStatusForPlayer
     {
         public int CardsFaceDownNum { get; set; }
-        public int CardsInDeck { get; set; }
+        public int CardsInDeckNum { get; set; }
         public IEnumerable<Card> CardsInHand { get; set; }
         public IEnumerable<Card> CardsFaceUp { get; set; }
         public string Name { get; set; }
         public IEnumerable<GameStatusForOpponent> GameStatusForOpponents { get; set; }
+        public IEnumerable<Card> PlayPile { get; set; }
+        public string CurrentPlayer { get; set; }
+        public int NumberOfValidMoves { get; set; }
     }
 
     public class GameStatusForOpponent
