@@ -7,9 +7,12 @@
     ],
     "tasks": [
         {
-			"taskName": "testfromnpm",
-			"isBuildCommand": false,
-			"showOutput": "always"
+			"taskName": "jest",
+			"isTestCommand": true,
+			"showOutput": "always",
+            "args": [
+                ""
+            ]
 		},
         {
 			"taskName": "gulpfromnpm",

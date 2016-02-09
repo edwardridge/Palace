@@ -41,7 +41,7 @@ class GameStatusForPlayer extends React.Component{
                     Cards in hand <br />
                     <VisibleCardPile cards={this.props.gameState.CardsInHand} toggleCardSelected={this.props.toggleCardSelected.bind(null, "CardsInHand")} /> <br />
                     <button onClick={this.props.playCards.bind(null, "CardsInHand")} disabled={noSelectedCards || !isPlayersTurn || gameOver}>Play cards</button> <br /> 
-                    <CannotPlay cannotPlayCards={this.props.cannotPlayCards} allowed={!isPlayersTurn || gameOver}/> <br/> 
+                    <CannotPlay cannotPlayCards={this.props.cannotPlayCards} disabled={!isPlayersTurn || gameOver}/> <br/> 
                 </span>
                 <span className="col-xs-12 col-sm-6 col-md-6">
                     <span className="col-xs-6 col-sm-6 col-md-6">
