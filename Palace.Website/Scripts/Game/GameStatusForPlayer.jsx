@@ -18,7 +18,7 @@ class GameStatusForPlayer extends React.Component{
         
         let fewerThanThreeCardsInHand = this.props.gameState.CardsInHand.length < 3;
         
-        let otherPlayerText = "It is " + this.props.gameState.CurrentPlayer + "\"s go";
+        let otherPlayerText = `It is ${this.props.gameState.CurrentPlayer}s turn`;
         let playersTurn = <div>{isPlayersTurn ? "It is your go" : otherPlayerText}</div>;
         
         let emptyFunction = function () { };
@@ -55,12 +55,6 @@ class GameStatusForPlayer extends React.Component{
                         Face down cards <br/>
                         <FaceDownCards cardsCount={this.props.gameState.CardsFaceDownNum} playCards={(isPlayersTurn && !gameOver) ? this.props.playCards.bind(null, "CardsFaceDown") : emptyFunction}/> <br/>
                     </span>
-                </span>
-            </span>
-            <h2>Play pile</h2>
-            <span className="row playPile">
-                <span className="col-xs-12 col-sm-12 col-md-12">
-                    <VisibleCardPile cards={this.props.gameState.PlayPile} /> 
                 </span>
             </span>
         </div>

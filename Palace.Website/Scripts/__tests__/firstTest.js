@@ -1,4 +1,3 @@
-// __tests__/CheckboxWithLabel-test.js
 jest.dontMock('../Game/CannotPlay.jsx');
 
 import React from 'react';
@@ -12,16 +11,16 @@ describe('CheckboxWithLabel', () => {
   it('changes the text after click', () => {
       var myMock = jest.genMockFunction();
     // Render a checkbox with label in the document
-    var checkbox = TestUtils.renderIntoDocument(
+    var cannotPlay = TestUtils.renderIntoDocument(
       <CannotPlay cannotPlayCards={myMock} disabled={false} />
     );
 
-    var checkboxNode = ReactDOM.findDOMNode(checkbox);
+    var cannotPlayNode = ReactDOM.findDOMNode(cannotPlay);
 
     // Verify that it's Off by default
-    expect(checkboxNode.textContent).toEqual('I can not play a card!');
+    expect(cannotPlayNode.textContent).toEqual('I can not play a card!');
 
-    TestUtils.Simulate.click(checkboxNode);
+    TestUtils.Simulate.click(cannotPlay);
     expect(myMock).toBeCalled();
   });
 

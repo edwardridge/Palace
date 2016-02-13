@@ -2,7 +2,6 @@
 
 class CannotPlay extends React.Component {  
     render(){
-        //console.log('func: ' + this.props.cannotPlayCards);
         return (
             <button className="CannotPlay" 
                 onClick={this.props.cannotPlayCards} 
@@ -12,5 +11,5 @@ class CannotPlay extends React.Component {
         );
     }
 }
-//disabled={this.props.allowed}
+
 export default CannotPlay;

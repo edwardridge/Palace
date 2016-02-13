@@ -15,10 +15,11 @@ module.exports = {
                 }
             }
         ]
-    },
-    resolve: {
-        root: [
-            path.resolve('C:\Users\Ed\Documents\GitHubVisualStudio\Palace\Palace.Website\Scripts')
-        ]
     }
+    // ,
+    // resolve: {
+    //     root: [
+    //         path.resolve('C:\Users\Ed\Documents\GitHubVisualStudio\Palace\Palace.Website\Scripts')
+    //     ]
+    // }
 };

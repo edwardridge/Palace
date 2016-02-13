@@ -1,5 +1,5 @@
 // CheckboxWithLabel.js
-import React from 'react';
+import React from "react";
 
 class CheckboxWithLabel extends React.Component {
 

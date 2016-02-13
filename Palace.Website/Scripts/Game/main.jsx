@@ -2,6 +2,7 @@
 import GameRules from "./GameRules.jsx";
 import GameStatusForPlayer from "./GameStatusForPlayer.jsx";
 import GameStatusForOpponents from "./GameStatusForOpponents.jsx";
+import PlayPile from "./PlayPile.jsx";
 
 
 class Game extends React.Component{
@@ -140,6 +141,8 @@ class Game extends React.Component{
                             playCards={this.playCards} 
                             errors = {this.state.errors}
                             cannotPlayCards={this.cannotPlayCards} />
+                            
+                <PlayPile playPile={this.state.gameStatusForPlayer.PlayPile} /> 
                             
                 <GameStatusForOpponents
                             gameState={this.state.gameStatusForOpponents}
