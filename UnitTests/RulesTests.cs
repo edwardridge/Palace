@@ -138,7 +138,8 @@ namespace UnitTests
         public void Setup()
         {
             rulesForCardsByValue = new RulesForGame();
-            rulesForCardsByValue.Add( new Rule(CardValue.Two, RuleForCard.Reset));
+            //rulesForCardsByValue.Add( new Rule(CardValue.Two, RuleForCard.Reset));
+            rulesForCardsByValue.AddIRule(new ResetRule(CardValue.Two));
         }
 
         [Test]
@@ -303,7 +304,8 @@ namespace UnitTests
         public void Setup()
         {
             rulesForCardsByValue = new RulesForGame();
-            rulesForCardsByValue.Add(new Rule(CardValue.Ten, RuleForCard.Burn));
+            //rulesForCardsByValue.Add(new Rule(CardValue.Ten, RuleForCard.Burn));
+            rulesForCardsByValue.AddIRule(new BurnRule(CardValue.Ten));
 
         }
 
@@ -358,7 +360,8 @@ namespace UnitTests
         public void Setup()
         {
             ruleForCardsByValue = new RulesForGame();
-            ruleForCardsByValue.Add(new Rule(CardValue.Eight, RuleForCard.SkipPlayer));
+            //ruleForCardsByValue.Add(new Rule(CardValue.Eight, RuleForCard.SkipPlayer));
+            ruleForCardsByValue.AddIRule(new SkipRule(CardValue.Eight));
         }
 
         [Test]

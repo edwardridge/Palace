@@ -72,15 +72,25 @@
 
             State.OrderOfPlay = this.GetOrderOfPlay();
 
-            if (!State.CurrentPlayer.HasNoMoreCards())
-            {
-                State.CurrentPlayerName = this.GetNextPlayerName();
+            var ruleToApply = this.RulesForGame.ListOfIRules.FirstOrDefault(f => f.CardValue == this.CardsPlayed.First().Value);
 
-                if (this.PlayPileShouldBeCleared())
-                    State.PlayPileStack.Clear();
+            if(ruleToApply != null)
+            {
+                ruleToApply.Apply(State, this.CardsPlayed);
             }
             else
-                State.GameOver = true;
+            {
+                if (!State.CurrentPlayer.HasNoMoreCards())
+                {
+                    State.CurrentPlayerName = this.GetNextPlayerName();
+
+                    if (this.PlayPileShouldBeCleared())
+                        State.PlayPileStack.Clear();
+
+                }
+                else
+                    State.GameOver = true;
+            }
 
             State.NumberOfValdMoves += 1;
 
@@ -128,14 +138,14 @@
             var ruleForPlayersCard = this.GetRuleForCardFromCardValue(CardsPlayed.First().Value);
             var nextPayer = this.GetNextPlayerFromOrderOfPlay(State.OrderOfPlay, State.CurrentPlayerLinkedListNode);
 
-            if (ruleForPlayersCard != RuleForCard.SkipPlayer)
-                return nextPayer.Value.Name;
+            //if (ruleForPlayersCard != RuleForCard.SkipPlayer)
+            //    return nextPayer.Value.Name;
 
-            var skipCardValue = this.RulesForGame.GetCardValueFromRule(RuleForCard.SkipPlayer);
-            var topCardsInPlayPileWithSkipValue = CardsPlayed.GetTopCardsWithSameValue(skipCardValue);
+            //var skipCardValue = this.RulesForGame.GetCardValueFromRule(RuleForCard.SkipPlayer);
+            //var topCardsInPlayPileWithSkipValue = CardsPlayed.GetTopCardsWithSameValue(skipCardValue);
 
-            foreach (var card in topCardsInPlayPileWithSkipValue)
-                nextPayer = this.GetNextPlayerFromOrderOfPlay(State.OrderOfPlay, nextPayer);
+            //foreach (var card in topCardsInPlayPileWithSkipValue)
+            //    nextPayer = this.GetNextPlayerFromOrderOfPlay(State.OrderOfPlay, nextPayer);
 
             return nextPayer.Value.Name;
         }
@@ -187,9 +197,10 @@
             if (!cardsToCheck.Any()) return false;
 
             var lastFourCardsAreSameValue = cardsToCheck.GetTopCardsWithSameValue(cardsToCheck.First().Value).Count() >= 4;
-            var isBurnCard = this.GetRuleForCardFromCardValue(cardsToCheck.First().Value) == RuleForCard.Burn;
+            //var isBurnCard = this.GetRuleForCardFromCardValue(cardsToCheck.First().Value) == RuleForCard.Burn;
 
-            return isBurnCard || lastFourCardsAreSameValue;
+            //return isBurnCard || lastFourCardsAreSameValue;
+            return lastFourCardsAreSameValue;
         }
 
         private bool CheckCardCanBePlayed(Card cardToPlay, IEnumerable<Card> cards)
@@ -208,7 +219,14 @@
                 return CheckCardCanBePlayed(cardToPlay, cards.Except(new[] { lastCardPlayed }));
             }
 
-            if (rulesForPlayersCard == RuleForCard.Reset || rulesForPlayersCard == RuleForCard.Burn || rulesForPlayersCard == RuleForCard.SeeThrough)
+            var ruleToApply = this.RulesForGame.ListOfIRules.FirstOrDefault(f => f.CardValue == this.CardsPlayed.First().Value);
+
+            if(ruleToApply != null)
+            {
+                return ruleToApply.CanBePlayed(lastCardPlayed.Value);
+            }
+            
+            if (rulesForPlayersCard == RuleForCard.SeeThrough)
                 return true;
             if (ruleForLastCardPlayed == RuleForCard.Standard && cardToPlay.Value < lastCardPlayed.Value)
                 return false;

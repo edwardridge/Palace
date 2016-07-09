@@ -43,7 +43,7 @@ namespace UnitTests
             var player2 = PlayerHelper.CreatePlayer("Soph");
 
             var rules = new List<Rule>();
-            rules.Add(new Rule(CardValue.Ten, RuleForCard.Burn));
+            //rules.Add(new Rule(CardValue.Ten, RuleForCard.Burn));
             var rulesForCardByValue = new RulesForGame(rules);
             //rulesForCardByValue.Add(CardValue.Ten, RuleForCard.Burn);
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, rulesForCardByValue);
@@ -71,7 +71,7 @@ namespace UnitTests
             var player2 = PlayerHelper.CreatePlayer("Soph");
 
             var rulesForCardByValue = new RulesForGame();
-            rulesForCardByValue.Add(new Rule(CardValue.Ten, RuleForCard.Burn));
+            //rulesForCardByValue.Add(new Rule(CardValue.Ten, RuleForCard.Burn));
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, rulesForCardByValue);
             var gameInit = dealer.CreateGameInitialisation();
             gameInit.DealInitialCards();

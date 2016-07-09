@@ -50,9 +50,26 @@
                 string ruleForCardAsString;
                 row.TryGetValue("CardValue", out cardValueAsString);
                 row.TryGetValue("Rule", out ruleForCardAsString);
-                var rule = new Rule(GetCardValueFromStringValue(cardValueAsString), GetRuleForCardFromStringValue(ruleForCardAsString));
-                ruleForCardsByValue.Add(rule);
+                var cardValue = GetCardValueFromStringValue(cardValueAsString);
+                //var rule = new Rule(cardValue, GetRuleForCardFromStringValue(ruleForCardAsString));
+
+                var iRule = GetIRuleFromStringValue(cardValue, ruleForCardAsString);
+                if(iRule != null)
+                {
+                    ruleForCardsByValue.ListOfIRules.Add(iRule);
+                }
+                //ruleForCardsByValue.Add(rule);
             }
+        }
+
+        private IRule GetIRuleFromStringValue(CardValue cardValue, string ruleStringValue)
+        {
+            if (ruleStringValue == "Reset")
+                return new ResetRule(cardValue);
+            if (ruleStringValue == "SkipPlayer")
+                return new SkipRule(cardValue);
+
+            return null;
         }
 
         [Given(@"the deck has no more cards")]
@@ -232,17 +249,17 @@
             }
         }
 
-        private RuleForCard GetRuleForCardFromStringValue(string ruleForCard)
-        {
-            switch (ruleForCard)
-            {
-                case "Reset":
-                    return RuleForCard.Reset;
-                case "SkipPlayer":
-                    return RuleForCard.SkipPlayer;
-                default:
-                    throw new Exception(ruleForCard + "Rule for card in test not found");
-            }
-        }
+        //private RuleForCard GetRuleForCardFromStringValue(string ruleForCard)
+        //{
+        //    switch (ruleForCard)
+        //    {
+        //        case "Reset": 
+        //            return RuleForCard.Standard;
+        //        case "SkipPlayer":
+        //            return RuleForCard.Standard;
+        //        default:
+        //            throw new Exception(ruleForCard + "Rule for card in test not found");
+        //    }
+        //}
     }
 }

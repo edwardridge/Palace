@@ -153,7 +153,7 @@
                     if (player.CardsInHand == null || player.CardsInHand.Count == 0)
                         continue;
 
-                    var resetCardValue = _rulesForCardsByValue.GetCardValueFromRule(RuleForCard.Reset);
+                    var resetCardValue = _rulesForCardsByValue.GetResetCardValue();
 
                     var lowestCardValueForCurrentPlayer = GetLowestNonResetCardValueForPlayer(player, resetCardValue);
                     var lowestCardValueForStartingPlayer = GetLowestNonResetCardValueForPlayer(startingPlayer, resetCardValue);
