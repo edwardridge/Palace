@@ -80,8 +80,7 @@ namespace UnitTests
         public void Setup()
         {
             cardTypes = new RulesForGame();
-            cardTypes.Add(new Rule(CardValue.Seven, RuleForCard.LowerThan));
-
+            cardTypes.AddIRule(new LowerThanRule(CardValue.Seven));
         }
 
         [Test]
@@ -196,7 +195,8 @@ namespace UnitTests
         public void Setup()
         {
             rulesForCardsByValue = new RulesForGame();
-            rulesForCardsByValue.Add(new Rule(CardValue.Seven, RuleForCard.LowerThan));
+            //rulesForCardsByValue.Add(new Rule(CardValue.Seven, RuleForCard.LowerThan));
+            rulesForCardsByValue.AddIRule(new LowerThanRule(CardValue.Seven));
         }
 
         [Test]
@@ -238,8 +238,8 @@ namespace UnitTests
         public void Setup()
         {
             rulesForCardByValue = new RulesForGame();
-            rulesForCardByValue.Add(new Rule(CardValue.Jack, RuleForCard.ReverseOrderOfPlay));
-
+            //rulesForCardByValue.Add(new Rule(CardValue.Jack, RuleForCard.ReverseOrderOfPlay));
+            rulesForCardByValue.AddIRule(new ReverseOrderOfPlayRule(CardValue.Jack));
         }
 
         [Test]
@@ -279,7 +279,7 @@ namespace UnitTests
         public void Setup()
         {
             rulesForCardsByValue = new RulesForGame();
-            rulesForCardsByValue.Add(new Rule(CardValue.Eight, RuleForCard.ReverseOrderOfPlay));
+            rulesForCardsByValue.AddIRule(new ReverseOrderOfPlayRule(CardValue.Eight));
         }
 
         [Test]
@@ -418,13 +418,14 @@ namespace UnitTests
         public void Setup()
         {
             ruleForCardsByValue = new RulesForGame();
-            ruleForCardsByValue.Add(new Rule(CardValue.Five, RuleForCard.SeeThrough));
+            //ruleForCardsByValue.Add(new Rule(CardValue.Five, RuleForCard.SeeThrough));
+            ruleForCardsByValue.AddIRule(new SeeThroughRule(CardValue.Five));
         }
 
         [Test]
         public void Can_Be_Played_Over_Card_Of_Higher_Value()
         {
-            var player1 = PlayerHelper.CreatePlayer(Card.FiveOfClubs, "Ed");
+            var player1 = PlayerHelper.CreatePlayer(new[] { Card.FiveOfClubs, Card.EightOfClubs }, "Ed");
             var player2 = PlayerHelper.CreatePlayer("Dave");
             var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, ruleForCardsByValue);
             var gameInit = dealer.CreateGameInitialisation();
@@ -448,6 +449,22 @@ namespace UnitTests
             var outcome = game.PlayInHandCards(player2.Name, Card.SixOfClubs).ResultOutcome;
 
             outcome.Should().Be(ResultOutcome.Fail);
+
+        }
+
+        [Test]
+        public void After_Playing_Card_Next_Player_Can_Play_Card_Higher_Than_Previous_Card()
+        {
+            var player1 = PlayerHelper.CreatePlayer(Card.FiveOfClubs, "Ed");
+            var player2 = PlayerHelper.CreatePlayer(Card.EightOfClubs, "Dave");
+            var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, ruleForCardsByValue);
+            var gameInit = dealer.CreateGameInitialisation();
+            var game = gameInit.StartGameWithPlayPile(player1, new[] { Card.SevenOfClubs });
+
+            game.PlayInHandCards(player1.Name, Card.FiveOfClubs);
+            var outcome = game.PlayInHandCards(player2.Name, Card.EightOfClubs).ResultOutcome;
+
+            outcome.Should().Be(ResultOutcome.Success);
 
         }
 

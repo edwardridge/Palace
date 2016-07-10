@@ -41,13 +41,9 @@ namespace Palace.Api.Controllers
             var player2 = new Player("Liam");
 
             var rules = new List<Rule>();
-
-            //rules.Add(new Rule(CardValue.Ten, RuleForCard.Burn));
-            //rules.Add(new Rule(CardValue.Two, RuleForCard.Reset));
-            rules.Add(new Rule(CardValue.Seven, RuleForCard.LowerThan));
-            rules.Add(new Rule(CardValue.Ace, RuleForCard.ReverseOrderOfPlay));
-            rules.Add(new Rule(CardValue.Eight, RuleForCard.SeeThrough));
-            //rules.Add(new Rule(CardValue.Jack, RuleForCard.SkipPlayer));
+            
+            //rules.Add(new Rule(CardValue.Seven, RuleForCard.LowerThan));
+            //rules.Add(new Rule(CardValue.Eight, RuleForCard.SeeThrough));
 
             var id = CreateGame(new List<Player>() { player1, player2 }, rules);
             

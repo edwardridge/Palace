@@ -43,7 +43,6 @@ namespace Palace.Website.Controllers
 
                 return View(gameInfos);
             }
-            return View();
         }
 
         public ActionResult Game(string playerName, string gameId)

@@ -27,11 +27,11 @@ namespace Palace.Rules
             this.RuleList = new List<Rule>(rules);
         }
 
-        public RuleForCard GetRuleFromCard(CardValue cardValue)
-        {
-            var rule = RuleList.FirstOrDefault(f => f.CardValue == cardValue);
-            return rule == null ? RuleForCard.Standard : rule.RuleForCard;
-        }
+        //public RuleForCard GetRuleFromCard(CardValue cardValue)
+        //{
+        //    var rule = RuleList.FirstOrDefault(f => f.CardValue == cardValue);
+        //    return rule == null ? RuleForCard.Standard : rule.RuleForCard;
+        //}
 
         public CardValue? GetCardValueFromRule(RuleForCard ruleFromCard)
         {
@@ -70,6 +70,12 @@ namespace Palace.Rules
         CardValue CardValue { get; }
 
         bool CanBePlayed(CardValue previousCardValue);
+
+        bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed);
+
+        bool IsPowerRule { get; }
+
+        bool AffectsNextCard { get; }
     }
 
     public class RuleBase
@@ -88,9 +94,33 @@ namespace Palace.Rules
             }
         }
 
-        public void SetNextPlayer(GameState gamestate)
+        protected void SetNextPlayer(GameState gamestate)
         {
-            gamestate.CurrentPlayerName = GetNextPlayerFromOrderOfPlay(gamestate);
+            if (this.ShouldBurn(gamestate.PlayPile))
+            {
+                gamestate.PlayPileStack.Clear();
+            }
+            else
+            {
+                gamestate.CurrentPlayerName = GetNextPlayerFromOrderOfPlay(gamestate);
+            }
+        }
+
+        private bool ShouldBurn(IEnumerable<Card> cardsToCheck)
+        {
+            cardsToCheck = cardsToCheck as IList<Card> ?? cardsToCheck.ToList();
+            if (!cardsToCheck.Any()) return false;
+
+            var lastFourCardsAreSameValue = cardsToCheck.GetTopCardsWithSameValue(cardsToCheck.First().Value).Count() >= 4;
+            //var isBurnCard = this.GetRuleForCardFromCardValue(cardsToCheck.First().Value) == RuleForCard.Burn;
+
+            //return isBurnCard || lastFourCardsAreSameValue;
+            return lastFourCardsAreSameValue;
+        }
+
+        protected bool IsCardValueHigherThanCardPlayed(CardValue previousCardValue)
+        {
+            return this.CardValue >= previousCardValue;
         }
 
         private string GetNextPlayerFromOrderOfPlay(GameState gamestate)
@@ -113,6 +143,27 @@ namespace Palace.Rules
            
         }
 
+        public bool AffectsNextCard
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public bool IsPowerRule
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
+        {
+            return true;
+        }
+
         public void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
         {
             gamestate.PlayPileStack.Clear(); 
@@ -133,6 +184,27 @@ namespace Palace.Rules
 
         }
 
+        public bool AffectsNextCard
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public bool IsPowerRule
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
+        {
+            return true;
+        }
+
         public void Apply(GameState gameState, IEnumerable<Card> cardsPlayed)
         {
             this.SetNextPlayer(gameState);
@@ -151,6 +223,27 @@ namespace Palace.Rules
 
         }
 
+        public bool AffectsNextCard
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public bool IsPowerRule
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
+        {
+            return true;
+        }
+
         public void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
         {
             this.SetNextPlayer(gamestate);
@@ -162,7 +255,165 @@ namespace Palace.Rules
 
         public bool CanBePlayed(CardValue previousCardValue)
         {
-            return this.CardValue >= previousCardValue;
+            return IsCardValueHigherThanCardPlayed(previousCardValue);
+        }
+    }
+
+    public class ReverseOrderOfPlayRule : RuleBase, IRule
+    {
+        public ReverseOrderOfPlayRule(CardValue cardValue) : base(cardValue)
+        {
+
+        }
+
+        public bool AffectsNextCard
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public bool IsPowerRule
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
+        {
+            return true;
+        }
+
+        public void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
+        {
+            gamestate.OrderOfPlay = gamestate.OrderOfPlay == OrderOfPlay.Forward ? OrderOfPlay.Backward : OrderOfPlay.Forward;
+            this.SetNextPlayer(gamestate);
+        }
+
+        public bool CanBePlayed(CardValue previousCardValue)
+        {
+            return IsCardValueHigherThanCardPlayed(previousCardValue);
+        }
+    }
+
+    public class SeeThroughRule : RuleBase, IRule
+    {
+        public SeeThroughRule(CardValue cardValue) : base(cardValue)
+        {
+
+        }
+
+        public bool AffectsNextCard
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public bool IsPowerRule
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
+        {
+            var lastCardNotSeeThrough = gameState.PlayPile.Except(gameState.PlayPile.GetTopCardsWithSameValue(this.CardValue)).First();
+            return cardToBePlayed >= lastCardNotSeeThrough.Value;
+        }
+
+        public void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
+        {
+            this.SetNextPlayer(gamestate);
+        }
+
+        public bool CanBePlayed(CardValue previousCardValue)
+        {
+            return true;
+        }
+    }
+
+    public class LowerThanRule : RuleBase, IRule
+    {
+        public LowerThanRule(CardValue cardValue) : base(cardValue)
+        {
+
+        }
+
+        public bool AffectsNextCard
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public bool IsPowerRule
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
+        {
+            return cardToBePlayed <= this.CardValue;
+        }
+
+        public void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
+        {
+            this.SetNextPlayer(gamestate);
+        }
+
+        public bool CanBePlayed(CardValue previousCardValue)
+        {
+            return this.IsCardValueHigherThanCardPlayed(previousCardValue);
+        }
+    }
+
+    public class StandardRule : RuleBase, IRule
+    {
+        public StandardRule(CardValue cardValue) : base(cardValue)
+        {
+
+        }
+
+        public bool AffectsNextCard
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public bool IsPowerRule
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
+        {
+            return true;
+        }
+
+        public void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
+        {
+            this.SetNextPlayer(gamestate);
+        }
+
+        public bool CanBePlayed(CardValue previousCardValue)
+        {
+            return this.IsCardValueHigherThanCardPlayed(previousCardValue);
         }
     }
 }

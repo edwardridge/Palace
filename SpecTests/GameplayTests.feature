@@ -27,8 +27,8 @@ Scenario: Playing two in hand card adds those cards to the play pile, changes wh
 Scenario: When four cards of the same value are played in different turns, the play pile is burnt and the last player gets another turn
 Given I have the following players and cards
 | Player | CardsInHand            |
-| Ed     | TwoOfClubs, TwoOfClubs |
-| Liam   | TwoOfClubs, TwoOfClubs |
+| Ed     | TwoOfClubs, TwoOfClubs, ThreeOfClubs |
+| Liam   | TwoOfClubs, TwoOfClubs, ThreeOfClubs |
 And it is 'Ed' turn
 When 'Ed' plays the 'TwoOfClubs'
 And 'Liam' plays the 'TwoOfClubs'
