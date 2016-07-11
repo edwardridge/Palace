@@ -12,7 +12,14 @@ namespace Palace.Api.Controllers
     {
         public IEnumerable<string> Players { get; set; }
 
-        public IEnumerable<Rule> Rules { get; set; }
+        public IEnumerable<RuleDefinition> Rules { get; set; }
+    }
+
+    public class RuleDefinition
+    {
+        public string Rule { get; set; }
+
+        public CardValue CardValue { get; set; }
     }
 
     //Todo: Replace!
@@ -34,28 +41,13 @@ namespace Palace.Api.Controllers
             return HttpStatusCode.OK;
         }
 
-        [Route("createstandardgame"), HttpGet]
-        public Guid CreateStandardGame()
-        {
-            var player1 = new Player("Ed");
-            var player2 = new Player("Liam");
-
-            var rules = new List<Rule>();
-            
-            //rules.Add(new Rule(CardValue.Seven, RuleForCard.LowerThan));
-            //rules.Add(new Rule(CardValue.Eight, RuleForCard.SeeThrough));
-
-            var id = CreateGame(new List<Player>() { player1, player2 }, rules);
-            
-            return id;
-        }
-
-        public Guid CreateGame(IEnumerable<Player> players, IEnumerable<Rule> rules)
+        public Guid CreateGame(IEnumerable<Player> players, IEnumerable<RuleDefinition> rulesAsString)
         {
             var rulesForGame = new RulesForGame();
-            foreach (var rule in rules)
+            foreach (var ruleAsString in rulesAsString)
             {
-                rulesForGame.Add(rule);
+                var rule = GetRuleFromString(ruleAsString);
+                rulesForGame.AddRule(rule);
             }
 
             var dealer = new Dealer(StandardDeck.CreateDeck(), new DefaultStartGameRules(), rulesForGame);
@@ -81,8 +73,20 @@ namespace Palace.Api.Controllers
             gameRepository.Save(game);
 
             return game.Id;
-        } 
-        
+        }
+
+        private IRule GetRuleFromString(RuleDefinition ruleAsString)
+        {
+            var cardValue = ruleAsString.CardValue;
+            switch (ruleAsString.Rule){
+                case "Reset":
+                    return new ResetRule(cardValue);
+
+                default: return new StandardRule(cardValue);
+            }
+                
+        }
+
         [Route("get/{id}/{player}")]
         public Result GetGameState(string id, string player)
         {
