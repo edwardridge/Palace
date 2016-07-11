@@ -149,7 +149,7 @@ class Game extends React.Component{
                             currentPlayer={this.state.gameStatusForPlayer.CurrentPlayer}
                             />
                             
-                <GameRules rules={this.state.rules} />   
+                
             </div> 
         );
     }

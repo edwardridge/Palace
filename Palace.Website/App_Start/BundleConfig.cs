@@ -21,11 +21,11 @@ namespace Palace.Website
                       "~/Content/Site/*.css"));
 
             bundles.Add(new ScriptBundle("~/creategame").Include(
-                "~/Scripts/dist/CreateGame/CreateGame.js"
+                "~/Scripts/create.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/game").Include(
-                "~/Scripts/webpack_bundle.js"
+                "~/Scripts/main.js"
                 ));
         }
     }

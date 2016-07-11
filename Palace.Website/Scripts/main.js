@@ -234,8 +234,7 @@
 	                React.createElement(_GameStatusForOpponents2.default, {
 	                    gameState: this.state.gameStatusForOpponents,
 	                    currentPlayer: this.state.gameStatusForPlayer.CurrentPlayer
-	                }),
-	                React.createElement(_GameRules2.default, { rules: this.state.rules })
+	                })
 	            );
 	        }
 	    }]);
@@ -285,7 +284,7 @@
 	                    { key: index },
 	                    rule.CardValue,
 	                    " : ",
-	                    rule.RuleForCard,
+	                    rule.Description,
 	                    " "
 	                ));
 	            });

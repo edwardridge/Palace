@@ -51,14 +51,12 @@
                 row.TryGetValue("CardValue", out cardValueAsString);
                 row.TryGetValue("Rule", out ruleForCardAsString);
                 var cardValue = GetCardValueFromStringValue(cardValueAsString);
-                //var rule = new Rule(cardValue, GetRuleForCardFromStringValue(ruleForCardAsString));
-
+                
                 var iRule = GetIRuleFromStringValue(cardValue, ruleForCardAsString);
                 if(iRule != null)
                 {
-                    ruleForCardsByValue.ListOfIRules.Add(iRule);
+                    ruleForCardsByValue.AddRule(iRule);
                 }
-                //ruleForCardsByValue.Add(rule);
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Palace.Rules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -72,7 +73,7 @@ namespace Palace
 
         public bool GameOver { get; set; }
 
-        public IEnumerable<KeyValuePair<CardValue, RuleForCard>> Rules { get; set; }
+        public IEnumerable<KeyValuePair<CardValue, IRule>> Rules { get; set; }
     }
 
     public class GameStatusForPlayer

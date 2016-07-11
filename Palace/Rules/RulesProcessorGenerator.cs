@@ -76,12 +76,8 @@
             }
             else
             {
-                var ruleToApply = this.RulesForGame.ListOfIRules.FirstOrDefault(f => f.CardValue == this.CardsPlayed.First().Value) ?? new StandardRule(this.CardsPlayed.First().Value);
-
-                if (ruleToApply != null)
-                {
-                    ruleToApply.Apply(State, this.CardsPlayed);
-                }
+                var ruleToApply = this.RulesForGame.GetRule(this.CardsPlayed.First().Value);
+                ruleToApply.Apply(State, this.CardsPlayed);
             }
 
             State.NumberOfValdMoves += 1;
@@ -113,7 +109,28 @@
 
         internal bool CardCanBePlayed()
         {
-            return this.CheckCardCanBePlayed(CardsPlayed.First(), State.PlayPile);
+            var playPile = State.PlayPile.ToList();
+            var cardToPlay = this.CardsPlayed.First();
+            if (!playPile.Any())
+                return true;
+
+            var lastCardPlayed = playPile.First();
+
+            var ruleToApply = this.RulesForGame.GetRule(this.CardsPlayed.First().Value);
+
+            if (ruleToApply.CanAlwaysPlayCard)
+            {
+                return true;
+            }
+
+            var previousRuleToApply = this.RulesForGame.GetRule(lastCardPlayed.Value);
+
+            if (previousRuleToApply.AffectsNextCard)
+            {
+                return previousRuleToApply.AllowsNextCard(State, cardToPlay.Value);
+            }
+
+            return IsCardValueHigherThanCardPlayed(cardToPlay.Value, lastCardPlayed.Value);
         }
 
         private string GetNextPlayerName()
@@ -149,11 +166,6 @@
             if (playerCardType == PlayerCardType.FaceUp)
                 player.RemoveCardsFromFaceUp(cards);
         }
-        
-        private bool PlayPileShouldBeCleared()
-        {
-            return this.ShouldBurn(State.PlayPile);
-        }
 
         private LinkedListNode<Player> GetNextPlayerFromOrderOfPlay(OrderOfPlay orderOfPlay, LinkedListNode<Player> player)
         {
@@ -172,28 +184,9 @@
             return lastFourCardsAreSameValue;
         }
 
-        private bool CheckCardCanBePlayed(Card cardToPlay, IEnumerable<Card> cards)
+        protected bool IsCardValueHigherThanCardPlayed(CardValue currentCardValue, CardValue previousCardValue)
         {
-            cards = cards.ToList();
-            if (!cards.Any())
-                return true;
-
-            var lastCardPlayed = cards.First();
-
-            var ruleToApply = this.RulesForGame.ListOfIRules.FirstOrDefault(f => f.CardValue == this.CardsPlayed.First().Value) ?? new StandardRule(this.CardsPlayed.First().Value);
-
-            if (ruleToApply.IsPowerRule)
-            {
-                return true;
-            }
-
-            var previousRuleToApply = this.RulesForGame.ListOfIRules.FirstOrDefault(f => f.CardValue == lastCardPlayed.Value) ?? new StandardRule(lastCardPlayed.Value);
-            if (previousRuleToApply.AffectsNextCard)
-            {
-                return previousRuleToApply.AllowsNextCard(State, cardToPlay.Value);
-            }
-
-            return ruleToApply.CanBePlayed(lastCardPlayed.Value);
+            return currentCardValue >= previousCardValue;
         }
     }
 }

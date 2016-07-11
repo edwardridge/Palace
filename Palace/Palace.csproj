@@ -109,7 +109,6 @@
     <Compile Include="Deck\Pack.cs" />
     <Compile Include="Card\Suit.cs" />
     <Compile Include="Card\CardValue.cs" />
-    <Compile Include="Card\RuleForCard.cs" />
     <Compile Include="Rules\ICanStartGame.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

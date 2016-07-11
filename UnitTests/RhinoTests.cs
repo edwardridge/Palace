@@ -36,23 +36,23 @@ namespace UnitTests
     [TestFixture]
     public class RhinoTests
     {
-        [Test, Ignore]
-        public void Can_Save_Game()
-        {
-            var player1 = PlayerHelper.CreatePlayer("Ed");
-            var player2 = PlayerHelper.CreatePlayer("Soph");
+        //    [Test, Ignore]
+        //    public void Can_Save_Game()
+        //    {
+        //        var player1 = PlayerHelper.CreatePlayer("Ed");
+        //        var player2 = PlayerHelper.CreatePlayer("Soph");
 
-            var rules = new List<Rule>();
-            //rules.Add(new Rule(CardValue.Ten, RuleForCard.Burn));
-            var rulesForCardByValue = new RulesForGame(rules);
-            //rulesForCardByValue.Add(CardValue.Ten, RuleForCard.Burn);
-            var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, rulesForCardByValue);
-            var gameInit = dealer.CreateGameInitialisation();
-            gameInit.DealInitialCards();
-            var game = gameInit.StartGame();
-            var gameRepository = new GameRepository(new TestPalaceDocumentSession());
-            gameRepository.Save(game);
-        }
+        //        var rules = new List<Rule>();
+        //        //rules.Add(new Rule(CardValue.Ten, RuleForCard.Burn));
+        //        var rulesForCardByValue = new RulesForGame(rules);
+        //        //rulesForCardByValue.Add(CardValue.Ten, RuleForCard.Burn);
+        //        var dealer = DealerHelper.TestDealerWithRules(new[] { player1, player2 }, rulesForCardByValue);
+        //        var gameInit = dealer.CreateGameInitialisation();
+        //        gameInit.DealInitialCards();
+        //        var game = gameInit.StartGame();
+        //        var gameRepository = new GameRepository(new TestPalaceDocumentSession());
+        //        gameRepository.Save(game);
+        //    }
 
         [Test, Ignore]
         public void Can_Open_Game()

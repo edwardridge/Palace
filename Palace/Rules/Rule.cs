@@ -6,79 +6,48 @@ namespace Palace.Rules
 {
     public class RulesForGame
     {
+        private ICollection<IRule> _ruleList;
+
         public RulesForGame()
         {
-            this.RuleList = new List<Rule>();
-            this.ListOfIRules = new List<IRule>();
+            this._ruleList = new List<IRule>();
         }
 
-        public void Add(Rule rule)
+        public void AddRule(IRule rule)
         {
-            this.RuleList.Add(rule);
+            this._ruleList.Add(rule);
         }
 
-        public void AddIRule(IRule rule)
+        public IRule GetRule(CardValue cardValue)
         {
-            this.ListOfIRules.Add(rule);
-        }
-
-        public RulesForGame(IEnumerable<Rule> rules)
-        {
-            this.RuleList = new List<Rule>(rules);
-        }
-
-        //public RuleForCard GetRuleFromCard(CardValue cardValue)
-        //{
-        //    var rule = RuleList.FirstOrDefault(f => f.CardValue == cardValue);
-        //    return rule == null ? RuleForCard.Standard : rule.RuleForCard;
-        //}
-
-        public CardValue? GetCardValueFromRule(RuleForCard ruleFromCard)
-        {
-            var rule = RuleList.FirstOrDefault(f => f.RuleForCard == ruleFromCard);
-            return rule == null ? new CardValue?() : rule.CardValue;
+            var ruleToApply = this._ruleList.FirstOrDefault(f => f.CardValue == cardValue) ?? new StandardRule(cardValue);
+            return ruleToApply;
         }
 
         public CardValue? GetResetCardValue()
         {
-            return this.ListOfIRules.FirstOrDefault(f => f.GetType() == typeof(ResetRule))?.CardValue;
+            return this._ruleList.FirstOrDefault(f => f.GetType() == typeof(ResetRule))?.CardValue;
         }
-
-        public ICollection<Rule> RuleList { get; private set; }
-
-        //TODO: rename from this abomination
-        public ICollection<IRule> ListOfIRules { get; private set; }
+        
+        public ICollection<IRule> Rules { get { return _ruleList; }  }
     }
-
-    public class Rule
-    {
-        public Rule(CardValue cardValue, RuleForCard ruleForCard)
-        {
-            this.CardValue = cardValue;
-            this.RuleForCard = ruleForCard;
-        }
-
-        public CardValue CardValue { get; private set; }
-
-        public RuleForCard RuleForCard { get; private set; }
-    }
-
+    
     public interface IRule
     {
         void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed);
 
         CardValue CardValue { get; }
 
-        bool CanBePlayed(CardValue previousCardValue);
-
         bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed);
 
-        bool IsPowerRule { get; }
+        bool CanAlwaysPlayCard { get; }
 
         bool AffectsNextCard { get; }
+
+        string Description { get; }
     }
 
-    public class RuleBase
+    public abstract class RuleBase : IRule
     {
         private readonly CardValue cardValue;
 
@@ -94,7 +63,19 @@ namespace Palace.Rules
             }
         }
 
-        protected void SetNextPlayer(GameState gamestate)
+        public abstract bool CanAlwaysPlayCard
+        {
+            get;
+        }
+
+        public abstract bool AffectsNextCard
+        {
+            get;
+        }
+
+        public string Description { get { return this.GetType().ToString(); } }
+
+        protected void CheckIfPlayPileShoudBeClearedAndSetNextPlayer(GameState gamestate)
         {
             if (this.ShouldBurn(gamestate.PlayPile))
             {
@@ -112,15 +93,7 @@ namespace Palace.Rules
             if (!cardsToCheck.Any()) return false;
 
             var lastFourCardsAreSameValue = cardsToCheck.GetTopCardsWithSameValue(cardsToCheck.First().Value).Count() >= 4;
-            //var isBurnCard = this.GetRuleForCardFromCardValue(cardsToCheck.First().Value) == RuleForCard.Burn;
-
-            //return isBurnCard || lastFourCardsAreSameValue;
             return lastFourCardsAreSameValue;
-        }
-
-        protected bool IsCardValueHigherThanCardPlayed(CardValue previousCardValue)
-        {
-            return this.CardValue >= previousCardValue;
         }
 
         private string GetNextPlayerFromOrderOfPlay(GameState gamestate)
@@ -134,16 +107,20 @@ namespace Palace.Rules
             }
             return nextPlayer.Value.Name;
         }
+
+        public abstract void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed);
+
+        public abstract bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed);
     }
 
-    public class BurnRule : RuleBase, IRule
+    public class BurnRule : RuleBase
     {
         public BurnRule(CardValue cardValue) : base(cardValue)
         {
            
         }
 
-        public bool AffectsNextCard
+        public override bool AffectsNextCard
         {
             get
             {
@@ -151,7 +128,7 @@ namespace Palace.Rules
             }
         }
 
-        public bool IsPowerRule
+        public override bool CanAlwaysPlayCard
         {
             get
             {
@@ -159,40 +136,26 @@ namespace Palace.Rules
             }
         }
 
-        public bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
+        public override bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
         {
             return true;
         }
 
-        public void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
+        public override void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
         {
             gamestate.PlayPileStack.Clear(); 
         }
-
-        public bool CanBePlayed(CardValue previousCardValue)
-        {
-            return true;
-        }
-
-
+        
     }
 
-    public class ResetRule : RuleBase, IRule
+    public class ResetRule : RuleBase
     {
         public ResetRule(CardValue cardValue) : base(cardValue)
         {
 
         }
 
-        public bool AffectsNextCard
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        public bool IsPowerRule
+        public override bool AffectsNextCard
         {
             get
             {
@@ -200,30 +163,33 @@ namespace Palace.Rules
             }
         }
 
-        public bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
+        public override bool CanAlwaysPlayCard
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
         {
             return true;
         }
 
-        public void Apply(GameState gameState, IEnumerable<Card> cardsPlayed)
+        public override void Apply(GameState gameState, IEnumerable<Card> cardsPlayed)
         {
-            this.SetNextPlayer(gameState);
-        }
-        
-        public bool CanBePlayed(CardValue previousCardValue)
-        {
-            return true;
+            this.CheckIfPlayPileShoudBeClearedAndSetNextPlayer(gameState);
         }
     }
 
-    public class SkipRule : RuleBase, IRule
+    public class SkipRule : RuleBase
     {
         public SkipRule(CardValue cardValue) : base(cardValue)
         {
 
         }
 
-        public bool AffectsNextCard
+        public override bool AffectsNextCard
         {
             get
             {
@@ -231,7 +197,7 @@ namespace Palace.Rules
             }
         }
 
-        public bool IsPowerRule
+        public override bool CanAlwaysPlayCard
         {
             get
             {
@@ -239,34 +205,30 @@ namespace Palace.Rules
             }
         }
 
-        public bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
+        public override bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
         {
             return true;
         }
 
-        public void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
+        public override void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
         {
-            this.SetNextPlayer(gamestate);
+            this.CheckIfPlayPileShoudBeClearedAndSetNextPlayer(gamestate);
             var topCardsInPlayPileWithSkipValue = cardsPlayed.GetTopCardsWithSameValue(this.CardValue);
 
             foreach (var card in topCardsInPlayPileWithSkipValue)
-                this.SetNextPlayer(gamestate);
+                this.CheckIfPlayPileShoudBeClearedAndSetNextPlayer(gamestate);
         }
 
-        public bool CanBePlayed(CardValue previousCardValue)
-        {
-            return IsCardValueHigherThanCardPlayed(previousCardValue);
-        }
     }
 
-    public class ReverseOrderOfPlayRule : RuleBase, IRule
+    public class ReverseOrderOfPlayRule : RuleBase
     {
         public ReverseOrderOfPlayRule(CardValue cardValue) : base(cardValue)
         {
 
         }
 
-        public bool AffectsNextCard
+        public override bool AffectsNextCard
         {
             get
             {
@@ -274,7 +236,7 @@ namespace Palace.Rules
             }
         }
 
-        public bool IsPowerRule
+        public override bool CanAlwaysPlayCard
         {
             get
             {
@@ -282,31 +244,26 @@ namespace Palace.Rules
             }
         }
 
-        public bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
+        public override bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
         {
             return true;
         }
 
-        public void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
+        public override void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
         {
             gamestate.OrderOfPlay = gamestate.OrderOfPlay == OrderOfPlay.Forward ? OrderOfPlay.Backward : OrderOfPlay.Forward;
-            this.SetNextPlayer(gamestate);
-        }
-
-        public bool CanBePlayed(CardValue previousCardValue)
-        {
-            return IsCardValueHigherThanCardPlayed(previousCardValue);
+            this.CheckIfPlayPileShoudBeClearedAndSetNextPlayer(gamestate);
         }
     }
 
-    public class SeeThroughRule : RuleBase, IRule
+    public class SeeThroughRule : RuleBase
     {
         public SeeThroughRule(CardValue cardValue) : base(cardValue)
         {
 
         }
 
-        public bool AffectsNextCard
+        public override bool AffectsNextCard
         {
             get
             {
@@ -314,7 +271,7 @@ namespace Palace.Rules
             }
         }
 
-        public bool IsPowerRule
+        public override bool CanAlwaysPlayCard
         {
             get
             {
@@ -322,31 +279,26 @@ namespace Palace.Rules
             }
         }
 
-        public bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
+        public override bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
         {
             var lastCardNotSeeThrough = gameState.PlayPile.Except(gameState.PlayPile.GetTopCardsWithSameValue(this.CardValue)).First();
             return cardToBePlayed >= lastCardNotSeeThrough.Value;
         }
 
-        public void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
+        public override void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
         {
-            this.SetNextPlayer(gamestate);
-        }
-
-        public bool CanBePlayed(CardValue previousCardValue)
-        {
-            return true;
+            this.CheckIfPlayPileShoudBeClearedAndSetNextPlayer(gamestate);
         }
     }
 
-    public class LowerThanRule : RuleBase, IRule
+    public class LowerThanRule : RuleBase
     {
         public LowerThanRule(CardValue cardValue) : base(cardValue)
         {
 
         }
 
-        public bool AffectsNextCard
+        public override bool AffectsNextCard
         {
             get
             {
@@ -354,7 +306,7 @@ namespace Palace.Rules
             }
         }
 
-        public bool IsPowerRule
+        public override bool CanAlwaysPlayCard
         {
             get
             {
@@ -362,30 +314,25 @@ namespace Palace.Rules
             }
         }
 
-        public bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
+        public override bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
         {
             return cardToBePlayed <= this.CardValue;
         }
 
-        public void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
+        public override void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
         {
-            this.SetNextPlayer(gamestate);
-        }
-
-        public bool CanBePlayed(CardValue previousCardValue)
-        {
-            return this.IsCardValueHigherThanCardPlayed(previousCardValue);
+            this.CheckIfPlayPileShoudBeClearedAndSetNextPlayer(gamestate);
         }
     }
 
-    public class StandardRule : RuleBase, IRule
+    public class StandardRule : RuleBase
     {
         public StandardRule(CardValue cardValue) : base(cardValue)
         {
 
         }
 
-        public bool AffectsNextCard
+        public override bool AffectsNextCard
         {
             get
             {
@@ -393,7 +340,7 @@ namespace Palace.Rules
             }
         }
 
-        public bool IsPowerRule
+        public override bool CanAlwaysPlayCard
         {
             get
             {
@@ -401,19 +348,14 @@ namespace Palace.Rules
             }
         }
 
-        public bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
+        public override bool AllowsNextCard(GameState gameState, CardValue cardToBePlayed)
         {
             return true;
         }
 
-        public void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
+        public override void Apply(GameState gamestate, IEnumerable<Card> cardsPlayed)
         {
-            this.SetNextPlayer(gamestate);
-        }
-
-        public bool CanBePlayed(CardValue previousCardValue)
-        {
-            return this.IsCardValueHigherThanCardPlayed(previousCardValue);
+            this.CheckIfPlayPileShoudBeClearedAndSetNextPlayer(gamestate);
         }
     }
 }

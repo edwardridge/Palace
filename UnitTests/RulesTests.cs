@@ -80,7 +80,7 @@ namespace UnitTests
         public void Setup()
         {
             cardTypes = new RulesForGame();
-            cardTypes.AddIRule(new LowerThanRule(CardValue.Seven));
+            cardTypes.AddRule(new LowerThanRule(CardValue.Seven));
         }
 
         [Test]
@@ -138,7 +138,7 @@ namespace UnitTests
         {
             rulesForCardsByValue = new RulesForGame();
             //rulesForCardsByValue.Add( new Rule(CardValue.Two, RuleForCard.Reset));
-            rulesForCardsByValue.AddIRule(new ResetRule(CardValue.Two));
+            rulesForCardsByValue.AddRule(new ResetRule(CardValue.Two));
         }
 
         [Test]
@@ -196,7 +196,7 @@ namespace UnitTests
         {
             rulesForCardsByValue = new RulesForGame();
             //rulesForCardsByValue.Add(new Rule(CardValue.Seven, RuleForCard.LowerThan));
-            rulesForCardsByValue.AddIRule(new LowerThanRule(CardValue.Seven));
+            rulesForCardsByValue.AddRule(new LowerThanRule(CardValue.Seven));
         }
 
         [Test]
@@ -239,7 +239,7 @@ namespace UnitTests
         {
             rulesForCardByValue = new RulesForGame();
             //rulesForCardByValue.Add(new Rule(CardValue.Jack, RuleForCard.ReverseOrderOfPlay));
-            rulesForCardByValue.AddIRule(new ReverseOrderOfPlayRule(CardValue.Jack));
+            rulesForCardByValue.AddRule(new ReverseOrderOfPlayRule(CardValue.Jack));
         }
 
         [Test]
@@ -279,7 +279,7 @@ namespace UnitTests
         public void Setup()
         {
             rulesForCardsByValue = new RulesForGame();
-            rulesForCardsByValue.AddIRule(new ReverseOrderOfPlayRule(CardValue.Eight));
+            rulesForCardsByValue.AddRule(new ReverseOrderOfPlayRule(CardValue.Eight));
         }
 
         [Test]
@@ -305,7 +305,7 @@ namespace UnitTests
         {
             rulesForCardsByValue = new RulesForGame();
             //rulesForCardsByValue.Add(new Rule(CardValue.Ten, RuleForCard.Burn));
-            rulesForCardsByValue.AddIRule(new BurnRule(CardValue.Ten));
+            rulesForCardsByValue.AddRule(new BurnRule(CardValue.Ten));
 
         }
 
@@ -361,7 +361,7 @@ namespace UnitTests
         {
             ruleForCardsByValue = new RulesForGame();
             //ruleForCardsByValue.Add(new Rule(CardValue.Eight, RuleForCard.SkipPlayer));
-            ruleForCardsByValue.AddIRule(new SkipRule(CardValue.Eight));
+            ruleForCardsByValue.AddRule(new SkipRule(CardValue.Eight));
         }
 
         [Test]
@@ -419,7 +419,7 @@ namespace UnitTests
         {
             ruleForCardsByValue = new RulesForGame();
             //ruleForCardsByValue.Add(new Rule(CardValue.Five, RuleForCard.SeeThrough));
-            ruleForCardsByValue.AddIRule(new SeeThroughRule(CardValue.Five));
+            ruleForCardsByValue.AddRule(new SeeThroughRule(CardValue.Five));
         }
 
         [Test]

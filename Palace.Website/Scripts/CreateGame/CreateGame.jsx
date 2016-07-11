@@ -51,7 +51,7 @@
             state.rules.forEach(function(rule){
                rules.push({
                    CardValue: rule.card,
-                   RuleForCard: rule.rule
+                   Rule: rule.rule
                }) ;
             });
             return { 

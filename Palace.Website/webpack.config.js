@@ -1,8 +1,8 @@
 module.exports = {
-    entry: "./Scripts/Game/main.jsx",
+    entry: { main: "./Scripts/Game/main.jsx", create: "./Scripts/CreateGame/CreateGame.jsx" },
     output: {
         path: __dirname + '/Scripts',
-        filename: "webpack_bundle.js"
+        filename: "[name].js"
     },
     module: {
         loaders: [
@@ -16,10 +16,10 @@ module.exports = {
             }
         ]
     }
-    ,
-    resolve: {
-        root: [
-            path.resolve('C:\Users\Ed\Documents\GitHubVisualStudio\Palace\Palace.Website\Scripts')
-        ]
-    }
+    //,
+    //resolve: {
+    //    root: [
+    //        path.resolve('C:\Users\Ed\Documents\GitHub\Palace\Palace.Website\Scripts')
+    //    ]
+    //}
 };

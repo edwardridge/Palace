@@ -3,7 +3,7 @@ class GameRules extends React.Component{
        let ruleList = []; 
        this.props.rules.forEach(function(rule, index){
            ruleList.push(
-               <div key={index}>{rule.CardValue} : { rule.RuleForCard } </div>
+               <div key={index}>{rule.CardValue} : { rule.Description    } </div>
                );
        });
        
